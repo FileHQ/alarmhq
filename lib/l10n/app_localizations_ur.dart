@@ -339,4 +339,49 @@ class AppLocalizationsUr extends AppLocalizations {
 
   @override
   String get pickAtLeastOneDate => 'کم از کم ایک تاریخ چنیں';
+
+  @override
+  String get permTitle => 'اجازتیں درکار ہیں';
+
+  @override
+  String get permBody =>
+      'AlarmHQ کو یہ اجازتیں چاہییں تاکہ آپ کے الارم ہمیشہ وقت پر بجیں — چاہے فون لاک ہو یا بیٹری بچا رہا ہو۔';
+
+  @override
+  String get permExactTitle => 'عین وقت پر الارم';
+
+  @override
+  String get permExactDesc =>
+      'الارم ٹھیک اسی منٹ پر بجتا ہے، چاہے فون Doze موڈ میں ہو۔';
+
+  @override
+  String get permBatteryTitle => 'بیٹری آپٹیمائزیشن نظرانداز کریں';
+
+  @override
+  String get permBatteryDesc =>
+      'فون کو بیٹری بچانے کے لیے الارم میں تاخیر یا بند کرنے سے روکتا ہے۔';
+
+  @override
+  String get permNotifTitle => 'نوٹیفکیشنز';
+
+  @override
+  String get permNotifDesc => 'الارم اسکرین پر اور نوٹیفکیشن میں دکھاتا ہے۔';
+
+  @override
+  String get permOverlayTitle => 'دوسری ایپس پر دکھائیں';
+
+  @override
+  String get permOverlayDesc => 'لاک اسکرین پر فل اسکرین الارم دکھاتا ہے۔';
+
+  @override
+  String get permGrant => 'اجازت دیں';
+
+  @override
+  String get permGranted => 'اجازت مل گئی';
+
+  @override
+  String get permContinue => 'آگے بڑھیں';
+
+  @override
+  String get permSkip => 'ابھی چھوڑیں';
 }

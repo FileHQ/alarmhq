@@ -703,6 +703,90 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Pick at least one date'**
   String get pickAtLeastOneDate;
+
+  /// No description provided for @permTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Permissions needed'**
+  String get permTitle;
+
+  /// No description provided for @permBody.
+  ///
+  /// In en, this message translates to:
+  /// **'AlarmHQ needs these permissions so your alarms always ring on time — even when the phone is locked or saving battery.'**
+  String get permBody;
+
+  /// No description provided for @permExactTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Exact alarms'**
+  String get permExactTitle;
+
+  /// No description provided for @permExactDesc.
+  ///
+  /// In en, this message translates to:
+  /// **'Lets alarms ring at the exact minute, even in Doze mode.'**
+  String get permExactDesc;
+
+  /// No description provided for @permBatteryTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Ignore battery optimizations'**
+  String get permBatteryTitle;
+
+  /// No description provided for @permBatteryDesc.
+  ///
+  /// In en, this message translates to:
+  /// **'Prevents the phone from delaying or killing alarms to save battery.'**
+  String get permBatteryDesc;
+
+  /// No description provided for @permNotifTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Notifications'**
+  String get permNotifTitle;
+
+  /// No description provided for @permNotifDesc.
+  ///
+  /// In en, this message translates to:
+  /// **'Shows the alarm on screen and in the notification shade.'**
+  String get permNotifDesc;
+
+  /// No description provided for @permOverlayTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Display over other apps'**
+  String get permOverlayTitle;
+
+  /// No description provided for @permOverlayDesc.
+  ///
+  /// In en, this message translates to:
+  /// **'Shows the full-screen alarm over the lock screen.'**
+  String get permOverlayDesc;
+
+  /// No description provided for @permGrant.
+  ///
+  /// In en, this message translates to:
+  /// **'Grant'**
+  String get permGrant;
+
+  /// No description provided for @permGranted.
+  ///
+  /// In en, this message translates to:
+  /// **'Granted'**
+  String get permGranted;
+
+  /// No description provided for @permContinue.
+  ///
+  /// In en, this message translates to:
+  /// **'Continue'**
+  String get permContinue;
+
+  /// No description provided for @permSkip.
+  ///
+  /// In en, this message translates to:
+  /// **'Skip for now'**
+  String get permSkip;
 }
 
 class _AppLocalizationsDelegate

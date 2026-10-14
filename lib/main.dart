@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:alarmhq/l10n/app_localizations.dart';
 
 import 'screens/alarm_list_screen.dart';
+import 'screens/permission_screen.dart';
 import 'screens/settings_screen.dart';
 import 'services/alarm_repository.dart';
 import 'services/app_settings.dart';
@@ -24,6 +25,7 @@ class _AlarmHQAppState extends State<AlarmHQApp> {
   final AppSettings _settings = AppSettings();
   final AlarmRepository _repo = AlarmRepository();
   bool _ready = false;
+  bool _onboarded = false;
   int _tab = 0;
 
   @override
@@ -35,6 +37,7 @@ class _AlarmHQAppState extends State<AlarmHQApp> {
   Future<void> _boot() async {
     await _settings.load();
     await _repo.load();
+    _onboarded = await PermissionScreen.isOnboarded();
     _settings.addListener(_onSettingsChanged);
     // If exact-alarm permission was granted while we were away, make sure
     // every enabled alarm is actually scheduled natively.
@@ -65,7 +68,10 @@ class _AlarmHQAppState extends State<AlarmHQApp> {
       supportedLocales: AppLocalizations.supportedLocales,
       home: !_ready
           ? const Scaffold(body: Center(child: CircularProgressIndicator()))
-          : Builder(
+          : !_onboarded
+              ? PermissionScreen(
+                  onDone: () => setState(() => _onboarded = true))
+              : Builder(
               builder: (context) {
                 final l10n = AppLocalizations.of(context)!;
                 return Scaffold(

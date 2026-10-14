@@ -60,4 +60,20 @@ class NativeBridge {
   /// Update the home-screen widget text (e.g. "Next: Fri 07:00").
   static Future<void> updateWidget(String text) async =>
       await _alarm.invokeMethod('updateWidget', {'text': text});
+
+  /// Play a short audible tick (native ToneGenerator) for the time picker.
+  static Future<void> playTick() async =>
+      await _alarm.invokeMethod('playTick');
+
+  static Future<bool> hasNotificationPermission() async =>
+      await _alarm.invokeMethod<bool>('hasNotificationPermission') ?? false;
+
+  static Future<void> openNotificationSettings() async =>
+      await _alarm.invokeMethod('openNotificationSettings');
+
+  static Future<bool> canDrawOverlays() async =>
+      await _alarm.invokeMethod<bool>('canDrawOverlays') ?? false;
+
+  static Future<void> openOverlaySettings() async =>
+      await _alarm.invokeMethod('openOverlaySettings');
 }

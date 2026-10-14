@@ -6,10 +6,14 @@ import android.app.AlarmManager
 import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
+import android.media.AudioManager
 import android.media.RingtoneManager
+import android.media.ToneGenerator
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
 import android.os.PowerManager
 import android.provider.Settings
 import io.flutter.embedding.android.FlutterView
@@ -129,6 +133,50 @@ class MainActivity : Activity() {
                 "updateWidget" -> {
                     val text = call.argument<String>("text") ?: ""
                     AlarmScheduler.setNextText(this, text)
+                    result.success(null)
+                }
+                "playTick" -> {
+                    try {
+                        val tone = ToneGenerator(AudioManager.STREAM_MUSIC, 70)
+                        tone.startTone(ToneGenerator.TONE_PROP_BEEP, 60)
+                        Handler(Looper.getMainLooper()).postDelayed(
+                            { try { tone.release() } catch (_: Exception) {} },
+                            300,
+                        )
+                    } catch (_: Exception) { /* best effort */ }
+                    result.success(null)
+                }
+                "hasNotificationPermission" -> {
+                    val granted = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+                        checkSelfPermission(Manifest.permission.POST_NOTIFICATIONS) ==
+                            PackageManager.PERMISSION_GRANTED
+                    } else {
+                        true
+                    }
+                    result.success(granted)
+                }
+                "openNotificationSettings" -> {
+                    val intent = Intent(Settings.ACTION_APP_NOTIFICATION_SETTINGS).apply {
+                        putExtra(Settings.EXTRA_APP_PACKAGE, packageName)
+                    }
+                    startActivity(intent)
+                    result.success(null)
+                }
+                "canDrawOverlays" -> {
+                    val granted = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                        Settings.canDrawOverlays(this)
+                    } else {
+                        true
+                    }
+                    result.success(granted)
+                }
+                "openOverlaySettings" -> {
+                    startActivity(
+                        Intent(
+                            Settings.ACTION_MANAGE_OVERLAY_PERMISSION,
+                            Uri.parse("package:$packageName"),
+                        )
+                    )
                     result.success(null)
                 }
                 else -> result.notImplemented()

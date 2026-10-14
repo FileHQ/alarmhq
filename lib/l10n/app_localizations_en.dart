@@ -340,4 +340,51 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get pickAtLeastOneDate => 'Pick at least one date';
+
+  @override
+  String get permTitle => 'Permissions needed';
+
+  @override
+  String get permBody =>
+      'AlarmHQ needs these permissions so your alarms always ring on time — even when the phone is locked or saving battery.';
+
+  @override
+  String get permExactTitle => 'Exact alarms';
+
+  @override
+  String get permExactDesc =>
+      'Lets alarms ring at the exact minute, even in Doze mode.';
+
+  @override
+  String get permBatteryTitle => 'Ignore battery optimizations';
+
+  @override
+  String get permBatteryDesc =>
+      'Prevents the phone from delaying or killing alarms to save battery.';
+
+  @override
+  String get permNotifTitle => 'Notifications';
+
+  @override
+  String get permNotifDesc =>
+      'Shows the alarm on screen and in the notification shade.';
+
+  @override
+  String get permOverlayTitle => 'Display over other apps';
+
+  @override
+  String get permOverlayDesc =>
+      'Shows the full-screen alarm over the lock screen.';
+
+  @override
+  String get permGrant => 'Grant';
+
+  @override
+  String get permGranted => 'Granted';
+
+  @override
+  String get permContinue => 'Continue';
+
+  @override
+  String get permSkip => 'Skip for now';
 }

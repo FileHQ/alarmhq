@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:alarmhq/l10n/app_localizations.dart';
 
+import '../services/native_bridge.dart';
 import '../theme/app_theme.dart';
 
 // ---------------------------------------------------------------------------
@@ -118,9 +119,11 @@ class _ScrollTimePickerState extends State<ScrollTimePicker> {
   }
 
   /// Audible tick + haptic on every scroll step.
+  /// Uses the native ToneGenerator (clearly audible on all devices);
+  /// SystemSound.click is silent on many phones, so it is not used.
   void _tick() {
     unawaited(HapticFeedback.lightImpact());
-    unawaited(SystemSound.play(SystemSoundType.click));
+    unawaited(NativeBridge.playTick());
   }
 
   TimeOfDay get _picked {

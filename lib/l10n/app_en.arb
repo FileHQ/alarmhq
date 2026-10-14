@@ -100,5 +100,19 @@
   "done": "Done",
   "repeatWeeklyShort": "Weekly",
   "pickAtLeastOneDay": "Pick at least one day",
-  "pickAtLeastOneDate": "Pick at least one date"
+  "pickAtLeastOneDate": "Pick at least one date",
+  "permTitle": "Permissions needed",
+  "permBody": "AlarmHQ needs these permissions so your alarms always ring on time — even when the phone is locked or saving battery.",
+  "permExactTitle": "Exact alarms",
+  "permExactDesc": "Lets alarms ring at the exact minute, even in Doze mode.",
+  "permBatteryTitle": "Ignore battery optimizations",
+  "permBatteryDesc": "Prevents the phone from delaying or killing alarms to save battery.",
+  "permNotifTitle": "Notifications",
+  "permNotifDesc": "Shows the alarm on screen and in the notification shade.",
+  "permOverlayTitle": "Display over other apps",
+  "permOverlayDesc": "Shows the full-screen alarm over the lock screen.",
+  "permGrant": "Grant",
+  "permGranted": "Granted",
+  "permContinue": "Continue",
+  "permSkip": "Skip for now"
 }
