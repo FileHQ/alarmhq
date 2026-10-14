@@ -1,9 +1,12 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:alarmhq/l10n/app_localizations.dart';
 
 import '../models/alarm.dart';
 import '../services/alarm_repository.dart';
 import '../services/app_settings.dart';
+import '../services/native_bridge.dart';
 import '../services/next_occurrence.dart';
 import '../theme/app_theme.dart';
 import 'alarm_edit_screen.dart';
@@ -20,7 +23,60 @@ class AlarmListScreen extends StatefulWidget {
   State<AlarmListScreen> createState() => _AlarmListScreenState();
 }
 
-class _AlarmListScreenState extends State<AlarmListScreen> {
+class _AlarmListScreenState extends State<AlarmListScreen>
+    with WidgetsBindingObserver {
+  /// Pending snooze triggers (alarm id -> trigger time), refreshed from
+  /// native. Used to show an accurate countdown while an alarm is snoozed.
+  final Map<int, DateTime> _snoozeTriggers = {};
+
+  /// Periodic timer to keep countdowns fresh (and pick up snooze triggers
+  /// set from the full-screen activity or in-app dialog).
+  Timer? _refreshTimer;
+
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addObserver(this);
+    _refreshSnoozeTriggers();
+    // Refresh every 30s so "Rings in Xm" never goes stale.
+    _refreshTimer =
+        Timer.periodic(const Duration(seconds: 30), (_) {
+      if (mounted) _refreshSnoozeTriggers();
+    });
+  }
+
+  @override
+  void dispose() {
+    WidgetsBinding.instance.removeObserver(this);
+    _refreshTimer?.cancel();
+    super.dispose();
+  }
+
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    if (state == AppLifecycleState.resumed) _refreshSnoozeTriggers();
+  }
+
+  /// Query native for pending snooze triggers (e.g. after returning from
+  /// the full-screen alarm where the user may have snoozed).
+  Future<void> _refreshSnoozeTriggers() async {
+    final map = <int, DateTime>{};
+    for (final a in widget.repo.alarms) {
+      try {
+        final ms = await NativeBridge.getSnoozeTrigger(a.id);
+        if (ms != null && ms > DateTime.now().millisecondsSinceEpoch) {
+          map[a.id] = DateTime.fromMillisecondsSinceEpoch(ms);
+        }
+      } catch (_) {
+        // Best effort: a missing trigger just falls back to normal countdown.
+      }
+    }
+    if (mounted) {
+      setState(() => _snoozeTriggers
+        ..clear()
+        ..addAll(map));
+    }
+  }
   Future<void> _openEditor({AlarmModel? existing}) async {
     final changed = await Navigator.of(context).push<bool>(
       MaterialPageRoute(
@@ -143,11 +199,16 @@ class _AlarmListScreenState extends State<AlarmListScreen> {
   }
 
   /// "Rings in 2d 14h 22m" countdown text, or empty when none.
+  /// While an alarm is snoozed, shows the time until the snooze fires.
   String _countdownText(AppLocalizations l10n, AlarmModel a) {
     if (!a.enabled) return '';
-    final next = NextOccurrence.nextTrigger(a, DateTime.now());
+    // v2.4: a pending snooze trigger takes precedence over the regular
+    // schedule, so "Rings in 10m" is accurate after snoozing.
+    final snoozed = _snoozeTriggers[a.id];
+    final next = snoozed ?? NextOccurrence.nextTrigger(a, DateTime.now());
     if (next == null) return '';
     final diff = next.difference(DateTime.now());
+    if (diff.isNegative) return '';
     final d = diff.inDays;
     final h = diff.inHours % 24;
     final m = diff.inMinutes % 60;
@@ -164,7 +225,8 @@ class _AlarmListScreenState extends State<AlarmListScreen> {
 
   String _nextLine(AppLocalizations l10n, AlarmModel a) {
     if (!a.enabled) return l10n.alarmOff;
-    final next = NextOccurrence.nextTrigger(a, DateTime.now());
+    final snoozed = _snoozeTriggers[a.id];
+    final next = snoozed ?? NextOccurrence.nextTrigger(a, DateTime.now());
     if (next == null) return l10n.disabled;
     return l10n.nextRing(
         '${next.day}/${next.month} ${_timeText12(next.hour, next.minute)}');

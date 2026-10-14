@@ -506,6 +506,18 @@ abstract class AppLocalizations {
   /// **'Display over other apps'**
   String get permOverlayTitle;
 
+  /// No description provided for @permAutostartTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Autostart permission'**
+  String get permAutostartTitle;
+
+  /// No description provided for @permAutostartDesc.
+  ///
+  /// In en, this message translates to:
+  /// **'Lets the alarm ring even when the app is closed (needed on Xiaomi, Oppo, Vivo, Huawei).'**
+  String get permAutostartDesc;
+
   /// No description provided for @permSkip.
   ///
   /// In en, this message translates to:

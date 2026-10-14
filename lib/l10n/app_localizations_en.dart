@@ -234,6 +234,13 @@ class AppLocalizationsEn extends AppLocalizations {
   String get permOverlayTitle => 'Display over other apps';
 
   @override
+  String get permAutostartTitle => 'Autostart permission';
+
+  @override
+  String get permAutostartDesc =>
+      'Lets the alarm ring even when the app is closed (needed on Xiaomi, Oppo, Vivo, Huawei).';
+
+  @override
   String get permSkip => 'Skip for now';
 
   @override

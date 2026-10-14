@@ -35,6 +35,10 @@ class _PermissionScreenState extends State<PermissionScreen>
   bool? _notif;
   bool? _overlay;
 
+  /// Autostart can't be checked via API; marked done once the user opens
+  /// the manufacturer's page. Never blocks Continue.
+  bool? _autostartDone;
+
   @override
   void initState() {
     super.initState();
@@ -144,6 +148,20 @@ class _PermissionScreenState extends State<PermissionScreen>
               desc: l10n.permOverlayDesc,
               granted: _overlay,
               onGrant: NativeBridge.openOverlaySettings,
+              l10n: l10n,
+            ),
+            // v2.4: autostart — Xiaomi/Oppo/Vivo/Huawei kill background
+            // alarms without it. Cannot be checked programmatically, so
+            // this card never blocks Continue; it just opens the right page.
+            _permCard(
+              icon: '🚀',
+              title: l10n.permAutostartTitle,
+              desc: l10n.permAutostartDesc,
+              granted: _autostartDone,
+              onGrant: () async {
+                await NativeBridge.openAutostartSettings();
+                if (mounted) setState(() => _autostartDone = true);
+              },
               l10n: l10n,
             ),
             const SizedBox(height: 24),

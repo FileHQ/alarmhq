@@ -203,9 +203,23 @@ class MainActivity : Activity() {
                     )
                     result.success(null)
                 }
+                // ---- autostart (v2.4): Xiaomi/Oppo/Vivo/Huawei kill
+                // background alarms without this; no API to check it, so
+                // we just open the manufacturer's autostart page.
+                "openAutostartSettings" -> {
+                    openAutostartSettings()
+                    result.success(null)
+                }
                 // ---- in-app ringing dialog support ----
                 "isAlarmRinging" ->
                     result.success(AlarmService.ringingAlarmJson != null)
+                // ---- snooze countdown (v2.4) ----
+                "getSnoozeTrigger" -> {
+                    val id = call.argument<Number>("id")?.toInt() ?: -1
+                    val t = if (id >= 0)
+                        AlarmScheduler.getSnoozeTrigger(this, id) else null
+                    result.success(t)
+                }
                 "getRingingAlarm" -> {
                     val json = AlarmService.ringingAlarmJson
                     if (json == null) {
@@ -348,4 +362,60 @@ class MainActivity : Activity() {
     @Suppress("unused")
     private fun am(): AlarmManager =
         getSystemService(Context.ALARM_SERVICE) as AlarmManager
+
+    /**
+     * Open the manufacturer's autostart / background-start management page.
+     * Xiaomi, Oppo/Realme, Vivo, Huawei and OnePlus all kill background
+     * alarms unless the app is whitelisted here. Falls back to the app's
+     * system settings page when no known component resolves.
+     */
+    private fun openAutostartSettings() {
+        val candidates = listOf(
+            // Xiaomi (MIUI)
+            "com.miui.securitycenter" to
+                "com.miui.permcenter.autostart.AutoStartManagementActivity",
+            // Oppo / Realme (ColorOS)
+            "com.coloros.safecenter" to
+                "com.coloros.safecenter.permission.startup.StartupAppListActivity",
+            "com.coloros.safecenter" to
+                "com.coloros.safecenter.permission.startupapp.StartupAppListActivity",
+            "com.oppo.safe" to
+                "com.oppo.safe.permission.startup.StartupAppListActivity",
+            // Vivo (Funtouch)
+            "com.vivo.permissionmanager" to
+                "com.vivo.permissionmanager.activity.BgStartUpManagerActivity",
+            "com.iqoo.secure" to
+                "com.iqoo.secure.ui.phoneoptimize.AddWhiteListActivity",
+            // Huawei (EMUI)
+            "com.huawei.systemmanager" to
+                "com.huawei.systemmanager.optimize.process.ProtectActivity",
+            "com.huawei.systemmanager" to
+                "com.huawei.systemmanager.startupmgr.ui.StartupNormalAppListActivity",
+            // OnePlus (OxygenOS)
+            "com.oneplus.security" to
+                "com.oneplus.security.chainlaunch.view.ChainLaunchAppListActivity",
+            // Samsung
+            "com.samsung.android.lool" to
+                "com.samsung.android.sm.ui.battery.BatteryActivity",
+        )
+        for ((pkg, cls) in candidates) {
+            try {
+                val intent = Intent().setClassName(pkg, cls)
+                // Only fire when the target actually exists on this device.
+                if (intent.resolveActivity(packageManager) != null) {
+                    startActivity(intent)
+                    return
+                }
+            } catch (_: Exception) { /* try next */ }
+        }
+        // Fallback: the app's own system settings page.
+        try {
+            startActivity(
+                Intent(
+                    Settings.ACTION_APPLICATION_DETAILS_SETTINGS,
+                    Uri.parse("package:$packageName"),
+                )
+            )
+        } catch (_: Exception) { /* best effort */ }
+    }
 }

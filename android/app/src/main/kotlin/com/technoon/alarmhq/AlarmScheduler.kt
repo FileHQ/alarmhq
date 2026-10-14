@@ -240,11 +240,32 @@ object AlarmScheduler {
     ) {
         if (!canScheduleExact(context)) return
         val trigger = System.currentTimeMillis() + snoozeMinutes * 60_000L
+        // v2.4: persist the snooze trigger so the Dart UI can show an
+        // accurate "Rings in Xm" countdown while snoozed.
+        miscPrefs(context).edit()
+            .putLong("snooze_trigger_$id", trigger).apply()
         val am = alarmManager(context)
         val info = AlarmManager.AlarmClockInfo(trigger, showIntent(context))
         am.setAlarmClock(
             info, fireIntent(context, id, alarmJson, snoozeCount, true)
         )
+    }
+
+    /** Epoch-ms of a pending snooze trigger for [id], or null when none/future. */
+    fun getSnoozeTrigger(context: Context, id: Int): Long? {
+        val t = miscPrefs(context).getLong("snooze_trigger_$id", 0L)
+        if (t <= 0L) return null
+        // Expired entries are stale — drop them.
+        if (t <= System.currentTimeMillis()) {
+            miscPrefs(context).edit().remove("snooze_trigger_$id").apply()
+            return null
+        }
+        return t
+    }
+
+    /** Clear a stored snooze trigger (fired, dismissed, or cancelled). */
+    fun clearSnoozeTrigger(context: Context, id: Int) {
+        miscPrefs(context).edit().remove("snooze_trigger_$id").apply()
     }
 
     fun cancel(context: Context, id: Int) {
@@ -253,6 +274,8 @@ object AlarmScheduler {
         am.cancel(fireIntent(context, id, "{}", 0, false))
         am.cancel(fireIntent(context, id, "{}", 0, true))
         removeDef(context, id)
+        // v2.4: drop any pending snooze trigger for the UI countdown.
+        clearSnoozeTrigger(context, id)
         updateWidget(context)
     }
 

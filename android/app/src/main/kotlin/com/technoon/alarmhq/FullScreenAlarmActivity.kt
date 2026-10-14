@@ -84,6 +84,27 @@ class FullScreenAlarmActivity : Activity() {
             setPadding(48, 96, 48, 64)
         }
 
+        // Bug fix (v2.4): respect system-bar insets so the huge time is not
+        // cut off behind the status bar and the swipe hint is not hidden
+        // behind the navigation bar on edge-to-edge devices.
+        root.setOnApplyWindowInsetsListener { v, insets ->
+            val top: Int
+            val bottom: Int
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+                val bars = insets.getInsets(
+                    android.view.WindowInsets.Type.systemBars())
+                top = bars.top
+                bottom = bars.bottom
+            } else {
+                @Suppress("DEPRECATION")
+                top = insets.systemWindowInsetTop
+                @Suppress("DEPRECATION")
+                bottom = insets.systemWindowInsetBottom
+            }
+            v.setPadding(48, 96 + top, 48, 64 + bottom)
+            insets
+        }
+
         val timeView = TextView(this).apply {
             text = timeText
             textSize = 96f

@@ -83,6 +83,11 @@ class NativeBridge {
   static Future<void> openOverlaySettings() async =>
       await _alarm.invokeMethod('openOverlaySettings');
 
+  /// Open the manufacturer's autostart settings (Xiaomi/Oppo/Vivo/Huawei).
+  /// No API exists to check this permission; it never blocks Continue.
+  static Future<void> openAutostartSettings() async =>
+      await _alarm.invokeMethod('openAutostartSettings');
+
   // ---- in-app ringing dialog support ----
 
   /// True while AlarmService is currently sounding an alarm.
@@ -106,4 +111,9 @@ class NativeBridge {
   /// Snooze the currently-ringing alarm. Returns false when no snoozes left.
   static Future<bool> snoozeAlarm() async =>
       await _alarm.invokeMethod<bool>('snoozeAlarm') ?? false;
+
+  /// Epoch-ms of a pending snooze trigger for alarm [id], or null when none.
+  /// Used to show an accurate "Rings in Xm" countdown while snoozed.
+  static Future<int?> getSnoozeTrigger(int id) async =>
+      await _alarm.invokeMethod<int>('getSnoozeTrigger', {'id': id});
 }

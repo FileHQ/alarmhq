@@ -231,6 +231,13 @@ class AppLocalizationsUr extends AppLocalizations {
   String get permOverlayTitle => 'دوسری ایپس پر دکھائیں';
 
   @override
+  String get permAutostartTitle => 'آٹو اسٹارٹ کی اجازت';
+
+  @override
+  String get permAutostartDesc =>
+      'ایپ بند ہو تو بھی الارم بجے (Xiaomi، Oppo، Vivo، Huawei پر ضروری)۔';
+
+  @override
   String get permSkip => 'ابھی چھوڑیں';
 
   @override

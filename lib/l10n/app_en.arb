@@ -68,6 +68,8 @@
   "permNotifTitle": "Notifications",
   "permOverlayDesc": "Shows the full-screen alarm over the lock screen.",
   "permOverlayTitle": "Display over other apps",
+  "permAutostartTitle": "Autostart permission",
+  "permAutostartDesc": "Lets the alarm ring even when the app is closed (needed on Xiaomi, Oppo, Vivo, Huawei).",
   "permSkip": "Skip for now",
   "permTitle": "Permissions needed",
   "permissions": "Permissions",

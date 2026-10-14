@@ -11,10 +11,17 @@ class AlarmReceiver : BroadcastReceiver() {
         val alarmJson = intent.getStringExtra("alarmJson") ?: return
         val snoozeCount = intent.getIntExtra("snoozeCount", 0)
         val isSnooze = intent.getBooleanExtra("isSnooze", false)
+        val alarmId = intent.getIntExtra("alarmId", -1)
 
         // Arm the following regular occurrence first, so it survives even if
         // the service below fails to start. Snooze one-shots skip this.
         if (!isSnooze) AlarmScheduler.onFired(context, alarmJson)
+
+        // v2.4: a fired snooze is no longer "pending" — clear its trigger so
+        // the UI countdown falls back to the next regular occurrence.
+        if (isSnooze && alarmId >= 0) {
+            AlarmScheduler.clearSnoozeTrigger(context, alarmId)
+        }
 
         val svc = Intent(context, AlarmService::class.java).apply {
             action = AlarmService.ACTION_START
