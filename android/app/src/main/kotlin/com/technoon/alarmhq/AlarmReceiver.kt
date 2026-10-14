@@ -26,6 +26,21 @@ class AlarmReceiver : BroadcastReceiver() {
         } else {
             context.startService(svc)
         }
+
+        // Launch the full-screen alarm UI (over the lock screen). Without
+        // this the alarm rings with no visible screen.
+        val fullScreen = Intent(context, FullScreenAlarmActivity::class.java).apply {
+            putExtra("alarmJson", alarmJson)
+            putExtra("snoozeCount", snoozeCount)
+            addFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TOP)
+        }
+        try {
+            context.startActivity(fullScreen)
+        } catch (_: Exception) {
+            // Activity launch failed (e.g. background-start restriction);
+            // the AlarmService keeps ringing and the full-screen notification
+            // intent still offers a way in.
+        }
         AlarmScheduler.updateWidget(context)
     }
 }
