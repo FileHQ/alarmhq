@@ -1,0 +1,27 @@
+name: alarmhq
+description: AlarmHQ - personal alarm app (Urdu + English).
+publish_to: 'none'
+version: 1.0.0+1
+
+environment:
+  sdk: ^3.13.5
+
+# Zero third-party dependencies on purpose: everything native goes through
+# hand-written platform channels (see android/app/src/main/kotlin), so the
+# project resolves fully offline and has no plugin failure modes.
+dependencies:
+  flutter:
+    sdk: flutter
+  flutter_localizations:
+    sdk: flutter
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^6.0.0
+
+flutter:
+  uses-material-design: true
+  generate: true
+  assets:
+    - assets/tones/

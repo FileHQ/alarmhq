@@ -1,0 +1,213 @@
+package com.technoon.alarmhq
+
+import android.Manifest
+import android.app.Activity
+import android.app.AlarmManager
+import android.content.Context
+import android.content.Intent
+import android.content.pm.PackageManager
+import android.media.RingtoneManager
+import android.net.Uri
+import android.os.Build
+import android.os.Bundle
+import android.os.PowerManager
+import android.provider.Settings
+import io.flutter.embedding.android.FlutterView
+import io.flutter.embedding.engine.FlutterEngine
+import io.flutter.embedding.engine.dart.DartExecutor
+import io.flutter.plugin.common.MethodChannel
+
+class MainActivity : Activity() {
+
+    private var flutterEngine: FlutterEngine? = null
+    private var pendingPickResult: MethodChannel.Result? = null
+
+    companion object {
+        private const val PICK_AUDIO_REQUEST = 1001
+        private const val NOTIF_PERMISSION_REQUEST = 9001
+    }
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+
+        val engine = FlutterEngine(this)
+        flutterEngine = engine
+        engine.dartExecutor.executeDartEntrypoint(
+            DartExecutor.DartEntrypoint.createDefault()
+        )
+
+        val flutterView = FlutterView(this)
+        setContentView(flutterView)
+        flutterView.attachToFlutterEngine(engine)
+
+        requestNotificationPermissionIfNeeded()
+        setupChannels(engine)
+    }
+
+    private fun setupChannels(engine: FlutterEngine) {
+        MethodChannel(
+            engine.dartExecutor.binaryMessenger,
+            "com.technoon.alarmhq/alarm",
+        ).setMethodCallHandler { call, result ->
+            when (call.method) {
+                "scheduleAlarm" -> {
+                    val id = (call.argument<Number>("id")?.toInt()) ?: -1
+                    val trigger = call.argument<Number>("triggerAtMillis")?.toLong()
+                        ?: 0L
+                    val json = call.argument<String>("alarmJson")
+                    if (id < 0 || trigger <= 0 || json.isNullOrEmpty()) {
+                        result.success(false)
+                    } else {
+                        val ok = AlarmScheduler.schedule(this, id, trigger, json)
+                        result.success(ok)
+                    }
+                }
+                "cancelAlarm" -> {
+                    val id = call.argument<Number>("id")?.toInt() ?: -1
+                    if (id >= 0) AlarmScheduler.cancel(this, id)
+                    result.success(true)
+                }
+                "cancelAllAlarms" -> {
+                    AlarmScheduler.cancelAll(this)
+                    result.success(true)
+                }
+                "hasExactAlarmPermission" ->
+                    result.success(AlarmScheduler.canScheduleExact(this))
+                "openExactAlarmSettings" -> {
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+                        startActivity(Intent(Settings.ACTION_REQUEST_SCHEDULE_EXACT_ALARM))
+                    }
+                    result.success(null)
+                }
+                "isIgnoringBatteryOptimizations" -> {
+                    val pm = getSystemService(Context.POWER_SERVICE) as PowerManager
+                    result.success(pm.isIgnoringBatteryOptimizations(packageName))
+                }
+                "openBatteryOptimizationSettings" -> {
+                    startActivity(
+                        Intent(Settings.ACTION_REQUEST_IGNORE_BATTERY_OPTIMIZATIONS).apply {
+                            data = Uri.parse("package:$packageName")
+                        }
+                    )
+                    result.success(null)
+                }
+                "pickAudioFile" -> {
+                    pendingPickResult = result
+                    val intent = Intent(Intent.ACTION_OPEN_DOCUMENT).apply {
+                        addCategory(Intent.CATEGORY_OPENABLE)
+                        type = "audio/*"
+                    }
+                    startActivityForResult(intent, PICK_AUDIO_REQUEST)
+                }
+                "getSystemDefaultAlarmUri" -> {
+                    val uri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_ALARM)
+                    result.success(uri?.toString())
+                }
+                "playTonePreview" -> {
+                    val uri = call.argument<String>("toneUri") ?: ""
+                    val volume =
+                        call.argument<Number>("volume")?.toFloat() ?: 0.8f
+                    val i = Intent(this, AlarmService::class.java).apply {
+                        action = AlarmService.ACTION_PREVIEW
+                        putExtra("toneUri", uri)
+                        putExtra("volume", volume)
+                    }
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                        startForegroundService(i)
+                    } else {
+                        startService(i)
+                    }
+                    result.success(null)
+                }
+                "stopTonePreview" -> {
+                    val i = Intent(this, AlarmService::class.java).apply {
+                        action = AlarmService.ACTION_STOP
+                    }
+                    startService(i)
+                    result.success(null)
+                }
+                "updateWidget" -> {
+                    val text = call.argument<String>("text") ?: ""
+                    AlarmScheduler.setNextText(this, text)
+                    result.success(null)
+                }
+                else -> result.notImplemented()
+            }
+        }
+
+        MethodChannel(
+            engine.dartExecutor.binaryMessenger,
+            "com.technoon.alarmhq/prefs",
+        ).setMethodCallHandler { call, result ->
+            val prefs = getSharedPreferences("alarmhq_prefs", Context.MODE_PRIVATE)
+            when (call.method) {
+                "getString" -> result.success(
+                    prefs.getString(call.argument<String>("key"), null)
+                )
+                "putString" -> {
+                    prefs.edit()
+                        .putString(
+                            call.argument<String>("key"),
+                            call.argument<String>("value"),
+                        )
+                        .apply()
+                    result.success(true)
+                }
+                "remove" -> {
+                    prefs.edit().remove(call.argument<String>("key")).apply()
+                    result.success(true)
+                }
+                else -> result.notImplemented()
+            }
+        }
+    }
+
+    @Deprecated("Use Activity Result API")
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        if (requestCode == PICK_AUDIO_REQUEST) {
+            val pending = pendingPickResult
+            pendingPickResult = null
+            if (resultCode == RESULT_OK && data?.data != null) {
+                val uri = data.data!!
+                try {
+                    contentResolver.takePersistableUriPermission(
+                        uri,
+                        Intent.FLAG_GRANT_READ_URI_PERMISSION,
+                    )
+                } catch (_: SecurityException) { /* best effort */ }
+                pending?.success(uri.toString())
+            } else {
+                pending?.success(null)
+            }
+        }
+    }
+
+    private fun requestNotificationPermissionIfNeeded() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU &&
+            checkSelfPermission(Manifest.permission.POST_NOTIFICATIONS) != PackageManager.PERMISSION_GRANTED
+        ) {
+            requestPermissions(arrayOf(Manifest.permission.POST_NOTIFICATIONS), NOTIF_PERMISSION_REQUEST)
+        }
+    }
+
+    override fun onResume() {
+        super.onResume()
+        flutterEngine?.lifecycleChannel?.appIsResumed()
+    }
+
+    override fun onPause() {
+        super.onPause()
+        flutterEngine?.lifecycleChannel?.appIsInactive()
+    }
+
+    override fun onDestroy() {
+        flutterEngine?.destroy()
+        flutterEngine = null
+        super.onDestroy()
+    }
+
+    @Suppress("unused")
+    private fun am(): AlarmManager =
+        getSystemService(Context.ALARM_SERVICE) as AlarmManager
+}

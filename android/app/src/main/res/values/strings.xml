@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="alarm">Alarm</string>
+    <string name="dismiss">Dismiss</string>
+    <string name="snooze">Snooze</string>
+    <string name="alarm_channel_name">Alarms</string>
+    <string name="alarm_channel_desc">AlarmHQ alarm notifications</string>
+    <string name="alarm_service_notif">AlarmHQ alarm is ringing</string>
+    <string name="widget_name">AlarmHQ</string>
+    <string name="widget_desc">Shows the next AlarmHQ alarm time</string>
+    <string name="no_alarms_set">No alarms set</string>
+</resources>

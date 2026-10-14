@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="alarm">الارم</string>
+    <string name="dismiss">بند کریں</string>
+    <string name="snooze">اسنوز</string>
+    <string name="alarm_channel_name">الارمز</string>
+    <string name="alarm_channel_desc">AlarmHQ الارم کی اطلاعات</string>
+    <string name="alarm_service_notif">AlarmHQ کا الارم بج رہا ہے</string>
+    <string name="widget_name">AlarmHQ</string>
+    <string name="widget_desc">اگلے AlarmHQ الارم کا وقت دکھاتا ہے</string>
+    <string name="no_alarms_set">کوئی الارم نہیں</string>
+</resources>
