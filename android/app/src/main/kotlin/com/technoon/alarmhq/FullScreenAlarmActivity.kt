@@ -126,18 +126,68 @@ class FullScreenAlarmActivity : Activity() {
             setPadding(0, 16, 0, 0)
         }
 
-        val dismissBtn = Button(this).apply {
-            text = getString(R.string.dismiss)
-            textSize = 22f
+        // v2.5: draggable pills — STOP towards the top (drag UP to stop),
+        // SNOOZE towards the bottom (drag DOWN to snooze). Tap = same action.
+        val dragThreshold = 100f // px of vertical drag to trigger
+
+        fun makeDraggable(
+            button: Button,
+            onDrag: () -> Unit,
+            onTap: () -> Unit,
+            dragUp: Boolean,
+        ) {
+            var downY = 0f
+            var downX = 0f
+            var triggered = false
+            button.setOnTouchListener { v, ev ->
+                when (ev.action) {
+                    MotionEvent.ACTION_DOWN -> {
+                        downY = ev.rawY
+                        downX = ev.rawX
+                        triggered = false
+                        // Let the button show its pressed state.
+                        v.isPressed = true
+                        true
+                    }
+                    MotionEvent.ACTION_MOVE -> {
+                        val dy = ev.rawY - downY
+                        // Drag up for STOP, drag down for SNOOZE.
+                        val hit = if (dragUp) dy < -dragThreshold
+                        else dy > dragThreshold
+                        if (hit && !triggered) {
+                            triggered = true
+                            v.isPressed = false
+                            onDrag()
+                        }
+                        true
+                    }
+                    MotionEvent.ACTION_UP, MotionEvent.ACTION_CANCEL -> {
+                        v.isPressed = false
+                        if (!triggered) {
+                            // Treat as a tap when the finger barely moved.
+                            val dy = ev.rawY - downY
+                            val dx = ev.rawX - downX
+                            if (abs(dy) < 30 && abs(dx) < 30) onTap()
+                        }
+                        true
+                    }
+                    else -> false
+                }
+            }
+        }
+
+        val stopPill = Button(this).apply {
+            text = "↑ ${getString(R.string.dismiss)}"
+            textSize = 20f
             typeface = Typeface.create(Typeface.DEFAULT, Typeface.BOLD)
             setTextColor(Color.BLACK)
             setBackgroundColor(lime)
         }
-        val snoozeBtn = Button(this).apply {
+        val snoozePill = Button(this).apply {
             text = if (maxSnoozes > 0)
-                "${getString(R.string.snooze)} (${snoozeCount + 1}/$maxSnoozes)"
-            else getString(R.string.snooze)
-            textSize = 22f
+                "↓ ${getString(R.string.snooze)} (${snoozeCount + 1}/$maxSnoozes)"
+            else "↓ ${getString(R.string.snooze)}"
+            textSize = 20f
             typeface = Typeface.create(Typeface.DEFAULT, Typeface.BOLD)
             setTextColor(Color.WHITE)
             setBackgroundColor(Color.parseColor("#3A414C"))
@@ -145,35 +195,54 @@ class FullScreenAlarmActivity : Activity() {
             else android.view.View.GONE
         }
 
-        dismissBtn.setOnClickListener { doDismiss() }
-        snoozeBtn.setOnClickListener { doSnooze() }
+        makeDraggable(stopPill, onDrag = { doDismiss() },
+            onTap = { doDismiss() }, dragUp = true)
+        makeDraggable(snoozePill, onDrag = { doSnooze() },
+            onTap = { doSnooze() }, dragUp = false)
 
-        val btnParams = LinearLayout.LayoutParams(
+        val pillParams = LinearLayout.LayoutParams(
             LinearLayout.LayoutParams.MATCH_PARENT,
             LinearLayout.LayoutParams.WRAP_CONTENT,
         ).apply {
-            topMargin = 20
-            height = 176
+            topMargin = 16
+            bottomMargin = 16
+            height = 150
         }
 
-        val hintView = TextView(this).apply {
-            text = getString(R.string.swipe_hints)
-            textSize = 14f
+        val stopHint = TextView(this).apply {
+            text = getString(R.string.drag_up_stop)
+            textSize = 13f
             setTextColor(grayText)
             gravity = Gravity.CENTER
-            setPadding(0, 28, 0, 0)
+        }
+        val snoozeHint = TextView(this).apply {
+            text = getString(R.string.drag_down_snooze)
+            textSize = 13f
+            setTextColor(grayText)
+            gravity = Gravity.CENTER
+            visibility = if (canSnooze) android.view.View.VISIBLE
+            else android.view.View.GONE
         }
 
         root.addView(timeView)
         root.addView(dateView)
         root.addView(labelView)
+        // STOP pill in the upper-middle: drag it UP.
+        root.addView(Space(this), LinearLayout.LayoutParams(
+            LinearLayout.LayoutParams.MATCH_PARENT, 0, 0.6f))
+        root.addView(stopHint)
+        root.addView(stopPill, pillParams)
+        // SNOOZE pill in the lower-middle: drag it DOWN.
         root.addView(Space(this), LinearLayout.LayoutParams(
             LinearLayout.LayoutParams.MATCH_PARENT, 0, 1f))
-        root.addView(dismissBtn, btnParams)
-        root.addView(snoozeBtn, btnParams)
-        root.addView(hintView)
+        root.addView(snoozePill, pillParams)
+        root.addView(snoozeHint)
+        root.addView(Space(this), LinearLayout.LayoutParams(
+            LinearLayout.LayoutParams.MATCH_PARENT, 0, 0.4f))
         setContentView(root)
 
+        // Keep the anywhere-on-screen fling as an extra shortcut:
+        // fling up = snooze, fling down = dismiss.
         gestureDetector = GestureDetector(
             this,
             object : GestureDetector.SimpleOnGestureListener() {

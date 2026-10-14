@@ -12,4 +12,8 @@
     <string name="snoozing_for">%1$d منٹ کے لیے سنوز کر دیا</string>
     <string name="no_more_snoozes">مزید اسنوز باقی نہیں</string>
     <string name="swipe_hints">↑ اسنوز کے لیے اوپر سوائپ کریں · ↓ بند کرنے کے لیے نیچے سوائپ کریں</string>
+    <string name="snoozed_until">⏰ %1$s تک اسنوز کیا گیا</string>
+    <string name="notif_stop">بند کریں</string>
+    <string name="drag_up_stop">اوپر ڈریگ کریں — یا ٹیپ کریں — بند کرنے کے لیے</string>
+    <string name="drag_down_snooze">نیچے ڈریگ کریں — یا ٹیپ کریں — اسنوز کے لیے</string>
 </resources>

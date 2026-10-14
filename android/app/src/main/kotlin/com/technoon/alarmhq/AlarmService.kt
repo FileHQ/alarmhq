@@ -32,8 +32,10 @@ class AlarmService : Service() {
         const val ACTION_START = "com.technoon.alarmhq.START"
         const val ACTION_PREVIEW = "com.technoon.alarmhq.PREVIEW"
         const val ACTION_STOP = "com.technoon.alarmhq.STOP"
+        const val ACTION_SNOOZED = "com.technoon.alarmhq.SNOOZED"
         private const val CHANNEL_ID = "alarmhq_alarm"
         private const val NOTIF_ID = 1001
+        private const val SNOOZED_NOTIF_ID = 1002
 
         // Currently-ringing alarm, visible to MainActivity/Flutter so the
         // in-app ringing dialog can show Dismiss/Snooze while ringing.
@@ -77,7 +79,21 @@ class AlarmService : Service() {
                 startForegroundService(getString(R.string.alarm_service_notif), null)
                 playTone(uri, fadeInSeconds = 0, fixedVolume = volume)
             }
-            ACTION_STOP -> stopEverything()
+            ACTION_STOP -> {
+                // If this Stop came from the snoozed notification, also
+                // cancel the pending snooze alarm.
+                val snoozeId = intent.getIntExtra("snoozeAlarmId", -1)
+                if (snoozeId >= 0) {
+                    AlarmScheduler.cancelSnoozeOnly(this, snoozeId)
+                }
+                stopEverything()
+            }
+            ACTION_SNOOZED -> {
+                // Persistent "Snoozed until X" notification (Xiaomi-style).
+                val trigger = intent.getLongExtra("snoozeTrigger", 0L)
+                val alarmId = intent.getIntExtra("snoozeAlarmId", -1)
+                if (trigger > 0L) showSnoozedNotification(trigger, alarmId)
+            }
             else -> { // ACTION_START (or null action = start)
                 val alarmJson = intent?.getStringExtra("alarmJson") ?: return START_NOT_STICKY
                 val snoozeCount = intent.getIntExtra("snoozeCount", 0)
@@ -89,6 +105,8 @@ class AlarmService : Service() {
                 }
                 ringingAlarmJson = alarmJson
                 ringingSnoozeCount = snoozeCount
+                // A firing snooze replaces the "Snoozed until X" notice.
+                cancelSnoozedNotification()
                 startForegroundService(label, Pair(alarmJson, snoozeCount))
                 if (alarm.optBoolean("vibration", true)) startVibration()
                 ensureAlarmVolume()
@@ -108,6 +126,9 @@ class AlarmService : Service() {
      * real alarm — the notification then carries a full-screen intent, which
      * is the documented way to pop an alarm UI over the lock screen
      * (USE_FULL_SCREEN_INTENT is declared in the manifest).
+     *
+     * Real alarms use a Xiaomi-style custom layout: big time, info line,
+     * and a round blue Stop button (RemoteViews).
      */
     private fun startForegroundService(title: String, fullScreen: Pair<String, Int>?) {
         val nm = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
@@ -119,22 +140,57 @@ class AlarmService : Service() {
             ).apply { description = getString(R.string.alarm_channel_desc) }
             nm.createNotificationChannel(channel)
         }
+
+        // Stop action: tapping the round blue button stops the alarm.
+        val stopIntent = Intent(this, AlarmService::class.java).apply {
+            action = ACTION_STOP
+        }
+        val stopPending = android.app.PendingIntent.getService(
+            this, 3001, stopIntent,
+            android.app.PendingIntent.FLAG_UPDATE_CURRENT or
+                android.app.PendingIntent.FLAG_IMMUTABLE,
+        )
+
         val builder = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             Notification.Builder(this, CHANNEL_ID)
         } else {
             @Suppress("DEPRECATION")
             Notification.Builder(this)
         }
-            .setContentTitle(title)
-            .setContentText(getString(R.string.alarm_service_notif))
             .setSmallIcon(android.R.drawable.ic_lock_idle_alarm)
             .setOngoing(true)
             .setCategory(Notification.CATEGORY_ALARM)
             .setPriority(Notification.PRIORITY_MAX)
+
         if (fullScreen != null) {
+            val (alarmJson, snoozeCount) = fullScreen
+            val alarm = try { JSONObject(alarmJson) } catch (_: Exception) { JSONObject() }
+            val label = alarm.optString("label", "").ifEmpty {
+                getString(R.string.alarm)
+            }
+            // Big 12-hour time, e.g. "09:40".
+            val cal = java.util.Calendar.getInstance()
+            var h12 = cal.get(java.util.Calendar.HOUR)
+            if (h12 == 0) h12 = 12
+            val mm = cal.get(java.util.Calendar.MINUTE).toString().padStart(2, '0')
+            val timeText = "$h12:$mm"
+
+            // Xiaomi-style custom layout via RemoteViews.
+            val views = android.widget.RemoteViews(packageName,
+                R.layout.notif_alarm_ringing)
+            views.setTextViewText(R.id.notif_time, timeText)
+            views.setTextViewText(R.id.notif_info, label)
+            views.setTextViewText(R.id.notif_stop, getString(R.string.notif_stop))
+            views.setOnClickPendingIntent(R.id.notif_stop, stopPending)
+            builder.setCustomContentView(views)
+            // Expanded style for the big layout on all API levels.
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
+                builder.setCustomBigContentView(views)
+            }
+
             val fsIntent = Intent(this, FullScreenAlarmActivity::class.java).apply {
-                putExtra("alarmJson", fullScreen.first)
-                putExtra("snoozeCount", fullScreen.second)
+                putExtra("alarmJson", alarmJson)
+                putExtra("snoozeCount", snoozeCount)
             }
             val fsPending = android.app.PendingIntent.getActivity(
                 this, 2001, fsIntent,
@@ -143,6 +199,9 @@ class AlarmService : Service() {
             )
             builder.setFullScreenIntent(fsPending, true)
             builder.setContentIntent(fsPending)
+        } else {
+            builder.setContentTitle(title)
+                .setContentText(getString(R.string.alarm_service_notif))
         }
         val notif: Notification = builder.build()
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
@@ -153,6 +212,86 @@ class AlarmService : Service() {
         } else {
             startForeground(NOTIF_ID, notif)
         }
+    }
+
+    /**
+     * Persistent Xiaomi-style "Snoozed until 10:09 PM" notification shown
+     * after the user snoozes. Tapping Stop cancels the pending snooze.
+     */
+    private fun showSnoozedNotification(triggerMillis: Long, alarmId: Int) {
+        val nm = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            val channel = NotificationChannel(
+                CHANNEL_ID,
+                getString(R.string.alarm_channel_name),
+                NotificationManager.IMPORTANCE_HIGH,
+            ).apply { description = getString(R.string.alarm_channel_desc) }
+            nm.createNotificationChannel(channel)
+        }
+
+        // Format trigger as 12-hour time, e.g. "10:09 PM".
+        val cal = java.util.Calendar.getInstance().apply {
+            timeInMillis = triggerMillis
+        }
+        var h12 = cal.get(java.util.Calendar.HOUR)
+        if (h12 == 0) h12 = 12
+        val mm = cal.get(java.util.Calendar.MINUTE).toString().padStart(2, '0')
+        val ampm = if (cal.get(java.util.Calendar.AM_PM) ==
+            java.util.Calendar.AM) "AM" else "PM"
+        val timeText = "$h12:$mm $ampm"
+
+        // Stop action cancels the pending snooze alarm.
+        val stopIntent = Intent(this, AlarmService::class.java).apply {
+            action = ACTION_STOP
+            putExtra("snoozeAlarmId", alarmId)
+        }
+        val stopPending = android.app.PendingIntent.getService(
+            this, 3002, stopIntent,
+            android.app.PendingIntent.FLAG_UPDATE_CURRENT or
+                android.app.PendingIntent.FLAG_IMMUTABLE,
+        )
+
+        // Tapping the notification opens the app.
+        val openIntent = Intent(this, MainActivity::class.java)
+        val openPending = android.app.PendingIntent.getActivity(
+            this, 3003, openIntent,
+            android.app.PendingIntent.FLAG_UPDATE_CURRENT or
+                android.app.PendingIntent.FLAG_IMMUTABLE,
+        )
+
+        val views = android.widget.RemoteViews(packageName,
+            R.layout.notif_alarm_ringing)
+        views.setTextViewText(R.id.notif_time, timeText)
+        views.setTextViewText(
+            R.id.notif_info, getString(R.string.snoozed_until, timeText))
+        views.setTextViewText(R.id.notif_stop, getString(R.string.notif_stop))
+        views.setOnClickPendingIntent(R.id.notif_stop, stopPending)
+
+        val builder = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            Notification.Builder(this, CHANNEL_ID)
+        } else {
+            @Suppress("DEPRECATION")
+            Notification.Builder(this)
+        }
+            .setSmallIcon(android.R.drawable.ic_lock_idle_alarm)
+            .setOngoing(true)
+            .setCategory(Notification.CATEGORY_ALARM)
+            .setPriority(Notification.PRIORITY_HIGH)
+            .setCustomContentView(views)
+            .setContentIntent(openPending)
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
+            builder.setCustomBigContentView(views)
+        }
+        nm.notify(SNOOZED_NOTIF_ID, builder.build())
+    }
+
+    /** Remove the snoozed notification (snooze fired or was cancelled). */
+    private fun cancelSnoozedNotification() {
+        try {
+            val nm = getSystemService(Context.NOTIFICATION_SERVICE)
+                as NotificationManager
+            nm.cancel(SNOOZED_NOTIF_ID)
+        } catch (_: Exception) { }
     }
 
     private fun resolveUri(toneUri: String): Uri? {
@@ -278,6 +417,7 @@ class AlarmService : Service() {
         ringingAlarmJson = null
         ringingSnoozeCount = 0
         stopPlayback()
+        cancelSnoozedNotification()
         try { stopForeground(STOP_FOREGROUND_REMOVE) } catch (_: Exception) {}
         stopSelf()
     }

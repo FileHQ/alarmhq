@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  Xiaomi-style alarm notification: big time on the left, snooze info line
+  below it, and a round blue Stop button on the right.
+  Used via RemoteViews from AlarmService while the alarm is ringing.
+-->
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal"
+    android:gravity="center_vertical"
+    android:padding="16dp"
+    android:background="#23272E">
+
+    <LinearLayout
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/notif_time"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="09:40"
+            android:textSize="44sp"
+            android:textStyle="bold"
+            android:textColor="#FFFFFF" />
+
+        <TextView
+            android:id="@+id/notif_info"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="4dp"
+            android:text="Alarm"
+            android:textSize="14sp"
+            android:textColor="#B0B7C3" />
+    </LinearLayout>
+
+    <Button
+        android:id="@+id/notif_stop"
+        android:layout_width="72dp"
+        android:layout_height="72dp"
+        android:layout_marginStart="12dp"
+        android:text="Stop"
+        android:textSize="13sp"
+        android:textStyle="bold"
+        android:textColor="#FFFFFF"
+        android:background="@drawable/notif_stop_circle" />
+</LinearLayout>

@@ -249,6 +249,20 @@ object AlarmScheduler {
         am.setAlarmClock(
             info, fireIntent(context, id, alarmJson, snoozeCount, true)
         )
+        // v2.5: show the persistent Xiaomi-style "Snoozed until X"
+        // notification with a working Stop action.
+        try {
+            val svc = android.content.Intent(context, AlarmService::class.java).apply {
+                action = AlarmService.ACTION_SNOOZED
+                putExtra("snoozeTrigger", trigger)
+                putExtra("snoozeAlarmId", id)
+            }
+            if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
+                context.startForegroundService(svc)
+            } else {
+                context.startService(svc)
+            }
+        } catch (_: Exception) { /* best effort */ }
     }
 
     /** Epoch-ms of a pending snooze trigger for [id], or null when none/future. */
@@ -275,6 +289,14 @@ object AlarmScheduler {
         am.cancel(fireIntent(context, id, "{}", 0, true))
         removeDef(context, id)
         // v2.4: drop any pending snooze trigger for the UI countdown.
+        clearSnoozeTrigger(context, id)
+        updateWidget(context)
+    }
+
+    /** Cancel only the pending snooze one-shot for [id] (keeps the def). */
+    fun cancelSnoozeOnly(context: Context, id: Int) {
+        val am = alarmManager(context)
+        am.cancel(fireIntent(context, id, "{}", 0, true))
         clearSnoozeTrigger(context, id)
         updateWidget(context)
     }

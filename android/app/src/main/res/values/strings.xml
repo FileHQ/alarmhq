@@ -12,4 +12,8 @@
     <string name="snoozing_for">Snoozing for %1$d minutes</string>
     <string name="no_more_snoozes">No more snoozes left</string>
     <string name="swipe_hints">↑ Swipe up to snooze · ↓ Swipe down to dismiss</string>
+    <string name="snoozed_until">⏰ Snoozed until %1$s</string>
+    <string name="notif_stop">Stop</string>
+    <string name="drag_up_stop">Drag up — or tap — to stop</string>
+    <string name="drag_down_snooze">Drag down — or tap — to snooze</string>
 </resources>
