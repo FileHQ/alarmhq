@@ -116,6 +116,17 @@ class AppLocalizationsUr extends AppLocalizations {
   String get intervalDays => 'ہر کتنے دن بعد دہراؤ';
 
   @override
+  String get cycleRingDays => 'بجے (دن)';
+
+  @override
+  String get cycleSkipDays => 'نہ بجے (دن)';
+
+  @override
+  String cycleSummary(Object ring, Object skip) {
+    return '$ring دن بجے، $skip دن نہ بجے';
+  }
+
+  @override
   String get intervalPreview => 'اگلی بار بجنے کے اوقات';
 
   @override
@@ -267,6 +278,9 @@ class AppLocalizationsUr extends AppLocalizations {
 
   @override
   String get repeatDates => 'تاریخیں';
+
+  @override
+  String get repeatCycle => 'سائیکل';
 
   @override
   String get repeatInterval => 'ہر N دن بعد';

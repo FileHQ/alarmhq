@@ -195,6 +195,8 @@ class _AlarmListScreenState extends State<AlarmListScreen>
         ];
         final days = a.weekDays.map((w) => names[w - 1]).join(' · ');
         return l10n.weeklySummary(days);
+      case AlarmRepeatMode.cycle:
+        return l10n.cycleSummary(a.ringDays, a.skipDays);
     }
   }
 

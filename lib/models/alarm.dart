@@ -10,6 +10,9 @@ class AlarmModel {
   final DateTime? onceDate; // date part only, for AlarmRepeatMode.once
   final int intervalDays; // N for AlarmRepeatMode.interval (>= 1)
   final DateTime? intervalStart; // date part only, counting origin
+  final int ringDays; // X for AlarmRepeatMode.cycle: ring every day for X days
+  final int skipDays; // Y for AlarmRepeatMode.cycle: then skip Y days
+  final DateTime? cycleStart; // date part only, cycle counting origin
   final List<DateTime> specificDates; // date parts only, for specificDates mode
   final DateTime? skipNextDate; // exact trigger to skip ("skip next only")
   final int snoozeMinutes;
@@ -30,6 +33,9 @@ class AlarmModel {
     this.onceDate,
     this.intervalDays = 1,
     this.intervalStart,
+    this.ringDays = 5,
+    this.skipDays = 1,
+    this.cycleStart,
     this.specificDates = const [],
     this.skipNextDate,
     this.snoozeMinutes = 10,
@@ -51,6 +57,9 @@ class AlarmModel {
     DateTime? Function()? onceDate,
     int? intervalDays,
     DateTime? Function()? intervalStart,
+    int? ringDays,
+    int? skipDays,
+    DateTime? Function()? cycleStart,
     List<DateTime>? specificDates,
     DateTime? Function()? skipNextDate,
     int? snoozeMinutes,
@@ -71,6 +80,9 @@ class AlarmModel {
       onceDate: onceDate != null ? onceDate() : this.onceDate,
       intervalDays: intervalDays ?? this.intervalDays,
       intervalStart: intervalStart != null ? intervalStart() : this.intervalStart,
+      ringDays: ringDays ?? this.ringDays,
+      skipDays: skipDays ?? this.skipDays,
+      cycleStart: cycleStart != null ? cycleStart() : this.cycleStart,
       specificDates: specificDates ?? this.specificDates,
       skipNextDate: skipNextDate != null ? skipNextDate() : this.skipNextDate,
       snoozeMinutes: snoozeMinutes ?? this.snoozeMinutes,
@@ -111,6 +123,9 @@ class AlarmModel {
         'onceDate': onceDate == null ? null : _dateStr(onceDate!),
         'intervalDays': intervalDays,
         'intervalStart': intervalStart == null ? null : _dateStr(intervalStart!),
+        'ringDays': ringDays,
+        'skipDays': skipDays,
+        'cycleStart': cycleStart == null ? null : _dateStr(cycleStart!),
         'specificDates':
             specificDates.map(_dateStr).toList(),
         'skipNextDate':
@@ -142,6 +157,11 @@ class AlarmModel {
         intervalStart: j['intervalStart'] == null
             ? null
             : _dateParse(j['intervalStart'] as String),
+        ringDays: (j['ringDays'] as num?)?.toInt() ?? 5,
+        skipDays: (j['skipDays'] as num?)?.toInt() ?? 1,
+        cycleStart: j['cycleStart'] == null
+            ? null
+            : _dateParse(j['cycleStart'] as String),
         specificDates: ((j['specificDates'] as List?) ?? const [])
             .map((e) => _dateParse(e as String))
             .toList(),
@@ -158,4 +178,4 @@ class AlarmModel {
       );
 }
 
-enum AlarmRepeatMode { weekly, once, interval, specificDates }
+enum AlarmRepeatMode { weekly, once, interval, specificDates, cycle }

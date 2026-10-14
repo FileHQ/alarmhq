@@ -35,6 +35,9 @@ class _AlarmEditScreenState extends State<AlarmEditScreen> {
   late DateTime _onceDate;
   late int _intervalDays;
   late DateTime _intervalStart;
+  late int _ringDays;
+  late int _skipDays;
+  late DateTime _cycleStart;
   late List<DateTime> _specificDates;
   late DateTime _calMonth; // calendar page being viewed
   late int _snoozeMinutes;
@@ -61,6 +64,10 @@ class _AlarmEditScreenState extends State<AlarmEditScreen> {
     _intervalDays = e?.intervalDays ?? 5;
     _intervalStart =
         e?.intervalStart ?? DateTime(now.year, now.month, now.day);
+    _ringDays = e?.ringDays ?? 5;
+    _skipDays = e?.skipDays ?? 1;
+    _cycleStart =
+        e?.cycleStart ?? DateTime(now.year, now.month, now.day);
     _specificDates = List<DateTime>.from(e?.specificDates ?? []);
     _specificDates.sort(_dateCmp);
     _calMonth = DateTime(now.year, now.month, 1);
@@ -100,6 +107,10 @@ class _AlarmEditScreenState extends State<AlarmEditScreen> {
         intervalDays: _intervalDays,
         intervalStart: DateTime(
             _intervalStart.year, _intervalStart.month, _intervalStart.day),
+        ringDays: _ringDays,
+        skipDays: _skipDays,
+        cycleStart:
+            DateTime(_cycleStart.year, _cycleStart.month, _cycleStart.day),
         specificDates: _specificDates
             .map((d) => DateTime(d.year, d.month, d.day))
             .toList(),
@@ -170,18 +181,25 @@ class _AlarmEditScreenState extends State<AlarmEditScreen> {
     if (t != null) _markDirty(() => _time = t);
   }
 
-  Future<void> _pickDate({required bool forIntervalStart}) async {
+  /// which: 0 = once date, 1 = interval start, 2 = cycle start.
+  Future<void> _pickDate({required int which}) async {
     final now = DateTime.now();
     final d = await showDatePicker(
       context: context,
-      initialDate: forIntervalStart ? _intervalStart : _onceDate,
+      initialDate: which == 1
+          ? _intervalStart
+          : which == 2
+              ? _cycleStart
+              : _onceDate,
       firstDate: DateTime(now.year - 1),
       lastDate: DateTime(now.year + 5),
     );
     if (d != null) {
       _markDirty(() {
-        if (forIntervalStart) {
+        if (which == 1) {
           _intervalStart = d;
+        } else if (which == 2) {
+          _cycleStart = d;
         } else {
           _onceDate = d;
         }
@@ -290,6 +308,7 @@ class _AlarmEditScreenState extends State<AlarmEditScreen> {
             if (_mode == AlarmRepeatMode.interval) _intervalPicker(l10n),
             if (_mode == AlarmRepeatMode.specificDates)
               _specificDatesPicker(l10n),
+            if (_mode == AlarmRepeatMode.cycle) _cyclePicker(l10n),
             const Divider(height: 32),
             // ---- snooze ----
             _sectionTitle(l10n.snooze),
@@ -380,13 +399,14 @@ class _AlarmEditScreenState extends State<AlarmEditScreen> {
     );
   }
 
-  /// 4-option segment with compact labels that fit on one line.
+  /// 5-option segment with compact labels that fit on one line.
   Widget _modeSegment(AppLocalizations l10n) {
     final options = [
       (AlarmRepeatMode.weekly, l10n.repeatWeeklyShort),
       (AlarmRepeatMode.once, l10n.repeatOnce),
       (AlarmRepeatMode.interval, l10n.repeatNDays),
       (AlarmRepeatMode.specificDates, l10n.repeatDates),
+      (AlarmRepeatMode.cycle, l10n.repeatCycle),
     ];
     return Container(
       decoration: BoxDecoration(
@@ -495,7 +515,7 @@ class _AlarmEditScreenState extends State<AlarmEditScreen> {
         title: Text(l10n.date),
         subtitle: Text(_dateText(_onceDate)),
         leading: const Icon(Icons.calendar_today, color: AppTheme.emerald),
-        onTap: () => _pickDate(forIntervalStart: false),
+        onTap: () => _pickDate(which: 0),
       );
 
   Widget _intervalPicker(AppLocalizations l10n) {
@@ -519,7 +539,7 @@ class _AlarmEditScreenState extends State<AlarmEditScreen> {
           subtitle: Text(_dateText(_intervalStart)),
           leading:
               const Icon(Icons.event_repeat, color: AppTheme.emerald),
-          onTap: () => _pickDate(forIntervalStart: true),
+          onTap: () => _pickDate(which: 1),
           contentPadding: EdgeInsets.zero,
         ),
         if (preview.isNotEmpty) ...[
@@ -552,6 +572,67 @@ class _AlarmEditScreenState extends State<AlarmEditScreen> {
     var h = h24 % 12;
     if (h == 0) h = 12;
     return '$h:${m.toString().padLeft(2, '0')} $ampm';
+  }
+
+  /// Ring/skip cycle picker: "ring X days, skip Y days", start date,
+  /// plus a preview of the next rings.
+  Widget _cyclePicker(AppLocalizations l10n) {
+    final preview =
+        NextOccurrence.nextTriggers(_buildDraft(), DateTime.now(), 5);
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        _stepperRow(
+          label: l10n.cycleRingDays,
+          valueText: '$_ringDays',
+          onMinus: _ringDays > 1
+              ? () => _markDirty(() => _ringDays--)
+              : null,
+          onPlus: _ringDays < 30
+              ? () => _markDirty(() => _ringDays++)
+              : null,
+        ),
+        _stepperRow(
+          label: l10n.cycleSkipDays,
+          valueText: '$_skipDays',
+          onMinus: _skipDays > 0
+              ? () => _markDirty(() => _skipDays--)
+              : null,
+          onPlus: _skipDays < 30
+              ? () => _markDirty(() => _skipDays++)
+              : null,
+        ),
+        ListTile(
+          title: Text(l10n.startDate),
+          subtitle: Text(_dateText(_cycleStart)),
+          leading:
+              const Icon(Icons.event_repeat, color: AppTheme.emerald),
+          onTap: () => _pickDate(which: 2),
+          contentPadding: EdgeInsets.zero,
+        ),
+        if (preview.isNotEmpty) ...[
+          const SizedBox(height: 4),
+          Text(l10n.intervalPreview,
+              style: Theme.of(context).textTheme.bodySmall),
+          const SizedBox(height: 4),
+          for (final t in preview)
+            Padding(
+              padding: const EdgeInsets.symmetric(vertical: 2),
+              child: Row(
+                children: [
+                  const Icon(Icons.alarm,
+                      size: 16, color: AppTheme.emerald),
+                  const SizedBox(width: 8),
+                  Text(
+                    '${_dateText(t)}  ${_time12(t.hour, t.minute)}',
+                    style: const TextStyle(fontWeight: FontWeight.w600),
+                  ),
+                ],
+              ),
+            ),
+        ],
+      ],
+    );
   }
 
   /// Calendar multi-select for specific dates.

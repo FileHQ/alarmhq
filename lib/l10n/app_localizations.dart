@@ -290,6 +290,24 @@ abstract class AppLocalizations {
   /// **'Repeat every (days)'**
   String get intervalDays;
 
+  /// No description provided for @cycleRingDays.
+  ///
+  /// In en, this message translates to:
+  /// **'Ring for (days)'**
+  String get cycleRingDays;
+
+  /// No description provided for @cycleSkipDays.
+  ///
+  /// In en, this message translates to:
+  /// **'Skip (days)'**
+  String get cycleSkipDays;
+
+  /// No description provided for @cycleSummary.
+  ///
+  /// In en, this message translates to:
+  /// **'Ring {ring}d, skip {skip}d'**
+  String cycleSummary(Object ring, Object skip);
+
   /// No description provided for @intervalPreview.
   ///
   /// In en, this message translates to:
@@ -577,6 +595,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Dates'**
   String get repeatDates;
+
+  /// No description provided for @repeatCycle.
+  ///
+  /// In en, this message translates to:
+  /// **'Cycle'**
+  String get repeatCycle;
 
   /// No description provided for @repeatInterval.
   ///

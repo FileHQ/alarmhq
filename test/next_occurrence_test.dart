@@ -187,4 +187,65 @@ void main() {
         [DateTime(2026, 10, 25), DateTime(2026, 11, 1)]);
     expect(b.skipNextDate, DateTime(2026, 10, 15, 7, 0));
   });
+
+  group('cycle mode (ring X days, skip Y days)', () {
+    AlarmModel cycle({
+      int hour = 7,
+      int minute = 0,
+      int ringDays = 5,
+      int skipDays = 1,
+      DateTime? cycleStart,
+    }) =>
+        AlarmModel(
+          id: 2,
+          hour: hour,
+          minute: minute,
+          mode: AlarmRepeatMode.cycle,
+          ringDays: ringDays,
+          skipDays: skipDays,
+          cycleStart: cycleStart ?? DateTime(2026, 10, 12), // a Monday
+        );
+
+    test('rings on a ring day at the alarm time', () {
+      // Oct 14 = 2 days after start -> position 2 < 5 -> rings.
+      final a = cycle();
+      final t = NextOccurrence.nextTrigger(a, DateTime(2026, 10, 14, 6, 0));
+      expect(t, DateTime(2026, 10, 14, 7, 0));
+    });
+
+    test('skips the silent days', () {
+      // Oct 17 = 5 days after start -> position 5 >= 5 -> silent.
+      // Next ring day is Oct 18 (position 0 of next cycle).
+      final a = cycle();
+      final t = NextOccurrence.nextTrigger(a, DateTime(2026, 10, 17, 6, 0));
+      expect(t, DateTime(2026, 10, 18, 7, 0));
+    });
+
+    test('same-day alarm time already passed -> next ring day', () {
+      final a = cycle();
+      final t = NextOccurrence.nextTrigger(a, DateTime(2026, 10, 14, 8, 0));
+      expect(t, DateTime(2026, 10, 15, 7, 0));
+    });
+
+    test('start date in the future', () {
+      final a = cycle(cycleStart: DateTime(2026, 10, 20));
+      final t = NextOccurrence.nextTrigger(a, DateTime(2026, 10, 14, 6, 0));
+      expect(t, DateTime(2026, 10, 20, 7, 0));
+    });
+
+    test('skipDays = 0 means ring every day', () {
+      final a = cycle(skipDays: 0);
+      final t = NextOccurrence.nextTrigger(a, DateTime(2026, 10, 14, 8, 0));
+      expect(t, DateTime(2026, 10, 15, 7, 0));
+    });
+
+    test('JSON round-trip keeps cycle fields', () {
+      final a = cycle(ringDays: 3, skipDays: 2);
+      final b = AlarmModel.fromJson(a.toJson());
+      expect(b.mode, AlarmRepeatMode.cycle);
+      expect(b.ringDays, 3);
+      expect(b.skipDays, 2);
+      expect(b.cycleStart, DateTime(2026, 10, 12));
+    });
+  });
 }

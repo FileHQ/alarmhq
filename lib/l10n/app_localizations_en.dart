@@ -117,6 +117,17 @@ class AppLocalizationsEn extends AppLocalizations {
   String get intervalDays => 'Repeat every (days)';
 
   @override
+  String get cycleRingDays => 'Ring for (days)';
+
+  @override
+  String get cycleSkipDays => 'Skip (days)';
+
+  @override
+  String cycleSummary(Object ring, Object skip) {
+    return 'Ring ${ring}d, skip ${skip}d';
+  }
+
+  @override
   String get intervalPreview => 'Next rings';
 
   @override
@@ -270,6 +281,9 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get repeatDates => 'Dates';
+
+  @override
+  String get repeatCycle => 'Cycle';
 
   @override
   String get repeatInterval => 'Every N days';

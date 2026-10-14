@@ -63,6 +63,7 @@ object AlarmScheduler {
             "once" -> nextOnce(alarm, hour, minute, nowMillis)
             "interval" -> nextInterval(alarm, hour, minute, nowMillis)
             "specificDates" -> nextSpecificDates(alarm, hour, minute, nowMillis)
+            "cycle" -> nextCycle(alarm, hour, minute, nowMillis)
             else -> null
         }
         // "Skip next only": if the computed trigger matches skipNextDate,
@@ -85,6 +86,7 @@ object AlarmScheduler {
             "once" -> nextOnce(alarm, hour, minute, afterMillis)
             "interval" -> nextInterval(alarm, hour, minute, afterMillis)
             "specificDates" -> nextSpecificDates(alarm, hour, minute, afterMillis)
+            "cycle" -> nextCycle(alarm, hour, minute, afterMillis)
             else -> null
         }
     }
@@ -156,6 +158,43 @@ object AlarmScheduler {
             if (best == null || t < best) best = t
         }
         return best
+    }
+
+    /**
+     * Ring/skip cycle (mirrors Dart _nextCycle): ring every day for
+     * [ringDays] days, then stay silent for [skipDays] days, repeating
+     * from [cycleStart].
+     */
+    private fun nextCycle(
+        alarm: JSONObject, hour: Int, minute: Int, nowMillis: Long
+    ): Long? {
+        val startCal = parseDate(alarm.optString("cycleStart", "")) ?: return null
+        val ring = alarm.optInt("ringDays", 5)
+        val skip = alarm.optInt("skipDays", 1)
+        if (ring < 1 || skip < 0) return null
+        val cycleLen = ring + skip
+        // Day boundaries at local midnight.
+        val startDay = (startCal.timeInMillis / 86400000L)
+        val nowDay = Calendar.getInstance().apply {
+            set(Calendar.HOUR_OF_DAY, 0)
+            set(Calendar.MINUTE, 0)
+            set(Calendar.SECOND, 0)
+            set(Calendar.MILLISECOND, 0)
+        }
+        for (d in 0 until 366) {
+            val dayCal = (nowDay.clone() as Calendar).apply {
+                add(Calendar.DAY_OF_YEAR, d)
+            }
+            val dayIndex = dayCal.timeInMillis / 86400000L
+            val daysSinceStart = dayIndex - startDay
+            if (daysSinceStart < 0) continue
+            val pos = (daysSinceStart % cycleLen).toInt()
+            if (pos < ring) {
+                val t = atMillis(dayCal, hour, minute)
+                if (t >= nowMillis) return t
+            }
+        }
+        return null
     }
 
     private fun parseDate(s: String): Calendar? {

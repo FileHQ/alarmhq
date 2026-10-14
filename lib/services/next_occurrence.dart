@@ -34,6 +34,8 @@ class NextOccurrence {
         return _nextInterval(alarm, now);
       case AlarmRepeatMode.specificDates:
         return _nextSpecificDates(alarm, now);
+      case AlarmRepeatMode.cycle:
+        return _nextCycle(alarm, now);
     }
   }
 
@@ -98,5 +100,31 @@ class NextOccurrence {
     // smallest k >= 1 with origin + k*step >= now
     final k = (elapsed + stepMs - 1) ~/ stepMs;
     return origin.add(Duration(milliseconds: k * stepMs));
+  }
+
+  /// Ring/skip cycle: ring every day for [ringDays] days, then stay silent
+  /// for [skipDays] days, repeating from [cycleStart]. Finds the next
+  /// ring-day at/after [now].
+  static DateTime? _nextCycle(AlarmModel alarm, DateTime now) {
+    final start = alarm.cycleStart;
+    final ring = alarm.ringDays;
+    final skip = alarm.skipDays;
+    if (start == null || ring < 1 || skip < 0) return null;
+    final cycleLen = ring + skip;
+    if (cycleLen < 1) return null;
+    final startDay = DateTime(start.year, start.month, start.day);
+    final today = DateTime(now.year, now.month, now.day);
+    // Scan forward day by day (bounded: one year is plenty).
+    for (var d = 0; d < 366; d++) {
+      final day = today.add(Duration(days: d));
+      final daysSinceStart = day.difference(startDay).inDays;
+      if (daysSinceStart < 0) continue; // before the cycle start
+      final pos = daysSinceStart % cycleLen;
+      if (pos < ring) {
+        final t = _at(day, alarm.hour, alarm.minute);
+        if (!t.isBefore(now)) return t;
+      }
+    }
+    return null;
   }
 }
