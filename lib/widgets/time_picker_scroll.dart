@@ -61,7 +61,16 @@ class ScrollTimePicker extends StatefulWidget {
       context: context,
       isScrollControlled: true,
       backgroundColor: Colors.transparent,
-      builder: (_) => ScrollTimePicker(initial: initial),
+      builder: (_) => SafeArea(
+        // Keeps the sheet (esp. the Done button) above the system
+        // navigation bar on edge-to-edge devices.
+        top: false,
+        child: SingleChildScrollView(
+          // Safety net for very small screens: the sheet scrolls instead
+          // of cutting content off.
+          child: ScrollTimePicker(initial: initial),
+        ),
+      ),
     );
   }
 
