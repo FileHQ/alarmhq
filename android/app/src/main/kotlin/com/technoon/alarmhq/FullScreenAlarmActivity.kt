@@ -126,10 +126,10 @@ class FullScreenAlarmActivity : Activity() {
             setPadding(0, 16, 0, 0)
         }
 
-        // v2.6 (user correction): SNOOZE pill at the very TOP (drag UP to
-        // snooze), STOP pill at the very BOTTOM (drag DOWN to stop).
-        // Layout top→bottom: snooze pill, hint, time, date, label,
-        // spacer, hint, stop pill. Tap = same action (fallback).
+        // v2.6 (user correction): SNOOZE pill at the very TOP, STOP pill at
+        // the very BOTTOM. Drag directions: drag UP = STOP, drag DOWN =
+        // SNOOZE. So drag the Snooze pill DOWN to snooze, drag the Stop
+        // pill UP to stop. Tap = same action (fallback).
         val dragThreshold = 100f // px of vertical drag to trigger
 
         fun makeDraggable(
@@ -153,7 +153,7 @@ class FullScreenAlarmActivity : Activity() {
                     }
                     MotionEvent.ACTION_MOVE -> {
                         val dy = ev.rawY - downY
-                        // Drag up for SNOOZE, drag down for STOP.
+                        // Drag UP = STOP, drag DOWN = SNOOZE.
                         val hit = if (dragUp) dy < -dragThreshold
                         else dy > dragThreshold
                         if (hit && !triggered) {
@@ -180,8 +180,8 @@ class FullScreenAlarmActivity : Activity() {
 
         val snoozePill = Button(this).apply {
             text = if (maxSnoozes > 0)
-                "↑ ${getString(R.string.snooze)} (${snoozeCount + 1}/$maxSnoozes)"
-            else "↑ ${getString(R.string.snooze)}"
+                "↓ ${getString(R.string.snooze)} (${snoozeCount + 1}/$maxSnoozes)"
+            else "↓ ${getString(R.string.snooze)}"
             textSize = 20f
             typeface = Typeface.create(Typeface.DEFAULT, Typeface.BOLD)
             setTextColor(Color.WHITE)
@@ -190,7 +190,7 @@ class FullScreenAlarmActivity : Activity() {
             else android.view.View.GONE
         }
         val stopPill = Button(this).apply {
-            text = "↓ ${getString(R.string.dismiss)}"
+            text = "↑ ${getString(R.string.dismiss)}"
             textSize = 20f
             typeface = Typeface.create(Typeface.DEFAULT, Typeface.BOLD)
             setTextColor(Color.BLACK)
@@ -198,9 +198,9 @@ class FullScreenAlarmActivity : Activity() {
         }
 
         makeDraggable(snoozePill, onDrag = { doSnooze() },
-            onTap = { doSnooze() }, dragUp = true)
+            onTap = { doSnooze() }, dragUp = false)
         makeDraggable(stopPill, onDrag = { doDismiss() },
-            onTap = { doDismiss() }, dragUp = false)
+            onTap = { doDismiss() }, dragUp = true)
 
         val pillParams = LinearLayout.LayoutParams(
             LinearLayout.LayoutParams.MATCH_PARENT,
@@ -212,7 +212,7 @@ class FullScreenAlarmActivity : Activity() {
         }
 
         val snoozeHint = TextView(this).apply {
-            text = getString(R.string.drag_up_snooze)
+            text = getString(R.string.drag_down_snooze)
             textSize = 13f
             setTextColor(grayText)
             gravity = Gravity.CENTER
@@ -220,7 +220,7 @@ class FullScreenAlarmActivity : Activity() {
             else android.view.View.GONE
         }
         val stopHint = TextView(this).apply {
-            text = getString(R.string.drag_down_stop)
+            text = getString(R.string.drag_up_stop)
             textSize = 13f
             setTextColor(grayText)
             gravity = Gravity.CENTER
@@ -241,8 +241,8 @@ class FullScreenAlarmActivity : Activity() {
         root.addView(stopPill, pillParams)
         setContentView(root)
 
-        // Keep the anywhere-on-screen fling as an extra shortcut:
-        // fling up = snooze, fling down = dismiss.
+        // Screen-level fling shortcut: swipe UP anywhere = stop,
+        // swipe DOWN anywhere = snooze. (Matches the pill drag directions.)
         gestureDetector = GestureDetector(
             this,
             object : GestureDetector.SimpleOnGestureListener() {
@@ -256,9 +256,9 @@ class FullScreenAlarmActivity : Activity() {
                     val x1 = e1?.x ?: e2.x
                     val dy = e2.y - y1
                     val dx = e2.x - x1
-                    // Vertical fling: swipe up = snooze, swipe down = dismiss.
+                    // Vertical fling: swipe up = stop, swipe down = snooze.
                     if (abs(dy) > abs(dx) && abs(dy) > 150 && abs(velocityY) > 200) {
-                        if (dy < 0) doSnooze() else doDismiss()
+                        if (dy < 0) doDismiss() else doSnooze()
                         return true
                     }
                     return false
