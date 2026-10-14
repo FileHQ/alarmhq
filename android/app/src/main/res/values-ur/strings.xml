@@ -16,4 +16,5 @@
     <string name="notif_stop">بند کریں</string>
     <string name="drag_down_snooze">↓ نیچے ڈریگ کریں اسنوز کے لیے</string>
     <string name="drag_up_stop">↑ اوپر ڈریگ کریں بند کرنے کے لیے</string>
+    <string name="slider_hint">بند کرنے کے لیے گھڑی کو اوپر سلائیڈ کریں · اسنوز کے لیے نیچے سلائیڈ کریں</string>
 </resources>

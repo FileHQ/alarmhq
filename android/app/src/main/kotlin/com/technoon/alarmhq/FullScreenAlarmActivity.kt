@@ -126,123 +126,141 @@ class FullScreenAlarmActivity : Activity() {
             setPadding(0, 16, 0, 0)
         }
 
-        // v2.6 (user correction): SNOOZE pill at the very TOP, STOP pill at
-        // the very BOTTOM. Drag directions: drag UP = STOP, drag DOWN =
-        // SNOOZE. So drag the Snooze pill DOWN to snooze, drag the Stop
-        // pill UP to stop. Tap = same action (fallback).
-        val dragThreshold = 100f // px of vertical drag to trigger
+        // v2.8 (final user design): clock slider — vertical track with a
+        // draggable ⏰ knob in the center. Drag knob UP → Stop,
+        // drag knob DOWN → Snooze. Tap = no action (must drag).
+        val density = resources.displayMetrics.density
+        fun dp(v: Int) = (v * density).toInt()
 
-        fun makeDraggable(
-            button: Button,
-            onDrag: () -> Unit,
-            onTap: () -> Unit,
-            dragUp: Boolean,
-        ) {
-            var downY = 0f
-            var downX = 0f
-            var triggered = false
-            button.setOnTouchListener { v, ev ->
-                when (ev.action) {
-                    MotionEvent.ACTION_DOWN -> {
-                        downY = ev.rawY
-                        downX = ev.rawX
-                        triggered = false
-                        // Let the button show its pressed state.
-                        v.isPressed = true
-                        true
-                    }
-                    MotionEvent.ACTION_MOVE -> {
-                        val dy = ev.rawY - downY
-                        // Drag UP = STOP, drag DOWN = SNOOZE.
-                        val hit = if (dragUp) dy < -dragThreshold
-                        else dy > dragThreshold
-                        if (hit && !triggered) {
-                            triggered = true
-                            v.isPressed = false
-                            onDrag()
-                        }
-                        true
-                    }
-                    MotionEvent.ACTION_UP, MotionEvent.ACTION_CANCEL -> {
-                        v.isPressed = false
-                        if (!triggered) {
-                            // Treat as a tap when the finger barely moved.
-                            val dy = ev.rawY - downY
-                            val dx = ev.rawX - downX
-                            if (abs(dy) < 30 && abs(dx) < 30) onTap()
-                        }
-                        true
-                    }
-                    else -> false
+        val stopLabel = TextView(this).apply {
+            text = "■ ${getString(R.string.dismiss)}  ↑"
+            textSize = 18f
+            typeface = Typeface.create(Typeface.DEFAULT, Typeface.BOLD)
+            setTextColor(lime)
+            gravity = Gravity.CENTER
+        }
+        val snoozeLabel = TextView(this).apply {
+            text = "⏰ ${getString(R.string.snooze)}  ↓"
+            textSize = 18f
+            typeface = Typeface.create(Typeface.DEFAULT, Typeface.BOLD)
+            setTextColor(Color.WHITE)
+            gravity = Gravity.CENTER
+            visibility = if (canSnooze) android.view.View.VISIBLE
+            else android.view.View.GONE
+        }
+
+        // Slider: FrameLayout holding the track + the draggable knob.
+        val trackHeight = dp(340)
+        val knobSize = dp(92)
+        val slider = android.widget.FrameLayout(this).apply {
+            layoutParams = LinearLayout.LayoutParams(
+                LinearLayout.LayoutParams.WRAP_CONTENT, trackHeight
+            ).apply { topMargin = dp(8); bottomMargin = dp(8) }
+        }
+        val track = android.view.View(this).apply {
+            val trackW = dp(28)
+            layoutParams = android.widget.FrameLayout.LayoutParams(
+                trackW, trackHeight, Gravity.CENTER
+            )
+            background = android.graphics.drawable.GradientDrawable().apply {
+                shape = android.graphics.drawable.GradientDrawable.RECTANGLE
+                cornerRadius = dp(14).toFloat()
+                setColor(Color.parseColor("#3A414C"))
+            }
+        }
+        val knob = TextView(this).apply {
+            text = "⏰"
+            textSize = 44f
+            gravity = Gravity.CENTER
+            layoutParams = android.widget.FrameLayout.LayoutParams(
+                knobSize, knobSize, Gravity.CENTER
+            )
+            background = resources.getDrawable(
+                R.drawable.slider_knob, null)
+            // Lime glow around the knob.
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                elevation = dp(12).toFloat()
+                outlineProvider = android.view.ViewOutlineProvider.BACKGROUND
+            }
+        }
+        slider.addView(track)
+        slider.addView(knob)
+
+        // Drag the knob: up = stop, down = snooze, tap = nothing.
+        val dragThreshold = dp(90).toFloat()
+        var knobDownY = 0f
+        var knobStartTrans = 0f
+        var knobMoved = false
+        // Clamp travel to the track (knob stays inside).
+        val maxTravel = (trackHeight - knobSize) / 2f
+        knob.setOnTouchListener { v, ev ->
+            when (ev.action) {
+                MotionEvent.ACTION_DOWN -> {
+                    knobDownY = ev.rawY
+                    knobStartTrans = v.translationY
+                    knobMoved = false
+                    true
                 }
+                MotionEvent.ACTION_MOVE -> {
+                    val dy = ev.rawY - knobDownY
+                    if (abs(dy) > 12) knobMoved = true
+                    v.translationY =
+                        (knobStartTrans + dy).coerceIn(-maxTravel, maxTravel)
+                    true
+                }
+                MotionEvent.ACTION_UP, MotionEvent.ACTION_CANCEL -> {
+                    val totalDy = v.translationY - knobStartTrans
+                    // Snap back first, then act.
+                    v.animate().translationY(0f).setDuration(180).start()
+                    if (knobMoved) {
+                        if (totalDy < -dragThreshold) {
+                            doDismiss() // dragged UP → stop
+                        } else if (totalDy > dragThreshold) {
+                            doSnooze() // dragged DOWN → snooze
+                        }
+                    }
+                    // Tap = no action (must drag).
+                    true
+                }
+                else -> false
             }
         }
 
-        val snoozePill = Button(this).apply {
-            text = if (maxSnoozes > 0)
-                "↓ ${getString(R.string.snooze)} (${snoozeCount + 1}/$maxSnoozes)"
-            else "↓ ${getString(R.string.snooze)}"
-            textSize = 20f
-            typeface = Typeface.create(Typeface.DEFAULT, Typeface.BOLD)
-            setTextColor(Color.WHITE)
-            setBackgroundColor(Color.parseColor("#3A414C"))
-            visibility = if (canSnooze) android.view.View.VISIBLE
-            else android.view.View.GONE
-        }
-        val stopPill = Button(this).apply {
-            text = "↑ ${getString(R.string.dismiss)}"
-            textSize = 20f
-            typeface = Typeface.create(Typeface.DEFAULT, Typeface.BOLD)
-            setTextColor(Color.BLACK)
-            setBackgroundColor(lime)
-        }
-
-        makeDraggable(snoozePill, onDrag = { doSnooze() },
-            onTap = { doSnooze() }, dragUp = false)
-        makeDraggable(stopPill, onDrag = { doDismiss() },
-            onTap = { doDismiss() }, dragUp = true)
-
-        val pillParams = LinearLayout.LayoutParams(
-            LinearLayout.LayoutParams.MATCH_PARENT,
-            LinearLayout.LayoutParams.WRAP_CONTENT,
-        ).apply {
-            topMargin = 12
-            bottomMargin = 12
-            height = 140
-        }
-
-        val snoozeHint = TextView(this).apply {
-            text = getString(R.string.drag_down_snooze)
-            textSize = 13f
+        val sliderHint = TextView(this).apply {
+            text = getString(R.string.slider_hint)
+            textSize = 14f
             setTextColor(grayText)
             gravity = Gravity.CENTER
-            visibility = if (canSnooze) android.view.View.VISIBLE
-            else android.view.View.GONE
-        }
-        val stopHint = TextView(this).apply {
-            text = getString(R.string.drag_up_stop)
-            textSize = 13f
-            setTextColor(grayText)
-            gravity = Gravity.CENTER
+            setPadding(0, dp(12), 0, 0)
         }
 
-        // Top→bottom: snooze pill, hint, time, date, label,
-        // spacer, hint, stop pill.
-        if (canSnooze) {
-            root.addView(snoozePill, pillParams)
-            root.addView(snoozeHint)
-        }
+        // Top→bottom: time, date, label, spacer,
+        // STOP label, slider, SNOOZE label, hint.
         root.addView(timeView)
         root.addView(dateView)
         root.addView(labelView)
         root.addView(Space(this), LinearLayout.LayoutParams(
             LinearLayout.LayoutParams.MATCH_PARENT, 0, 1f))
-        root.addView(stopHint)
-        root.addView(stopPill, pillParams)
+        root.addView(stopLabel)
+        // Center the slider horizontally.
+        val sliderWrap = LinearLayout(this).apply {
+            orientation = LinearLayout.VERTICAL
+            gravity = Gravity.CENTER_HORIZONTAL
+            addView(slider)
+        }
+        root.addView(sliderWrap)
+        if (canSnooze) root.addView(snoozeLabel)
+        root.addView(sliderHint)
+        root.addView(Space(this), LinearLayout.LayoutParams(
+            LinearLayout.LayoutParams.MATCH_PARENT, 0, 0.5f))
         setContentView(root)
 
-        // Screen-level fling shortcut: swipe UP anywhere = stop,
-        // swipe DOWN anywhere = snooze. (Matches the pill drag directions.)
+        // Xiaomi-style gradient background.
+        root.background = resources.getDrawable(
+            R.drawable.alarm_bg_gradient, null)
+
+        // Screen-level swipe kept as a shortcut: swipe UP = stop,
+        // swipe DOWN = snooze.
         gestureDetector = GestureDetector(
             this,
             object : GestureDetector.SimpleOnGestureListener() {
