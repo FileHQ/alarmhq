@@ -3,18 +3,17 @@
   Xiaomi-style alarm notification: big time on the left, info line
   below it, and a round blue Stop button on the right.
   Used via RemoteViews from AlarmService while the alarm is ringing.
-  v2.11: fixed cramped layout — text sizes tuned, info line single-line
-  with ellipsize, proper margins so nothing is cut off.
+  v2.13: bigger time (48sp), more breathing room, clearer hierarchy.
 -->
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="horizontal"
     android:gravity="center_vertical"
-    android:paddingStart="20dp"
-    android:paddingEnd="16dp"
-    android:paddingTop="14dp"
-    android:paddingBottom="14dp"
+    android:paddingStart="24dp"
+    android:paddingEnd="20dp"
+    android:paddingTop="18dp"
+    android:paddingBottom="18dp"
     android:background="#23272E">
 
     <LinearLayout
@@ -28,18 +27,19 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="09:40"
-            android:textSize="40sp"
+            android:textSize="48sp"
             android:textStyle="bold"
             android:textColor="#FFFFFF"
-            android:maxLines="1" />
+            android:maxLines="1"
+            android:singleLine="true" />
 
         <TextView
             android:id="@+id/notif_info"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="4dp"
+            android:layout_marginTop="6dp"
             android:text="Alarm"
-            android:textSize="14sp"
+            android:textSize="15sp"
             android:textColor="#B0B7C3"
             android:maxLines="1"
             android:ellipsize="end"
@@ -48,13 +48,14 @@
 
     <Button
         android:id="@+id/notif_stop"
-        android:layout_width="68dp"
-        android:layout_height="68dp"
-        android:layout_marginStart="12dp"
+        android:layout_width="72dp"
+        android:layout_height="72dp"
+        android:layout_marginStart="16dp"
         android:text="Stop"
-        android:textSize="12sp"
+        android:textSize="13sp"
         android:textStyle="bold"
         android:textColor="#FFFFFF"
         android:maxLines="1"
+        android:singleLine="true"
         android:background="@drawable/notif_stop_circle" />
 </LinearLayout>

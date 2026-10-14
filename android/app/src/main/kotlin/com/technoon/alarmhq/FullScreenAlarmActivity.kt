@@ -59,8 +59,14 @@ class FullScreenAlarmActivity : Activity() {
         alarmJsonStr = alarmJson
         val label = alarm.optString("label", "")
         snoozeMinutes = alarm.optInt("snoozeMinutes", 10)
-        maxSnoozes = alarm.optInt("maxSnoozes", 3)
+        // v2.13: read maxSnoozes from the CURRENT stored definition so a
+        // setting changed after scheduling is respected.
+        val storedDef = if (alarmId >= 0)
+            AlarmScheduler.getDef(this, alarmId) else null
+        maxSnoozes = storedDef?.optInt("maxSnoozes", -2)?.takeIf { it != -2 }
+            ?: alarm.optInt("maxSnoozes", 3)
         // maxSnoozes: 0 = no snooze, -1 = unlimited.
+        // "No more left" when used >= max.
         canSnooze = maxSnoozes != 0 &&
             (maxSnoozes < 0 || snoozeCount < maxSnoozes)
 
@@ -126,79 +132,20 @@ class FullScreenAlarmActivity : Activity() {
             setPadding(0, 16, 0, 0)
         }
 
-        // v2.8 (final user design): clock slider — vertical track with a
-        // draggable ⏰ knob (emoji only, no background circle).
-        // Drag knob UP → Stop, drag knob DOWN → Snooze.
+        // v2.13 (approved mockup): clock slider — vertical track with
+        // "■ STOP" + ↑ at top INSIDE track, draggable ⏰ knob (emoji only,
+        // no background circle) in center, ↓ + "⏰ SNOOZE" at bottom INSIDE
+        // track. Drag knob UP → Stop, drag knob DOWN → Snooze.
         // Tap = no action (must drag).
         val density = resources.displayMetrics.density
         fun dp(v: Int) = (v * density).toInt()
 
-        // v2.11: track width in dp (was raw px — inconsistent across
-        // densities and caused the "Dismiss" label to wrap). Labels are
-        // single-line with ellipsize as a safety net.
         val trackWidthPx = dp(110)
         val trackHeight = dp(340)
         val knobTextSize = 52f
 
-        val sliderCol = LinearLayout(this).apply {
-            orientation = LinearLayout.VERTICAL
-            gravity = Gravity.CENTER_HORIZONTAL
-            layoutParams = LinearLayout.LayoutParams(
-                trackWidthPx + dp(40),
-                LinearLayout.LayoutParams.WRAP_CONTENT,
-            )
-        }
-
-        val stopLabel = TextView(this).apply {
-            text = "■ ${getString(R.string.dismiss)}"
-            textSize = 14f
-            typeface = Typeface.create(Typeface.DEFAULT, Typeface.BOLD)
-            setTextColor(lime)
-            gravity = Gravity.CENTER
-            maxLines = 1
-            ellipsize = android.text.TextUtils.TruncateAt.END
-            setSingleLine(true)
-            setPadding(dp(4), dp(4), dp(4), dp(2))
-            layoutParams = LinearLayout.LayoutParams(
-                LinearLayout.LayoutParams.MATCH_PARENT,
-                LinearLayout.LayoutParams.WRAP_CONTENT,
-            )
-        }
-        val stopArrow = TextView(this).apply {
-            text = "↑"
-            textSize = 16f
-            setTextColor(lime)
-            gravity = Gravity.CENTER
-            setPadding(0, 0, 0, dp(6))
-        }
-        val snoozeLabel = TextView(this).apply {
-            text = "⏰ ${getString(R.string.snooze)}"
-            textSize = 14f
-            typeface = Typeface.create(Typeface.DEFAULT, Typeface.BOLD)
-            setTextColor(Color.WHITE)
-            gravity = Gravity.CENTER
-            maxLines = 1
-            ellipsize = android.text.TextUtils.TruncateAt.END
-            setSingleLine(true)
-            setPadding(dp(4), dp(2), dp(4), dp(4))
-            layoutParams = LinearLayout.LayoutParams(
-                LinearLayout.LayoutParams.MATCH_PARENT,
-                LinearLayout.LayoutParams.WRAP_CONTENT,
-            )
-            visibility = if (canSnooze) android.view.View.VISIBLE
-            else android.view.View.GONE
-        }
-        val snoozeArrow = TextView(this).apply {
-            text = "↓"
-            textSize = 16f
-            setTextColor(Color.WHITE)
-            gravity = Gravity.CENTER
-            setPadding(0, dp(6), 0, 0)
-            visibility = if (canSnooze) android.view.View.VISIBLE
-            else android.view.View.GONE
-        }
-
-        // Slider: FrameLayout holding the 110px track + the draggable knob.
+        // Slider: FrameLayout holding the track background, fixed labels
+        // (STOP at top, SNOOZE at bottom, both INSIDE), and the draggable knob.
         val slider = android.widget.FrameLayout(this).apply {
             layoutParams = LinearLayout.LayoutParams(
                 trackWidthPx, trackHeight
@@ -214,7 +161,68 @@ class FullScreenAlarmActivity : Activity() {
                 setColor(Color.parseColor("#3A414C"))
             }
         }
-        // Knob: just the ⏰ emoji, no background circle.
+        slider.addView(track)
+
+        // STOP label at top INSIDE track (single line, no wrap).
+        val stopLabel = TextView(this).apply {
+            text = "■ ${getString(R.string.stop)}"
+            textSize = 13f
+            typeface = Typeface.create(Typeface.DEFAULT, Typeface.BOLD)
+            setTextColor(Color.WHITE)
+            gravity = Gravity.CENTER
+            maxLines = 1
+            setSingleLine(true)
+            layoutParams = android.widget.FrameLayout.LayoutParams(
+                trackWidthPx, LinearLayout.LayoutParams.WRAP_CONTENT,
+                Gravity.TOP or Gravity.CENTER_HORIZONTAL,
+            ).apply { topMargin = dp(14) }
+        }
+        slider.addView(stopLabel)
+        val stopArrow = TextView(this).apply {
+            text = "↑"
+            textSize = 14f
+            setTextColor(Color.parseColor("#8A94A6"))
+            gravity = Gravity.CENTER
+            layoutParams = android.widget.FrameLayout.LayoutParams(
+                trackWidthPx, LinearLayout.LayoutParams.WRAP_CONTENT,
+                Gravity.TOP or Gravity.CENTER_HORIZONTAL,
+            ).apply { topMargin = dp(36) }
+        }
+        slider.addView(stopArrow)
+
+        // SNOOZE label at bottom INSIDE track (single line, no wrap).
+        // Only visible when snoozing is allowed.
+        val snoozeLabel = TextView(this).apply {
+            text = "⏰ ${getString(R.string.snooze).uppercase()}"
+            textSize = 13f
+            typeface = Typeface.create(Typeface.DEFAULT, Typeface.BOLD)
+            setTextColor(Color.WHITE)
+            gravity = Gravity.CENTER
+            maxLines = 1
+            setSingleLine(true)
+            layoutParams = android.widget.FrameLayout.LayoutParams(
+                trackWidthPx, LinearLayout.LayoutParams.WRAP_CONTENT,
+                Gravity.BOTTOM or Gravity.CENTER_HORIZONTAL,
+            ).apply { bottomMargin = dp(14) }
+            visibility = if (canSnooze) android.view.View.VISIBLE
+            else android.view.View.GONE
+        }
+        slider.addView(snoozeLabel)
+        val snoozeArrow = TextView(this).apply {
+            text = "↓"
+            textSize = 14f
+            setTextColor(Color.parseColor("#8A94A6"))
+            gravity = Gravity.CENTER
+            layoutParams = android.widget.FrameLayout.LayoutParams(
+                trackWidthPx, LinearLayout.LayoutParams.WRAP_CONTENT,
+                Gravity.BOTTOM or Gravity.CENTER_HORIZONTAL,
+            ).apply { bottomMargin = dp(36) }
+            visibility = if (canSnooze) android.view.View.VISIBLE
+            else android.view.View.GONE
+        }
+        slider.addView(snoozeArrow)
+
+        // Knob: just the ⏰ emoji, no background circle. Draggable.
         val knob = TextView(this).apply {
             text = "⏰"
             textSize = knobTextSize
@@ -224,7 +232,6 @@ class FullScreenAlarmActivity : Activity() {
             )
             // No background — emoji only, per user.
         }
-        slider.addView(track)
         slider.addView(knob)
 
         // Drag the knob: up = stop, down = snooze, tap = nothing.
@@ -276,25 +283,18 @@ class FullScreenAlarmActivity : Activity() {
             setPadding(0, dp(12), 0, 0)
         }
 
-        // Top→bottom: time, date, label, spacer,
-        // slider column (stop label, track+knob, snooze label), hint.
+        // Top→bottom: time, date, label, spacer, slider (track with
+        // STOP/SNOOZE labels inside + draggable knob), hint.
         root.addView(timeView)
         root.addView(dateView)
         root.addView(labelView)
         root.addView(Space(this), LinearLayout.LayoutParams(
             LinearLayout.LayoutParams.MATCH_PARENT, 0, 1f))
-        sliderCol.addView(stopLabel)
-        sliderCol.addView(stopArrow)
-        sliderCol.addView(slider)
-        if (canSnooze) {
-            sliderCol.addView(snoozeArrow)
-            sliderCol.addView(snoozeLabel)
-        }
-        // Center the slider column horizontally.
+        // Center the slider horizontally.
         val sliderWrap = LinearLayout(this).apply {
             orientation = LinearLayout.VERTICAL
             gravity = Gravity.CENTER_HORIZONTAL
-            addView(sliderCol)
+            addView(slider)
         }
         root.addView(sliderWrap)
         root.addView(sliderHint)

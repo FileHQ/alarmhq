@@ -2,6 +2,7 @@
 <resources>
     <string name="alarm">Alarm</string>
     <string name="dismiss">Dismiss</string>
+    <string name="stop">STOP</string>
     <string name="snooze">Snooze</string>
     <string name="alarm_channel_name">Alarms</string>
     <string name="alarm_channel_desc">AlarmHQ alarm notifications</string>

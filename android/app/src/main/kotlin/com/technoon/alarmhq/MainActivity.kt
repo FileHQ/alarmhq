@@ -287,14 +287,32 @@ class MainActivity : Activity() {
                             val id = alarm.optInt("id", -1)
                             val count = AlarmService.ringingSnoozeCount
                             val minutes = alarm.optInt("snoozeMinutes", 10)
-                            val max = alarm.optInt("maxSnoozes", 3)
+                            // v2.13: read maxSnoozes from the CURRENT stored
+                            // definition (not the potentially stale ringing
+                            // JSON) so a setting changed after scheduling
+                            // is respected. Falls back to the ringing JSON.
+                            val stored = if (id >= 0)
+                                AlarmScheduler.getDef(this, id) else null
+                            val max = stored?.optInt("maxSnoozes", -2)
+                                ?.takeIf { it != -2 }
+                                ?: alarm.optInt("maxSnoozes", 3)
+                            android.util.Log.i(
+                                "AlarmHQ",
+                                "snoozeAlarm: id=$id count=$count max=$max",
+                            )
                             // max: 0 = no snooze, -1 = unlimited.
+                            // "No more left" when used >= max.
                             if (id >= 0 && max != 0 &&
                                 (max < 0 || count < max)) {
                                 AlarmScheduler.scheduleSnooze(
                                     this, id, json, minutes, count + 1
                                 )
                                 ok = true
+                            } else {
+                                android.util.Log.w(
+                                    "AlarmHQ",
+                                    "snoozeAlarm REJECTED: count=$count max=$max",
+                                )
                             }
                         } catch (_: Exception) { /* parse failed */ }
                     }

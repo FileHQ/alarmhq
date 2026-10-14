@@ -136,7 +136,7 @@ class AlarmService : Service() {
             val channel = NotificationChannel(
                 CHANNEL_ID,
                 getString(R.string.alarm_channel_name),
-                NotificationManager.IMPORTANCE_HIGH,
+                NotificationManager.IMPORTANCE_MAX,
             ).apply { description = getString(R.string.alarm_channel_desc) }
             nm.createNotificationChannel(channel)
         }
@@ -224,7 +224,7 @@ class AlarmService : Service() {
             val channel = NotificationChannel(
                 CHANNEL_ID,
                 getString(R.string.alarm_channel_name),
-                NotificationManager.IMPORTANCE_HIGH,
+                NotificationManager.IMPORTANCE_MAX,
             ).apply { description = getString(R.string.alarm_channel_desc) }
             nm.createNotificationChannel(channel)
         }

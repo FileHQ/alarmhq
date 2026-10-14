@@ -2,6 +2,7 @@
 <resources>
     <string name="alarm">الارم</string>
     <string name="dismiss">بند کریں</string>
+    <string name="stop">بند کریں</string>
     <string name="snooze">اسنوز</string>
     <string name="alarm_channel_name">الارمز</string>
     <string name="alarm_channel_desc">AlarmHQ الارم کی اطلاعات</string>
