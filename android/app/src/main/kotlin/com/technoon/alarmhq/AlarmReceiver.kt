@@ -8,7 +8,12 @@ import android.os.Build
 /** Fired by AlarmManager when an alarm (or a snooze one-shot) goes off. */
 class AlarmReceiver : BroadcastReceiver() {
     override fun onReceive(context: Context, intent: Intent) {
-        val alarmJson = intent.getStringExtra("alarmJson") ?: return
+        // v2.15: diagnostic logging to trace firing issues.
+        android.util.Log.i("AlarmHQ", "AlarmReceiver.onReceive: fired!")
+        val alarmJson = intent.getStringExtra("alarmJson") ?: run {
+            android.util.Log.w("AlarmHQ", "AlarmReceiver: missing alarmJson, aborting")
+            return
+        }
         val snoozeCount = intent.getIntExtra("snoozeCount", 0)
         val isSnooze = intent.getBooleanExtra("isSnooze", false)
         val alarmId = intent.getIntExtra("alarmId", -1)

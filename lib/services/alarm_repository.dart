@@ -81,10 +81,15 @@ class AlarmRepository {
 
   /// (Re)schedule one alarm natively from its next trigger.
   Future<void> reschedule(AlarmModel alarm) async {
+    // v2.15: diagnostic logging to trace scheduling issues.
+    // ignore: avoid_print
+    print('AlarmHQ reschedule(id=${alarm.id}, enabled=${alarm.enabled})');
     await NativeBridge.cancelAlarm(alarm.id);
     if (!alarm.enabled) return;
     final next = NextOccurrence.nextTrigger(alarm, DateTime.now());
     if (next == null) {
+      // ignore: avoid_print
+      print('AlarmHQ reschedule(id=${alarm.id}): nextTrigger=null, not scheduling');
       // One-time alarm already fired (or weekly with no days): retire it in
       // the list too, so it doesn't linger as "enabled" forever.
       if (alarm.mode == AlarmRepeatMode.once) {
@@ -96,11 +101,15 @@ class AlarmRepository {
       }
       return;
     }
-    await NativeBridge.scheduleAlarm(
+    // ignore: avoid_print
+    print('AlarmHQ reschedule(id=${alarm.id}): scheduling for $next');
+    final ok = await NativeBridge.scheduleAlarm(
       alarm.id,
       next.millisecondsSinceEpoch,
       alarm.toJson(),
     );
+    // ignore: avoid_print
+    print('AlarmHQ reschedule(id=${alarm.id}): native schedule result=$ok');
   }
 
   /// Recompute every native schedule (used after boot-prompt flows).
