@@ -28,11 +28,11 @@ jobs:
       - name: Analyze
         run: flutter analyze
 
-      - name: Build APK
-        run: flutter build apk --debug
+      - name: Build Release APK
+        run: flutter build apk --release --split-per-abi
 
       - name: Upload APK
         uses: actions/upload-artifact@v4
         with:
-          name: alarmhq-apk
-          path: build/app/outputs/flutter-apk/app-debug.apk
+          name: alarmhq-release-apk
+          path: build/app/outputs/flutter-apk/app-*-release.apk
