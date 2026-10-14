@@ -20,6 +20,7 @@ import io.flutter.embedding.android.FlutterView
 import io.flutter.embedding.engine.FlutterEngine
 import io.flutter.embedding.engine.dart.DartExecutor
 import io.flutter.plugin.common.MethodChannel
+import org.json.JSONObject
 
 class MainActivity : Activity() {
 
@@ -201,6 +202,56 @@ class MainActivity : Activity() {
                         )
                     )
                     result.success(null)
+                }
+                // ---- in-app ringing dialog support ----
+                "isAlarmRinging" ->
+                    result.success(AlarmService.ringingAlarmJson != null)
+                "getRingingAlarm" -> {
+                    val json = AlarmService.ringingAlarmJson
+                    if (json == null) {
+                        result.success(null)
+                    } else {
+                        result.success(
+                            mapOf(
+                                "alarmJson" to json,
+                                "snoozeCount" to AlarmService.ringingSnoozeCount,
+                            )
+                        )
+                    }
+                }
+                "dismissAlarm" -> {
+                    startService(
+                        Intent(this, AlarmService::class.java).apply {
+                            action = AlarmService.ACTION_STOP
+                        }
+                    )
+                    result.success(true)
+                }
+                "snoozeAlarm" -> {
+                    val json = AlarmService.ringingAlarmJson
+                    var ok = false
+                    if (json != null) {
+                        try {
+                            val alarm = JSONObject(json)
+                            val id = alarm.optInt("id", -1)
+                            val count = AlarmService.ringingSnoozeCount
+                            val minutes = alarm.optInt("snoozeMinutes", 10)
+                            val max = alarm.optInt("maxSnoozes", 3)
+                            if (id >= 0 && max > 0 && count < max) {
+                                AlarmScheduler.scheduleSnooze(
+                                    this, id, json, minutes, count + 1
+                                )
+                                ok = true
+                            }
+                        } catch (_: Exception) { /* parse failed */ }
+                    }
+                    // Stop the current ringing either way.
+                    startService(
+                        Intent(this, AlarmService::class.java).apply {
+                            action = AlarmService.ACTION_STOP
+                        }
+                    )
+                    result.success(ok)
                 }
                 else -> result.notImplemented()
             }

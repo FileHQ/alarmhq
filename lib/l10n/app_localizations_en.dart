@@ -20,7 +20,15 @@ class AppLocalizationsEn extends AppLocalizations {
   String get addAlarm => 'Add alarm';
 
   @override
+  String alarmIn(Object duration) {
+    return 'Alarm in $duration';
+  }
+
+  @override
   String get alarmOff => 'Alarm is off';
+
+  @override
+  String get alarmRinging => 'Alarm ringing';
 
   @override
   String get alarms => 'Alarms';
@@ -76,6 +84,12 @@ class AppLocalizationsEn extends AppLocalizations {
   String get discardTitle => 'Discard changes?';
 
   @override
+  String get dismiss => 'Dismiss';
+
+  @override
+  String get done => 'Done';
+
+  @override
   String get editAlarm => 'Edit alarm';
 
   @override
@@ -95,6 +109,9 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get granted => 'Granted';
+
+  @override
+  String get hoursShort => 'H';
 
   @override
   String get intervalDays => 'Repeat every (days)';
@@ -133,6 +150,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get maxSnoozes => 'Max snoozes';
 
   @override
+  String get minutesShort => 'M';
+
+  @override
   String minutesUnit(Object n) {
     return '$n min';
   }
@@ -155,6 +175,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get noFadeIn => 'Off';
 
   @override
+  String get noMoreSnoozes => 'No more snoozes left';
+
+  @override
   String get noSnooze => 'Off';
 
   @override
@@ -164,10 +187,66 @@ class AppLocalizationsEn extends AppLocalizations {
   String get onceSummary => 'Once';
 
   @override
+  String get openPermissionScreen => 'Open permission screen';
+
+  @override
   String get openSettings => 'Open settings';
 
   @override
+  String get permBatteryDesc =>
+      'Prevents the phone from delaying or killing alarms to save battery.';
+
+  @override
+  String get permBatteryTitle => 'Ignore battery optimizations';
+
+  @override
+  String get permBody =>
+      'AlarmHQ needs these permissions so your alarms always ring on time — even when the phone is locked or saving battery.';
+
+  @override
+  String get permContinue => 'Continue';
+
+  @override
+  String get permExactDesc =>
+      'Lets alarms ring at the exact minute, even in Doze mode.';
+
+  @override
+  String get permExactTitle => 'Exact alarms';
+
+  @override
+  String get permGrant => 'Grant';
+
+  @override
+  String get permGranted => 'Granted';
+
+  @override
+  String get permNotifDesc =>
+      'Shows the alarm on screen and in the notification shade.';
+
+  @override
+  String get permNotifTitle => 'Notifications';
+
+  @override
+  String get permOverlayDesc =>
+      'Shows the full-screen alarm over the lock screen.';
+
+  @override
+  String get permOverlayTitle => 'Display over other apps';
+
+  @override
+  String get permSkip => 'Skip for now';
+
+  @override
+  String get permTitle => 'Permissions needed';
+
+  @override
   String get permissions => 'Permissions';
+
+  @override
+  String get pickAtLeastOneDate => 'Pick at least one date';
+
+  @override
+  String get pickAtLeastOneDay => 'Pick at least one day';
 
   @override
   String get pickDate => 'Pick date';
@@ -176,13 +255,30 @@ class AppLocalizationsEn extends AppLocalizations {
   String get repeat => 'Repeat';
 
   @override
+  String get repeatDates => 'Dates';
+
+  @override
   String get repeatInterval => 'Every N days';
+
+  @override
+  String get repeatNDays => 'N days';
 
   @override
   String get repeatOnce => 'One time';
 
   @override
+  String get repeatSpecificDates => 'Specific dates';
+
+  @override
   String get repeatWeekly => 'Weekly days';
+
+  @override
+  String get repeatWeeklyShort => 'Weekly';
+
+  @override
+  String ringsIn(Object duration) {
+    return 'Rings in $duration';
+  }
 
   @override
   String get save => 'Save';
@@ -193,7 +289,16 @@ class AppLocalizationsEn extends AppLocalizations {
   }
 
   @override
+  String get selectDates => 'Tap dates to select (each rings once)';
+
+  @override
+  String get selectedDates => 'Selected dates';
+
+  @override
   String get settings => 'Settings';
+
+  @override
+  String get skipNextOnly => 'Skip next only';
 
   @override
   String get snooze => 'Snooze';
@@ -256,6 +361,17 @@ class AppLocalizationsEn extends AppLocalizations {
   String get toneSystemDefault => 'System default';
 
   @override
+  String turnOffAlarmBody(Object label, Object when) {
+    return '$label — next ring $when';
+  }
+
+  @override
+  String get turnOffAlarmTitle => 'Turn off alarm?';
+
+  @override
+  String get turnOffCompletely => 'Turn off completely';
+
+  @override
   String get vibration => 'Vibration';
 
   @override
@@ -283,108 +399,4 @@ class AppLocalizationsEn extends AppLocalizations {
   String weeklySummary(Object days) {
     return '$days';
   }
-
-  @override
-  String get repeatSpecificDates => 'Specific dates';
-
-  @override
-  String get repeatDates => 'Dates';
-
-  @override
-  String get repeatNDays => 'N days';
-
-  @override
-  String get skipNextOnly => 'Skip next only';
-
-  @override
-  String get turnOffCompletely => 'Turn off completely';
-
-  @override
-  String get turnOffAlarmTitle => 'Turn off alarm?';
-
-  @override
-  String turnOffAlarmBody(Object label, Object when) {
-    return '$label — next ring $when';
-  }
-
-  @override
-  String ringsIn(Object duration) {
-    return 'Rings in $duration';
-  }
-
-  @override
-  String alarmIn(Object duration) {
-    return 'Alarm in $duration';
-  }
-
-  @override
-  String get selectDates => 'Tap dates to select (each rings once)';
-
-  @override
-  String get selectedDates => 'Selected dates';
-
-  @override
-  String get hoursShort => 'H';
-
-  @override
-  String get minutesShort => 'M';
-
-  @override
-  String get done => 'Done';
-
-  @override
-  String get repeatWeeklyShort => 'Weekly';
-
-  @override
-  String get pickAtLeastOneDay => 'Pick at least one day';
-
-  @override
-  String get pickAtLeastOneDate => 'Pick at least one date';
-
-  @override
-  String get permTitle => 'Permissions needed';
-
-  @override
-  String get permBody =>
-      'AlarmHQ needs these permissions so your alarms always ring on time — even when the phone is locked or saving battery.';
-
-  @override
-  String get permExactTitle => 'Exact alarms';
-
-  @override
-  String get permExactDesc =>
-      'Lets alarms ring at the exact minute, even in Doze mode.';
-
-  @override
-  String get permBatteryTitle => 'Ignore battery optimizations';
-
-  @override
-  String get permBatteryDesc =>
-      'Prevents the phone from delaying or killing alarms to save battery.';
-
-  @override
-  String get permNotifTitle => 'Notifications';
-
-  @override
-  String get permNotifDesc =>
-      'Shows the alarm on screen and in the notification shade.';
-
-  @override
-  String get permOverlayTitle => 'Display over other apps';
-
-  @override
-  String get permOverlayDesc =>
-      'Shows the full-screen alarm over the lock screen.';
-
-  @override
-  String get permGrant => 'Grant';
-
-  @override
-  String get permGranted => 'Granted';
-
-  @override
-  String get permContinue => 'Continue';
-
-  @override
-  String get permSkip => 'Skip for now';
 }

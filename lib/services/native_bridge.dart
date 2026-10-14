@@ -82,4 +82,28 @@ class NativeBridge {
 
   static Future<void> openOverlaySettings() async =>
       await _alarm.invokeMethod('openOverlaySettings');
+
+  // ---- in-app ringing dialog support ----
+
+  /// True while AlarmService is currently sounding an alarm.
+  static Future<bool> isAlarmRinging() async =>
+      await _alarm.invokeMethod<bool>('isAlarmRinging') ?? false;
+
+  /// {'alarmJson': String, 'snoozeCount': int} or null when not ringing.
+  static Future<Map<String, dynamic>?> getRingingAlarm() async {
+    final m = await _alarm.invokeMethod<Map>('getRingingAlarm');
+    if (m == null) return null;
+    return {
+      'alarmJson': m['alarmJson'] as String,
+      'snoozeCount': (m['snoozeCount'] as num).toInt(),
+    };
+  }
+
+  /// Stop the currently-ringing alarm sound.
+  static Future<bool> dismissAlarm() async =>
+      await _alarm.invokeMethod<bool>('dismissAlarm') ?? false;
+
+  /// Snooze the currently-ringing alarm. Returns false when no snoozes left.
+  static Future<bool> snoozeAlarm() async =>
+      await _alarm.invokeMethod<bool>('snoozeAlarm') ?? false;
 }

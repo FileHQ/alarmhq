@@ -116,11 +116,23 @@ abstract class AppLocalizations {
   /// **'Add alarm'**
   String get addAlarm;
 
+  /// No description provided for @alarmIn.
+  ///
+  /// In en, this message translates to:
+  /// **'Alarm in {duration}'**
+  String alarmIn(Object duration);
+
   /// No description provided for @alarmOff.
   ///
   /// In en, this message translates to:
   /// **'Alarm is off'**
   String get alarmOff;
+
+  /// No description provided for @alarmRinging.
+  ///
+  /// In en, this message translates to:
+  /// **'Alarm ringing'**
+  String get alarmRinging;
 
   /// No description provided for @alarms.
   ///
@@ -218,6 +230,18 @@ abstract class AppLocalizations {
   /// **'Discard changes?'**
   String get discardTitle;
 
+  /// No description provided for @dismiss.
+  ///
+  /// In en, this message translates to:
+  /// **'Dismiss'**
+  String get dismiss;
+
+  /// No description provided for @done.
+  ///
+  /// In en, this message translates to:
+  /// **'Done'**
+  String get done;
+
   /// No description provided for @editAlarm.
   ///
   /// In en, this message translates to:
@@ -253,6 +277,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Granted'**
   String get granted;
+
+  /// No description provided for @hoursShort.
+  ///
+  /// In en, this message translates to:
+  /// **'H'**
+  String get hoursShort;
 
   /// No description provided for @intervalDays.
   ///
@@ -326,6 +356,12 @@ abstract class AppLocalizations {
   /// **'Max snoozes'**
   String get maxSnoozes;
 
+  /// No description provided for @minutesShort.
+  ///
+  /// In en, this message translates to:
+  /// **'M'**
+  String get minutesShort;
+
   /// No description provided for @minutesUnit.
   ///
   /// In en, this message translates to:
@@ -362,6 +398,12 @@ abstract class AppLocalizations {
   /// **'Off'**
   String get noFadeIn;
 
+  /// No description provided for @noMoreSnoozes.
+  ///
+  /// In en, this message translates to:
+  /// **'No more snoozes left'**
+  String get noMoreSnoozes;
+
   /// No description provided for @noSnooze.
   ///
   /// In en, this message translates to:
@@ -380,17 +422,119 @@ abstract class AppLocalizations {
   /// **'Once'**
   String get onceSummary;
 
+  /// No description provided for @openPermissionScreen.
+  ///
+  /// In en, this message translates to:
+  /// **'Open permission screen'**
+  String get openPermissionScreen;
+
   /// No description provided for @openSettings.
   ///
   /// In en, this message translates to:
   /// **'Open settings'**
   String get openSettings;
 
+  /// No description provided for @permBatteryDesc.
+  ///
+  /// In en, this message translates to:
+  /// **'Prevents the phone from delaying or killing alarms to save battery.'**
+  String get permBatteryDesc;
+
+  /// No description provided for @permBatteryTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Ignore battery optimizations'**
+  String get permBatteryTitle;
+
+  /// No description provided for @permBody.
+  ///
+  /// In en, this message translates to:
+  /// **'AlarmHQ needs these permissions so your alarms always ring on time — even when the phone is locked or saving battery.'**
+  String get permBody;
+
+  /// No description provided for @permContinue.
+  ///
+  /// In en, this message translates to:
+  /// **'Continue'**
+  String get permContinue;
+
+  /// No description provided for @permExactDesc.
+  ///
+  /// In en, this message translates to:
+  /// **'Lets alarms ring at the exact minute, even in Doze mode.'**
+  String get permExactDesc;
+
+  /// No description provided for @permExactTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Exact alarms'**
+  String get permExactTitle;
+
+  /// No description provided for @permGrant.
+  ///
+  /// In en, this message translates to:
+  /// **'Grant'**
+  String get permGrant;
+
+  /// No description provided for @permGranted.
+  ///
+  /// In en, this message translates to:
+  /// **'Granted'**
+  String get permGranted;
+
+  /// No description provided for @permNotifDesc.
+  ///
+  /// In en, this message translates to:
+  /// **'Shows the alarm on screen and in the notification shade.'**
+  String get permNotifDesc;
+
+  /// No description provided for @permNotifTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Notifications'**
+  String get permNotifTitle;
+
+  /// No description provided for @permOverlayDesc.
+  ///
+  /// In en, this message translates to:
+  /// **'Shows the full-screen alarm over the lock screen.'**
+  String get permOverlayDesc;
+
+  /// No description provided for @permOverlayTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Display over other apps'**
+  String get permOverlayTitle;
+
+  /// No description provided for @permSkip.
+  ///
+  /// In en, this message translates to:
+  /// **'Skip for now'**
+  String get permSkip;
+
+  /// No description provided for @permTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Permissions needed'**
+  String get permTitle;
+
   /// No description provided for @permissions.
   ///
   /// In en, this message translates to:
   /// **'Permissions'**
   String get permissions;
+
+  /// No description provided for @pickAtLeastOneDate.
+  ///
+  /// In en, this message translates to:
+  /// **'Pick at least one date'**
+  String get pickAtLeastOneDate;
+
+  /// No description provided for @pickAtLeastOneDay.
+  ///
+  /// In en, this message translates to:
+  /// **'Pick at least one day'**
+  String get pickAtLeastOneDay;
 
   /// No description provided for @pickDate.
   ///
@@ -404,11 +548,23 @@ abstract class AppLocalizations {
   /// **'Repeat'**
   String get repeat;
 
+  /// No description provided for @repeatDates.
+  ///
+  /// In en, this message translates to:
+  /// **'Dates'**
+  String get repeatDates;
+
   /// No description provided for @repeatInterval.
   ///
   /// In en, this message translates to:
   /// **'Every N days'**
   String get repeatInterval;
+
+  /// No description provided for @repeatNDays.
+  ///
+  /// In en, this message translates to:
+  /// **'N days'**
+  String get repeatNDays;
 
   /// No description provided for @repeatOnce.
   ///
@@ -416,11 +572,29 @@ abstract class AppLocalizations {
   /// **'One time'**
   String get repeatOnce;
 
+  /// No description provided for @repeatSpecificDates.
+  ///
+  /// In en, this message translates to:
+  /// **'Specific dates'**
+  String get repeatSpecificDates;
+
   /// No description provided for @repeatWeekly.
   ///
   /// In en, this message translates to:
   /// **'Weekly days'**
   String get repeatWeekly;
+
+  /// No description provided for @repeatWeeklyShort.
+  ///
+  /// In en, this message translates to:
+  /// **'Weekly'**
+  String get repeatWeeklyShort;
+
+  /// No description provided for @ringsIn.
+  ///
+  /// In en, this message translates to:
+  /// **'Rings in {duration}'**
+  String ringsIn(Object duration);
 
   /// No description provided for @save.
   ///
@@ -434,11 +608,29 @@ abstract class AppLocalizations {
   /// **'{n} sec'**
   String secondsUnit(Object n);
 
+  /// No description provided for @selectDates.
+  ///
+  /// In en, this message translates to:
+  /// **'Tap dates to select (each rings once)'**
+  String get selectDates;
+
+  /// No description provided for @selectedDates.
+  ///
+  /// In en, this message translates to:
+  /// **'Selected dates'**
+  String get selectedDates;
+
   /// No description provided for @settings.
   ///
   /// In en, this message translates to:
   /// **'Settings'**
   String get settings;
+
+  /// No description provided for @skipNextOnly.
+  ///
+  /// In en, this message translates to:
+  /// **'Skip next only'**
+  String get skipNextOnly;
 
   /// No description provided for @snooze.
   ///
@@ -548,6 +740,24 @@ abstract class AppLocalizations {
   /// **'System default'**
   String get toneSystemDefault;
 
+  /// No description provided for @turnOffAlarmBody.
+  ///
+  /// In en, this message translates to:
+  /// **'{label} — next ring {when}'**
+  String turnOffAlarmBody(Object label, Object when);
+
+  /// No description provided for @turnOffAlarmTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Turn off alarm?'**
+  String get turnOffAlarmTitle;
+
+  /// No description provided for @turnOffCompletely.
+  ///
+  /// In en, this message translates to:
+  /// **'Turn off completely'**
+  String get turnOffCompletely;
+
   /// No description provided for @vibration.
   ///
   /// In en, this message translates to:
@@ -601,192 +811,6 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'{days}'**
   String weeklySummary(Object days);
-
-  /// No description provided for @repeatSpecificDates.
-  ///
-  /// In en, this message translates to:
-  /// **'Specific dates'**
-  String get repeatSpecificDates;
-
-  /// No description provided for @repeatDates.
-  ///
-  /// In en, this message translates to:
-  /// **'Dates'**
-  String get repeatDates;
-
-  /// No description provided for @repeatNDays.
-  ///
-  /// In en, this message translates to:
-  /// **'N days'**
-  String get repeatNDays;
-
-  /// No description provided for @skipNextOnly.
-  ///
-  /// In en, this message translates to:
-  /// **'Skip next only'**
-  String get skipNextOnly;
-
-  /// No description provided for @turnOffCompletely.
-  ///
-  /// In en, this message translates to:
-  /// **'Turn off completely'**
-  String get turnOffCompletely;
-
-  /// No description provided for @turnOffAlarmTitle.
-  ///
-  /// In en, this message translates to:
-  /// **'Turn off alarm?'**
-  String get turnOffAlarmTitle;
-
-  /// No description provided for @turnOffAlarmBody.
-  ///
-  /// In en, this message translates to:
-  /// **'{label} — next ring {when}'**
-  String turnOffAlarmBody(Object label, Object when);
-
-  /// No description provided for @ringsIn.
-  ///
-  /// In en, this message translates to:
-  /// **'Rings in {duration}'**
-  String ringsIn(Object duration);
-
-  /// No description provided for @alarmIn.
-  ///
-  /// In en, this message translates to:
-  /// **'Alarm in {duration}'**
-  String alarmIn(Object duration);
-
-  /// No description provided for @selectDates.
-  ///
-  /// In en, this message translates to:
-  /// **'Tap dates to select (each rings once)'**
-  String get selectDates;
-
-  /// No description provided for @selectedDates.
-  ///
-  /// In en, this message translates to:
-  /// **'Selected dates'**
-  String get selectedDates;
-
-  /// No description provided for @hoursShort.
-  ///
-  /// In en, this message translates to:
-  /// **'H'**
-  String get hoursShort;
-
-  /// No description provided for @minutesShort.
-  ///
-  /// In en, this message translates to:
-  /// **'M'**
-  String get minutesShort;
-
-  /// No description provided for @done.
-  ///
-  /// In en, this message translates to:
-  /// **'Done'**
-  String get done;
-
-  /// No description provided for @repeatWeeklyShort.
-  ///
-  /// In en, this message translates to:
-  /// **'Weekly'**
-  String get repeatWeeklyShort;
-
-  /// No description provided for @pickAtLeastOneDay.
-  ///
-  /// In en, this message translates to:
-  /// **'Pick at least one day'**
-  String get pickAtLeastOneDay;
-
-  /// No description provided for @pickAtLeastOneDate.
-  ///
-  /// In en, this message translates to:
-  /// **'Pick at least one date'**
-  String get pickAtLeastOneDate;
-
-  /// No description provided for @permTitle.
-  ///
-  /// In en, this message translates to:
-  /// **'Permissions needed'**
-  String get permTitle;
-
-  /// No description provided for @permBody.
-  ///
-  /// In en, this message translates to:
-  /// **'AlarmHQ needs these permissions so your alarms always ring on time — even when the phone is locked or saving battery.'**
-  String get permBody;
-
-  /// No description provided for @permExactTitle.
-  ///
-  /// In en, this message translates to:
-  /// **'Exact alarms'**
-  String get permExactTitle;
-
-  /// No description provided for @permExactDesc.
-  ///
-  /// In en, this message translates to:
-  /// **'Lets alarms ring at the exact minute, even in Doze mode.'**
-  String get permExactDesc;
-
-  /// No description provided for @permBatteryTitle.
-  ///
-  /// In en, this message translates to:
-  /// **'Ignore battery optimizations'**
-  String get permBatteryTitle;
-
-  /// No description provided for @permBatteryDesc.
-  ///
-  /// In en, this message translates to:
-  /// **'Prevents the phone from delaying or killing alarms to save battery.'**
-  String get permBatteryDesc;
-
-  /// No description provided for @permNotifTitle.
-  ///
-  /// In en, this message translates to:
-  /// **'Notifications'**
-  String get permNotifTitle;
-
-  /// No description provided for @permNotifDesc.
-  ///
-  /// In en, this message translates to:
-  /// **'Shows the alarm on screen and in the notification shade.'**
-  String get permNotifDesc;
-
-  /// No description provided for @permOverlayTitle.
-  ///
-  /// In en, this message translates to:
-  /// **'Display over other apps'**
-  String get permOverlayTitle;
-
-  /// No description provided for @permOverlayDesc.
-  ///
-  /// In en, this message translates to:
-  /// **'Shows the full-screen alarm over the lock screen.'**
-  String get permOverlayDesc;
-
-  /// No description provided for @permGrant.
-  ///
-  /// In en, this message translates to:
-  /// **'Grant'**
-  String get permGrant;
-
-  /// No description provided for @permGranted.
-  ///
-  /// In en, this message translates to:
-  /// **'Granted'**
-  String get permGranted;
-
-  /// No description provided for @permContinue.
-  ///
-  /// In en, this message translates to:
-  /// **'Continue'**
-  String get permContinue;
-
-  /// No description provided for @permSkip.
-  ///
-  /// In en, this message translates to:
-  /// **'Skip for now'**
-  String get permSkip;
 }
 
 class _AppLocalizationsDelegate

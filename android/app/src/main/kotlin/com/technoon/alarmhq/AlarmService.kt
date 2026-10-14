@@ -34,6 +34,14 @@ class AlarmService : Service() {
         const val ACTION_STOP = "com.technoon.alarmhq.STOP"
         private const val CHANNEL_ID = "alarmhq_alarm"
         private const val NOTIF_ID = 1001
+
+        // Currently-ringing alarm, visible to MainActivity/Flutter so the
+        // in-app ringing dialog can show Dismiss/Snooze while ringing.
+        // Same process, so plain statics are fine.
+        @Volatile var ringingAlarmJson: String? = null
+            private set
+        @Volatile var ringingSnoozeCount: Int = 0
+            private set
     }
 
     private var player: MediaPlayer? = null
@@ -79,6 +87,8 @@ class AlarmService : Service() {
                 val label = alarm.optString("label", "").ifEmpty {
                     getString(R.string.alarm)
                 }
+                ringingAlarmJson = alarmJson
+                ringingSnoozeCount = snoozeCount
                 startForegroundService(label, Pair(alarmJson, snoozeCount))
                 if (alarm.optBoolean("vibration", true)) startVibration()
                 ensureAlarmVolume()
@@ -265,6 +275,8 @@ class AlarmService : Service() {
     }
 
     private fun stopEverything() {
+        ringingAlarmJson = null
+        ringingSnoozeCount = 0
         stopPlayback()
         try { stopForeground(STOP_FOREGROUND_REMOVE) } catch (_: Exception) {}
         stopSelf()

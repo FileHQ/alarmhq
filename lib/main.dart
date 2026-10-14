@@ -8,6 +8,7 @@ import 'services/alarm_repository.dart';
 import 'services/app_settings.dart';
 import 'services/native_bridge.dart';
 import 'theme/app_theme.dart';
+import 'widgets/ringing_overlay.dart';
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
@@ -21,18 +22,42 @@ class AlarmHQApp extends StatefulWidget {
   State<AlarmHQApp> createState() => _AlarmHQAppState();
 }
 
-class _AlarmHQAppState extends State<AlarmHQApp> {
+class _AlarmHQAppState extends State<AlarmHQApp>
+    with WidgetsBindingObserver {
   final AppSettings _settings = AppSettings();
   final AlarmRepository _repo = AlarmRepository();
   bool _ready = false;
   bool _onboarded = false;
   int _tab = 0;
+  bool _ringingDialogOpen = false;
 
   @override
   void initState() {
     super.initState();
+    WidgetsBinding.instance.addObserver(this);
     _boot();
   }
+
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    // If an alarm fired while the app was in the background and the user
+    // returns to it, show the in-app ringing dialog with Dismiss/Snooze.
+    if (state == AppLifecycleState.resumed) _checkRinging();
+  }
+
+  Future<void> _checkRinging() async {
+    if (!_ready || _ringingDialogOpen) return;
+    final ctx = _scaffoldKey.currentContext;
+    if (ctx == null) return;
+    _ringingDialogOpen = true;
+    try {
+      await RingingOverlay.showIfRinging(ctx);
+    } finally {
+      _ringingDialogOpen = false;
+    }
+  }
+
+  final GlobalKey _scaffoldKey = GlobalKey();
 
   Future<void> _boot() async {
     await _settings.load();
@@ -45,12 +70,16 @@ class _AlarmHQAppState extends State<AlarmHQApp> {
       await _repo.rescheduleAll();
     }
     if (mounted) setState(() => _ready = true);
+    // In case the app was opened while an alarm is ringing (e.g. from the
+    // notification), check right after the first frame.
+    WidgetsBinding.instance.addPostFrameCallback((_) => _checkRinging());
   }
 
   void _onSettingsChanged() => setState(() {});
 
   @override
   void dispose() {
+    WidgetsBinding.instance.removeObserver(this);
     _settings.removeListener(_onSettingsChanged);
     super.dispose();
   }
@@ -75,6 +104,7 @@ class _AlarmHQAppState extends State<AlarmHQApp> {
               builder: (context) {
                 final l10n = AppLocalizations.of(context)!;
                 return Scaffold(
+                  key: _scaffoldKey,
                   body: _tab == 0
                       ? AlarmListScreen(repo: _repo, settings: _settings)
                       : SettingsScreen(repo: _repo, settings: _settings),

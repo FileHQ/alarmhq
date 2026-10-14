@@ -20,7 +20,15 @@ class AppLocalizationsUr extends AppLocalizations {
   String get addAlarm => 'الارم شامل کریں';
 
   @override
+  String alarmIn(Object duration) {
+    return '$duration میں الارم';
+  }
+
+  @override
   String get alarmOff => 'الارم بند ہے';
+
+  @override
+  String get alarmRinging => 'الارم بج رہا ہے';
 
   @override
   String get alarms => 'الارمز';
@@ -76,6 +84,12 @@ class AppLocalizationsUr extends AppLocalizations {
   String get discardTitle => 'تبدیلیاں چھوڑ دیں؟';
 
   @override
+  String get dismiss => 'بند کریں';
+
+  @override
+  String get done => 'ٹھیک ہے';
+
+  @override
   String get editAlarm => 'الارم میں ترمیم';
 
   @override
@@ -94,6 +108,9 @@ class AppLocalizationsUr extends AppLocalizations {
 
   @override
   String get granted => 'اجازت ہے';
+
+  @override
+  String get hoursShort => 'H';
 
   @override
   String get intervalDays => 'ہر کتنے دن بعد دہراؤ';
@@ -132,6 +149,9 @@ class AppLocalizationsUr extends AppLocalizations {
   String get maxSnoozes => 'زیادہ سے زیادہ اسنوز';
 
   @override
+  String get minutesShort => 'M';
+
+  @override
   String minutesUnit(Object n) {
     return '$n منٹ';
   }
@@ -154,6 +174,9 @@ class AppLocalizationsUr extends AppLocalizations {
   String get noFadeIn => 'بند';
 
   @override
+  String get noMoreSnoozes => 'مزید اسنوز باقی نہیں';
+
+  @override
   String get noSnooze => 'بند';
 
   @override
@@ -163,10 +186,64 @@ class AppLocalizationsUr extends AppLocalizations {
   String get onceSummary => 'ایک بار';
 
   @override
+  String get openPermissionScreen => 'اجازت سکرین کھولیں';
+
+  @override
   String get openSettings => 'سیٹنگز کھولیں';
 
   @override
+  String get permBatteryDesc =>
+      'فون کو بیٹری بچانے کے لیے الارم میں تاخیر یا بند کرنے سے روکتا ہے۔';
+
+  @override
+  String get permBatteryTitle => 'بیٹری آپٹیمائزیشن نظرانداز کریں';
+
+  @override
+  String get permBody =>
+      'AlarmHQ کو یہ اجازتیں چاہییں تاکہ آپ کے الارم ہمیشہ وقت پر بجیں — چاہے فون لاک ہو یا بیٹری بچا رہا ہو۔';
+
+  @override
+  String get permContinue => 'آگے بڑھیں';
+
+  @override
+  String get permExactDesc =>
+      'الارم ٹھیک اسی منٹ پر بجتا ہے، چاہے فون Doze موڈ میں ہو۔';
+
+  @override
+  String get permExactTitle => 'عین وقت پر الارم';
+
+  @override
+  String get permGrant => 'اجازت دیں';
+
+  @override
+  String get permGranted => 'اجازت مل گئی';
+
+  @override
+  String get permNotifDesc => 'الارم اسکرین پر اور نوٹیفکیشن میں دکھاتا ہے۔';
+
+  @override
+  String get permNotifTitle => 'نوٹیفکیشنز';
+
+  @override
+  String get permOverlayDesc => 'لاک اسکرین پر فل اسکرین الارم دکھاتا ہے۔';
+
+  @override
+  String get permOverlayTitle => 'دوسری ایپس پر دکھائیں';
+
+  @override
+  String get permSkip => 'ابھی چھوڑیں';
+
+  @override
+  String get permTitle => 'اجازتیں درکار ہیں';
+
+  @override
   String get permissions => 'اجازتیں';
+
+  @override
+  String get pickAtLeastOneDate => 'کم از کم ایک تاریخ چنیں';
+
+  @override
+  String get pickAtLeastOneDay => 'کم از کم ایک دن چنیں';
 
   @override
   String get pickDate => 'تاریخ چنیں';
@@ -175,13 +252,30 @@ class AppLocalizationsUr extends AppLocalizations {
   String get repeat => 'دہراؤ';
 
   @override
+  String get repeatDates => 'تاریخیں';
+
+  @override
   String get repeatInterval => 'ہر N دن بعد';
+
+  @override
+  String get repeatNDays => 'N دن';
 
   @override
   String get repeatOnce => 'ایک بار';
 
   @override
+  String get repeatSpecificDates => 'مخصوص تاریخیں';
+
+  @override
   String get repeatWeekly => 'ہفتہ وار دن';
+
+  @override
+  String get repeatWeeklyShort => 'ہفتہ وار';
+
+  @override
+  String ringsIn(Object duration) {
+    return '$duration میں بجے گا';
+  }
 
   @override
   String get save => 'محفوظ کریں';
@@ -192,7 +286,16 @@ class AppLocalizationsUr extends AppLocalizations {
   }
 
   @override
+  String get selectDates => 'تاریخوں پر ٹیپ کریں (ہر ایک پر ایک بار بجے گا)';
+
+  @override
+  String get selectedDates => 'منتخب تاریخیں';
+
+  @override
   String get settings => 'سیٹنگز';
+
+  @override
+  String get skipNextOnly => 'صرف اگلی چھوڑیں';
 
   @override
   String get snooze => 'اسنوز';
@@ -255,6 +358,17 @@ class AppLocalizationsUr extends AppLocalizations {
   String get toneSystemDefault => 'سسٹم کی پہلے سے طے شدہ';
 
   @override
+  String turnOffAlarmBody(Object label, Object when) {
+    return '$label — اگلی رنگ $when';
+  }
+
+  @override
+  String get turnOffAlarmTitle => 'الارم بند کریں؟';
+
+  @override
+  String get turnOffCompletely => 'مکمل بند کریں';
+
+  @override
   String get vibration => 'وائبریشن';
 
   @override
@@ -282,106 +396,4 @@ class AppLocalizationsUr extends AppLocalizations {
   String weeklySummary(Object days) {
     return '$days';
   }
-
-  @override
-  String get repeatSpecificDates => 'مخصوص تاریخیں';
-
-  @override
-  String get repeatDates => 'تاریخیں';
-
-  @override
-  String get repeatNDays => 'N دن';
-
-  @override
-  String get skipNextOnly => 'صرف اگلی چھوڑیں';
-
-  @override
-  String get turnOffCompletely => 'مکمل بند کریں';
-
-  @override
-  String get turnOffAlarmTitle => 'الارم بند کریں؟';
-
-  @override
-  String turnOffAlarmBody(Object label, Object when) {
-    return '$label — اگلی رنگ $when';
-  }
-
-  @override
-  String ringsIn(Object duration) {
-    return '$duration میں بجے گا';
-  }
-
-  @override
-  String alarmIn(Object duration) {
-    return '$duration میں الارم';
-  }
-
-  @override
-  String get selectDates => 'تاریخوں پر ٹیپ کریں (ہر ایک پر ایک بار بجے گا)';
-
-  @override
-  String get selectedDates => 'منتخب تاریخیں';
-
-  @override
-  String get hoursShort => 'H';
-
-  @override
-  String get minutesShort => 'M';
-
-  @override
-  String get done => 'ٹھیک ہے';
-
-  @override
-  String get repeatWeeklyShort => 'ہفتہ وار';
-
-  @override
-  String get pickAtLeastOneDay => 'کم از کم ایک دن چنیں';
-
-  @override
-  String get pickAtLeastOneDate => 'کم از کم ایک تاریخ چنیں';
-
-  @override
-  String get permTitle => 'اجازتیں درکار ہیں';
-
-  @override
-  String get permBody =>
-      'AlarmHQ کو یہ اجازتیں چاہییں تاکہ آپ کے الارم ہمیشہ وقت پر بجیں — چاہے فون لاک ہو یا بیٹری بچا رہا ہو۔';
-
-  @override
-  String get permExactTitle => 'عین وقت پر الارم';
-
-  @override
-  String get permExactDesc =>
-      'الارم ٹھیک اسی منٹ پر بجتا ہے، چاہے فون Doze موڈ میں ہو۔';
-
-  @override
-  String get permBatteryTitle => 'بیٹری آپٹیمائزیشن نظرانداز کریں';
-
-  @override
-  String get permBatteryDesc =>
-      'فون کو بیٹری بچانے کے لیے الارم میں تاخیر یا بند کرنے سے روکتا ہے۔';
-
-  @override
-  String get permNotifTitle => 'نوٹیفکیشنز';
-
-  @override
-  String get permNotifDesc => 'الارم اسکرین پر اور نوٹیفکیشن میں دکھاتا ہے۔';
-
-  @override
-  String get permOverlayTitle => 'دوسری ایپس پر دکھائیں';
-
-  @override
-  String get permOverlayDesc => 'لاک اسکرین پر فل اسکرین الارم دکھاتا ہے۔';
-
-  @override
-  String get permGrant => 'اجازت دیں';
-
-  @override
-  String get permGranted => 'اجازت مل گئی';
-
-  @override
-  String get permContinue => 'آگے بڑھیں';
-
-  @override
-  String get permSkip => 'ابھی چھوڑیں';
 }

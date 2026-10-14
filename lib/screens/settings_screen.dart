@@ -4,6 +4,7 @@ import 'package:alarmhq/l10n/app_localizations.dart';
 import '../services/alarm_repository.dart';
 import '../services/app_settings.dart';
 import '../services/native_bridge.dart';
+import 'permission_screen.dart';
 
 /// Settings: language, theme, default snooze, permission helpers, about.
 class SettingsScreen extends StatefulWidget {
@@ -146,6 +147,22 @@ class _SettingsScreenState extends State<SettingsScreen> {
               onPressed: _refreshPermissions,
               child: Text(l10n.openSettings),
             ),
+          ),
+          ListTile(
+            leading: const Text('🔐', style: TextStyle(fontSize: 24)),
+            title: Text(l10n.openPermissionScreen),
+            trailing: const Icon(Icons.chevron_right),
+            onTap: () async {
+              await Navigator.of(context).push(
+                MaterialPageRoute(
+                  builder: (_) => PermissionScreen(
+                    onDone: () => Navigator.of(context).pop(),
+                  ),
+                ),
+              );
+              // Statuses may have changed; refresh the tiles above.
+              _refreshPermissions();
+            },
           ),
           const Divider(height: 32),
           _section(l10n.about),
