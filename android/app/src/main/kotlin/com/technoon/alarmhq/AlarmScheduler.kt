@@ -58,10 +58,33 @@ object AlarmScheduler {
     fun nextTriggerMillis(alarm: JSONObject, nowMillis: Long): Long? {
         val hour = alarm.optInt("hour", 7)
         val minute = alarm.optInt("minute", 0)
-        return when (alarm.optString("mode", "weekly")) {
+        val t = when (alarm.optString("mode", "weekly")) {
             "weekly" -> nextWeekly(alarm, hour, minute, nowMillis)
             "once" -> nextOnce(alarm, hour, minute, nowMillis)
             "interval" -> nextInterval(alarm, hour, minute, nowMillis)
+            "specificDates" -> nextSpecificDates(alarm, hour, minute, nowMillis)
+            else -> null
+        }
+        // "Skip next only": if the computed trigger matches skipNextDate,
+        // find the following one instead.
+        val skipStr = alarm.optString("skipNextDate", null)
+        if (t != null && skipStr != null) {
+            val skipCal = parseDateTime(skipStr)
+            if (skipCal != null && t == skipCal.timeInMillis) {
+                return nextTriggerMillisAfter(alarm, hour, minute, t + 1000)
+            }
+        }
+        return t
+    }
+
+    private fun nextTriggerMillisAfter(
+        alarm: JSONObject, hour: Int, minute: Int, afterMillis: Long
+    ): Long? {
+        return when (alarm.optString("mode", "weekly")) {
+            "weekly" -> nextWeekly(alarm, hour, minute, afterMillis)
+            "once" -> nextOnce(alarm, hour, minute, afterMillis)
+            "interval" -> nextInterval(alarm, hour, minute, afterMillis)
+            "specificDates" -> nextSpecificDates(alarm, hour, minute, afterMillis)
             else -> null
         }
     }
@@ -121,6 +144,20 @@ object AlarmScheduler {
         return origin + k * step
     }
 
+    private fun nextSpecificDates(
+        alarm: JSONObject, hour: Int, minute: Int, nowMillis: Long
+    ): Long? {
+        val arr = alarm.optJSONArray("specificDates") ?: return null
+        var best: Long? = null
+        for (i in 0 until arr.length()) {
+            val c = parseDate(arr.optString(i, "")) ?: continue
+            val t = atMillis(c, hour, minute)
+            if (t < nowMillis) continue
+            if (best == null || t < best) best = t
+        }
+        return best
+    }
+
     private fun parseDate(s: String): Calendar? {
         return try {
             val p = s.split("-").map { it.toInt() }
@@ -128,6 +165,24 @@ object AlarmScheduler {
                 set(Calendar.YEAR, p[0])
                 set(Calendar.MONTH, p[1] - 1)
                 set(Calendar.DAY_OF_MONTH, p[2])
+            }
+        } catch (_: Exception) { null }
+    }
+
+    /** Parse "yyyy-MM-ddTHH:mm" (skipNextDate). */
+    private fun parseDateTime(s: String): Calendar? {
+        return try {
+            val parts = s.split("T")
+            val d = parts[0].split("-").map { it.toInt() }
+            val t = parts[1].split(":").map { it.toInt() }
+            Calendar.getInstance().apply {
+                set(Calendar.YEAR, d[0])
+                set(Calendar.MONTH, d[1] - 1)
+                set(Calendar.DAY_OF_MONTH, d[2])
+                set(Calendar.HOUR_OF_DAY, t[0])
+                set(Calendar.MINUTE, t[1])
+                set(Calendar.SECOND, 0)
+                set(Calendar.MILLISECOND, 0)
             }
         } catch (_: Exception) { null }
     }

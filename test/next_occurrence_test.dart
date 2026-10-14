@@ -94,15 +94,97 @@ void main() {
     });
   });
 
+  group('specific dates mode', () {
+    AlarmModel datesBase(List<DateTime> ds) => AlarmModel(
+          id: 1,
+          hour: 7,
+          minute: 0,
+          mode: AlarmRepeatMode.specificDates,
+          specificDates: ds,
+        );
+
+    test('picks the next future date', () {
+      final a = datesBase([
+        DateTime(2026, 10, 15),
+        DateTime(2026, 10, 23),
+        DateTime(2026, 11, 5),
+      ]);
+      final t = NextOccurrence.nextTrigger(a, DateTime(2026, 10, 14, 12, 0));
+      expect(t, DateTime(2026, 10, 15, 7, 0));
+    });
+
+    test('skips past dates', () {
+      final a = datesBase([
+        DateTime(2026, 10, 10),
+        DateTime(2026, 10, 23),
+      ]);
+      final t = NextOccurrence.nextTrigger(a, DateTime(2026, 10, 14, 12, 0));
+      expect(t, DateTime(2026, 10, 23, 7, 0));
+    });
+
+    test('all past dates returns null', () {
+      final a = datesBase([DateTime(2026, 10, 10)]);
+      expect(
+        NextOccurrence.nextTrigger(a, DateTime(2026, 10, 14, 12, 0)),
+        isNull,
+      );
+    });
+
+    test('empty list returns null', () {
+      final a = datesBase([]);
+      expect(
+        NextOccurrence.nextTrigger(a, DateTime(2026, 10, 14, 12, 0)),
+        isNull,
+      );
+    });
+  });
+
+  group('skip next', () {
+    test('skipped trigger is bypassed', () {
+      final a = AlarmModel(
+        id: 1,
+        hour: 7,
+        minute: 0,
+        mode: AlarmRepeatMode.weekly,
+        weekDays: [1, 2, 3, 4, 5, 6, 7],
+        skipNextDate: DateTime(2026, 10, 15, 7, 0),
+      );
+      // Next would be Oct 15 07:00, but it's skipped -> Oct 16.
+      final t = NextOccurrence.nextTrigger(a, DateTime(2026, 10, 14, 12, 0));
+      expect(t, DateTime(2026, 10, 16, 7, 0));
+    });
+
+    test('past skip date is ignored', () {
+      final a = AlarmModel(
+        id: 1,
+        hour: 7,
+        minute: 0,
+        mode: AlarmRepeatMode.weekly,
+        weekDays: [1, 2, 3, 4, 5, 6, 7],
+        skipNextDate: DateTime(2026, 10, 10, 7, 0),
+      );
+      final t = NextOccurrence.nextTrigger(a, DateTime(2026, 10, 14, 12, 0));
+      expect(t, DateTime(2026, 10, 15, 7, 0));
+    });
+  });
+
   test('model survives a JSON round-trip', () {
     final a = base(
       intervalStart: DateTime(2026, 10, 14),
       onceDate: DateTime(2026, 10, 20),
-    ).copyWith(label: 'فجر', toneUri: 'content://media/1');
+    ).copyWith(
+      label: 'فجر',
+      toneUri: 'content://media/1',
+      specificDates: [DateTime(2026, 10, 25), DateTime(2026, 11, 1)],
+      skipNextDate: () => DateTime(2026, 10, 15, 7, 0),
+    );
     final b = AlarmModel.fromJson(a.toJson());
     expect(b.label, 'فجر');
     expect(b.intervalDays, 5);
     expect(b.intervalStart, DateTime(2026, 10, 14));
     expect(b.toneUri, 'content://media/1');
+    expect(b.specificDates,
+        [DateTime(2026, 10, 25), DateTime(2026, 11, 1)]);
+    expect(b.skipNextDate, DateTime(2026, 10, 15, 7, 0));
   });
 }

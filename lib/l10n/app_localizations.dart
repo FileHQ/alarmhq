@@ -601,6 +601,108 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'{days}'**
   String weeklySummary(Object days);
+
+  /// No description provided for @repeatSpecificDates.
+  ///
+  /// In en, this message translates to:
+  /// **'Specific dates'**
+  String get repeatSpecificDates;
+
+  /// No description provided for @repeatDates.
+  ///
+  /// In en, this message translates to:
+  /// **'Dates'**
+  String get repeatDates;
+
+  /// No description provided for @repeatNDays.
+  ///
+  /// In en, this message translates to:
+  /// **'N days'**
+  String get repeatNDays;
+
+  /// No description provided for @skipNextOnly.
+  ///
+  /// In en, this message translates to:
+  /// **'Skip next only'**
+  String get skipNextOnly;
+
+  /// No description provided for @turnOffCompletely.
+  ///
+  /// In en, this message translates to:
+  /// **'Turn off completely'**
+  String get turnOffCompletely;
+
+  /// No description provided for @turnOffAlarmTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Turn off alarm?'**
+  String get turnOffAlarmTitle;
+
+  /// No description provided for @turnOffAlarmBody.
+  ///
+  /// In en, this message translates to:
+  /// **'{label} — next ring {when}'**
+  String turnOffAlarmBody(Object label, Object when);
+
+  /// No description provided for @ringsIn.
+  ///
+  /// In en, this message translates to:
+  /// **'Rings in {duration}'**
+  String ringsIn(Object duration);
+
+  /// No description provided for @alarmIn.
+  ///
+  /// In en, this message translates to:
+  /// **'Alarm in {duration}'**
+  String alarmIn(Object duration);
+
+  /// No description provided for @selectDates.
+  ///
+  /// In en, this message translates to:
+  /// **'Tap dates to select (each rings once)'**
+  String get selectDates;
+
+  /// No description provided for @selectedDates.
+  ///
+  /// In en, this message translates to:
+  /// **'Selected dates'**
+  String get selectedDates;
+
+  /// No description provided for @hoursShort.
+  ///
+  /// In en, this message translates to:
+  /// **'H'**
+  String get hoursShort;
+
+  /// No description provided for @minutesShort.
+  ///
+  /// In en, this message translates to:
+  /// **'M'**
+  String get minutesShort;
+
+  /// No description provided for @done.
+  ///
+  /// In en, this message translates to:
+  /// **'Done'**
+  String get done;
+
+  /// No description provided for @repeatWeeklyShort.
+  ///
+  /// In en, this message translates to:
+  /// **'Weekly'**
+  String get repeatWeeklyShort;
+
+  /// No description provided for @pickAtLeastOneDay.
+  ///
+  /// In en, this message translates to:
+  /// **'Pick at least one day'**
+  String get pickAtLeastOneDay;
+
+  /// No description provided for @pickAtLeastOneDate.
+  ///
+  /// In en, this message translates to:
+  /// **'Pick at least one date'**
+  String get pickAtLeastOneDate;
 }
 
 class _AppLocalizationsDelegate

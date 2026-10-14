@@ -8,6 +8,23 @@ class NextOccurrence {
   /// or null when there is no future occurrence (one-time alarm in the past,
   /// or weekly alarm with no days selected).
   static DateTime? nextTrigger(AlarmModel alarm, DateTime now) {
+    final t = _nextTriggerInner(alarm, now);
+    final skip = alarm.skipNextDate;
+    // "Skip next only": if the computed trigger is the skipped one,
+    // find the following occurrence instead.
+    if (t != null &&
+        skip != null &&
+        t.year == skip.year &&
+        t.month == skip.month &&
+        t.day == skip.day &&
+        t.hour == skip.hour &&
+        t.minute == skip.minute) {
+      return _nextTriggerInner(alarm, t.add(const Duration(seconds: 1)));
+    }
+    return t;
+  }
+
+  static DateTime? _nextTriggerInner(AlarmModel alarm, DateTime now) {
     switch (alarm.mode) {
       case AlarmRepeatMode.weekly:
         return _nextWeekly(alarm, now);
@@ -15,6 +32,8 @@ class NextOccurrence {
         return _nextOnce(alarm, now);
       case AlarmRepeatMode.interval:
         return _nextInterval(alarm, now);
+      case AlarmRepeatMode.specificDates:
+        return _nextSpecificDates(alarm, now);
     }
   }
 
@@ -56,6 +75,16 @@ class NextOccurrence {
     if (d == null) return null;
     final t = _at(d, alarm.hour, alarm.minute);
     return t.isBefore(now) ? null : t;
+  }
+
+  static DateTime? _nextSpecificDates(AlarmModel alarm, DateTime now) {
+    DateTime? best;
+    for (final d in alarm.specificDates) {
+      final t = _at(d, alarm.hour, alarm.minute);
+      if (t.isBefore(now)) continue;
+      if (best == null || t.isBefore(best)) best = t;
+    }
+    return best;
   }
 
   static DateTime? _nextInterval(AlarmModel alarm, DateTime now) {

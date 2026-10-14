@@ -6,8 +6,11 @@ import '../services/alarm_repository.dart';
 import '../services/app_settings.dart';
 import '../services/native_bridge.dart';
 import '../services/next_occurrence.dart';
+import '../theme/app_theme.dart';
+import '../widgets/time_picker_scroll.dart';
 
-/// Create / edit one alarm, including the signature "every N days" mode.
+/// Create / edit one alarm: 12-hour scroll time picker, 4 repeat modes
+/// (weekly / once / N days / specific dates), snooze, sound.
 class AlarmEditScreen extends StatefulWidget {
   final AlarmRepository repo;
   final AppSettings settings;
@@ -32,6 +35,8 @@ class _AlarmEditScreenState extends State<AlarmEditScreen> {
   late DateTime _onceDate;
   late int _intervalDays;
   late DateTime _intervalStart;
+  late List<DateTime> _specificDates;
+  late DateTime _calMonth; // calendar page being viewed
   late int _snoozeMinutes;
   late int _maxSnoozes;
   late String _toneUri;
@@ -56,6 +61,9 @@ class _AlarmEditScreenState extends State<AlarmEditScreen> {
     _intervalDays = e?.intervalDays ?? 5;
     _intervalStart =
         e?.intervalStart ?? DateTime(now.year, now.month, now.day);
+    _specificDates = List<DateTime>.from(e?.specificDates ?? []);
+    _specificDates.sort(_dateCmp);
+    _calMonth = DateTime(now.year, now.month, 1);
     _snoozeMinutes = e?.snoozeMinutes ?? widget.settings.defaultSnoozeMinutes;
     _maxSnoozes = e?.maxSnoozes ?? 3;
     _toneUri = e?.toneUri ?? 'asset://tones/alarmhq-classic.wav';
@@ -64,6 +72,10 @@ class _AlarmEditScreenState extends State<AlarmEditScreen> {
     _fadeInSeconds = e?.fadeInSeconds ?? 30;
     _labelCtrl.addListener(() => _dirty = true);
   }
+
+  static int _dateCmp(DateTime a, DateTime b) =>
+      DateTime(a.year, a.month, a.day)
+          .compareTo(DateTime(b.year, b.month, b.day));
 
   @override
   void dispose() {
@@ -88,6 +100,9 @@ class _AlarmEditScreenState extends State<AlarmEditScreen> {
         intervalDays: _intervalDays,
         intervalStart: DateTime(
             _intervalStart.year, _intervalStart.month, _intervalStart.day),
+        specificDates: _specificDates
+            .map((d) => DateTime(d.year, d.month, d.day))
+            .toList(),
         snoozeMinutes: _snoozeMinutes,
         maxSnoozes: _maxSnoozes,
         toneUri: _toneUri,
@@ -102,6 +117,18 @@ class _AlarmEditScreenState extends State<AlarmEditScreen> {
     if (_mode == AlarmRepeatMode.interval && _intervalDays < 1) {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(content: Text(l10n.intervalTooSmall)),
+      );
+      return;
+    }
+    if (_mode == AlarmRepeatMode.weekly && _weekDays.isEmpty) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text(l10n.pickAtLeastOneDay)),
+      );
+      return;
+    }
+    if (_mode == AlarmRepeatMode.specificDates && _specificDates.isEmpty) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text(l10n.pickAtLeastOneDate)),
       );
       return;
     }
@@ -139,14 +166,7 @@ class _AlarmEditScreenState extends State<AlarmEditScreen> {
   }
 
   Future<void> _pickTime() async {
-    final t = await showTimePicker(
-      context: context,
-      initialTime: _time,
-      builder: (c, child) => MediaQuery(
-        data: MediaQuery.of(c).copyWith(alwaysUse24HourFormat: true),
-        child: child!,
-      ),
-    );
+    final t = await ScrollTimePicker.show(context, _time);
     if (t != null) _markDirty(() => _time = t);
   }
 
@@ -192,11 +212,17 @@ class _AlarmEditScreenState extends State<AlarmEditScreen> {
   String _dateText(DateTime d) =>
       '${d.day.toString().padLeft(2, '0')}/${d.month.toString().padLeft(2, '0')}/${d.year}';
 
+  /// "6:32 PM"
+  String _timeText12() {
+    final ampm = _time.hour < 12 ? 'AM' : 'PM';
+    var h = _time.hour % 12;
+    if (h == 0) h = 12;
+    return '$h:${_time.minute.toString().padLeft(2, '0')} $ampm';
+  }
+
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
-    final timeText =
-        '${_time.hour.toString().padLeft(2, '0')}:${_time.minute.toString().padLeft(2, '0')}';
     return PopScope(
       canPop: false,
       onPopInvokedWithResult: (didPop, _) async {
@@ -207,20 +233,22 @@ class _AlarmEditScreenState extends State<AlarmEditScreen> {
       },
       child: Scaffold(
         appBar: AppBar(
-          title: Text(
-              widget.existing == null ? l10n.newAlarm : l10n.editAlarm),
+          title:
+              Text(widget.existing == null ? l10n.newAlarm : l10n.editAlarm),
           actions: [
             TextButton(
               onPressed: _save,
               child: Text(l10n.save,
-                  style: const TextStyle(fontWeight: FontWeight.bold)),
+                  style: const TextStyle(
+                      fontWeight: FontWeight.bold,
+                      color: AppTheme.emerald)),
             ),
           ],
         ),
         body: ListView(
           padding: const EdgeInsets.all(16),
           children: [
-            // ---- time ----
+            // ---- time (12-hour, tap opens scroll picker) ----
             Center(
               child: InkWell(
                 onTap: _pickTime,
@@ -229,11 +257,12 @@ class _AlarmEditScreenState extends State<AlarmEditScreen> {
                   padding: const EdgeInsets.symmetric(
                       horizontal: 32, vertical: 12),
                   child: Text(
-                    timeText,
+                    _timeText12(),
                     style:
                         Theme.of(context).textTheme.displayLarge?.copyWith(
-                              fontWeight: FontWeight.bold,
-                              color: Theme.of(context).colorScheme.primary,
+                              fontWeight: FontWeight.w800,
+                              color: AppTheme.emerald,
+                              letterSpacing: -1,
                             ),
                   ),
                 ),
@@ -250,27 +279,17 @@ class _AlarmEditScreenState extends State<AlarmEditScreen> {
               ),
             ),
             const SizedBox(height: 16),
-            // ---- repeat mode ----
+            // ---- repeat mode (4 options, one line each) ----
             Text(l10n.repeat,
                 style: Theme.of(context).textTheme.titleMedium),
             const SizedBox(height: 8),
-            SegmentedButton<AlarmRepeatMode>(
-              segments: [
-                ButtonSegment(
-                    value: AlarmRepeatMode.weekly, label: Text(l10n.repeatWeekly)),
-                ButtonSegment(
-                    value: AlarmRepeatMode.once, label: Text(l10n.repeatOnce)),
-                ButtonSegment(
-                    value: AlarmRepeatMode.interval,
-                    label: Text(l10n.repeatInterval)),
-              ],
-              selected: {_mode},
-              onSelectionChanged: (s) => _markDirty(() => _mode = s.first),
-            ),
+            _modeSegment(l10n),
             const SizedBox(height: 12),
             if (_mode == AlarmRepeatMode.weekly) _weeklyPicker(l10n),
             if (_mode == AlarmRepeatMode.once) _oncePicker(l10n),
             if (_mode == AlarmRepeatMode.interval) _intervalPicker(l10n),
+            if (_mode == AlarmRepeatMode.specificDates)
+              _specificDatesPicker(l10n),
             const Divider(height: 32),
             // ---- snooze ----
             _sectionTitle(l10n.snooze),
@@ -320,10 +339,10 @@ class _AlarmEditScreenState extends State<AlarmEditScreen> {
               onTap: _pickTone,
             ),
             ListTile(
-              title: Text(
-                  _previewing ? l10n.toneStop : l10n.tonePreview),
-              leading: Icon(
-                  _previewing ? Icons.stop : Icons.play_arrow),
+              title:
+                  Text(_previewing ? l10n.toneStop : l10n.tonePreview),
+              leading:
+                  Icon(_previewing ? Icons.stop : Icons.play_arrow),
               onTap: _togglePreview,
             ),
             SwitchListTile(
@@ -358,6 +377,55 @@ class _AlarmEditScreenState extends State<AlarmEditScreen> {
     );
   }
 
+  /// 4-option segment with compact labels that fit on one line.
+  Widget _modeSegment(AppLocalizations l10n) {
+    final options = [
+      (AlarmRepeatMode.weekly, l10n.repeatWeeklyShort),
+      (AlarmRepeatMode.once, l10n.repeatOnce),
+      (AlarmRepeatMode.interval, l10n.repeatNDays),
+      (AlarmRepeatMode.specificDates, l10n.repeatDates),
+    ];
+    return Container(
+      decoration: BoxDecoration(
+        color: AppTheme.charcoalCard,
+        borderRadius: BorderRadius.circular(16),
+      ),
+      padding: const EdgeInsets.all(4),
+      child: Row(
+        children: [
+          for (final (mode, label) in options)
+            Expanded(
+              child: GestureDetector(
+                onTap: () => _markDirty(() => _mode = mode),
+                child: Container(
+                  padding: const EdgeInsets.symmetric(vertical: 11),
+                  decoration: BoxDecoration(
+                    color: _mode == mode
+                        ? AppTheme.emerald
+                        : Colors.transparent,
+                    borderRadius: BorderRadius.circular(12),
+                  ),
+                  child: Text(
+                    '${_mode == mode ? '✓ ' : ''}$label',
+                    textAlign: TextAlign.center,
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                    style: TextStyle(
+                      fontSize: 12.5,
+                      fontWeight: FontWeight.w700,
+                      color: _mode == mode
+                          ? Colors.black
+                          : Colors.white60,
+                    ),
+                  ),
+                ),
+              ),
+            ),
+        ],
+      ),
+    );
+  }
+
   bool get _isBuiltInTone =>
       _toneUri == 'asset://tones/alarmhq-classic.wav' ||
       _toneUri == 'system://default';
@@ -367,6 +435,7 @@ class _AlarmEditScreenState extends State<AlarmEditScreen> {
         child: Text(t, style: Theme.of(context).textTheme.titleMedium),
       );
 
+  /// Day circles M T W T F S S.
   Widget _weeklyPicker(AppLocalizations l10n) {
     final names = [
       l10n.weekdayMon,
@@ -377,21 +446,43 @@ class _AlarmEditScreenState extends State<AlarmEditScreen> {
       l10n.weekdaySat,
       l10n.weekdaySun,
     ];
-    return Wrap(
-      spacing: 8,
+    // Use first letter of each localized day name.
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: List.generate(7, (i) {
         final wd = i + 1;
         final selected = _weekDays.contains(wd);
-        return FilterChip(
-          label: Text(names[i]),
-          selected: selected,
-          onSelected: (v) => _markDirty(() {
-            if (v) {
-              _weekDays.add(wd);
-            } else {
+        final letter = names[i].isNotEmpty
+            ? names[i].characters.first
+            : '?';
+        return GestureDetector(
+          onTap: () => _markDirty(() {
+            if (selected) {
               _weekDays.remove(wd);
+            } else {
+              _weekDays.add(wd);
             }
           }),
+          child: Container(
+            width: 42,
+            height: 42,
+            decoration: BoxDecoration(
+              shape: BoxShape.circle,
+              color: selected ? AppTheme.emerald : AppTheme.charcoalCard,
+              border: selected
+                  ? null
+                  : Border.all(color: Colors.white24, width: 1.5),
+            ),
+            alignment: Alignment.center,
+            child: Text(
+              letter,
+              style: TextStyle(
+                fontWeight: FontWeight.w800,
+                fontSize: 15,
+                color: selected ? Colors.black : Colors.white60,
+              ),
+            ),
+          ),
         );
       }),
     );
@@ -400,7 +491,7 @@ class _AlarmEditScreenState extends State<AlarmEditScreen> {
   Widget _oncePicker(AppLocalizations l10n) => ListTile(
         title: Text(l10n.date),
         subtitle: Text(_dateText(_onceDate)),
-        leading: const Icon(Icons.calendar_today),
+        leading: const Icon(Icons.calendar_today, color: AppTheme.emerald),
         onTap: () => _pickDate(forIntervalStart: false),
       );
 
@@ -423,7 +514,8 @@ class _AlarmEditScreenState extends State<AlarmEditScreen> {
         ListTile(
           title: Text(l10n.startDate),
           subtitle: Text(_dateText(_intervalStart)),
-          leading: const Icon(Icons.event_repeat),
+          leading:
+              const Icon(Icons.event_repeat, color: AppTheme.emerald),
           onTap: () => _pickDate(forIntervalStart: true),
           contentPadding: EdgeInsets.zero,
         ),
@@ -437,12 +529,11 @@ class _AlarmEditScreenState extends State<AlarmEditScreen> {
               padding: const EdgeInsets.symmetric(vertical: 2),
               child: Row(
                 children: [
-                  Icon(Icons.alarm,
-                      size: 16,
-                      color: Theme.of(context).colorScheme.primary),
+                  const Icon(Icons.alarm,
+                      size: 16, color: AppTheme.emerald),
                   const SizedBox(width: 8),
                   Text(
-                    '${_dateText(t)}  ${t.hour.toString().padLeft(2, '0')}:${t.minute.toString().padLeft(2, '0')}',
+                    '${_dateText(t)}  ${_time12(t.hour, t.minute)}',
                     style: const TextStyle(fontWeight: FontWeight.w600),
                   ),
                 ],
@@ -451,6 +542,188 @@ class _AlarmEditScreenState extends State<AlarmEditScreen> {
         ],
       ],
     );
+  }
+
+  String _time12(int h24, int m) {
+    final ampm = h24 < 12 ? 'AM' : 'PM';
+    var h = h24 % 12;
+    if (h == 0) h = 12;
+    return '$h:${m.toString().padLeft(2, '0')} $ampm';
+  }
+
+  /// Calendar multi-select for specific dates.
+  Widget _specificDatesPicker(AppLocalizations l10n) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(
+          l10n.selectDates,
+          style:
+              Theme.of(context).textTheme.bodySmall?.copyWith(
+                    color: Colors.white60,
+                  ),
+        ),
+        const SizedBox(height: 8),
+        _calendarGrid(l10n),
+        if (_specificDates.isNotEmpty) ...[
+          const SizedBox(height: 8),
+          Text(l10n.selectedDates,
+              style: Theme.of(context).textTheme.titleSmall),
+          const SizedBox(height: 4),
+          for (final d in _specificDates)
+            Padding(
+              padding: const EdgeInsets.symmetric(vertical: 3),
+              child: Row(
+                children: [
+                  const Icon(Icons.alarm,
+                      size: 16, color: AppTheme.emerald),
+                  const SizedBox(width: 8),
+                  Text(
+                    '${_dateText(d)}  ${_timeText12()}',
+                    style: const TextStyle(fontWeight: FontWeight.w600),
+                  ),
+                  const Spacer(),
+                  GestureDetector(
+                    onTap: () => _markDirty(() {
+                      _specificDates.removeWhere(
+                          (x) => _dateCmp(x, d) == 0);
+                    }),
+                    child: const Icon(Icons.close,
+                        size: 20, color: Colors.redAccent),
+                  ),
+                ],
+              ),
+            ),
+        ],
+      ],
+    );
+  }
+
+  bool _isSelected(DateTime d) =>
+      _specificDates.any((x) => _dateCmp(x, d) == 0);
+
+  Widget _calendarGrid(AppLocalizations l10n) {
+    final now = DateTime.now();
+    final today = DateTime(now.year, now.month, now.day);
+    final monthStart = DateTime(_calMonth.year, _calMonth.month, 1);
+    final monthName = _monthName(l10n, _calMonth.month);
+    // Monday-first offset.
+    final leading = (monthStart.weekday - 1) % 7;
+    final daysInMonth =
+        DateTime(_calMonth.year, _calMonth.month + 1, 0).day;
+    final cells = <DateTime?>[
+      ...List<DateTime?>.filled(leading, null),
+      for (var d = 1; d <= daysInMonth; d++)
+        DateTime(_calMonth.year, _calMonth.month, d),
+    ];
+    final dow = [
+      l10n.weekdayMon,
+      l10n.weekdayTue,
+      l10n.weekdayWed,
+      l10n.weekdayThu,
+      l10n.weekdayFri,
+      l10n.weekdaySat,
+      l10n.weekdaySun,
+    ].map((s) => s.isNotEmpty ? s.characters.first : '?').toList();
+
+    return Container(
+      decoration: BoxDecoration(
+        color: AppTheme.charcoalCard,
+        borderRadius: BorderRadius.circular(16),
+      ),
+      padding: const EdgeInsets.all(12),
+      child: Column(
+        children: [
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              IconButton(
+                icon: const Icon(Icons.chevron_left),
+                onPressed: () => setState(() {
+                  _calMonth =
+                      DateTime(_calMonth.year, _calMonth.month - 1, 1);
+                }),
+              ),
+              Text('$monthName ${_calMonth.year}',
+                  style: const TextStyle(
+                      fontWeight: FontWeight.w800, fontSize: 16)),
+              IconButton(
+                icon: const Icon(Icons.chevron_right),
+                onPressed: () => setState(() {
+                  _calMonth =
+                      DateTime(_calMonth.year, _calMonth.month + 1, 1);
+                }),
+              ),
+            ],
+          ),
+          const SizedBox(height: 4),
+          GridView.count(
+            crossAxisCount: 7,
+            shrinkWrap: true,
+            physics: const NeverScrollableScrollPhysics(),
+            children: [
+              for (final h in dow)
+                Center(
+                  child: Text(h,
+                      style: const TextStyle(
+                          color: Colors.white38,
+                          fontWeight: FontWeight.w700,
+                          fontSize: 12)),
+                ),
+              for (final cell in cells)
+                if (cell == null)
+                  const SizedBox.shrink()
+                else
+                  _calCell(cell, today),
+            ],
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _calCell(DateTime cell, DateTime today) {
+    final selected = _isSelected(cell);
+    final isPast = cell.isBefore(today);
+    return GestureDetector(
+      onTap: isPast
+          ? null
+          : () => _markDirty(() {
+                if (selected) {
+                  _specificDates
+                      .removeWhere((x) => _dateCmp(x, cell) == 0);
+                } else {
+                  _specificDates.add(cell);
+                  _specificDates.sort(_dateCmp);
+                }
+              }),
+      child: Container(
+        margin: const EdgeInsets.all(3),
+        decoration: BoxDecoration(
+          shape: BoxShape.circle,
+          color: selected ? AppTheme.emerald : Colors.transparent,
+        ),
+        alignment: Alignment.center,
+        child: Text(
+          '${cell.day}',
+          style: TextStyle(
+            fontWeight: selected ? FontWeight.w800 : FontWeight.w500,
+            fontSize: 14,
+            color: selected
+                ? Colors.black
+                : isPast
+                    ? Colors.white24
+                    : Colors.white,
+          ),
+        ),
+      ),
+    );
+  }
+
+  String _monthName(AppLocalizations l10n, int m) {
+    // Locale-aware "October 2026" via MaterialLocalizations (no extra deps).
+    final ml = MaterialLocalizations.of(context);
+    return ml.formatMonthYear(DateTime(_calMonth.year, m));
   }
 
   Widget _stepperRow({
@@ -463,7 +736,8 @@ class _AlarmEditScreenState extends State<AlarmEditScreen> {
         children: [
           Expanded(child: Text(label)),
           IconButton(
-            icon: const Icon(Icons.remove_circle_outline),
+            icon: const Icon(Icons.remove_circle_outline,
+                color: AppTheme.emerald),
             onPressed: onMinus,
           ),
           SizedBox(
@@ -471,7 +745,8 @@ class _AlarmEditScreenState extends State<AlarmEditScreen> {
             child: Text(valueText, textAlign: TextAlign.center),
           ),
           IconButton(
-            icon: const Icon(Icons.add_circle_outline),
+            icon:
+                const Icon(Icons.add_circle_outline, color: AppTheme.emerald),
             onPressed: onPlus,
           ),
         ],
@@ -486,5 +761,6 @@ class _AlarmEditScreenState extends State<AlarmEditScreen> {
   Widget _toneRow(String uri, String name) => RadioListTile<String>(
         title: Text(name),
         value: uri,
+        activeColor: AppTheme.emerald,
       );
 }

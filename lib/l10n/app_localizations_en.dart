@@ -283,4 +283,61 @@ class AppLocalizationsEn extends AppLocalizations {
   String weeklySummary(Object days) {
     return '$days';
   }
+
+  @override
+  String get repeatSpecificDates => 'Specific dates';
+
+  @override
+  String get repeatDates => 'Dates';
+
+  @override
+  String get repeatNDays => 'N days';
+
+  @override
+  String get skipNextOnly => 'Skip next only';
+
+  @override
+  String get turnOffCompletely => 'Turn off completely';
+
+  @override
+  String get turnOffAlarmTitle => 'Turn off alarm?';
+
+  @override
+  String turnOffAlarmBody(Object label, Object when) {
+    return '$label — next ring $when';
+  }
+
+  @override
+  String ringsIn(Object duration) {
+    return 'Rings in $duration';
+  }
+
+  @override
+  String alarmIn(Object duration) {
+    return 'Alarm in $duration';
+  }
+
+  @override
+  String get selectDates => 'Tap dates to select (each rings once)';
+
+  @override
+  String get selectedDates => 'Selected dates';
+
+  @override
+  String get hoursShort => 'H';
+
+  @override
+  String get minutesShort => 'M';
+
+  @override
+  String get done => 'Done';
+
+  @override
+  String get repeatWeeklyShort => 'Weekly';
+
+  @override
+  String get pickAtLeastOneDay => 'Pick at least one day';
+
+  @override
+  String get pickAtLeastOneDate => 'Pick at least one date';
 }

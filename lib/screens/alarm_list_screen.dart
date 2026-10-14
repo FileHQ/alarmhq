@@ -5,9 +5,11 @@ import '../models/alarm.dart';
 import '../services/alarm_repository.dart';
 import '../services/app_settings.dart';
 import '../services/next_occurrence.dart';
+import '../theme/app_theme.dart';
 import 'alarm_edit_screen.dart';
 
-/// Main screen: the list of alarms with on/off toggles and next-ring preview.
+/// Main screen: Alarmy-style alarm cards with countdown, 12-hour time,
+/// colorful icons and lime-green accents.
 class AlarmListScreen extends StatefulWidget {
   final AlarmRepository repo;
   final AppSettings settings;
@@ -32,6 +34,7 @@ class _AlarmListScreenState extends State<AlarmListScreen> {
     if (changed == true && mounted) setState(() {});
   }
 
+  /// Delete confirmation (long-press on card).
   Future<void> _confirmDelete(AlarmModel alarm) async {
     final l10n = AppLocalizations.of(context)!;
     final ok = await showDialog<bool>(
@@ -39,7 +42,7 @@ class _AlarmListScreenState extends State<AlarmListScreen> {
       builder: (c) => AlertDialog(
         title: Text(l10n.deleteAlarmTitle),
         content: Text(l10n.deleteAlarmBody(alarm.label.isEmpty
-            ? _timeText(alarm)
+            ? _timeText12(alarm.hour, alarm.minute)
             : alarm.label)),
         actions: [
           TextButton(
@@ -59,10 +62,61 @@ class _AlarmListScreenState extends State<AlarmListScreen> {
     }
   }
 
-  String _timeText(AlarmModel a) {
-    final hh = a.hour.toString().padLeft(2, '0');
-    final mm = a.minute.toString().padLeft(2, '0');
-    return '$hh:$mm';
+  /// Toggle-off dialog: "Skip next only" vs "Turn off completely".
+  Future<void> _confirmTurnOff(AlarmModel alarm) async {
+    final l10n = AppLocalizations.of(context)!;
+    final next = NextOccurrence.nextTrigger(alarm, DateTime.now());
+    final when = next == null
+        ? ''
+        : '${next.day}/${next.month} ${_timeText12(next.hour, next.minute)}';
+    final choice = await showDialog<String>(
+      context: context,
+      builder: (c) => AlertDialog(
+        title: Text(l10n.turnOffAlarmTitle),
+        content: Text(l10n.turnOffAlarmBody(
+          alarm.label.isEmpty ? _timeText12(alarm.hour, alarm.minute) : alarm.label,
+          when,
+        )),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(c, 'cancel'),
+            child: Text(l10n.cancel),
+          ),
+          TextButton(
+            onPressed: () => Navigator.pop(c, 'skip'),
+            child: Text(l10n.skipNextOnly,
+                style: const TextStyle(color: AppTheme.emerald)),
+          ),
+          FilledButton(
+            style: FilledButton.styleFrom(backgroundColor: Colors.redAccent),
+            onPressed: () => Navigator.pop(c, 'off'),
+            child: Text(l10n.turnOffCompletely),
+          ),
+        ],
+      ),
+    );
+    if (choice == 'off') {
+      await widget.repo.setEnabled(alarm, false);
+    } else if (choice == 'skip') {
+      await widget.repo.skipNext(alarm);
+    }
+    if (mounted) setState(() {});
+  }
+
+  /// 12-hour "6:32 PM" text.
+  String _timeText12(int hour24, int minute) {
+    final ampm = hour24 < 12 ? 'AM' : 'PM';
+    var h = hour24 % 12;
+    if (h == 0) h = 12;
+    return '$h:${minute.toString().padLeft(2, '0')} $ampm';
+  }
+
+  /// "6:32" and "PM" separately for styled display.
+  (String, String) _timeParts(int hour24, int minute) {
+    final ampm = hour24 < 12 ? 'AM' : 'PM';
+    var h = hour24 % 12;
+    if (h == 0) h = 12;
+    return ('$h:${minute.toString().padLeft(2, '0')}', ampm);
   }
 
   String _repeatSummary(AppLocalizations l10n, AlarmModel a) {
@@ -71,6 +125,8 @@ class _AlarmListScreenState extends State<AlarmListScreen> {
         return l10n.onceSummary;
       case AlarmRepeatMode.interval:
         return l10n.everyNDaysSummary(a.intervalDays);
+      case AlarmRepeatMode.specificDates:
+        return l10n.repeatSpecificDates;
       case AlarmRepeatMode.weekly:
         final names = [
           l10n.weekdayMon,
@@ -86,20 +142,32 @@ class _AlarmListScreenState extends State<AlarmListScreen> {
     }
   }
 
-  String _nextText(AppLocalizations l10n, AlarmModel a) {
+  /// "Rings in 2d 14h 22m" countdown text, or empty when none.
+  String _countdownText(AppLocalizations l10n, AlarmModel a) {
+    if (!a.enabled) return '';
+    final next = NextOccurrence.nextTrigger(a, DateTime.now());
+    if (next == null) return '';
+    final diff = next.difference(DateTime.now());
+    final d = diff.inDays;
+    final h = diff.inHours % 24;
+    final m = diff.inMinutes % 60;
+    String dur;
+    if (d > 0) {
+      dur = '${d}d ${h}h ${m}m';
+    } else if (h > 0) {
+      dur = '${h}h ${m}m';
+    } else {
+      dur = '${m}m';
+    }
+    return l10n.ringsIn(dur);
+  }
+
+  String _nextLine(AppLocalizations l10n, AlarmModel a) {
     if (!a.enabled) return l10n.alarmOff;
     final next = NextOccurrence.nextTrigger(a, DateTime.now());
     if (next == null) return l10n.disabled;
-    final time =
-        '${next.hour.toString().padLeft(2, '0')}:${next.minute.toString().padLeft(2, '0')}';
-    final now = DateTime.now();
-    final today = DateTime(now.year, now.month, now.day);
-    final day = DateTime(next.year, next.month, next.day);
-    final diff = day.difference(today).inDays;
-    if (diff == 0) return l10n.nextRing(l10n.todayAt(time));
-    if (diff == 1) return l10n.nextRing(l10n.tomorrowAt(time));
-    final date = '${next.day}/${next.month}';
-    return l10n.nextRing(l10n.dateAt(date, time));
+    return l10n.nextRing(
+        '${next.day}/${next.month} ${_timeText12(next.hour, next.minute)}');
   }
 
   @override
@@ -107,7 +175,15 @@ class _AlarmListScreenState extends State<AlarmListScreen> {
     final l10n = AppLocalizations.of(context)!;
     final alarms = widget.repo.alarms;
     return Scaffold(
-      appBar: AppBar(title: Text(l10n.alarms)),
+      appBar: AppBar(
+        title: Row(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            const Text('⏰ '),
+            Text(l10n.alarms),
+          ],
+        ),
+      ),
       body: alarms.isEmpty
           ? Center(
               child: Padding(
@@ -115,9 +191,7 @@ class _AlarmListScreenState extends State<AlarmListScreen> {
                 child: Column(
                   mainAxisSize: MainAxisSize.min,
                   children: [
-                    Icon(Icons.alarm_off,
-                        size: 64,
-                        color: Theme.of(context).colorScheme.primary),
+                    const Text('⏰', style: TextStyle(fontSize: 64)),
                     const SizedBox(height: 16),
                     Text(l10n.noAlarms,
                         style: Theme.of(context).textTheme.titleLarge),
@@ -130,68 +204,148 @@ class _AlarmListScreenState extends State<AlarmListScreen> {
               ),
             )
           : ListView.builder(
-              padding: const EdgeInsets.all(12),
+              padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 8),
               itemCount: alarms.length,
               itemBuilder: (c, i) {
                 final a = alarms[i];
-                return Dismissible(
-                  key: ValueKey(a.id),
-                  direction: DismissDirection.endToStart,
-                  background: Container(
-                    alignment: Alignment.centerRight,
-                    padding: const EdgeInsets.only(right: 20),
-                    decoration: BoxDecoration(
-                      color: Theme.of(context).colorScheme.error,
-                      borderRadius: BorderRadius.circular(16),
-                    ),
-                    child: const Icon(Icons.delete, color: Colors.white),
-                  ),
-                  confirmDismiss: (_) async {
-                    await _confirmDelete(a);
-                    return false; // we handle removal ourselves
-                  },
-                  child: Card(
-                    child: ListTile(
-                      contentPadding: const EdgeInsets.symmetric(
-                          horizontal: 16, vertical: 8),
-                      title: Text(
-                        _timeText(a),
-                        style: Theme.of(context)
-                            .textTheme
-                            .headlineMedium
-                            ?.copyWith(fontWeight: FontWeight.bold),
-                      ),
-                      subtitle: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          if (a.label.isNotEmpty) Text(a.label),
-                          Text(_repeatSummary(l10n, a)),
-                          Text(
-                            _nextText(l10n, a),
-                            style: TextStyle(
-                              color: Theme.of(context).colorScheme.primary,
-                              fontWeight: FontWeight.w600,
-                            ),
-                          ),
-                        ],
-                      ),
-                      trailing: Switch(
-                        value: a.enabled,
-                        onChanged: (v) async {
-                          await widget.repo.setEnabled(a, v);
-                          if (mounted) setState(() {});
-                        },
-                      ),
-                      onTap: () => _openEditor(existing: a),
-                    ),
-                  ),
-                );
+                return _alarmCard(context, l10n, a);
               },
             ),
       floatingActionButton: FloatingActionButton(
         onPressed: () => _openEditor(),
         tooltip: l10n.addAlarm,
-        child: const Icon(Icons.add),
+        backgroundColor: AppTheme.emerald,
+        foregroundColor: Colors.black,
+        child: const Icon(Icons.add, size: 30),
+      ),
+    );
+  }
+
+  Widget _alarmCard(
+      BuildContext context, AppLocalizations l10n, AlarmModel a) {
+    final (time, ampm) = _timeParts(a.hour, a.minute);
+    final countdown = _countdownText(l10n, a);
+    final dimmed = !a.enabled;
+    return Opacity(
+      opacity: dimmed ? 0.55 : 1.0,
+      child: Container(
+        margin: const EdgeInsets.symmetric(vertical: 7),
+        decoration: BoxDecoration(
+          color: AppTheme.charcoalCard,
+          borderRadius: BorderRadius.circular(18),
+          border: Border(
+            left: BorderSide(
+              color: a.enabled ? AppTheme.emerald : Colors.white24,
+              width: 4,
+            ),
+          ),
+          boxShadow: a.enabled
+              ? [
+                  BoxShadow(
+                    color: AppTheme.emerald.withAlpha(40),
+                    blurRadius: 16,
+                    offset: const Offset(0, 4),
+                  ),
+                ]
+              : null,
+        ),
+        child: InkWell(
+          borderRadius: BorderRadius.circular(18),
+          onTap: () => _openEditor(existing: a),
+          onLongPress: () => _confirmDelete(a),
+          child: Padding(
+            padding: const EdgeInsets.all(16),
+            child: Row(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      RichText(
+                        text: TextSpan(
+                          children: [
+                            TextSpan(
+                              text: time,
+                              style: const TextStyle(
+                                fontSize: 38,
+                                fontWeight: FontWeight.w800,
+                                color: Colors.white,
+                                letterSpacing: -0.5,
+                              ),
+                            ),
+                            TextSpan(
+                              text: ' $ampm',
+                              style: const TextStyle(
+                                fontSize: 15,
+                                fontWeight: FontWeight.w700,
+                                color: AppTheme.emerald,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                      if (a.label.isNotEmpty) ...[
+                        const SizedBox(height: 2),
+                        Text(a.label,
+                            style: const TextStyle(
+                                fontSize: 14, color: Colors.white70)),
+                      ],
+                      const SizedBox(height: 8),
+                      Container(
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 12, vertical: 5),
+                        decoration: BoxDecoration(
+                          color: a.enabled
+                              ? AppTheme.emerald
+                              : Colors.white12,
+                          borderRadius: BorderRadius.circular(14),
+                        ),
+                        child: Text(
+                          _repeatSummary(l10n, a),
+                          style: TextStyle(
+                            fontSize: 11,
+                            fontWeight: FontWeight.w800,
+                            color: a.enabled ? Colors.black : Colors.white60,
+                          ),
+                        ),
+                      ),
+                      if (countdown.isNotEmpty) ...[
+                        const SizedBox(height: 8),
+                        Text(
+                          '⏳ $countdown',
+                          style: const TextStyle(
+                            fontSize: 13,
+                            fontWeight: FontWeight.w700,
+                            color: AppTheme.emerald,
+                          ),
+                        ),
+                      ],
+                      const SizedBox(height: 4),
+                      Text(
+                        _nextLine(l10n, a),
+                        style: const TextStyle(
+                            fontSize: 12, color: Colors.white54),
+                      ),
+                    ],
+                  ),
+                ),
+                Switch(
+                  value: a.enabled,
+                  activeThumbColor: AppTheme.emerald,
+                  onChanged: (v) async {
+                    if (v) {
+                      await widget.repo.setEnabled(a, true);
+                      if (mounted) setState(() {});
+                    } else {
+                      await _confirmTurnOff(a);
+                    }
+                  },
+                ),
+              ],
+            ),
+          ),
+        ),
       ),
     );
   }

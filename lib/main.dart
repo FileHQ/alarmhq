@@ -77,11 +77,13 @@ class _AlarmHQAppState extends State<AlarmHQApp> {
                     onDestinationSelected: (i) => setState(() => _tab = i),
                     destinations: [
                       NavigationDestination(
-                        icon: const Icon(Icons.alarm),
+                        icon: const Text('⏰',
+                            style: TextStyle(fontSize: 24)),
                         label: l10n.alarms,
                       ),
                       NavigationDestination(
-                        icon: const Icon(Icons.settings),
+                        icon: const Text('⚙️',
+                            style: TextStyle(fontSize: 24)),
                         label: l10n.settings,
                       ),
                     ],

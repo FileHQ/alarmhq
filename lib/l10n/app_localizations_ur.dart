@@ -282,4 +282,61 @@ class AppLocalizationsUr extends AppLocalizations {
   String weeklySummary(Object days) {
     return '$days';
   }
+
+  @override
+  String get repeatSpecificDates => 'مخصوص تاریخیں';
+
+  @override
+  String get repeatDates => 'تاریخیں';
+
+  @override
+  String get repeatNDays => 'N دن';
+
+  @override
+  String get skipNextOnly => 'صرف اگلی چھوڑیں';
+
+  @override
+  String get turnOffCompletely => 'مکمل بند کریں';
+
+  @override
+  String get turnOffAlarmTitle => 'الارم بند کریں؟';
+
+  @override
+  String turnOffAlarmBody(Object label, Object when) {
+    return '$label — اگلی رنگ $when';
+  }
+
+  @override
+  String ringsIn(Object duration) {
+    return '$duration میں بجے گا';
+  }
+
+  @override
+  String alarmIn(Object duration) {
+    return '$duration میں الارم';
+  }
+
+  @override
+  String get selectDates => 'تاریخوں پر ٹیپ کریں (ہر ایک پر ایک بار بجے گا)';
+
+  @override
+  String get selectedDates => 'منتخب تاریخیں';
+
+  @override
+  String get hoursShort => 'H';
+
+  @override
+  String get minutesShort => 'M';
+
+  @override
+  String get done => 'ٹھیک ہے';
+
+  @override
+  String get repeatWeeklyShort => 'ہفتہ وار';
+
+  @override
+  String get pickAtLeastOneDay => 'کم از کم ایک دن چنیں';
+
+  @override
+  String get pickAtLeastOneDate => 'کم از کم ایک تاریخ چنیں';
 }

@@ -10,6 +10,8 @@ class AlarmModel {
   final DateTime? onceDate; // date part only, for AlarmRepeatMode.once
   final int intervalDays; // N for AlarmRepeatMode.interval (>= 1)
   final DateTime? intervalStart; // date part only, counting origin
+  final List<DateTime> specificDates; // date parts only, for specificDates mode
+  final DateTime? skipNextDate; // exact trigger to skip ("skip next only")
   final int snoozeMinutes;
   final int maxSnoozes; // 0 = no snooze
   final String toneUri; // asset://..., system://default, content://...
@@ -28,6 +30,8 @@ class AlarmModel {
     this.onceDate,
     this.intervalDays = 1,
     this.intervalStart,
+    this.specificDates = const [],
+    this.skipNextDate,
     this.snoozeMinutes = 10,
     this.maxSnoozes = 3,
     this.toneUri = 'asset://tones/alarmhq-classic.wav',
@@ -47,6 +51,8 @@ class AlarmModel {
     DateTime? Function()? onceDate,
     int? intervalDays,
     DateTime? Function()? intervalStart,
+    List<DateTime>? specificDates,
+    DateTime? Function()? skipNextDate,
     int? snoozeMinutes,
     int? maxSnoozes,
     String? toneUri,
@@ -65,6 +71,8 @@ class AlarmModel {
       onceDate: onceDate != null ? onceDate() : this.onceDate,
       intervalDays: intervalDays ?? this.intervalDays,
       intervalStart: intervalStart != null ? intervalStart() : this.intervalStart,
+      specificDates: specificDates ?? this.specificDates,
+      skipNextDate: skipNextDate != null ? skipNextDate() : this.skipNextDate,
       snoozeMinutes: snoozeMinutes ?? this.snoozeMinutes,
       maxSnoozes: maxSnoozes ?? this.maxSnoozes,
       toneUri: toneUri ?? this.toneUri,
@@ -83,6 +91,16 @@ class AlarmModel {
     return DateTime(p[0], p[1], p[2]);
   }
 
+  static String _dateTimeStr(DateTime d) =>
+      '${_dateStr(d)}T${d.hour.toString().padLeft(2, '0')}:${d.minute.toString().padLeft(2, '0')}';
+
+  static DateTime _dateTimeParse(String s) {
+    final parts = s.split('T');
+    final d = _dateParse(parts[0]);
+    final t = parts[1].split(':').map(int.parse).toList();
+    return DateTime(d.year, d.month, d.day, t[0], t[1]);
+  }
+
   Map<String, dynamic> toJson() => {
         'id': id,
         'label': label,
@@ -93,6 +111,10 @@ class AlarmModel {
         'onceDate': onceDate == null ? null : _dateStr(onceDate!),
         'intervalDays': intervalDays,
         'intervalStart': intervalStart == null ? null : _dateStr(intervalStart!),
+        'specificDates':
+            specificDates.map(_dateStr).toList(),
+        'skipNextDate':
+            skipNextDate == null ? null : _dateTimeStr(skipNextDate!),
         'snoozeMinutes': snoozeMinutes,
         'maxSnoozes': maxSnoozes,
         'toneUri': toneUri,
@@ -120,6 +142,12 @@ class AlarmModel {
         intervalStart: j['intervalStart'] == null
             ? null
             : _dateParse(j['intervalStart'] as String),
+        specificDates: ((j['specificDates'] as List?) ?? const [])
+            .map((e) => _dateParse(e as String))
+            .toList(),
+        skipNextDate: j['skipNextDate'] == null
+            ? null
+            : _dateTimeParse(j['skipNextDate'] as String),
         snoozeMinutes: (j['snoozeMinutes'] as num?)?.toInt() ?? 10,
         maxSnoozes: (j['maxSnoozes'] as num?)?.toInt() ?? 3,
         toneUri: (j['toneUri'] as String?) ?? 'asset://tones/alarmhq-classic.wav',
@@ -130,4 +158,4 @@ class AlarmModel {
       );
 }
 
-enum AlarmRepeatMode { weekly, once, interval }
+enum AlarmRepeatMode { weekly, once, interval, specificDates }

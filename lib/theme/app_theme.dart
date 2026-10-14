@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
 
-/// AlarmHQ brand: emerald green + charcoal (user-approved 2026-10-13).
+/// AlarmHQ brand: glowing lime-green + charcoal (user-approved 2026-10-14).
+/// Single shade #a3e635 — no gradients.
 class AppTheme {
-  static const emerald = Color(0xFF10B981);
-  static const emeraldDark = Color(0xFF0B8A5F);
+  static const emerald = Color(0xFFA3E635);
+  static const emeraldDark = Color(0xFF7CB518);
   static const charcoal = Color(0xFF23272E);
   static const charcoalSurface = Color(0xFF2C313A);
   static const charcoalCard = Color(0xFF343B46);

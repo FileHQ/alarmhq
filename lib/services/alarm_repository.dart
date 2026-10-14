@@ -71,6 +71,14 @@ class AlarmRepository {
     await update(alarm.copyWith(enabled: enabled));
   }
 
+  /// "Skip next only": record the upcoming trigger as skipped and reschedule
+  /// to the following occurrence. The alarm stays enabled.
+  Future<void> skipNext(AlarmModel alarm) async {
+    final next = NextOccurrence.nextTrigger(alarm, DateTime.now());
+    if (next == null) return;
+    await update(alarm.copyWith(skipNextDate: () => next));
+  }
+
   /// (Re)schedule one alarm natively from its next trigger.
   Future<void> reschedule(AlarmModel alarm) async {
     await NativeBridge.cancelAlarm(alarm.id);
