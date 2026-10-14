@@ -25,6 +25,7 @@ class MainActivity : Activity() {
 
     private var flutterEngine: FlutterEngine? = null
     private var pendingPickResult: MethodChannel.Result? = null
+    private var pendingNotifResult: MethodChannel.Result? = null
 
     companion object {
         private const val PICK_AUDIO_REQUEST = 1001
@@ -79,7 +80,14 @@ class MainActivity : Activity() {
                     result.success(AlarmScheduler.canScheduleExact(this))
                 "openExactAlarmSettings" -> {
                     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
-                        startActivity(Intent(Settings.ACTION_REQUEST_SCHEDULE_EXACT_ALARM))
+                        // Package URI takes the user straight to this app's
+                        // toggle instead of the generic list.
+                        startActivity(
+                            Intent(
+                                Settings.ACTION_REQUEST_SCHEDULE_EXACT_ALARM,
+                                Uri.parse("package:$packageName"),
+                            )
+                        )
                     }
                     result.success(null)
                 }
@@ -155,6 +163,21 @@ class MainActivity : Activity() {
                     }
                     result.success(granted)
                 }
+                "requestNotificationPermission" -> {
+                    // One-tap system dialog (no settings page needed).
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU &&
+                        checkSelfPermission(Manifest.permission.POST_NOTIFICATIONS) !=
+                            PackageManager.PERMISSION_GRANTED
+                    ) {
+                        pendingNotifResult = result
+                        requestPermissions(
+                            arrayOf(Manifest.permission.POST_NOTIFICATIONS),
+                            NOTIF_PERMISSION_REQUEST,
+                        )
+                    } else {
+                        result.success(true)
+                    }
+                }
                 "openNotificationSettings" -> {
                     val intent = Intent(Settings.ACTION_APP_NOTIFICATION_SETTINGS).apply {
                         putExtra(Settings.EXTRA_APP_PACKAGE, packageName)
@@ -207,6 +230,20 @@ class MainActivity : Activity() {
                 }
                 else -> result.notImplemented()
             }
+        }
+    }
+
+    override fun onRequestPermissionsResult(
+        requestCode: Int,
+        permissions: Array<out String>,
+        grantResults: IntArray,
+    ) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
+        if (requestCode == NOTIF_PERMISSION_REQUEST) {
+            val granted = grantResults.isNotEmpty() &&
+                grantResults[0] == PackageManager.PERMISSION_GRANTED
+            pendingNotifResult?.success(granted)
+            pendingNotifResult = null
         }
     }
 

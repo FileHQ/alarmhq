@@ -387,4 +387,8 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get permSkip => 'Skip for now';
+
+  @override
+  String get permAppClosedNote =>
+      'You don\'t need to keep the app open — alarms are handled by the Android system.';
 }

@@ -68,6 +68,12 @@ class NativeBridge {
   static Future<bool> hasNotificationPermission() async =>
       await _alarm.invokeMethod<bool>('hasNotificationPermission') ?? false;
 
+  /// Shows the one-tap system permission dialog (Android 13+).
+  /// Returns true when granted.
+  static Future<bool> requestNotificationPermission() async =>
+      await _alarm.invokeMethod<bool>('requestNotificationPermission') ??
+      false;
+
   static Future<void> openNotificationSettings() async =>
       await _alarm.invokeMethod('openNotificationSettings');
 

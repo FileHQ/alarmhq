@@ -384,4 +384,8 @@ class AppLocalizationsUr extends AppLocalizations {
 
   @override
   String get permSkip => 'ابھی چھوڑیں';
+
+  @override
+  String get permAppClosedNote =>
+      'آپ کو ایپ کھلی رکھنے کی ضرورت نہیں — الارم اینڈرائیڈ سسٹم سنبھالتا ہے۔';
 }
