@@ -37,7 +37,12 @@ class _PermissionScreenState extends State<PermissionScreen>
 
   /// Autostart can't be checked via API; marked done once the user opens
   /// the manufacturer's page. Never blocks Continue.
+  /// v2.10: initialized to false (was null → infinite spinner bug).
   bool? _autostartDone;
+
+  /// Set when the user taps the autostart card; used to show the
+  /// background-activity reminder snackbar when they return.
+  bool _autostartOpened = false;
 
   @override
   void initState() {
@@ -55,7 +60,37 @@ class _PermissionScreenState extends State<PermissionScreen>
   @override
   void didChangeAppLifecycleState(AppLifecycleState state) {
     // Re-check when the user returns from system settings.
-    if (state == AppLifecycleState.resumed) _refresh();
+    if (state == AppLifecycleState.resumed) {
+      _refresh();
+      // v2.10: after the user visits the autostart page on Realme/ColorOS,
+      // remind them to also allow background activity.
+      if (_autostartOpened) {
+        _autostartOpened = false;
+        _maybeShowBgActivityReminder();
+      }
+    }
+  }
+
+  /// On Realme/Oppo/OnePlus (ColorOS), autostart alone is not enough —
+  /// "Allow background activity" must also be enabled. Remind once.
+  Future<void> _maybeShowBgActivityReminder() async {
+    try {
+      final m = (await NativeBridge.getManufacturer()).toLowerCase();
+      final isColorOs =
+          m.contains('realme') || m.contains('oppo') || m.contains('oneplus');
+      if (isColorOs && mounted) {
+        final l10n = AppLocalizations.of(context)!;
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text(l10n.permBgActivityReminder),
+            duration: const Duration(seconds: 6),
+            behavior: SnackBarBehavior.floating,
+          ),
+        );
+      }
+    } catch (_) {
+      // Best effort only.
+    }
   }
 
   Future<void> _refresh() async {
@@ -71,6 +106,9 @@ class _PermissionScreenState extends State<PermissionScreen>
       _battery = results[1];
       _notif = results[2];
       _overlay = results[3];
+      // v2.10: autostart was never set here → infinite spinner.
+      // Default to false so the Grant button shows.
+      _autostartDone ??= false;
     });
   }
 
@@ -159,7 +197,14 @@ class _PermissionScreenState extends State<PermissionScreen>
               desc: l10n.permAutostartDesc,
               granted: _autostartDone,
               onGrant: () async {
-                await NativeBridge.openAutostartSettings();
+                // v2.10: fire-and-forget with timeout — never hang the UI.
+                _autostartOpened = true;
+                try {
+                  await NativeBridge.openAutostartSettings()
+                      .timeout(const Duration(seconds: 2));
+                } catch (_) {
+                  // Best effort: the settings page was still launched.
+                }
                 if (mounted) setState(() => _autostartDone = true);
               },
               l10n: l10n,

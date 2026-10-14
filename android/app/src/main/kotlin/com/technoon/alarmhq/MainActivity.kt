@@ -210,6 +210,9 @@ class MainActivity : Activity() {
                     openAutostartSettings()
                     result.success(null)
                 }
+                // ---- device info (v2.10) ----
+                "getManufacturer" ->
+                    result.success(Build.MANUFACTURER ?: "")
                 // ---- in-app ringing dialog support ----
                 "isAlarmRinging" ->
                     result.success(AlarmService.ringingAlarmJson != null)
@@ -381,6 +384,11 @@ class MainActivity : Activity() {
                 "com.coloros.safecenter.permission.startupapp.StartupAppListActivity",
             "com.oppo.safe" to
                 "com.oppo.safe.permission.startup.StartupAppListActivity",
+            // Realme UI 3.0+ / ColorOS 12+ (Oplus)
+            "com.oplus.safecenter" to
+                "com.oplus.safecenter.permission.startup.StartupAppListActivity",
+            "com.oplus.safecenter" to
+                "com.oplus.safecenter.permission.startupapp.StartupAppListActivity",
             // Vivo (Funtouch)
             "com.vivo.permissionmanager" to
                 "com.vivo.permissionmanager.activity.BgStartUpManagerActivity",

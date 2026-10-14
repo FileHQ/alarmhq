@@ -409,4 +409,8 @@ class AppLocalizationsEn extends AppLocalizations {
   String weeklySummary(Object days) {
     return '$days';
   }
+
+  @override
+  String get permBgActivityReminder =>
+      'Also enable \"Allow background activity\" for AlarmHQ in Settings > Apps, so the alarm rings when the app is closed.';
 }

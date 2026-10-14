@@ -225,11 +225,21 @@ object AlarmScheduler {
     fun schedule(
         context: Context, id: Int, triggerAtMillis: Long, alarmJson: String
     ): Boolean {
-        if (!canScheduleExact(context)) return false
+        if (!canScheduleExact(context)) {
+            android.util.Log.w(
+                "AlarmHQ",
+                "schedule($id) FAILED: exact-alarm permission not granted",
+            )
+            return false
+        }
         storeDef(context, id, alarmJson)
         val am = alarmManager(context)
         val info = AlarmManager.AlarmClockInfo(triggerAtMillis, showIntent(context))
         am.setAlarmClock(info, fireIntent(context, id, alarmJson, 0, false))
+        android.util.Log.i(
+            "AlarmHQ",
+            "schedule($id) OK: triggerAt=${java.util.Date(triggerAtMillis)}",
+        )
         updateWidget(context)
         return true
     }

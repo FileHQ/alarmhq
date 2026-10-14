@@ -88,6 +88,10 @@ class NativeBridge {
   static Future<void> openAutostartSettings() async =>
       await _alarm.invokeMethod('openAutostartSettings');
 
+  /// Device manufacturer (e.g. "realme", "Xiaomi") — v2.10.
+  static Future<String> getManufacturer() async =>
+      (await _alarm.invokeMethod<String>('getManufacturer')) ?? '';
+
   // ---- in-app ringing dialog support ----
 
   /// True while AlarmService is currently sounding an alarm.

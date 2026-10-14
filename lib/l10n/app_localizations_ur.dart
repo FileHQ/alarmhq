@@ -406,4 +406,8 @@ class AppLocalizationsUr extends AppLocalizations {
   String weeklySummary(Object days) {
     return '$days';
   }
+
+  @override
+  String get permBgActivityReminder =>
+      'سیٹنگز ← ایپس میں AlarmHQ کے لیے \"Allow background activity\" بھی آن کریں تاکہ ایپ بند ہو تو بھی الارم بجے۔';
 }

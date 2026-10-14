@@ -121,5 +121,6 @@
   "weekdayThu": "Thu",
   "weekdayTue": "Tue",
   "weekdayWed": "Wed",
-  "weeklySummary": "{days}"
+  "weeklySummary": "{days}",
+  "permBgActivityReminder": "Also enable \"Allow background activity\" for AlarmHQ in Settings > Apps, so the alarm rings when the app is closed."
 }

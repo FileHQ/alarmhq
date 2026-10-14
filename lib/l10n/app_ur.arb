@@ -121,5 +121,6 @@
   "weekdayThu": "جمعرات",
   "weekdayTue": "منگل",
   "weekdayWed": "بدھ",
-  "weeklySummary": "{days}"
+  "weeklySummary": "{days}",
+  "permBgActivityReminder": "سیٹنگز ← ایپس میں AlarmHQ کے لیے \"Allow background activity\" بھی آن کریں تاکہ ایپ بند ہو تو بھی الارم بجے۔"
 }

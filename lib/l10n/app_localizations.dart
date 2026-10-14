@@ -829,6 +829,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'{days}'**
   String weeklySummary(Object days);
+
+  /// No description provided for @permBgActivityReminder.
+  ///
+  /// In en, this message translates to:
+  /// **'Also enable \"Allow background activity\" for AlarmHQ in Settings > Apps, so the alarm rings when the app is closed.'**
+  String get permBgActivityReminder;
 }
 
 class _AppLocalizationsDelegate
