@@ -372,6 +372,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get turnOffCompletely => 'Turn off completely';
 
   @override
+  String get unlimited => 'Unlimited';
+
+  @override
   String get vibration => 'Vibration';
 
   @override

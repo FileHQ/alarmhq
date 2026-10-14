@@ -237,7 +237,9 @@ class MainActivity : Activity() {
                             val count = AlarmService.ringingSnoozeCount
                             val minutes = alarm.optInt("snoozeMinutes", 10)
                             val max = alarm.optInt("maxSnoozes", 3)
-                            if (id >= 0 && max > 0 && count < max) {
+                            // max: 0 = no snooze, -1 = unlimited.
+                            if (id >= 0 && max != 0 &&
+                                (max < 0 || count < max)) {
                                 AlarmScheduler.scheduleSnooze(
                                     this, id, json, minutes, count + 1
                                 )

@@ -758,6 +758,12 @@ abstract class AppLocalizations {
   /// **'Turn off completely'**
   String get turnOffCompletely;
 
+  /// No description provided for @unlimited.
+  ///
+  /// In en, this message translates to:
+  /// **'Unlimited'**
+  String get unlimited;
+
   /// No description provided for @vibration.
   ///
   /// In en, this message translates to:

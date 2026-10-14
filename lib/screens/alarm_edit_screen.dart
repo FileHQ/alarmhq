@@ -293,26 +293,29 @@ class _AlarmEditScreenState extends State<AlarmEditScreen> {
             const Divider(height: 32),
             // ---- snooze ----
             _sectionTitle(l10n.snooze),
-            _stepperRow(
-              label: l10n.snoozeLength,
-              valueText: l10n.minutesUnit(_snoozeMinutes),
-              onMinus: _snoozeMinutes > 1
-                  ? () => _markDirty(() => _snoozeMinutes--)
-                  : null,
-              onPlus: _snoozeMinutes < 60
-                  ? () => _markDirty(() => _snoozeMinutes++)
-                  : null,
+            Text(l10n.snoozeLength,
+                style: Theme.of(context).textTheme.bodyMedium),
+            const SizedBox(height: 8),
+            _presetChips<int>(
+              options: _withCurrent([5, 10, 15, 20, 30], _snoozeMinutes),
+              selected: _snoozeMinutes,
+              label: (v) => l10n.minutesUnit(v),
+              onSelect: (v) => _markDirty(() => _snoozeMinutes = v),
             ),
-            _stepperRow(
-              label: l10n.maxSnoozes,
-              valueText:
-                  _maxSnoozes == 0 ? l10n.noSnooze : l10n.timesUnit(_maxSnoozes),
-              onMinus: _maxSnoozes > 0
-                  ? () => _markDirty(() => _maxSnoozes--)
-                  : null,
-              onPlus: _maxSnoozes < 10
-                  ? () => _markDirty(() => _maxSnoozes++)
-                  : null,
+            const SizedBox(height: 12),
+            Text(l10n.maxSnoozes,
+                style: Theme.of(context).textTheme.bodyMedium),
+            const SizedBox(height: 8),
+            _presetChips<int>(
+              // -1 = unlimited.
+              options: _withCurrent([0, 1, 2, 3, 5, -1], _maxSnoozes),
+              selected: _maxSnoozes,
+              label: (v) => v == 0
+                  ? l10n.noSnooze
+                  : v < 0
+                      ? l10n.unlimited
+                      : l10n.timesUnit(v),
+              onSelect: (v) => _markDirty(() => _maxSnoozes = v),
             ),
             const Divider(height: 32),
             // ---- sound ----
@@ -725,6 +728,42 @@ class _AlarmEditScreenState extends State<AlarmEditScreen> {
     final ml = MaterialLocalizations.of(context);
     return ml.formatMonthYear(DateTime(_calMonth.year, m));
   }
+
+  /// Keeps a stored value selectable even when it isn't a preset.
+  List<T> _withCurrent<T>(List<T> presets, T current) =>
+      presets.contains(current) ? presets : [...presets, current];
+
+  /// Preset value chips (lime when selected).
+  Widget _presetChips<T>({
+    required List<T> options,
+    required T selected,
+    required String Function(T) label,
+    required ValueChanged<T> onSelect,
+  }) =>
+      Wrap(
+        spacing: 8,
+        runSpacing: 8,
+        children: [
+          for (final o in options)
+            ChoiceChip(
+              label: Text(label(o)),
+              selected: o == selected,
+              onSelected: (_) => onSelect(o),
+              selectedColor: AppTheme.emerald,
+              labelStyle: TextStyle(
+                color: o == selected ? Colors.black : Colors.white70,
+                fontWeight:
+                    o == selected ? FontWeight.w700 : FontWeight.w500,
+              ),
+              backgroundColor: AppTheme.charcoalCard,
+              side: BorderSide(
+                color: o == selected
+                    ? AppTheme.emerald
+                    : Colors.white24,
+              ),
+            ),
+        ],
+      );
 
   Widget _stepperRow({
     required String label,

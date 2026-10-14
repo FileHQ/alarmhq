@@ -60,7 +60,9 @@ class FullScreenAlarmActivity : Activity() {
         val label = alarm.optString("label", "")
         snoozeMinutes = alarm.optInt("snoozeMinutes", 10)
         maxSnoozes = alarm.optInt("maxSnoozes", 3)
-        canSnooze = maxSnoozes > 0 && snoozeCount < maxSnoozes
+        // maxSnoozes: 0 = no snooze, -1 = unlimited.
+        canSnooze = maxSnoozes != 0 &&
+            (maxSnoozes < 0 || snoozeCount < maxSnoozes)
 
         // 12-hour clock + date line, like the system alarm apps.
         val cal = Calendar.getInstance()

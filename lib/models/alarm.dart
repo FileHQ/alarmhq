@@ -13,7 +13,7 @@ class AlarmModel {
   final List<DateTime> specificDates; // date parts only, for specificDates mode
   final DateTime? skipNextDate; // exact trigger to skip ("skip next only")
   final int snoozeMinutes;
-  final int maxSnoozes; // 0 = no snooze
+  final int maxSnoozes; // 0 = no snooze, -1 = unlimited
   final String toneUri; // asset://..., system://default, content://...
   final String toneName;
   final bool vibration;

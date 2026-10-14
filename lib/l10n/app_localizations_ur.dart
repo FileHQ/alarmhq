@@ -369,6 +369,9 @@ class AppLocalizationsUr extends AppLocalizations {
   String get turnOffCompletely => 'مکمل بند کریں';
 
   @override
+  String get unlimited => 'لامحدود';
+
+  @override
   String get vibration => 'وائبریشن';
 
   @override

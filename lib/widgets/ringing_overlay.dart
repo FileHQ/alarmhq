@@ -76,8 +76,12 @@ class RingingOverlay extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
-    final canSnooze =
-        alarm.maxSnoozes > 0 && snoozeCount < alarm.maxSnoozes;
+    // maxSnoozes: 0 = no snooze, -1 = unlimited.
+    final canSnooze = alarm.maxSnoozes != 0 &&
+        (alarm.maxSnoozes < 0 || snoozeCount < alarm.maxSnoozes);
+    final snoozeLabel = alarm.maxSnoozes > 0
+        ? '${l10n.snooze} (${snoozeCount + 1}/${alarm.maxSnoozes})'
+        : l10n.snooze;
     return PopScope(
       canPop: false,
       child: Scaffold(
@@ -155,9 +159,7 @@ class RingingOverlay extends StatelessWidget {
                       ),
                     ),
                     child: Text(
-                      canSnooze
-                          ? '${l10n.snooze} (${snoozeCount + 1}/${alarm.maxSnoozes})'
-                          : l10n.snooze,
+                      snoozeLabel,
                       style: const TextStyle(
                           fontSize: 18, fontWeight: FontWeight.w700),
                     ),

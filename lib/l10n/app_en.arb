@@ -110,6 +110,7 @@
   "turnOffAlarmBody": "{label} — next ring {when}",
   "turnOffAlarmTitle": "Turn off alarm?",
   "turnOffCompletely": "Turn off completely",
+  "unlimited": "Unlimited",
   "vibration": "Vibration",
   "weekdayFri": "Fri",
   "weekdayMon": "Mon",
