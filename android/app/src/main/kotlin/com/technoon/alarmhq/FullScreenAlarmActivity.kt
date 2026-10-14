@@ -127,61 +127,70 @@ class FullScreenAlarmActivity : Activity() {
         }
 
         // v2.8 (final user design): clock slider — vertical track with a
-        // draggable ⏰ knob in the center. Drag knob UP → Stop,
-        // drag knob DOWN → Snooze. Tap = no action (must drag).
+        // draggable ⏰ knob (emoji only, no background circle).
+        // Drag knob UP → Stop, drag knob DOWN → Snooze.
+        // Tap = no action (must drag).
         val density = resources.displayMetrics.density
         fun dp(v: Int) = (v * density).toInt()
 
+        // Track is 110px wide per user spec; labels fit inside with padding.
+        val trackWidthPx = 110
+        val trackHeight = dp(340)
+        val knobTextSize = 52f
+
+        val sliderCol = LinearLayout(this).apply {
+            orientation = LinearLayout.VERTICAL
+            gravity = Gravity.CENTER_HORIZONTAL
+            layoutParams = LinearLayout.LayoutParams(
+                trackWidthPx + dp(32),
+                LinearLayout.LayoutParams.WRAP_CONTENT,
+            )
+        }
+
         val stopLabel = TextView(this).apply {
-            text = "■ ${getString(R.string.dismiss)}  ↑"
-            textSize = 18f
+            text = "■ ${getString(R.string.dismiss)}\n↑"
+            textSize = 15f
             typeface = Typeface.create(Typeface.DEFAULT, Typeface.BOLD)
             setTextColor(lime)
             gravity = Gravity.CENTER
+            setPadding(dp(4), dp(4), dp(4), dp(8))
         }
         val snoozeLabel = TextView(this).apply {
-            text = "⏰ ${getString(R.string.snooze)}  ↓"
-            textSize = 18f
+            text = "⏰ ${getString(R.string.snooze)}\n↓"
+            textSize = 15f
             typeface = Typeface.create(Typeface.DEFAULT, Typeface.BOLD)
             setTextColor(Color.WHITE)
             gravity = Gravity.CENTER
+            setPadding(dp(4), dp(8), dp(4), dp(4))
             visibility = if (canSnooze) android.view.View.VISIBLE
             else android.view.View.GONE
         }
 
-        // Slider: FrameLayout holding the track + the draggable knob.
-        val trackHeight = dp(340)
-        val knobSize = dp(92)
+        // Slider: FrameLayout holding the 110px track + the draggable knob.
         val slider = android.widget.FrameLayout(this).apply {
             layoutParams = LinearLayout.LayoutParams(
-                LinearLayout.LayoutParams.WRAP_CONTENT, trackHeight
-            ).apply { topMargin = dp(8); bottomMargin = dp(8) }
+                trackWidthPx, trackHeight
+            ).apply { topMargin = dp(4); bottomMargin = dp(4) }
         }
         val track = android.view.View(this).apply {
-            val trackW = dp(28)
             layoutParams = android.widget.FrameLayout.LayoutParams(
-                trackW, trackHeight, Gravity.CENTER
+                trackWidthPx, trackHeight, Gravity.CENTER
             )
             background = android.graphics.drawable.GradientDrawable().apply {
                 shape = android.graphics.drawable.GradientDrawable.RECTANGLE
-                cornerRadius = dp(14).toFloat()
+                cornerRadius = (trackWidthPx / 2).toFloat()
                 setColor(Color.parseColor("#3A414C"))
             }
         }
+        // Knob: just the ⏰ emoji, no background circle.
         val knob = TextView(this).apply {
             text = "⏰"
-            textSize = 44f
+            textSize = knobTextSize
             gravity = Gravity.CENTER
             layoutParams = android.widget.FrameLayout.LayoutParams(
-                knobSize, knobSize, Gravity.CENTER
+                trackWidthPx, dp(80), Gravity.CENTER
             )
-            background = resources.getDrawable(
-                R.drawable.slider_knob, null)
-            // Lime glow around the knob.
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                elevation = dp(12).toFloat()
-                outlineProvider = android.view.ViewOutlineProvider.BACKGROUND
-            }
+            // No background — emoji only, per user.
         }
         slider.addView(track)
         slider.addView(knob)
@@ -191,8 +200,9 @@ class FullScreenAlarmActivity : Activity() {
         var knobDownY = 0f
         var knobStartTrans = 0f
         var knobMoved = false
-        // Clamp travel to the track (knob stays inside).
-        val maxTravel = (trackHeight - knobSize) / 2f
+        // Clamp travel so the knob stays inside the track.
+        val knobH = dp(80)
+        val maxTravel = (trackHeight - knobH) / 2f
         knob.setOnTouchListener { v, ev ->
             when (ev.action) {
                 MotionEvent.ACTION_DOWN -> {
@@ -235,21 +245,22 @@ class FullScreenAlarmActivity : Activity() {
         }
 
         // Top→bottom: time, date, label, spacer,
-        // STOP label, slider, SNOOZE label, hint.
+        // slider column (stop label, track+knob, snooze label), hint.
         root.addView(timeView)
         root.addView(dateView)
         root.addView(labelView)
         root.addView(Space(this), LinearLayout.LayoutParams(
             LinearLayout.LayoutParams.MATCH_PARENT, 0, 1f))
-        root.addView(stopLabel)
-        // Center the slider horizontally.
+        sliderCol.addView(stopLabel)
+        sliderCol.addView(slider)
+        if (canSnooze) sliderCol.addView(snoozeLabel)
+        // Center the slider column horizontally.
         val sliderWrap = LinearLayout(this).apply {
             orientation = LinearLayout.VERTICAL
             gravity = Gravity.CENTER_HORIZONTAL
-            addView(slider)
+            addView(sliderCol)
         }
         root.addView(sliderWrap)
-        if (canSnooze) root.addView(snoozeLabel)
         root.addView(sliderHint)
         root.addView(Space(this), LinearLayout.LayoutParams(
             LinearLayout.LayoutParams.MATCH_PARENT, 0, 0.5f))
