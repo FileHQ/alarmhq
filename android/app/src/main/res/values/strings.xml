@@ -9,4 +9,7 @@
     <string name="widget_name">AlarmHQ</string>
     <string name="widget_desc">Shows the next AlarmHQ alarm time</string>
     <string name="no_alarms_set">No alarms set</string>
+    <string name="snoozing_for">Snoozing for %1$d minutes</string>
+    <string name="no_more_snoozes">No more snoozes left</string>
+    <string name="swipe_hints">↑ Swipe up to snooze · ↓ Swipe down to dismiss</string>
 </resources>

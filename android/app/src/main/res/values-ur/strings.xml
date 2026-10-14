@@ -9,4 +9,7 @@
     <string name="widget_name">AlarmHQ</string>
     <string name="widget_desc">اگلے AlarmHQ الارم کا وقت دکھاتا ہے</string>
     <string name="no_alarms_set">کوئی الارم نہیں</string>
+    <string name="snoozing_for">%1$d منٹ کے لیے سنوز کر دیا</string>
+    <string name="no_more_snoozes">مزید اسنوز باقی نہیں</string>
+    <string name="swipe_hints">↑ اسنوز کے لیے اوپر سوائپ کریں · ↓ بند کرنے کے لیے نیچے سوائپ کریں</string>
 </resources>

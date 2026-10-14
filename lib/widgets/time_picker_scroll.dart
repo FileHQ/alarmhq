@@ -1,12 +1,55 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:alarmhq/l10n/app_localizations.dart';
 
 import '../theme/app_theme.dart';
 
+// ---------------------------------------------------------------------------
+// Infinite-wheel helpers (pure functions — unit tested).
+// The wheels use large virtual item counts with modulo indexing so the user
+// can scroll forever in either direction, like the Realme/Samsung pickers.
+// ---------------------------------------------------------------------------
+
+/// Number of virtual rows per wheel. Large enough that a user can never
+/// reach an end in practice.
+const int kHourWheelCount = 12000; // 1000 x 12
+const int kMinuteWheelCount = 120000; // 2000 x 60
+const int kAmPmWheelCount = 4000; // 2000 x 2
+
+/// Hour value (1-12) shown at virtual [index] ([index] >= 0).
+int hourValueAt(int index) => (index % 12) + 1;
+
+/// Minute value (0-59) shown at virtual [index] ([index] >= 0).
+int minuteValueAt(int index) => index % 60;
+
+/// True when virtual [index] of the AM/PM wheel shows AM ([index] >= 0).
+bool isAmAt(int index) => index % 2 == 0;
+
+/// True when moving the hour wheel from [prevHour] to [newHour] crossed the
+/// 12 boundary (12 -> 1 or 1 -> 12). The caller must toggle AM/PM.
+bool hourWrapTogglesAmPm(int prevHour, int newHour) =>
+    (prevHour == 12 && newHour == 1) || (prevHour == 1 && newHour == 12);
+
+/// Virtual index nearest to (at or after) [currentIndex] that shows [hour12].
+int nearestHourIndex(int currentIndex, int hour12) {
+  final cur = currentIndex % 12;
+  final want = hour12 - 1;
+  return currentIndex + ((want - cur + 12) % 12);
+}
+
+/// Virtual index nearest to (at or after) [currentIndex] that shows [minute].
+int nearestMinuteIndex(int currentIndex, int minute) {
+  final cur = currentIndex % 60;
+  return currentIndex + ((minute - cur + 60) % 60);
+}
+
 /// Scroll-based time picker: AM/PM | Hours (H) | Minutes (M).
-/// Up/down scroll columns like the reference design. Tick haptic on scroll.
-/// Tap a number to type it directly. 12-hour format only.
+/// All three columns loop infinitely in both directions (hours 12<->1,
+/// minutes 59<->0); AM/PM flips automatically when the hours cross 12.
+/// Audible tick + haptic on every scroll step. Tap a number to type it.
+/// 12-hour format only.
 class ScrollTimePicker extends StatefulWidget {
   final TimeOfDay initial;
 
@@ -30,9 +73,16 @@ class _ScrollTimePickerState extends State<ScrollTimePicker> {
   late int _hour12; // 1-12
   late int _minute; // 0-59
   late bool _isAm;
+  late int _hourIndex;
+  late int _minIndex;
+  late int _ampmIndex;
   late FixedExtentScrollController _ampmCtrl;
   late FixedExtentScrollController _hourCtrl;
   late FixedExtentScrollController _minCtrl;
+
+  /// While true, AM/PM wheel callbacks come from our own programmatic jump
+  /// (hour wrap) and must not play an extra tick.
+  bool _ampmJumping = false;
 
   @override
   void initState() {
@@ -41,9 +91,13 @@ class _ScrollTimePickerState extends State<ScrollTimePicker> {
     _isAm = h24 < 12;
     _hour12 = h24 % 12 == 0 ? 12 : h24 % 12;
     _minute = widget.initial.minute;
-    _ampmCtrl = FixedExtentScrollController(initialItem: _isAm ? 0 : 1);
-    _hourCtrl = FixedExtentScrollController(initialItem: _hour12 - 1);
-    _minCtrl = FixedExtentScrollController(initialItem: _minute);
+    // Center the wheels on a multiple of the cycle so modulo math is exact.
+    _hourIndex = (kHourWheelCount ~/ 2) + (_hour12 - 1);
+    _minIndex = (kMinuteWheelCount ~/ 2) + _minute;
+    _ampmIndex = (kAmPmWheelCount ~/ 2) + (_isAm ? 0 : 1);
+    _ampmCtrl = FixedExtentScrollController(initialItem: _ampmIndex);
+    _hourCtrl = FixedExtentScrollController(initialItem: _hourIndex);
+    _minCtrl = FixedExtentScrollController(initialItem: _minIndex);
   }
 
   @override
@@ -54,7 +108,11 @@ class _ScrollTimePickerState extends State<ScrollTimePicker> {
     super.dispose();
   }
 
-  void _tick() => HapticFeedback.lightImpact();
+  /// Audible tick + haptic on every scroll step.
+  void _tick() {
+    unawaited(HapticFeedback.lightImpact());
+    unawaited(SystemSound.play(SystemSoundType.click));
+  }
 
   TimeOfDay get _picked {
     final h24 = _isAm ? (_hour12 % 12) : (_hour12 % 12 + 12);
@@ -98,8 +156,7 @@ class _ScrollTimePickerState extends State<ScrollTimePicker> {
           keyboardType: TextInputType.number,
           autofocus: true,
           inputFormatters: [FilteringTextInputFormatter.digitsOnly],
-          onSubmitted: (_) =>
-              Navigator.pop(c, int.tryParse(ctrl.text.trim())),
+          onSubmitted: (_) => Navigator.pop(c, int.tryParse(ctrl.text.trim())),
         ),
         actions: [
           TextButton(
@@ -107,8 +164,7 @@ class _ScrollTimePickerState extends State<ScrollTimePicker> {
             child: Text(MaterialLocalizations.of(c).cancelButtonLabel),
           ),
           FilledButton(
-            onPressed: () =>
-                Navigator.pop(c, int.tryParse(ctrl.text.trim())),
+            onPressed: () => Navigator.pop(c, int.tryParse(ctrl.text.trim())),
             child: Text(MaterialLocalizations.of(c).okButtonLabel),
           ),
         ],
@@ -120,7 +176,43 @@ class _ScrollTimePickerState extends State<ScrollTimePicker> {
     }
   }
 
-  Widget _wheel<T>({
+  void _onHourChanged(int index) {
+    final newHour = hourValueAt(index);
+    if (hourWrapTogglesAmPm(_hour12, newHour)) {
+      // Crossing 12 <-> 1 flips AM/PM; move the AM/PM wheel along so it
+      // always shows the true value.
+      _isAm = !_isAm;
+      _ampmIndex += 1;
+      _ampmJumping = true;
+      _ampmCtrl.jumpToItem(_ampmIndex);
+      WidgetsBinding.instance
+          .addPostFrameCallback((_) => _ampmJumping = false);
+    }
+    _hour12 = newHour;
+    _hourIndex = index;
+    setState(() {});
+    _tick();
+  }
+
+  void _onMinuteChanged(int index) {
+    _minute = minuteValueAt(index);
+    _minIndex = index;
+    setState(() {});
+    _tick();
+  }
+
+  void _onAmPmChanged(int index) {
+    _ampmIndex = index;
+    _isAm = isAmAt(index);
+    setState(() {});
+    if (_ampmJumping) {
+      _ampmJumping = false;
+    } else {
+      _tick();
+    }
+  }
+
+  Widget _wheel({
     required FixedExtentScrollController controller,
     required int itemCount,
     required String Function(int) label,
@@ -138,10 +230,7 @@ class _ScrollTimePickerState extends State<ScrollTimePicker> {
             perspective: 0.003,
             diameterRatio: 1.6,
             physics: const FixedExtentScrollPhysics(),
-            onSelectedItemChanged: (i) {
-              onChanged(i);
-              _tick();
-            },
+            onSelectedItemChanged: onChanged,
             childDelegate: ListWheelChildBuilderDelegate(
               builder: (c, i) {
                 if (i < 0 || i >= itemCount) return null;
@@ -238,21 +327,23 @@ class _ScrollTimePickerState extends State<ScrollTimePicker> {
             child: Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                // AM/PM
+                // AM/PM (loops forever too)
                 _wheel(
                   controller: _ampmCtrl,
-                  itemCount: 2,
-                  label: (i) => i == 0 ? 'AM' : 'PM',
-                  onChanged: (i) => setState(() => _isAm = i == 0),
-                  onTap: () {},
+                  itemCount: kAmPmWheelCount,
+                  label: (i) => isAmAt(i) ? 'AM' : 'PM',
+                  onChanged: _onAmPmChanged,
+                  onTap: () {
+                    // Tap toggles AM/PM.
+                    _ampmCtrl.jumpToItem(_ampmIndex + 1);
+                  },
                 ),
-                // Hours 1-12
+                // Hours 1-12 (infinite loop)
                 _wheel(
                   controller: _hourCtrl,
-                  itemCount: 12,
-                  label: (i) =>
-                      (i + 1).toString().padLeft(2, '0'),
-                  onChanged: (i) => setState(() => _hour12 = i + 1),
+                  itemCount: kHourWheelCount,
+                  label: (i) => hourValueAt(i).toString().padLeft(2, '0'),
+                  onChanged: _onHourChanged,
                   onTap: () => _typeValue(
                     title: l10n.hoursShort,
                     current: _hour12,
@@ -260,16 +351,17 @@ class _ScrollTimePickerState extends State<ScrollTimePicker> {
                     max: 12,
                     onDone: (v) {
                       _hour12 = v;
-                      _hourCtrl.jumpToItem(v - 1);
+                      _hourIndex = nearestHourIndex(_hourIndex, v);
+                      _hourCtrl.jumpToItem(_hourIndex);
                     },
                   ),
                 ),
-                // Minutes 00-59
+                // Minutes 00-59 (infinite loop)
                 _wheel(
                   controller: _minCtrl,
-                  itemCount: 60,
-                  label: (i) => i.toString().padLeft(2, '0'),
-                  onChanged: (i) => setState(() => _minute = i),
+                  itemCount: kMinuteWheelCount,
+                  label: (i) => minuteValueAt(i).toString().padLeft(2, '0'),
+                  onChanged: _onMinuteChanged,
                   onTap: () => _typeValue(
                     title: l10n.minutesShort,
                     current: _minute,
@@ -277,7 +369,8 @@ class _ScrollTimePickerState extends State<ScrollTimePicker> {
                     max: 59,
                     onDone: (v) {
                       _minute = v;
-                      _minCtrl.jumpToItem(v);
+                      _minIndex = nearestMinuteIndex(_minIndex, v);
+                      _minCtrl.jumpToItem(_minIndex);
                     },
                   ),
                 ),
@@ -308,8 +401,7 @@ class _ScrollTimePickerState extends State<ScrollTimePicker> {
   }
 }
 
-/// One row inside a wheel. Selected styling is handled by the wheel's
-/// magnification; tap opens the type-in dialog.
+/// One row inside a wheel. Tap opens the type-in dialog.
 class _WheelItem extends StatelessWidget {
   final String text;
   final VoidCallback onTap;
