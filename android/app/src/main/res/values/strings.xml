@@ -14,6 +14,6 @@
     <string name="swipe_hints">↑ Swipe up to snooze · ↓ Swipe down to dismiss</string>
     <string name="snoozed_until">⏰ Snoozed until %1$s</string>
     <string name="notif_stop">Stop</string>
-    <string name="drag_up_stop">Drag up — or tap — to stop</string>
-    <string name="drag_down_snooze">Drag down — or tap — to snooze</string>
+    <string name="drag_up_snooze">Drag up — or tap — to snooze</string>
+    <string name="drag_down_stop">Drag down — or tap — to stop</string>
 </resources>

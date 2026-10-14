@@ -126,8 +126,10 @@ class FullScreenAlarmActivity : Activity() {
             setPadding(0, 16, 0, 0)
         }
 
-        // v2.5: draggable pills — STOP towards the top (drag UP to stop),
-        // SNOOZE towards the bottom (drag DOWN to snooze). Tap = same action.
+        // v2.6 (user correction): SNOOZE pill at the very TOP (drag UP to
+        // snooze), STOP pill at the very BOTTOM (drag DOWN to stop).
+        // Layout top→bottom: snooze pill, hint, time, date, label,
+        // spacer, hint, stop pill. Tap = same action (fallback).
         val dragThreshold = 100f // px of vertical drag to trigger
 
         fun makeDraggable(
@@ -151,7 +153,7 @@ class FullScreenAlarmActivity : Activity() {
                     }
                     MotionEvent.ACTION_MOVE -> {
                         val dy = ev.rawY - downY
-                        // Drag up for STOP, drag down for SNOOZE.
+                        // Drag up for SNOOZE, drag down for STOP.
                         val hit = if (dragUp) dy < -dragThreshold
                         else dy > dragThreshold
                         if (hit && !triggered) {
@@ -176,17 +178,10 @@ class FullScreenAlarmActivity : Activity() {
             }
         }
 
-        val stopPill = Button(this).apply {
-            text = "↑ ${getString(R.string.dismiss)}"
-            textSize = 20f
-            typeface = Typeface.create(Typeface.DEFAULT, Typeface.BOLD)
-            setTextColor(Color.BLACK)
-            setBackgroundColor(lime)
-        }
         val snoozePill = Button(this).apply {
             text = if (maxSnoozes > 0)
-                "↓ ${getString(R.string.snooze)} (${snoozeCount + 1}/$maxSnoozes)"
-            else "↓ ${getString(R.string.snooze)}"
+                "↑ ${getString(R.string.snooze)} (${snoozeCount + 1}/$maxSnoozes)"
+            else "↑ ${getString(R.string.snooze)}"
             textSize = 20f
             typeface = Typeface.create(Typeface.DEFAULT, Typeface.BOLD)
             setTextColor(Color.WHITE)
@@ -194,51 +189,56 @@ class FullScreenAlarmActivity : Activity() {
             visibility = if (canSnooze) android.view.View.VISIBLE
             else android.view.View.GONE
         }
+        val stopPill = Button(this).apply {
+            text = "↓ ${getString(R.string.dismiss)}"
+            textSize = 20f
+            typeface = Typeface.create(Typeface.DEFAULT, Typeface.BOLD)
+            setTextColor(Color.BLACK)
+            setBackgroundColor(lime)
+        }
 
-        makeDraggable(stopPill, onDrag = { doDismiss() },
-            onTap = { doDismiss() }, dragUp = true)
         makeDraggable(snoozePill, onDrag = { doSnooze() },
-            onTap = { doSnooze() }, dragUp = false)
+            onTap = { doSnooze() }, dragUp = true)
+        makeDraggable(stopPill, onDrag = { doDismiss() },
+            onTap = { doDismiss() }, dragUp = false)
 
         val pillParams = LinearLayout.LayoutParams(
             LinearLayout.LayoutParams.MATCH_PARENT,
             LinearLayout.LayoutParams.WRAP_CONTENT,
         ).apply {
-            topMargin = 16
-            bottomMargin = 16
-            height = 150
+            topMargin = 12
+            bottomMargin = 12
+            height = 140
         }
 
-        val stopHint = TextView(this).apply {
-            text = getString(R.string.drag_up_stop)
-            textSize = 13f
-            setTextColor(grayText)
-            gravity = Gravity.CENTER
-        }
         val snoozeHint = TextView(this).apply {
-            text = getString(R.string.drag_down_snooze)
+            text = getString(R.string.drag_up_snooze)
             textSize = 13f
             setTextColor(grayText)
             gravity = Gravity.CENTER
             visibility = if (canSnooze) android.view.View.VISIBLE
             else android.view.View.GONE
         }
+        val stopHint = TextView(this).apply {
+            text = getString(R.string.drag_down_stop)
+            textSize = 13f
+            setTextColor(grayText)
+            gravity = Gravity.CENTER
+        }
 
+        // Top→bottom: snooze pill, hint, time, date, label,
+        // spacer, hint, stop pill.
+        if (canSnooze) {
+            root.addView(snoozePill, pillParams)
+            root.addView(snoozeHint)
+        }
         root.addView(timeView)
         root.addView(dateView)
         root.addView(labelView)
-        // STOP pill in the upper-middle: drag it UP.
-        root.addView(Space(this), LinearLayout.LayoutParams(
-            LinearLayout.LayoutParams.MATCH_PARENT, 0, 0.6f))
-        root.addView(stopHint)
-        root.addView(stopPill, pillParams)
-        // SNOOZE pill in the lower-middle: drag it DOWN.
         root.addView(Space(this), LinearLayout.LayoutParams(
             LinearLayout.LayoutParams.MATCH_PARENT, 0, 1f))
-        root.addView(snoozePill, pillParams)
-        root.addView(snoozeHint)
-        root.addView(Space(this), LinearLayout.LayoutParams(
-            LinearLayout.LayoutParams.MATCH_PARENT, 0, 0.4f))
+        root.addView(stopHint)
+        root.addView(stopPill, pillParams)
         setContentView(root)
 
         // Keep the anywhere-on-screen fling as an extra shortcut:
