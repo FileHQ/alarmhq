@@ -114,6 +114,5 @@
   "permGrant": "Grant",
   "permGranted": "Granted",
   "permContinue": "Continue",
-  "permSkip": "Skip for now",
-  "permAppClosedNote": "You don't need to keep the app open — alarms are handled by the Android system."
+  "permSkip": "Skip for now"
 }

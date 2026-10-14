@@ -147,31 +147,6 @@ class _PermissionScreenState extends State<PermissionScreen>
               l10n: l10n,
             ),
             const SizedBox(height: 24),
-            Container(
-              padding: const EdgeInsets.all(14),
-              decoration: BoxDecoration(
-                color: AppTheme.emerald.withValues(alpha: 0.1),
-                borderRadius: BorderRadius.circular(14),
-                border: Border.all(
-                    color: AppTheme.emerald.withValues(alpha: 0.35)),
-              ),
-              child: Row(
-                children: [
-                  const Text('💤', style: TextStyle(fontSize: 24)),
-                  const SizedBox(width: 12),
-                  Expanded(
-                    child: Text(
-                      l10n.permAppClosedNote,
-                      style: const TextStyle(
-                          fontSize: 13,
-                          color: Colors.white70,
-                          height: 1.5),
-                    ),
-                  ),
-                ],
-              ),
-            ),
-            const SizedBox(height: 16),
             SizedBox(
               width: double.infinity,
               child: ElevatedButton(

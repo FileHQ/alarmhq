@@ -787,12 +787,6 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Skip for now'**
   String get permSkip;
-
-  /// No description provided for @permAppClosedNote.
-  ///
-  /// In en, this message translates to:
-  /// **'You don\'t need to keep the app open — alarms are handled by the Android system.'**
-  String get permAppClosedNote;
 }
 
 class _AppLocalizationsDelegate
