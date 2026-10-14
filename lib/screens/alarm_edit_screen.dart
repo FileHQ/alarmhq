@@ -120,7 +120,8 @@ class _AlarmEditScreenState extends State<AlarmEditScreen> {
         toneName: _toneName,
         vibration: _vibration,
         fadeInSeconds: _fadeInSeconds,
-        enabled: widget.existing?.enabled ?? true,
+        // v2.14: always enable on save — the user explicitly set this alarm.
+        enabled: true,
       );
 
   Future<void> _save() async {

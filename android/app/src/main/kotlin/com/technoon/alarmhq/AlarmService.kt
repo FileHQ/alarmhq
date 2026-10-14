@@ -33,7 +33,10 @@ class AlarmService : Service() {
         const val ACTION_PREVIEW = "com.technoon.alarmhq.PREVIEW"
         const val ACTION_STOP = "com.technoon.alarmhq.STOP"
         const val ACTION_SNOOZED = "com.technoon.alarmhq.SNOOZED"
-        private const val CHANNEL_ID = "alarmhq_alarm"
+        // v2.14: new channel ID — the old channel was created with
+        // IMPORTANCE_HIGH and Android never upgrades an existing channel's
+        // importance. Fresh ID forces MAX, required for full-screen intent.
+        private const val CHANNEL_ID = "alarmhq_alarm_v2"
         private const val NOTIF_ID = 1001
         private const val SNOOZED_NOTIF_ID = 1002
 
@@ -133,6 +136,9 @@ class AlarmService : Service() {
     private fun startForegroundService(title: String, fullScreen: Pair<String, Int>?) {
         val nm = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            // v2.14: remove the stale HIGH-importance channel so only the
+            // fresh MAX channel remains.
+            try { nm.deleteNotificationChannel("alarmhq_alarm") } catch (_: Exception) {}
             val channel = NotificationChannel(
                 CHANNEL_ID,
                 getString(R.string.alarm_channel_name),
