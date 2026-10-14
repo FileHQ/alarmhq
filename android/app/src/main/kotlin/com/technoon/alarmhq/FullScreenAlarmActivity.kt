@@ -133,8 +133,10 @@ class FullScreenAlarmActivity : Activity() {
         val density = resources.displayMetrics.density
         fun dp(v: Int) = (v * density).toInt()
 
-        // Track is 110px wide per user spec; labels fit inside with padding.
-        val trackWidthPx = 110
+        // v2.11: track width in dp (was raw px — inconsistent across
+        // densities and caused the "Dismiss" label to wrap). Labels are
+        // single-line with ellipsize as a safety net.
+        val trackWidthPx = dp(110)
         val trackHeight = dp(340)
         val knobTextSize = 52f
 
@@ -142,26 +144,56 @@ class FullScreenAlarmActivity : Activity() {
             orientation = LinearLayout.VERTICAL
             gravity = Gravity.CENTER_HORIZONTAL
             layoutParams = LinearLayout.LayoutParams(
-                trackWidthPx + dp(32),
+                trackWidthPx + dp(40),
                 LinearLayout.LayoutParams.WRAP_CONTENT,
             )
         }
 
         val stopLabel = TextView(this).apply {
-            text = "■ ${getString(R.string.dismiss)}\n↑"
-            textSize = 15f
+            text = "■ ${getString(R.string.dismiss)}"
+            textSize = 14f
             typeface = Typeface.create(Typeface.DEFAULT, Typeface.BOLD)
             setTextColor(lime)
             gravity = Gravity.CENTER
-            setPadding(dp(4), dp(4), dp(4), dp(8))
+            maxLines = 1
+            ellipsize = android.text.TextUtils.TruncateAt.END
+            setSingleLine(true)
+            setPadding(dp(4), dp(4), dp(4), dp(2))
+            layoutParams = LinearLayout.LayoutParams(
+                LinearLayout.LayoutParams.MATCH_PARENT,
+                LinearLayout.LayoutParams.WRAP_CONTENT,
+            )
+        }
+        val stopArrow = TextView(this).apply {
+            text = "↑"
+            textSize = 16f
+            setTextColor(lime)
+            gravity = Gravity.CENTER
+            setPadding(0, 0, 0, dp(6))
         }
         val snoozeLabel = TextView(this).apply {
-            text = "⏰ ${getString(R.string.snooze)}\n↓"
-            textSize = 15f
+            text = "⏰ ${getString(R.string.snooze)}"
+            textSize = 14f
             typeface = Typeface.create(Typeface.DEFAULT, Typeface.BOLD)
             setTextColor(Color.WHITE)
             gravity = Gravity.CENTER
-            setPadding(dp(4), dp(8), dp(4), dp(4))
+            maxLines = 1
+            ellipsize = android.text.TextUtils.TruncateAt.END
+            setSingleLine(true)
+            setPadding(dp(4), dp(2), dp(4), dp(4))
+            layoutParams = LinearLayout.LayoutParams(
+                LinearLayout.LayoutParams.MATCH_PARENT,
+                LinearLayout.LayoutParams.WRAP_CONTENT,
+            )
+            visibility = if (canSnooze) android.view.View.VISIBLE
+            else android.view.View.GONE
+        }
+        val snoozeArrow = TextView(this).apply {
+            text = "↓"
+            textSize = 16f
+            setTextColor(Color.WHITE)
+            gravity = Gravity.CENTER
+            setPadding(0, dp(6), 0, 0)
             visibility = if (canSnooze) android.view.View.VISIBLE
             else android.view.View.GONE
         }
@@ -252,8 +284,12 @@ class FullScreenAlarmActivity : Activity() {
         root.addView(Space(this), LinearLayout.LayoutParams(
             LinearLayout.LayoutParams.MATCH_PARENT, 0, 1f))
         sliderCol.addView(stopLabel)
+        sliderCol.addView(stopArrow)
         sliderCol.addView(slider)
-        if (canSnooze) sliderCol.addView(snoozeLabel)
+        if (canSnooze) {
+            sliderCol.addView(snoozeArrow)
+            sliderCol.addView(snoozeLabel)
+        }
         // Center the slider column horizontally.
         val sliderWrap = LinearLayout(this).apply {
             orientation = LinearLayout.VERTICAL

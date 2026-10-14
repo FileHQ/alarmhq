@@ -234,6 +234,13 @@ class AppLocalizationsEn extends AppLocalizations {
   String get permOverlayTitle => 'Display over other apps';
 
   @override
+  String get permFsTitle => 'Full-screen alarm';
+
+  @override
+  String get permFsDesc =>
+      'Lets the alarm pop up on the lock screen (needed on Android 14+).';
+
+  @override
   String get permAutostartTitle => 'Autostart permission';
 
   @override

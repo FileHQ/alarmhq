@@ -17,7 +17,10 @@ import '../theme/app_theme.dart';
 /// reach an end in practice.
 const int kHourWheelCount = 12000; // 1000 x 12
 const int kMinuteWheelCount = 120000; // 2000 x 60
-const int kAmPmWheelCount = 4000; // 2000 x 2
+
+/// AM/PM wheel has exactly 2 items (v2.11: user asked AM/PM to appear only
+/// once each, not loop). Index 0 = AM, 1 = PM.
+const int kAmPmWheelCount = 2;
 
 /// Hour value (1-12) shown at virtual [index] ([index] >= 0).
 int hourValueAt(int index) => (index % 12) + 1;
@@ -47,10 +50,27 @@ int nearestMinuteIndex(int currentIndex, int minute) {
 }
 
 /// Scroll-based time picker: AM/PM | Hours (H) | Minutes (M).
-/// All three columns loop infinitely in both directions (hours 12<->1,
-/// minutes 59<->0); AM/PM flips automatically when the hours cross 12.
+/// Hours and minutes loop infinitely in both directions (hours 12<->1,
+/// minutes 59<->0); AM/PM shows exactly once each and flips automatically
+/// when the hours cross 12.
 /// Audible tick + haptic on every scroll step. Tap a number to type it.
 /// 12-hour format only.
+/// Scroll physics for the picker wheels: snaps to items like
+/// [FixedExtentScrollPhysics], but amplifies fling velocity so a fast flick
+/// spins the wheel quickly (Xiaomi-style momentum). The snap-to-item
+/// behavior at the end of the fling is unchanged.
+class _FastWheelPhysics extends FixedExtentScrollPhysics {
+  const _FastWheelPhysics();
+
+  @override
+  Simulation? createBallisticSimulation(
+      ScrollMetrics position, double velocity) {
+    // 2.2x velocity: hard flicks travel much further, gentle flicks are
+    // barely affected. Snapping is still handled by super.
+    return super.createBallisticSimulation(position, velocity * 2.2);
+  }
+}
+
 class ScrollTimePicker extends StatefulWidget {
   final TimeOfDay initial;
 
@@ -101,10 +121,11 @@ class _ScrollTimePickerState extends State<ScrollTimePicker> {
     _isAm = h24 < 12;
     _hour12 = h24 % 12 == 0 ? 12 : h24 % 12;
     _minute = widget.initial.minute;
-    // Center the wheels on a multiple of the cycle so modulo math is exact.
+    // Center the hour/minute wheels on a multiple of the cycle so modulo
+    // math is exact. AM/PM is just 2 items (0 = AM, 1 = PM), no looping.
     _hourIndex = (kHourWheelCount ~/ 2) + (_hour12 - 1);
     _minIndex = (kMinuteWheelCount ~/ 2) + _minute;
-    _ampmIndex = (kAmPmWheelCount ~/ 2) + (_isAm ? 0 : 1);
+    _ampmIndex = _isAm ? 0 : 1;
     _ampmCtrl = FixedExtentScrollController(initialItem: _ampmIndex);
     _hourCtrl = FixedExtentScrollController(initialItem: _hourIndex);
     _minCtrl = FixedExtentScrollController(initialItem: _minIndex);
@@ -192,9 +213,9 @@ class _ScrollTimePickerState extends State<ScrollTimePicker> {
     final newHour = hourValueAt(index);
     if (hourWrapTogglesAmPm(_hour12, newHour)) {
       // Crossing 12 <-> 1 flips AM/PM; move the AM/PM wheel along so it
-      // always shows the true value.
+      // always shows the true value (2 items, no looping).
       _isAm = !_isAm;
-      _ampmIndex += 1;
+      _ampmIndex = _isAm ? 0 : 1;
       _ampmJumping = true;
       _ampmCtrl.jumpToItem(_ampmIndex);
       WidgetsBinding.instance
@@ -241,7 +262,7 @@ class _ScrollTimePickerState extends State<ScrollTimePicker> {
             itemExtent: 56,
             perspective: 0.003,
             diameterRatio: 1.6,
-            physics: const FixedExtentScrollPhysics(),
+            physics: const _FastWheelPhysics(),
             onSelectedItemChanged: onChanged,
             childDelegate: ListWheelChildBuilderDelegate(
               builder: (c, i) {
@@ -339,7 +360,7 @@ class _ScrollTimePickerState extends State<ScrollTimePicker> {
             child: Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                // AM/PM (loops forever too)
+                // AM/PM (exactly AM and PM once each — no looping)
                 _wheel(
                   controller: _ampmCtrl,
                   itemCount: kAmPmWheelCount,
@@ -347,7 +368,7 @@ class _ScrollTimePickerState extends State<ScrollTimePicker> {
                   onChanged: _onAmPmChanged,
                   onTap: () {
                     // Tap toggles AM/PM.
-                    _ampmCtrl.jumpToItem(_ampmIndex + 1);
+                    _ampmCtrl.jumpToItem(_isAm ? 1 : 0);
                   },
                 ),
                 // Hours 1-12 (infinite loop)

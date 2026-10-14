@@ -203,6 +203,39 @@ class MainActivity : Activity() {
                     )
                     result.success(null)
                 }
+                // ---- full-screen intent (v2.11, CRITICAL): on Android 14+
+                // USE_FULL_SCREEN_INTENT must be granted by the user, or
+                // setFullScreenIntent() is silently ignored and the alarm
+                // never appears on the lock screen.
+                "canUseFullScreenIntent" -> {
+                    val granted =
+                        if (Build.VERSION.SDK_INT >= 34) {
+                            val nm = getSystemService(
+                                Context.NOTIFICATION_SERVICE
+                            ) as NotificationManager
+                            nm.canUseFullScreenIntent()
+                        } else {
+                            true // auto-granted below Android 14
+                        }
+                    result.success(granted)
+                }
+                "needsFullScreenIntentCard" -> {
+                    // Only Android 14+ needs the user to grant this.
+                    result.success(Build.VERSION.SDK_INT >= 34)
+                }
+                "openFullScreenIntentSettings" -> {
+                    try {
+                        if (Build.VERSION.SDK_INT >= 34) {
+                            startActivity(
+                                Intent(
+                                    Settings.ACTION_MANAGE_APP_USE_FULL_SCREEN_INTENT,
+                                    Uri.parse("package:$packageName"),
+                                )
+                            )
+                        }
+                    } catch (_: Exception) { /* best effort */ }
+                    result.success(null)
+                }
                 // ---- autostart (v2.4): Xiaomi/Oppo/Vivo/Huawei kill
                 // background alarms without this; no API to check it, so
                 // we just open the manufacturer's autostart page.

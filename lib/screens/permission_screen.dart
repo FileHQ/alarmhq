@@ -35,6 +35,12 @@ class _PermissionScreenState extends State<PermissionScreen>
   bool? _notif;
   bool? _overlay;
 
+  /// Android 14+: USE_FULL_SCREEN_INTENT must be granted or the alarm
+  /// won't pop up on the lock screen (v2.11, critical). Only shown on
+  /// API 34+; auto-granted below that.
+  bool? _fsIntent;
+  bool _showFsCard = false;
+
   /// Autostart can't be checked via API; marked done once the user opens
   /// the manufacturer's page. Never blocks Continue.
   /// v2.10: initialized to false (was null → infinite spinner bug).
@@ -99,13 +105,19 @@ class _PermissionScreenState extends State<PermissionScreen>
       NativeBridge.isIgnoringBatteryOptimizations(),
       NativeBridge.hasNotificationPermission(),
       NativeBridge.canDrawOverlays(),
+      NativeBridge.needsFullScreenIntentCard(),
     ]);
+    final showFs = results[4];
+    final fsGranted =
+        showFs ? await NativeBridge.canUseFullScreenIntent() : true;
     if (!mounted) return;
     setState(() {
       _exact = results[0];
       _battery = results[1];
       _notif = results[2];
       _overlay = results[3];
+      _showFsCard = showFs;
+      _fsIntent = fsGranted;
       // v2.10: autostart was never set here → infinite spinner.
       // Default to false so the Grant button shows.
       _autostartDone ??= false;
@@ -113,7 +125,11 @@ class _PermissionScreenState extends State<PermissionScreen>
   }
 
   bool get _allGranted =>
-      _exact == true && _battery == true && _notif == true && _overlay == true;
+      _exact == true &&
+      _battery == true &&
+      _notif == true &&
+      _overlay == true &&
+      (!_showFsCard || _fsIntent == true);
 
   Future<void> _finish() async {
     await PermissionScreen.markOnboarded();
@@ -188,6 +204,18 @@ class _PermissionScreenState extends State<PermissionScreen>
               onGrant: NativeBridge.openOverlaySettings,
               l10n: l10n,
             ),
+            // v2.11 (critical): Android 14+ requires the user to grant
+            // USE_FULL_SCREEN_INTENT or the alarm never pops up on the
+            // lock screen. Only shown where needed.
+            if (_showFsCard)
+              _permCard(
+                icon: '🔔',
+                title: l10n.permFsTitle,
+                desc: l10n.permFsDesc,
+                granted: _fsIntent,
+                onGrant: NativeBridge.openFullScreenIntentSettings,
+                l10n: l10n,
+              ),
             // v2.4: autostart — Xiaomi/Oppo/Vivo/Huawei kill background
             // alarms without it. Cannot be checked programmatically, so
             // this card never blocks Continue; it just opens the right page.

@@ -24,12 +24,11 @@ void main() {
       expect(minuteValueAt(kMinuteWheelCount ~/ 2 + 60), 0);
     });
 
-    test('isAmAt alternates AM/PM', () {
+    test('isAmAt: index 0 = AM, 1 = PM (no looping)', () {
       expect(isAmAt(0), isTrue);
       expect(isAmAt(1), isFalse);
-      expect(isAmAt(2), isTrue);
-      expect(isAmAt(kAmPmWheelCount ~/ 2), isTrue);
-      expect(isAmAt(kAmPmWheelCount ~/ 2 + 1), isFalse);
+      // v2.11: AM/PM wheel is exactly 2 items — AM and PM appear once each.
+      expect(kAmPmWheelCount, 2);
     });
 
     test('hourWrapTogglesAmPm only at the 12 <-> 1 boundary', () {

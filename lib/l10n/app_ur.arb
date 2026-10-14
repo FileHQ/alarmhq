@@ -68,6 +68,8 @@
   "permNotifTitle": "نوٹیفکیشنز",
   "permOverlayDesc": "لاک اسکرین پر فل اسکرین الارم دکھاتا ہے۔",
   "permOverlayTitle": "دوسری ایپس پر دکھائیں",
+  "permFsTitle": "فل اسکرین الارم",
+  "permFsDesc": "لاک اسکرین پر الارم دکھانے دیتا ہے (Android 14+ پر ضروری)۔",
   "permAutostartTitle": "آٹو اسٹارٹ کی اجازت",
   "permAutostartDesc": "ایپ بند ہو تو بھی الارم بجے (Xiaomi، Oppo، Vivo، Huawei پر ضروری)۔",
   "permSkip": "ابھی چھوڑیں",

@@ -231,6 +231,13 @@ class AppLocalizationsUr extends AppLocalizations {
   String get permOverlayTitle => 'دوسری ایپس پر دکھائیں';
 
   @override
+  String get permFsTitle => 'فل اسکرین الارم';
+
+  @override
+  String get permFsDesc =>
+      'لاک اسکرین پر الارم دکھانے دیتا ہے (Android 14+ پر ضروری)۔';
+
+  @override
   String get permAutostartTitle => 'آٹو اسٹارٹ کی اجازت';
 
   @override

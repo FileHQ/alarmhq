@@ -506,6 +506,18 @@ abstract class AppLocalizations {
   /// **'Display over other apps'**
   String get permOverlayTitle;
 
+  /// No description provided for @permFsTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Full-screen alarm'**
+  String get permFsTitle;
+
+  /// No description provided for @permFsDesc.
+  ///
+  /// In en, this message translates to:
+  /// **'Lets the alarm pop up on the lock screen (needed on Android 14+).'**
+  String get permFsDesc;
+
   /// No description provided for @permAutostartTitle.
   ///
   /// In en, this message translates to:

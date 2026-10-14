@@ -83,6 +83,18 @@ class NativeBridge {
   static Future<void> openOverlaySettings() async =>
       await _alarm.invokeMethod('openOverlaySettings');
 
+  /// Android 14+: USE_FULL_SCREEN_INTENT must be granted or the alarm
+  /// won't appear on the lock screen (v2.11, critical).
+  static Future<bool> canUseFullScreenIntent() async =>
+      await _alarm.invokeMethod<bool>('canUseFullScreenIntent') ?? true;
+
+  /// True only on Android 14+ where the user must grant the above.
+  static Future<bool> needsFullScreenIntentCard() async =>
+      await _alarm.invokeMethod<bool>('needsFullScreenIntentCard') ?? false;
+
+  static Future<void> openFullScreenIntentSettings() async =>
+      await _alarm.invokeMethod('openFullScreenIntentSettings');
+
   /// Open the manufacturer's autostart settings (Xiaomi/Oppo/Vivo/Huawei).
   /// No API exists to check this permission; it never blocks Continue.
   static Future<void> openAutostartSettings() async =>
