@@ -260,7 +260,7 @@ class AppLocalizationsUr extends AppLocalizations {
 
   @override
   String get permLockScreenDesc =>
-      'فون لاک ہو تو الارم نظر آئے۔ سیٹنگز ← ایپس ← AlarmHQ کھولیں اور \"Show on Lock screen\" آن کریں (\"Open new windows while running in the background\" بھی آن کریں)۔';
+      'اس کے بغیر لاک اسکرین پر الارم کبھی نظر نہیں آئے گا۔ طریقہ: 1۔ نیچے \'Open Settings\' دبائیں۔ 2۔ \'Show on Lock screen\' آن کریں (\'Open new windows while running in the background\' بھی آن کریں)۔ 3۔ ایپ میں واپس آئیں۔';
 
   @override
   String get permUnusedTitle => 'خودکار اجازت منسوخی';
@@ -352,6 +352,11 @@ class AppLocalizationsUr extends AppLocalizations {
   @override
   String snoozedUntil(Object time) {
     return '$time تک اسنوز';
+  }
+
+  @override
+  String snoozedUntilLeft(Object left, Object time) {
+    return '$time تک اسنوز ($left باقی)';
   }
 
   @override

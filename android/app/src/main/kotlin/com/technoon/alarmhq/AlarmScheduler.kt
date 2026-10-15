@@ -303,6 +303,10 @@ object AlarmScheduler {
         // accurate "Rings in Xm" countdown while snoozed.
         miscPrefs(context).edit()
             .putLong("snooze_trigger_$id", trigger).apply()
+        // v2.23: also persist the snooze count so the card can show
+        // "Snoozed until X (N left)".
+        miscPrefs(context).edit()
+            .putInt("snooze_count_$id", snoozeCount).apply()
         // v2.21: mirror into the Dart prefs file ("alarmhq_prefs") as a
         // backup source for the card badge — belt and suspenders.
         try {
@@ -348,9 +352,15 @@ object AlarmScheduler {
         return t
     }
 
+    /** Snooze count for the pending snooze of [id], or 0 when none. */
+    fun getSnoozeCount(context: Context, id: Int): Int {
+        return miscPrefs(context).getInt("snooze_count_$id", 0)
+    }
+
     /** Clear a stored snooze trigger (fired, dismissed, or cancelled). */
     fun clearSnoozeTrigger(context: Context, id: Int) {
         miscPrefs(context).edit().remove("snooze_trigger_$id").apply()
+        miscPrefs(context).edit().remove("snooze_count_$id").apply()
         // v2.21: also drop the Dart-prefs backup (see scheduleSnooze).
         try {
             context.getSharedPreferences("alarmhq_prefs", Context.MODE_PRIVATE)

@@ -263,7 +263,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get permLockScreenDesc =>
-      'Lets the alarm appear when your phone is locked. Tap to open Settings → Apps → AlarmHQ and turn ON \"Show on Lock screen\" (also turn on \"Open new windows while running in the background\").';
+      'Without this, the alarm NEVER appears on the lock screen. Steps: 1. Tap \'Open Settings\' below. 2. Turn ON \'Show on Lock screen\' (also turn ON \'Open new windows while running in the background\'). 3. Return to the app.';
 
   @override
   String get permUnusedTitle => 'Auto-remove permissions';
@@ -355,6 +355,11 @@ class AppLocalizationsEn extends AppLocalizations {
   @override
   String snoozedUntil(Object time) {
     return 'Snoozed until $time';
+  }
+
+  @override
+  String snoozedUntilLeft(Object left, Object time) {
+    return 'Snoozed until $time ($left left)';
   }
 
   @override

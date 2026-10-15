@@ -557,7 +557,7 @@ abstract class AppLocalizations {
   /// No description provided for @permLockScreenDesc.
   ///
   /// In en, this message translates to:
-  /// **'Lets the alarm appear when your phone is locked. Tap to open Settings → Apps → AlarmHQ and turn ON \"Show on Lock screen\" (also turn on \"Open new windows while running in the background\").'**
+  /// **'Without this, the alarm NEVER appears on the lock screen. Steps: 1. Tap \'Open Settings\' below. 2. Turn ON \'Show on Lock screen\' (also turn ON \'Open new windows while running in the background\'). 3. Return to the app.'**
   String get permLockScreenDesc;
 
   /// No description provided for @permUnusedTitle.
@@ -727,6 +727,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Snoozed until {time}'**
   String snoozedUntil(Object time);
+
+  /// No description provided for @snoozedUntilLeft.
+  ///
+  /// In en, this message translates to:
+  /// **'Snoozed until {time} ({left} left)'**
+  String snoozedUntilLeft(Object left, Object time);
 
   /// No description provided for @fsBannerTitle.
   ///

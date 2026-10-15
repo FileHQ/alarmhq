@@ -410,6 +410,10 @@ class _PermissionScreenState extends State<PermissionScreen>
     // v2.19: unverifiable OEM cards never display the "Granted" check.
     final isGranted = verifiable && granted == true;
     final alert = highlight && !isGranted;
+    // v2.23: VERTICAL layout. The old horizontal Row put the button on the
+    // right, squeezing the text column to ~5 characters on narrow screens
+    // and wrapping titles letter-by-letter vertically. Now the icon/title/
+    // description get the full card width and the button sits BELOW.
     return Container(
       margin: const EdgeInsets.only(bottom: 12),
       padding: const EdgeInsets.all(16),
@@ -427,111 +431,103 @@ class _PermissionScreenState extends State<PermissionScreen>
           width: alert ? 2 : 1,
         ),
       ),
-      child: Row(
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text(icon, style: const TextStyle(fontSize: 32)),
-          const SizedBox(width: 14),
-          Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                // v2.21: "Required" badge on its own line. It used to sit
-                // in a Row with the title, and on narrow screens the
-                // badge squeezed the title's Flexible to ~zero width —
-                // wrapping "Manage app if unused" letter-by-letter
-                // vertically. Never again.
-                if (alert)
-                  Container(
-                    margin: const EdgeInsets.only(bottom: 6),
-                    padding: const EdgeInsets.symmetric(
-                        horizontal: 8, vertical: 2),
-                    decoration: BoxDecoration(
-                      color: Colors.redAccent,
-                      borderRadius: BorderRadius.circular(8),
-                    ),
-                    child: Text(
-                      l10n.permRequired,
-                      style: const TextStyle(
-                        fontSize: 11,
-                        fontWeight: FontWeight.w800,
-                        color: Colors.white,
+          Row(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(icon, style: const TextStyle(fontSize: 32)),
+              const SizedBox(width: 12),
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    if (alert)
+                      Container(
+                        margin: const EdgeInsets.only(bottom: 6),
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 8, vertical: 2),
+                        decoration: BoxDecoration(
+                          color: Colors.redAccent,
+                          borderRadius: BorderRadius.circular(8),
+                        ),
+                        child: Text(
+                          l10n.permRequired,
+                          style: const TextStyle(
+                            fontSize: 11,
+                            fontWeight: FontWeight.w800,
+                            color: Colors.white,
+                          ),
+                        ),
                       ),
-                    ),
-                  ),
-                Text(title,
-                    softWrap: true,
-                    style: const TextStyle(
-                        fontSize: 16, fontWeight: FontWeight.w700)),
-                const SizedBox(height: 4),
-                Text(desc,
-                    style: const TextStyle(
-                        fontSize: 13, color: Colors.white60, height: 1.4)),
-              ],
-            ),
-          ),
-          const SizedBox(width: 8),
-          if (granted == null)
-            const SizedBox(
-              width: 24,
-              height: 24,
-              child: CircularProgressIndicator(strokeWidth: 2),
-            )
-          else if (isGranted)
-            Row(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                const Icon(Icons.check_circle,
-                    color: AppTheme.emerald, size: 22),
-                const SizedBox(width: 4),
-                Text(l10n.permGranted,
-                    style: const TextStyle(
-                        color: AppTheme.emerald,
-                        fontWeight: FontWeight.w700,
-                        fontSize: 13)),
-              ],
-            )
-          else
-            Column(
-              mainAxisSize: MainAxisSize.min,
-              crossAxisAlignment: CrossAxisAlignment.end,
-              children: [
-                ElevatedButton(
-                  onPressed: () async {
-                    await onGrant();
-                    // Status re-checks on resume via the lifecycle observer.
-                  },
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: AppTheme.emerald,
-                    foregroundColor: Colors.black,
-                    padding: const EdgeInsets.symmetric(
-                        horizontal: 18, vertical: 10),
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(10),
-                    ),
-                  ),
-                  // v2.19: OEM toggles can't be granted from here —
-                  // the button opens the manufacturer's Settings page.
-                  child: Text(
-                      verifiable ? l10n.permGrant : l10n.permOpenSettings,
-                      style: const TextStyle(fontWeight: FontWeight.w700)),
-                ),
-                // v2.19: after the settings page was opened, remind the
-                // user to flip the toggle themselves — never "Granted".
-                if (!verifiable && opened)
-                  Padding(
-                    padding: const EdgeInsets.only(top: 6),
-                    child: SizedBox(
-                      // v2.21: narrower so the text column keeps room.
-                      width: 130,
-                      child: Text(
-                        '⚠️ ${l10n.permVerifyNote}',
-                        textAlign: TextAlign.end,
+                    Text(title,
+                        softWrap: true,
                         style: const TextStyle(
-                            fontSize: 11, color: Colors.amber, height: 1.35),
-                      ),
-                    ),
+                            fontSize: 16, fontWeight: FontWeight.w700)),
+                  ],
+                ),
+              ),
+              const SizedBox(width: 8),
+              if (granted == null)
+                const SizedBox(
+                  width: 24,
+                  height: 24,
+                  child: CircularProgressIndicator(strokeWidth: 2),
+                )
+              else if (isGranted)
+                const Icon(Icons.check_circle,
+                    color: AppTheme.emerald, size: 24),
+            ],
+          ),
+          const SizedBox(height: 8),
+          Text(desc,
+              style: const TextStyle(
+                  fontSize: 13, color: Colors.white60, height: 1.4)),
+          if (granted != null && !isGranted) ...[
+            const SizedBox(height: 12),
+            SizedBox(
+              width: double.infinity,
+              child: ElevatedButton(
+                onPressed: () async {
+                  await onGrant();
+                  // Status re-checks on resume via the lifecycle observer.
+                },
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: AppTheme.emerald,
+                  foregroundColor: Colors.black,
+                  padding: const EdgeInsets.symmetric(vertical: 12),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(10),
                   ),
-              ],
+                ),
+                // v2.19: OEM toggles can't be granted from here —
+                // the button opens the manufacturer's Settings page.
+                child: Text(
+                    verifiable ? l10n.permGrant : l10n.permOpenSettings,
+                    style: const TextStyle(
+                        fontWeight: FontWeight.w700, fontSize: 15)),
+              ),
+            ),
+            // v2.19: after the settings page was opened, remind the
+            // user to flip the toggle themselves — never "Granted".
+            if (!verifiable && opened)
+              Padding(
+                padding: const EdgeInsets.only(top: 8),
+                child: Text(
+                  '⚠️ ${l10n.permVerifyNote}',
+                  style: const TextStyle(
+                      fontSize: 12, color: Colors.amber, height: 1.4),
+                ),
+              ),
+          ] else if (isGranted)
+            Padding(
+              padding: const EdgeInsets.only(top: 8),
+              child: Text(l10n.permGranted,
+                  style: const TextStyle(
+                      color: AppTheme.emerald,
+                      fontWeight: FontWeight.w700,
+                      fontSize: 13)),
             ),
         ],
       ),

@@ -152,4 +152,9 @@ class NativeBridge {
   /// Used to show an accurate "Rings in Xm" countdown while snoozed.
   static Future<int?> getSnoozeTrigger(int id) async =>
       await _alarm.invokeMethod<int>('getSnoozeTrigger', {'id': id});
+
+  /// v2.23: snooze count of the pending snooze for alarm [id] (0 when none).
+  /// Used to show "N left" on the snoozed badge.
+  static Future<int> getSnoozeCount(int id) async =>
+      await _alarm.invokeMethod<int>('getSnoozeCount', {'id': id}) ?? 0;
 }

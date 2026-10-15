@@ -29,6 +29,8 @@ class _AlarmListScreenState extends State<AlarmListScreen>
   /// Pending snooze triggers (alarm id -> trigger time), refreshed from
   /// native. Used to show an accurate countdown while an alarm is snoozed.
   final Map<int, DateTime> _snoozeTriggers = {};
+  // v2.23: snooze count per alarm for the "N left" badge text.
+  final Map<int, int> _snoozeCounts = {};
 
   /// Periodic timer to keep countdowns fresh (and pick up snooze triggers
   /// set from the full-screen activity or in-app dialog).
@@ -103,12 +105,21 @@ class _AlarmListScreenState extends State<AlarmListScreen>
   /// the full-screen alarm where the user may have snoozed).
   Future<void> _refreshSnoozeTriggers() async {
     final map = <int, DateTime>{};
+    final counts = <int, int>{};
     final nowMs = DateTime.now().millisecondsSinceEpoch;
     for (final a in widget.repo.alarms) {
       try {
         final ms = await NativeBridge.getSnoozeTrigger(a.id);
+        // v2.23: diagnostic — the user reported the badge never shows.
+        // ignore: avoid_print
+        print('AlarmHQ snoozeCheck(id=${a.id}): trigger=$ms now=$nowMs');
         if (ms != null && ms > nowMs) {
           map[a.id] = DateTime.fromMillisecondsSinceEpoch(ms);
+          try {
+            counts[a.id] = await NativeBridge.getSnoozeCount(a.id);
+          } catch (_) {
+            // Best effort only.
+          }
           continue;
         }
       } catch (_) {
@@ -128,9 +139,14 @@ class _AlarmListScreenState extends State<AlarmListScreen>
       }
     }
     if (mounted) {
-      setState(() => _snoozeTriggers
-        ..clear()
-        ..addAll(map));
+      setState(() {
+        _snoozeTriggers
+          ..clear()
+          ..addAll(map);
+        _snoozeCounts
+          ..clear()
+          ..addAll(counts);
+      });
     }
   }
   Future<void> _openEditor({AlarmModel? existing}) async {
@@ -569,6 +585,7 @@ class _AlarmListScreenState extends State<AlarmListScreen>
                         ),
                       ],
                       // v2.17: prominent snoozed indicator.
+                      // v2.23: also show how many snoozes are left.
                       if (snoozedUntil != null && a.enabled) ...[
                         const SizedBox(height: 8),
                         Container(
@@ -583,13 +600,26 @@ class _AlarmListScreenState extends State<AlarmListScreen>
                                   AppTheme.emerald.withValues(alpha: 0.6),
                             ),
                           ),
-                          child: Text(
-                            '⏰ ${l10n.snoozedUntil(_timeText12(snoozedUntil.hour, snoozedUntil.minute))}',
-                            style: const TextStyle(
-                              fontSize: 13,
-                              fontWeight: FontWeight.w800,
-                              color: AppTheme.emerald,
-                            ),
+                          child: Builder(
+                            builder: (context) {
+                              final used = _snoozeCounts[a.id] ?? 0;
+                              final max = a.maxSnoozes;
+                              final timeStr = _timeText12(snoozedUntil.hour,
+                                  snoozedUntil.minute);
+                              final text = (max < 0 || max == 0)
+                                  ? l10n.snoozedUntil(timeStr)
+                                  : l10n.snoozedUntilLeft(
+                                      (max - used).clamp(0, max).toString(),
+                                      timeStr);
+                              return Text(
+                                '⏰ $text',
+                                style: const TextStyle(
+                                  fontSize: 13,
+                                  fontWeight: FontWeight.w800,
+                                  color: AppTheme.emerald,
+                                ),
+                              );
+                            },
                           ),
                         ),
                       ],

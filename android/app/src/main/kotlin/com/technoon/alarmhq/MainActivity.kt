@@ -304,6 +304,13 @@ class MainActivity : Activity() {
                         AlarmScheduler.getSnoozeTrigger(this, id) else null
                     result.success(t)
                 }
+                // v2.23: snooze count for the "N left" badge text.
+                "getSnoozeCount" -> {
+                    val id = call.argument<Number>("id")?.toInt() ?: -1
+                    val c = if (id >= 0)
+                        AlarmScheduler.getSnoozeCount(this, id) else 0
+                    result.success(c)
+                }
                 "getRingingAlarm" -> {
                     val json = AlarmService.ringingAlarmJson
                     if (json == null) {
