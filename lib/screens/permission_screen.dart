@@ -434,35 +434,32 @@ class _PermissionScreenState extends State<PermissionScreen>
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Row(
-                  children: [
-                    Flexible(
-                      child: Text(title,
-                          style: const TextStyle(
-                              fontSize: 16, fontWeight: FontWeight.w700)),
+                // v2.21: "Required" badge on its own line. It used to sit
+                // in a Row with the title, and on narrow screens the
+                // badge squeezed the title's Flexible to ~zero width —
+                // wrapping "Manage app if unused" letter-by-letter
+                // vertically. Never again.
+                if (alert)
+                  Container(
+                    margin: const EdgeInsets.only(bottom: 6),
+                    padding: const EdgeInsets.symmetric(
+                        horizontal: 8, vertical: 2),
+                    decoration: BoxDecoration(
+                      color: Colors.redAccent,
+                      borderRadius: BorderRadius.circular(8),
                     ),
-                    // v2.17: "Required" badge for critical permissions.
-                    if (alert) ...[
-                      const SizedBox(width: 8),
-                      Container(
-                        padding: const EdgeInsets.symmetric(
-                            horizontal: 8, vertical: 2),
-                        decoration: BoxDecoration(
-                          color: Colors.redAccent,
-                          borderRadius: BorderRadius.circular(8),
-                        ),
-                        child: Text(
-                          l10n.permRequired,
-                          style: const TextStyle(
-                            fontSize: 11,
-                            fontWeight: FontWeight.w800,
-                            color: Colors.white,
-                          ),
-                        ),
+                    child: Text(
+                      l10n.permRequired,
+                      style: const TextStyle(
+                        fontSize: 11,
+                        fontWeight: FontWeight.w800,
+                        color: Colors.white,
                       ),
-                    ],
-                  ],
-                ),
+                    ),
+                  ),
+                Text(title,
+                    style: const TextStyle(
+                        fontSize: 16, fontWeight: FontWeight.w700)),
                 const SizedBox(height: 4),
                 Text(desc,
                     style: const TextStyle(
@@ -522,7 +519,8 @@ class _PermissionScreenState extends State<PermissionScreen>
                   Padding(
                     padding: const EdgeInsets.only(top: 6),
                     child: SizedBox(
-                      width: 150,
+                      // v2.21: narrower so the text column keeps room.
+                      width: 130,
                       child: Text(
                         '⚠️ ${l10n.permVerifyNote}',
                         textAlign: TextAlign.end,

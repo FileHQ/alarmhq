@@ -44,6 +44,8 @@ class AlarmReceiver : BroadcastReceiver() {
         val fullScreen = Intent(context, FullScreenAlarmActivity::class.java).apply {
             putExtra("alarmJson", alarmJson)
             putExtra("snoozeCount", snoozeCount)
+            // v2.21: alarmId fallback for doSnooze when the JSON lacks it.
+            putExtra("alarmId", alarmId)
             addFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TOP)
         }
         try {

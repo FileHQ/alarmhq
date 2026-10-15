@@ -8,6 +8,7 @@ import '../services/alarm_repository.dart';
 import '../services/app_settings.dart';
 import '../services/native_bridge.dart';
 import '../services/next_occurrence.dart';
+import '../services/prefs_service.dart';
 import '../theme/app_theme.dart';
 import 'alarm_edit_screen.dart';
 
@@ -82,14 +83,28 @@ class _AlarmListScreenState extends State<AlarmListScreen>
   /// the full-screen alarm where the user may have snoozed).
   Future<void> _refreshSnoozeTriggers() async {
     final map = <int, DateTime>{};
+    final nowMs = DateTime.now().millisecondsSinceEpoch;
     for (final a in widget.repo.alarms) {
       try {
         final ms = await NativeBridge.getSnoozeTrigger(a.id);
-        if (ms != null && ms > DateTime.now().millisecondsSinceEpoch) {
+        if (ms != null && ms > nowMs) {
           map[a.id] = DateTime.fromMillisecondsSinceEpoch(ms);
+          continue;
         }
       } catch (_) {
         // Best effort: a missing trigger just falls back to normal countdown.
+      }
+      // v2.21: Dart-prefs backup (mirrored by native scheduleSnooze) —
+      // belt and suspenders if the native read ever misses.
+      try {
+        final backup =
+            await PrefsService.getString('dart_snooze_trigger_${a.id}');
+        final bms = int.tryParse(backup ?? '');
+        if (bms != null && bms > nowMs) {
+          map[a.id] = DateTime.fromMillisecondsSinceEpoch(bms);
+        }
+      } catch (_) {
+        // Best effort only.
       }
     }
     if (mounted) {

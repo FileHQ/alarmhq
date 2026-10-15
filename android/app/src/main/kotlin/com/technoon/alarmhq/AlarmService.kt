@@ -33,6 +33,8 @@ class AlarmService : Service() {
         const val ACTION_PREVIEW = "com.technoon.alarmhq.PREVIEW"
         const val ACTION_STOP = "com.technoon.alarmhq.STOP"
         const val ACTION_SNOOZED = "com.technoon.alarmhq.SNOOZED"
+        // v2.21: snooze directly from the ringing notification (lock screen).
+        const val ACTION_SNOOZE = "com.technoon.alarmhq.SNOOZE"
         // v2.14: new channel ID — the old channel was created with
         // IMPORTANCE_HIGH and Android never upgrades an existing channel's
         // importance. Fresh ID forces MAX, required for full-screen intent.
@@ -96,6 +98,44 @@ class AlarmService : Service() {
                 val trigger = intent.getLongExtra("snoozeTrigger", 0L)
                 val alarmId = intent.getIntExtra("snoozeAlarmId", -1)
                 if (trigger > 0L) showSnoozedNotification(trigger, alarmId)
+            }
+            ACTION_SNOOZE -> {
+                // v2.21: snooze tapped in the ringing notification (works
+                // from the lock screen). Mirrors the full-screen UI's
+                // doSnooze() logic.
+                val alarmJson = intent.getStringExtra("alarmJson")
+                    ?: ringingAlarmJson
+                val snoozeCount = if (intent.hasExtra("snoozeCount"))
+                    intent.getIntExtra("snoozeCount", 0)
+                else ringingSnoozeCount
+                if (alarmJson != null) {
+                    val alarm = try { JSONObject(alarmJson) }
+                    catch (_: Exception) { JSONObject() }
+                    val id = alarm.optInt("id", -1)
+                    val minutes = alarm.optInt("snoozeMinutes", 10)
+                    val storedDef = if (id >= 0)
+                        AlarmScheduler.getDef(this, id) else null
+                    val max = storedDef?.optInt("maxSnoozes", -2)
+                        ?.takeIf { it != -2 }
+                        ?: alarm.optInt("maxSnoozes", 3)
+                    val canSnooze = max != 0 &&
+                        (max < 0 || snoozeCount < max)
+                    if (id >= 0 && canSnooze) {
+                        AlarmScheduler.scheduleSnooze(
+                            this, id, alarmJson, minutes, snoozeCount + 1
+                        )
+                        android.util.Log.i(
+                            "AlarmHQ",
+                            "ACTION_SNOOZE: id=$id for ${minutes}min",
+                        )
+                    } else {
+                        android.util.Log.w(
+                            "AlarmHQ",
+                            "ACTION_SNOOZE rejected: id=$id canSnooze=$canSnooze",
+                        )
+                    }
+                }
+                stopEverything()
             }
             else -> { // ACTION_START (or null action = start)
                 val alarmJson = intent?.getStringExtra("alarmJson") ?: return START_NOT_STICKY
@@ -167,10 +207,14 @@ class AlarmService : Service() {
             .setOngoing(true)
             .setCategory(Notification.CATEGORY_ALARM)
             .setPriority(Notification.PRIORITY_MAX)
+            // v2.21: explicit public visibility so the alarm always shows
+            // its content on the lock screen.
+            .setVisibility(Notification.VISIBILITY_PUBLIC)
 
         if (fullScreen != null) {
             val (alarmJson, snoozeCount) = fullScreen
             val alarm = try { JSONObject(alarmJson) } catch (_: Exception) { JSONObject() }
+            val alarmId = alarm.optInt("id", -1)
             val label = alarm.optString("label", "").ifEmpty {
                 getString(R.string.alarm)
             }
@@ -181,11 +225,37 @@ class AlarmService : Service() {
             val mm = cal.get(java.util.Calendar.MINUTE).toString().padStart(2, '0')
             val timeText = "$h12:$mm"
 
+            // v2.21: snooze button in the notification (lock screen).
+            val snoozeIntent = Intent(this, AlarmService::class.java).apply {
+                action = ACTION_SNOOZE
+                putExtra("alarmJson", alarmJson)
+                putExtra("snoozeCount", snoozeCount)
+            }
+            val snoozePending = android.app.PendingIntent.getService(
+                this, 3004, snoozeIntent,
+                android.app.PendingIntent.FLAG_UPDATE_CURRENT or
+                    android.app.PendingIntent.FLAG_IMMUTABLE,
+            )
+            // maxSnoozes: 0 = no snooze, -1 = unlimited.
+            val storedDef = if (alarmId >= 0)
+                AlarmScheduler.getDef(this, alarmId) else null
+            val maxSnoozes = storedDef?.optInt("maxSnoozes", -2)
+                ?.takeIf { it != -2 }
+                ?: alarm.optInt("maxSnoozes", 3)
+            val canSnooze = maxSnoozes != 0 &&
+                (maxSnoozes < 0 || snoozeCount < maxSnoozes)
+
             // Xiaomi-style custom layout via RemoteViews.
             val views = android.widget.RemoteViews(packageName,
                 R.layout.notif_alarm_ringing)
             views.setTextViewText(R.id.notif_time, timeText)
             views.setTextViewText(R.id.notif_info, label)
+            views.setTextViewText(R.id.notif_snooze, getString(R.string.snooze))
+            views.setOnClickPendingIntent(R.id.notif_snooze, snoozePending)
+            if (!canSnooze) {
+                views.setViewVisibility(
+                    R.id.notif_snooze, android.view.View.GONE)
+            }
             views.setTextViewText(R.id.notif_stop, getString(R.string.notif_stop))
             views.setOnClickPendingIntent(R.id.notif_stop, stopPending)
             builder.setCustomContentView(views)
@@ -197,12 +267,30 @@ class AlarmService : Service() {
             val fsIntent = Intent(this, FullScreenAlarmActivity::class.java).apply {
                 putExtra("alarmJson", alarmJson)
                 putExtra("snoozeCount", snoozeCount)
+                // v2.21: alarmId fallback for doSnooze when the JSON
+                // lacks an id.
+                putExtra("alarmId", alarmId)
             }
+            // v2.21: unique request code per alarm so a stale PendingIntent
+            // can never carry another alarm's extras.
             val fsPending = android.app.PendingIntent.getActivity(
-                this, 2001, fsIntent,
+                this, 2100 + (if (alarmId >= 0) alarmId % 1000 else 0), fsIntent,
                 android.app.PendingIntent.FLAG_UPDATE_CURRENT or
                     android.app.PendingIntent.FLAG_IMMUTABLE,
             )
+            // v2.21: diagnostic — log whether the system will honor the
+            // full-screen intent (API 34+ permission check).
+            if (Build.VERSION.SDK_INT >= 34) {
+                try {
+                    val nm = getSystemService(Context.NOTIFICATION_SERVICE)
+                        as NotificationManager
+                    android.util.Log.i(
+                        "AlarmHQ",
+                        "fire(id=$alarmId): canUseFullScreenIntent=" +
+                            "${nm.canUseFullScreenIntent()}",
+                    )
+                } catch (_: Exception) { }
+            }
             builder.setFullScreenIntent(fsPending, true)
             builder.setContentIntent(fsPending)
         } else {
@@ -270,6 +358,8 @@ class AlarmService : Service() {
         views.setTextViewText(R.id.notif_time, timeText)
         views.setTextViewText(
             R.id.notif_info, getString(R.string.snoozed_until, timeText))
+        // v2.21: no snooze-on-snooze — only Stop (cancels the snooze).
+        views.setViewVisibility(R.id.notif_snooze, android.view.View.GONE)
         views.setTextViewText(R.id.notif_stop, getString(R.string.notif_stop))
         views.setOnClickPendingIntent(R.id.notif_stop, stopPending)
 

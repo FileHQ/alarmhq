@@ -56,6 +56,11 @@ class FullScreenAlarmActivity : Activity() {
         snoozeCount = intent.getIntExtra("snoozeCount", 0)
         val alarm = try { JSONObject(alarmJson) } catch (_: Exception) { JSONObject() }
         alarmId = alarm.optInt("id", -1)
+        // v2.21: fallback — the FSI/receiver intents now also carry alarmId
+        // directly in case the JSON lacks it.
+        if (alarmId < 0) {
+            alarmId = intent.getIntExtra("alarmId", -1)
+        }
         alarmJsonStr = alarmJson
         val label = alarm.optString("label", "")
         snoozeMinutes = alarm.optInt("snoozeMinutes", 10)
@@ -337,6 +342,32 @@ class FullScreenAlarmActivity : Activity() {
     override fun dispatchTouchEvent(ev: MotionEvent): Boolean {
         gestureDetector.onTouchEvent(ev)
         return super.dispatchTouchEvent(ev)
+    }
+
+    /**
+     * v2.21: the activity is singleInstance — a second alarm firing while
+     * this screen is up re-delivers via onNewIntent, not onCreate. Without
+     * this, alarmId/alarmJsonStr/snoozeCount would be stale (wrong alarm
+     * snoozed/dismissed).
+     */
+    override fun onNewIntent(intent: Intent) {
+        super.onNewIntent(intent)
+        setIntent(intent)
+        val alarmJson = intent.getStringExtra("alarmJson") ?: "{}"
+        snoozeCount = intent.getIntExtra("snoozeCount", 0)
+        val alarm = try { JSONObject(alarmJson) } catch (_: Exception) { JSONObject() }
+        alarmId = alarm.optInt("id", -1)
+        if (alarmId < 0) {
+            alarmId = intent.getIntExtra("alarmId", -1)
+        }
+        alarmJsonStr = alarmJson
+        val storedDef = if (alarmId >= 0)
+            AlarmScheduler.getDef(this, alarmId) else null
+        maxSnoozes = storedDef?.optInt("maxSnoozes", -2)?.takeIf { it != -2 }
+            ?: alarm.optInt("maxSnoozes", 3)
+        canSnooze = maxSnoozes != 0 &&
+            (maxSnoozes < 0 || snoozeCount < maxSnoozes)
+        snoozeMinutes = alarm.optInt("snoozeMinutes", 10)
     }
 
     private fun doSnooze() {

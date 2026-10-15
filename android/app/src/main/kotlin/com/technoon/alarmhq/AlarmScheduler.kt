@@ -291,12 +291,30 @@ object AlarmScheduler {
         context: Context, id: Int, alarmJson: String,
         snoozeMinutes: Int, snoozeCount: Int
     ) {
-        if (!canScheduleExact(context)) return
+        if (!canScheduleExact(context)) {
+            android.util.Log.w(
+                "AlarmHQ",
+                "scheduleSnooze($id) FAILED: exact-alarm permission not granted",
+            )
+            return
+        }
         val trigger = System.currentTimeMillis() + snoozeMinutes * 60_000L
         // v2.4: persist the snooze trigger so the Dart UI can show an
         // accurate "Rings in Xm" countdown while snoozed.
         miscPrefs(context).edit()
             .putLong("snooze_trigger_$id", trigger).apply()
+        // v2.21: mirror into the Dart prefs file ("alarmhq_prefs") as a
+        // backup source for the card badge — belt and suspenders.
+        try {
+            context.getSharedPreferences("alarmhq_prefs", Context.MODE_PRIVATE)
+                .edit()
+                .putString("dart_snooze_trigger_$id", trigger.toString())
+                .apply()
+        } catch (_: Exception) { }
+        android.util.Log.i(
+            "AlarmHQ",
+            "scheduleSnooze($id): trigger=${java.util.Date(trigger)}",
+        )
         val am = alarmManager(context)
         val info = AlarmManager.AlarmClockInfo(trigger, showIntent(context))
         am.setAlarmClock(
@@ -333,6 +351,13 @@ object AlarmScheduler {
     /** Clear a stored snooze trigger (fired, dismissed, or cancelled). */
     fun clearSnoozeTrigger(context: Context, id: Int) {
         miscPrefs(context).edit().remove("snooze_trigger_$id").apply()
+        // v2.21: also drop the Dart-prefs backup (see scheduleSnooze).
+        try {
+            context.getSharedPreferences("alarmhq_prefs", Context.MODE_PRIVATE)
+                .edit()
+                .remove("dart_snooze_trigger_$id")
+                .apply()
+        } catch (_: Exception) { }
     }
 
     fun cancel(context: Context, id: Int) {
