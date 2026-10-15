@@ -692,6 +692,30 @@ abstract class AppLocalizations {
   /// **'Snooze length'**
   String get snoozeLength;
 
+  /// No description provided for @snoozedUntil.
+  ///
+  /// In en, this message translates to:
+  /// **'Snoozed until {time}'**
+  String snoozedUntil(Object time);
+
+  /// No description provided for @fsBannerTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Full-screen alarm is off'**
+  String get fsBannerTitle;
+
+  /// No description provided for @fsBannerBody.
+  ///
+  /// In en, this message translates to:
+  /// **'Tap to allow the alarm to pop up on the lock screen'**
+  String get fsBannerBody;
+
+  /// No description provided for @permRequired.
+  ///
+  /// In en, this message translates to:
+  /// **'Required'**
+  String get permRequired;
+
   /// No description provided for @sound.
   ///
   /// In en, this message translates to:

@@ -335,6 +335,21 @@ class AppLocalizationsEn extends AppLocalizations {
   String get snoozeLength => 'Snooze length';
 
   @override
+  String snoozedUntil(Object time) {
+    return 'Snoozed until $time';
+  }
+
+  @override
+  String get fsBannerTitle => 'Full-screen alarm is off';
+
+  @override
+  String get fsBannerBody =>
+      'Tap to allow the alarm to pop up on the lock screen';
+
+  @override
+  String get permRequired => 'Required';
+
+  @override
   String get sound => 'Sound';
 
   @override

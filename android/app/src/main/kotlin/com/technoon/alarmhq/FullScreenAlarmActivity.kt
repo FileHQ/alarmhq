@@ -164,9 +164,10 @@ class FullScreenAlarmActivity : Activity() {
         slider.addView(track)
 
         // STOP label at top INSIDE track (single line, no wrap).
+        // v2.17: smaller text + more inset so it never touches the edge.
         val stopLabel = TextView(this).apply {
             text = "■ ${getString(R.string.stop)}"
-            textSize = 13f
+            textSize = 12f
             typeface = Typeface.create(Typeface.DEFAULT, Typeface.BOLD)
             setTextColor(Color.WHITE)
             gravity = Gravity.CENTER
@@ -175,7 +176,7 @@ class FullScreenAlarmActivity : Activity() {
             layoutParams = android.widget.FrameLayout.LayoutParams(
                 trackWidthPx, LinearLayout.LayoutParams.WRAP_CONTENT,
                 Gravity.TOP or Gravity.CENTER_HORIZONTAL,
-            ).apply { topMargin = dp(14) }
+            ).apply { topMargin = dp(18) }
         }
         slider.addView(stopLabel)
         val stopArrow = TextView(this).apply {
@@ -186,15 +187,16 @@ class FullScreenAlarmActivity : Activity() {
             layoutParams = android.widget.FrameLayout.LayoutParams(
                 trackWidthPx, LinearLayout.LayoutParams.WRAP_CONTENT,
                 Gravity.TOP or Gravity.CENTER_HORIZONTAL,
-            ).apply { topMargin = dp(36) }
+            ).apply { topMargin = dp(40) }
         }
         slider.addView(stopArrow)
 
         // SNOOZE label at bottom INSIDE track (single line, no wrap).
         // Only visible when snoozing is allowed.
+        // v2.17: smaller text + more inset — the ⏰ emoji made it overflow.
         val snoozeLabel = TextView(this).apply {
             text = "⏰ ${getString(R.string.snooze).uppercase()}"
-            textSize = 13f
+            textSize = 11f
             typeface = Typeface.create(Typeface.DEFAULT, Typeface.BOLD)
             setTextColor(Color.WHITE)
             gravity = Gravity.CENTER
@@ -203,7 +205,7 @@ class FullScreenAlarmActivity : Activity() {
             layoutParams = android.widget.FrameLayout.LayoutParams(
                 trackWidthPx, LinearLayout.LayoutParams.WRAP_CONTENT,
                 Gravity.BOTTOM or Gravity.CENTER_HORIZONTAL,
-            ).apply { bottomMargin = dp(14) }
+            ).apply { bottomMargin = dp(18) }
             visibility = if (canSnooze) android.view.View.VISIBLE
             else android.view.View.GONE
         }
@@ -216,7 +218,7 @@ class FullScreenAlarmActivity : Activity() {
             layoutParams = android.widget.FrameLayout.LayoutParams(
                 trackWidthPx, LinearLayout.LayoutParams.WRAP_CONTENT,
                 Gravity.BOTTOM or Gravity.CENTER_HORIZONTAL,
-            ).apply { bottomMargin = dp(36) }
+            ).apply { bottomMargin = dp(40) }
             visibility = if (canSnooze) android.view.View.VISIBLE
             else android.view.View.GONE
         }

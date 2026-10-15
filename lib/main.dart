@@ -63,6 +63,18 @@ class _AlarmHQAppState extends State<AlarmHQApp>
     await _settings.load();
     await _repo.load();
     _onboarded = await PermissionScreen.isOnboarded();
+    // v2.17: users who onboarded before v2.11 never saw the full-screen
+    // permission card (Android 14+). Show the permission screen once more
+    // so they can't miss it — this is the lock-screen fix.
+    if (_onboarded) {
+      try {
+        final needsFs = await NativeBridge.needsFullScreenIntentCard();
+        final fsShown = await PermissionScreen.isFsPromptShown();
+        if (needsFs && !fsShown) _onboarded = false;
+      } catch (_) {
+        // Best effort only.
+      }
+    }
     _settings.addListener(_onSettingsChanged);
     // If exact-alarm permission was granted while we were away, make sure
     // every enabled alarm is actually scheduled natively.

@@ -332,6 +332,20 @@ class AppLocalizationsUr extends AppLocalizations {
   String get snoozeLength => 'اسنوز کی مدت';
 
   @override
+  String snoozedUntil(Object time) {
+    return '$time تک اسنوز';
+  }
+
+  @override
+  String get fsBannerTitle => 'فل اسکرین الارم بند ہے';
+
+  @override
+  String get fsBannerBody => 'لاک اسکرین پر الارم دکھانے کے لیے یہاں دبائیں';
+
+  @override
+  String get permRequired => 'ضروری';
+
+  @override
   String get sound => 'آواز';
 
   @override

@@ -1,19 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!--
-  Xiaomi-style slim alarm notification: compact time on the left, info line
-  below it, and a round blue Stop button on the right.
+  Slim alarm notification: compact single row — time + info on the left,
+  round blue Stop button on the right. Styled like the system clock app's
+  "Upcoming alarm" notification (v2.17: slimmed per user feedback).
   Used via RemoteViews from AlarmService while the alarm is ringing.
-  v2.14: slim/compact — reduced time size and padding per user feedback.
 -->
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="horizontal"
     android:gravity="center_vertical"
-    android:paddingStart="16dp"
-    android:paddingEnd="14dp"
-    android:paddingTop="10dp"
-    android:paddingBottom="10dp"
+    android:paddingStart="12dp"
+    android:paddingEnd="10dp"
+    android:paddingTop="6dp"
+    android:paddingBottom="6dp"
     android:background="#23272E">
 
     <LinearLayout
@@ -27,7 +27,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="09:40"
-            android:textSize="32sp"
+            android:textSize="24sp"
             android:textStyle="bold"
             android:textColor="#FFFFFF"
             android:maxLines="1"
@@ -37,9 +37,8 @@
             android:id="@+id/notif_info"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="2dp"
             android:text="Alarm"
-            android:textSize="13sp"
+            android:textSize="12sp"
             android:textColor="#B0B7C3"
             android:maxLines="1"
             android:ellipsize="end"
@@ -48,11 +47,11 @@
 
     <Button
         android:id="@+id/notif_stop"
-        android:layout_width="56dp"
-        android:layout_height="56dp"
-        android:layout_marginStart="12dp"
+        android:layout_width="44dp"
+        android:layout_height="44dp"
+        android:layout_marginStart="8dp"
         android:text="Stop"
-        android:textSize="12sp"
+        android:textSize="10sp"
         android:textStyle="bold"
         android:textColor="#FFFFFF"
         android:maxLines="1"

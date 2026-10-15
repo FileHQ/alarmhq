@@ -33,11 +33,16 @@ class _AlarmListScreenState extends State<AlarmListScreen>
   /// set from the full-screen activity or in-app dialog).
   Timer? _refreshTimer;
 
+  /// v2.17: true when the full-screen-intent permission is needed but not
+  /// granted — shows a prominent banner that opens the settings page.
+  bool _showFsBanner = false;
+
   @override
   void initState() {
     super.initState();
     WidgetsBinding.instance.addObserver(this);
     _refreshSnoozeTriggers();
+    _checkFsPermission();
     // Refresh every 30s so "Rings in Xm" never goes stale.
     _refreshTimer =
         Timer.periodic(const Duration(seconds: 30), (_) {
@@ -54,7 +59,23 @@ class _AlarmListScreenState extends State<AlarmListScreen>
 
   @override
   void didChangeAppLifecycleState(AppLifecycleState state) {
-    if (state == AppLifecycleState.resumed) _refreshSnoozeTriggers();
+    if (state == AppLifecycleState.resumed) {
+      _refreshSnoozeTriggers();
+      _checkFsPermission();
+    }
+  }
+
+  /// v2.17: show the full-screen-permission banner when it's needed
+  /// (Android 14+) but not granted.
+  Future<void> _checkFsPermission() async {
+    try {
+      final needs = await NativeBridge.needsFullScreenIntentCard();
+      final granted =
+          needs ? await NativeBridge.canUseFullScreenIntent() : true;
+      if (mounted) setState(() => _showFsBanner = needs && !granted);
+    } catch (_) {
+      // Best effort only.
+    }
   }
 
   /// Query native for pending snooze triggers (e.g. after returning from
@@ -248,33 +269,101 @@ class _AlarmListScreenState extends State<AlarmListScreen>
           ],
         ),
       ),
-      body: alarms.isEmpty
-          ? Center(
-              child: Padding(
-                padding: const EdgeInsets.all(32),
-                child: Column(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    const Text('⏰', style: TextStyle(fontSize: 64)),
-                    const SizedBox(height: 16),
-                    Text(l10n.noAlarms,
-                        style: Theme.of(context).textTheme.titleLarge),
-                    const SizedBox(height: 8),
-                    Text(l10n.noAlarmsHint,
-                        textAlign: TextAlign.center,
-                        style: Theme.of(context).textTheme.bodyMedium),
-                  ],
+      body: Column(
+        children: [
+          // v2.17: prominent banner when the full-screen permission is off —
+          // without it the alarm can't pop up on the lock screen.
+          if (_showFsBanner)
+            Padding(
+              padding:
+                  const EdgeInsets.fromLTRB(14, 8, 14, 0),
+              child: InkWell(
+                borderRadius: BorderRadius.circular(14),
+                onTap: () async {
+                  await NativeBridge.openFullScreenIntentSettings();
+                },
+                child: Container(
+                  padding: const EdgeInsets.symmetric(
+                      horizontal: 14, vertical: 12),
+                  decoration: BoxDecoration(
+                    color: const Color(0xFF3A2222),
+                    borderRadius: BorderRadius.circular(14),
+                    border: Border.all(
+                        color: Colors.redAccent, width: 2),
+                  ),
+                  child: Row(
+                    children: [
+                      const Text('⚠️',
+                          style: TextStyle(fontSize: 26)),
+                      const SizedBox(width: 10),
+                      Expanded(
+                        child: Column(
+                          crossAxisAlignment:
+                              CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              l10n.fsBannerTitle,
+                              style: const TextStyle(
+                                fontSize: 15,
+                                fontWeight: FontWeight.w800,
+                                color: Colors.white,
+                              ),
+                            ),
+                            const SizedBox(height: 2),
+                            Text(
+                              l10n.fsBannerBody,
+                              style: const TextStyle(
+                                fontSize: 12,
+                                color: Colors.white70,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                      const Icon(Icons.chevron_right,
+                          color: Colors.redAccent),
+                    ],
+                  ),
                 ),
               ),
-            )
-          : ListView.builder(
-              padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 8),
-              itemCount: alarms.length,
-              itemBuilder: (c, i) {
-                final a = alarms[i];
-                return _alarmCard(context, l10n, a);
-              },
             ),
+          Expanded(
+            child: alarms.isEmpty
+                ? Center(
+                    child: Padding(
+                      padding: const EdgeInsets.all(32),
+                      child: Column(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          const Text('⏰',
+                              style: TextStyle(fontSize: 64)),
+                          const SizedBox(height: 16),
+                          Text(l10n.noAlarms,
+                              style: Theme.of(context)
+                                  .textTheme
+                                  .titleLarge),
+                          const SizedBox(height: 8),
+                          Text(l10n.noAlarmsHint,
+                              textAlign: TextAlign.center,
+                              style: Theme.of(context)
+                                  .textTheme
+                                  .bodyMedium),
+                        ],
+                      ),
+                    ),
+                  )
+                : ListView.builder(
+                    padding: const EdgeInsets.symmetric(
+                        horizontal: 14, vertical: 8),
+                    itemCount: alarms.length,
+                    itemBuilder: (c, i) {
+                      final a = alarms[i];
+                      return _alarmCard(context, l10n, a);
+                    },
+                  ),
+          ),
+        ],
+      ),
       floatingActionButton: FloatingActionButton(
         onPressed: () => _openEditor(),
         tooltip: l10n.addAlarm,
@@ -290,6 +379,9 @@ class _AlarmListScreenState extends State<AlarmListScreen>
     final (time, ampm) = _timeParts(a.hour, a.minute);
     final countdown = _countdownText(l10n, a);
     final dimmed = !a.enabled;
+    // v2.17: when snoozed, show it prominently — the user couldn't tell
+    // the alarm was snoozed from the card.
+    final snoozedUntil = _snoozeTriggers[a.id];
     return Opacity(
       opacity: dimmed ? 0.55 : 1.0,
       child: Container(
@@ -382,6 +474,31 @@ class _AlarmListScreenState extends State<AlarmListScreen>
                             fontSize: 13,
                             fontWeight: FontWeight.w700,
                             color: AppTheme.emerald,
+                          ),
+                        ),
+                      ],
+                      // v2.17: prominent snoozed indicator.
+                      if (snoozedUntil != null && a.enabled) ...[
+                        const SizedBox(height: 8),
+                        Container(
+                          padding: const EdgeInsets.symmetric(
+                              horizontal: 12, vertical: 6),
+                          decoration: BoxDecoration(
+                            color:
+                                AppTheme.emerald.withValues(alpha: 0.18),
+                            borderRadius: BorderRadius.circular(10),
+                            border: Border.all(
+                              color:
+                                  AppTheme.emerald.withValues(alpha: 0.6),
+                            ),
+                          ),
+                          child: Text(
+                            '⏰ ${l10n.snoozedUntil(_timeText12(snoozedUntil.hour, snoozedUntil.minute))}',
+                            style: const TextStyle(
+                              fontSize: 13,
+                              fontWeight: FontWeight.w800,
+                              color: AppTheme.emerald,
+                            ),
                           ),
                         ),
                       ],

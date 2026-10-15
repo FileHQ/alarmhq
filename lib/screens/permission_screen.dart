@@ -18,11 +18,22 @@ class PermissionScreen extends StatefulWidget {
 
   static const String _flagKey = 'permissions_onboarded';
 
+  /// v2.17: the full-screen-intent card was added in v2.11. Users who
+  /// onboarded before that never saw it, so re-show the permission
+  /// screen once for them on Android 14+.
+  static const String _fsFlagKey = 'permissions_fs_prompt_shown';
+
   static Future<bool> isOnboarded() async =>
       await PrefsService.getString(_flagKey) == '1';
 
   static Future<void> markOnboarded() =>
       PrefsService.putString(_flagKey, '1');
+
+  static Future<bool> isFsPromptShown() async =>
+      await PrefsService.getString(_fsFlagKey) == '1';
+
+  static Future<void> markFsPromptShown() =>
+      PrefsService.putString(_fsFlagKey, '1');
 
   @override
   State<PermissionScreen> createState() => _PermissionScreenState();
@@ -133,6 +144,9 @@ class _PermissionScreenState extends State<PermissionScreen>
 
   Future<void> _finish() async {
     await PermissionScreen.markOnboarded();
+    // v2.17: if the full-screen card was part of this onboarding round,
+    // don't ask again on later launches.
+    if (_showFsCard) await PermissionScreen.markFsPromptShown();
     widget.onDone();
   }
 
@@ -207,6 +221,7 @@ class _PermissionScreenState extends State<PermissionScreen>
             // v2.11 (critical): Android 14+ requires the user to grant
             // USE_FULL_SCREEN_INTENT or the alarm never pops up on the
             // lock screen. Only shown where needed.
+            // v2.17: highlighted — impossible to miss.
             if (_showFsCard)
               _permCard(
                 icon: '🔔',
@@ -215,6 +230,7 @@ class _PermissionScreenState extends State<PermissionScreen>
                 granted: _fsIntent,
                 onGrant: NativeBridge.openFullScreenIntentSettings,
                 l10n: l10n,
+                highlight: _fsIntent != true,
               ),
             // v2.4: autostart — Xiaomi/Oppo/Vivo/Huawei kill background
             // alarms without it. Cannot be checked programmatically, so
@@ -277,18 +293,27 @@ class _PermissionScreenState extends State<PermissionScreen>
     required bool? granted,
     required Future<void> Function() onGrant,
     required AppLocalizations l10n,
+    // v2.17: when true and not granted, the card gets a red alert border
+    // and a "Required" badge so it can't be missed.
+    bool highlight = false,
   }) {
     final isGranted = granted == true;
+    final alert = highlight && !isGranted;
     return Container(
       margin: const EdgeInsets.only(bottom: 12),
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
-        color: AppTheme.charcoalCard,
+        color: alert
+            ? const Color(0xFF3A2222)
+            : AppTheme.charcoalCard,
         borderRadius: BorderRadius.circular(16),
         border: Border.all(
-          color: isGranted
-              ? AppTheme.emerald.withValues(alpha: 0.6)
-              : Colors.white12,
+          color: alert
+              ? Colors.redAccent
+              : isGranted
+                  ? AppTheme.emerald.withValues(alpha: 0.6)
+                  : Colors.white12,
+          width: alert ? 2 : 1,
         ),
       ),
       child: Row(
@@ -299,9 +324,35 @@ class _PermissionScreenState extends State<PermissionScreen>
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text(title,
-                    style: const TextStyle(
-                        fontSize: 16, fontWeight: FontWeight.w700)),
+                Row(
+                  children: [
+                    Flexible(
+                      child: Text(title,
+                          style: const TextStyle(
+                              fontSize: 16, fontWeight: FontWeight.w700)),
+                    ),
+                    // v2.17: "Required" badge for critical permissions.
+                    if (alert) ...[
+                      const SizedBox(width: 8),
+                      Container(
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 8, vertical: 2),
+                        decoration: BoxDecoration(
+                          color: Colors.redAccent,
+                          borderRadius: BorderRadius.circular(8),
+                        ),
+                        child: Text(
+                          l10n.permRequired,
+                          style: const TextStyle(
+                            fontSize: 11,
+                            fontWeight: FontWeight.w800,
+                            color: Colors.white,
+                          ),
+                        ),
+                      ),
+                    ],
+                  ],
+                ),
                 const SizedBox(height: 4),
                 Text(desc,
                     style: const TextStyle(
