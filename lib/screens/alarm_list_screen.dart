@@ -36,6 +36,12 @@ class _AlarmListScreenState extends State<AlarmListScreen>
   /// set from the full-screen activity or in-app dialog).
   Timer? _refreshTimer;
 
+  /// v2.24: last time the app came back to the foreground. A snooze issued
+  /// from the native full-screen activity lands right before a resume, so
+  /// if a refresh right after a resume finds no triggers, retry once —
+  /// the native persist may still have been in flight.
+  DateTime? _lastResumedAt;
+
   /// v2.17: true when the full-screen-intent permission is needed but not
   /// granted — shows a prominent banner that opens the settings page.
   bool _showFsBanner = false;
@@ -71,6 +77,7 @@ class _AlarmListScreenState extends State<AlarmListScreen>
   @override
   void didChangeAppLifecycleState(AppLifecycleState state) {
     if (state == AppLifecycleState.resumed) {
+      _lastResumedAt = DateTime.now();
       _refreshSnoozeTriggers();
       _checkFsPermission();
     }
@@ -103,7 +110,9 @@ class _AlarmListScreenState extends State<AlarmListScreen>
 
   /// Query native for pending snooze triggers (e.g. after returning from
   /// the full-screen alarm where the user may have snoozed).
-  Future<void> _refreshSnoozeTriggers() async {
+  /// v2.24: if no triggers are found within 5s of an app resume, retry
+  /// once after 500ms — the native persist may still be in flight.
+  Future<void> _refreshSnoozeTriggers({bool retried = false}) async {
     final map = <int, DateTime>{};
     final counts = <int, int>{};
     final nowMs = DateTime.now().millisecondsSinceEpoch;
@@ -147,6 +156,16 @@ class _AlarmListScreenState extends State<AlarmListScreen>
           ..clear()
           ..addAll(counts);
       });
+    }
+    // v2.24: one retry shortly after a resume, when a native snooze write
+    // may still be in flight.
+    if (!retried && map.isEmpty && _lastResumedAt != null) {
+      final sinceResume =
+          DateTime.now().difference(_lastResumedAt!).inSeconds;
+      if (sinceResume < 5) {
+        await Future.delayed(const Duration(milliseconds: 500));
+        if (mounted) await _refreshSnoozeTriggers(retried: true);
+      }
     }
   }
   Future<void> _openEditor({AlarmModel? existing}) async {

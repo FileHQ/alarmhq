@@ -299,21 +299,25 @@ object AlarmScheduler {
             return
         }
         val trigger = System.currentTimeMillis() + snoozeMinutes * 60_000L
+        // v2.24: persist SYNCHRONOUSLY with commit() — the Dart UI reads
+        // these via getSnoozeTrigger immediately after snoozing, and
+        // apply() is asynchronous, so the badge could miss the write.
         // v2.4: persist the snooze trigger so the Dart UI can show an
         // accurate "Rings in Xm" countdown while snoozed.
-        miscPrefs(context).edit()
-            .putLong("snooze_trigger_$id", trigger).apply()
         // v2.23: also persist the snooze count so the card can show
         // "Snoozed until X (N left)".
         miscPrefs(context).edit()
-            .putInt("snooze_count_$id", snoozeCount).apply()
+            .putLong("snooze_trigger_$id", trigger)
+            .putInt("snooze_count_$id", snoozeCount)
+            .commit()
         // v2.21: mirror into the Dart prefs file ("alarmhq_prefs") as a
         // backup source for the card badge — belt and suspenders.
+        // v2.24: synchronous too, same reason as above.
         try {
             context.getSharedPreferences("alarmhq_prefs", Context.MODE_PRIVATE)
                 .edit()
                 .putString("dart_snooze_trigger_$id", trigger.toString())
-                .apply()
+                .commit()
         } catch (_: Exception) { }
         android.util.Log.i(
             "AlarmHQ",
