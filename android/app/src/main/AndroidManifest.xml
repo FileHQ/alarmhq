@@ -41,7 +41,7 @@
         <!-- Full-screen alarm UI (shown over the lock screen) -->
         <activity
             android:name=".FullScreenAlarmActivity"
-            android:exported="false"
+            android:exported="true"
             android:showWhenLocked="true"
             android:turnScreenOn="true"
             android:excludeFromRecents="true"

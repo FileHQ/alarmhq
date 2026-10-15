@@ -78,15 +78,15 @@ void main() {
       expect(NextOccurrence.nextTrigger(a, DateTime(2026, 10, 14)), isNull);
     });
 
-    test('v2.15: time 60s in the past uses 120s grace (rings today)', () {
+    test('v2.16: time 60s in the past rolls to next week (no grace)', () {
       final a = base(mode: AlarmRepeatMode.weekly, weekDays: [3]); // Wednesday
-      // Alarm for 7:00, now is 7:01 — within grace, should ring today.
+      // Alarm for 7:00, now is 7:01 — no grace, so next week.
       final t = NextOccurrence.nextTrigger(
           a, DateTime(2026, 10, 14, 7, 1, 0));
-      expect(t, DateTime(2026, 10, 14, 7, 0));
+      expect(t, DateTime(2026, 10, 21, 7, 0));
     });
 
-    test('v2.15: time 5min in the past rolls to next week', () {
+    test('v2.16: time 5min in the past rolls to next week', () {
       final a = base(mode: AlarmRepeatMode.weekly, weekDays: [3]); // Wednesday
       // Alarm for 7:00, now is 7:05 — beyond grace, next week.
       final t = NextOccurrence.nextTrigger(
@@ -109,19 +109,19 @@ void main() {
       );
     });
 
-    test('v2.15: one-time 60s in the past uses 120s grace', () {
+    test('v2.16: one-time 60s in the past returns null (no grace)', () {
       final a = base(
         mode: AlarmRepeatMode.once,
         onceDate: DateTime(2026, 10, 14),
         hour: 7,
         minute: 0,
       );
-      // Alarm for 7:00 today, now is 7:01 — within grace, should ring.
+      // Alarm for 7:00 today, now is 7:01 — no grace, so null.
       final t = NextOccurrence.nextTrigger(a, DateTime(2026, 10, 14, 7, 1, 0));
-      expect(t, DateTime(2026, 10, 14, 7, 0));
+      expect(t, isNull);
     });
 
-    test('v2.15: one-time 5min in the past returns null', () {
+    test('v2.16: one-time 5min in the past returns null', () {
       final a = base(
         mode: AlarmRepeatMode.once,
         onceDate: DateTime(2026, 10, 14),

@@ -11,8 +11,7 @@ class NextOccurrence {
     final t = _nextTriggerInner(alarm, now);
     final skip = alarm.skipNextDate;
     // "Skip next only": if the computed trigger is the skipped one,
-    // find the following occurrence instead. Use zero grace here so the
-    // just-skipped time (1s in the past) isn't re-selected by the grace.
+    // find the following occurrence instead.
     if (t != null &&
         skip != null &&
         t.year == skip.year &&
@@ -23,22 +22,17 @@ class NextOccurrence {
       return _nextTriggerInner(
         alarm,
         t.add(const Duration(seconds: 1)),
-        grace: Duration.zero,
       );
     }
     return t;
   }
 
-  static DateTime? _nextTriggerInner(
-    AlarmModel alarm,
-    DateTime now, {
-    Duration grace = const Duration(seconds: 120),
-  }) {
+  static DateTime? _nextTriggerInner(AlarmModel alarm, DateTime now) {
     switch (alarm.mode) {
       case AlarmRepeatMode.weekly:
-        return _nextWeekly(alarm, now, grace);
+        return _nextWeekly(alarm, now);
       case AlarmRepeatMode.once:
-        return _nextOnce(alarm, now, grace);
+        return _nextOnce(alarm, now);
       case AlarmRepeatMode.interval:
         return _nextInterval(alarm, now);
       case AlarmRepeatMode.specificDates:
@@ -52,20 +46,12 @@ class NextOccurrence {
   static List<DateTime> nextTriggers(AlarmModel alarm, DateTime now, int n) {
     final out = <DateTime>[];
     var cursor = now;
-    var first = true;
     for (var i = 0; i < n; i++) {
-      // Only the first lookup gets the grace period; subsequent ones use
-      // zero grace so the cursor (1s past the last trigger) advances.
-      final t = _nextTriggerInner(
-        alarm,
-        cursor,
-        grace: first ? const Duration(seconds: 120) : Duration.zero,
-      );
+      final t = _nextTriggerInner(alarm, cursor);
       if (t == null) break;
       out.add(t);
       // Move just past this trigger so the next search finds the following one.
       cursor = t.add(const Duration(seconds: 1));
-      first = false;
     }
     return out;
   }
@@ -73,18 +59,15 @@ class NextOccurrence {
   static DateTime _at(DateTime day, int hour, int minute) =>
       DateTime(day.year, day.month, day.day, hour, minute);
 
-  static DateTime? _nextWeekly(AlarmModel alarm, DateTime now, Duration grace) {
+  static DateTime? _nextWeekly(AlarmModel alarm, DateTime now) {
     if (alarm.weekDays.isEmpty) return null;
     DateTime? best;
     final today = DateTime(now.year, now.month, now.day);
-    // v2.15: grace period — if the user set the alarm for "right now", the
-    // candidate may be a few seconds in the past by the time they save.
-    final cutoff = now.subtract(grace);
     for (final wd in alarm.weekDays) {
       // wd: 1=Mon..7=Sun, matching DateTime.weekday.
       var delta = (wd - today.weekday) % 7;
       var candidate = _at(today.add(Duration(days: delta)), alarm.hour, alarm.minute);
-      if (candidate.isBefore(cutoff)) {
+      if (candidate.isBefore(now)) {
         candidate = candidate.add(const Duration(days: 7));
       }
       if (best == null || candidate.isBefore(best)) best = candidate;
@@ -92,12 +75,11 @@ class NextOccurrence {
     return best;
   }
 
-  static DateTime? _nextOnce(AlarmModel alarm, DateTime now, Duration grace) {
+  static DateTime? _nextOnce(AlarmModel alarm, DateTime now) {
     final d = alarm.onceDate;
     if (d == null) return null;
     final t = _at(d, alarm.hour, alarm.minute);
-    // v2.15: grace period — treat a just-passed time as "now", not "never".
-    return t.isBefore(now.subtract(grace)) ? null : t;
+    return t.isBefore(now) ? null : t;
   }
 
   static DateTime? _nextSpecificDates(AlarmModel alarm, DateTime now) {

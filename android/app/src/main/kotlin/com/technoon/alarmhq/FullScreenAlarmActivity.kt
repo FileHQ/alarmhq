@@ -23,9 +23,9 @@ import java.util.Locale
 import kotlin.math.abs
 
 /**
- * Full-screen UI shown when an alarm fires — Realme/Samsung style:
- * huge time, date + weekday + AM/PM, label, big Snooze / Dismiss buttons.
- * Swipe UP = snooze, swipe DOWN = dismiss. Visible over the lock screen.
+ * Full-screen UI shown when an alarm fires: huge time, date + weekday + AM/PM,
+ * label, and the clock-slider (drag ⏰ UP = stop, drag ⏰ DOWN = snooze).
+ * Visible over the lock screen.
  */
 class FullScreenAlarmActivity : Activity() {
 
@@ -371,6 +371,7 @@ class FullScreenAlarmActivity : Activity() {
 
     @Deprecated("Back button should not dismiss the alarm screen")
     override fun onBackPressed() {
-        // Intentionally empty: the user must swipe or tap Dismiss/Snooze.
+        // Intentionally empty: the user must drag the clock knob (up = stop,
+        // down = snooze).
     }
 }

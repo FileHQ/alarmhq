@@ -60,27 +60,23 @@ object AlarmScheduler {
         val minute = alarm.optInt("minute", 0)
         val t = nextTriggerMillisInner(alarm, hour, minute, nowMillis)
         // "Skip next only": if the computed trigger matches skipNextDate,
-        // find the following one instead. Use zero grace so the just-skipped
-        // time (1s in the past) isn't re-selected by the grace period.
+        // find the following one instead.
         val skipStr = alarm.optString("skipNextDate", null)
         if (t != null && skipStr != null) {
             val skipCal = parseDateTime(skipStr)
             if (skipCal != null && t == skipCal.timeInMillis) {
-                return nextTriggerMillisInner(
-                    alarm, hour, minute, t + 1000, graceMillis = 0L
-                )
+                return nextTriggerMillisInner(alarm, hour, minute, t + 1000)
             }
         }
         return t
     }
 
     private fun nextTriggerMillisInner(
-        alarm: JSONObject, hour: Int, minute: Int, nowMillis: Long,
-        graceMillis: Long = 120_000L
+        alarm: JSONObject, hour: Int, minute: Int, nowMillis: Long
     ): Long? {
         return when (alarm.optString("mode", "weekly")) {
-            "weekly" -> nextWeekly(alarm, hour, minute, nowMillis, graceMillis)
-            "once" -> nextOnce(alarm, hour, minute, nowMillis, graceMillis)
+            "weekly" -> nextWeekly(alarm, hour, minute, nowMillis)
+            "once" -> nextOnce(alarm, hour, minute, nowMillis)
             "interval" -> nextInterval(alarm, hour, minute, nowMillis)
             "specificDates" -> nextSpecificDates(alarm, hour, minute, nowMillis)
             "cycle" -> nextCycle(alarm, hour, minute, nowMillis)
@@ -101,17 +97,12 @@ object AlarmScheduler {
     private fun dartWdToCalendar(wd: Int): Int = (wd % 7) + 1
 
     private fun nextWeekly(
-        alarm: JSONObject, hour: Int, minute: Int, nowMillis: Long,
-        graceMillis: Long = 120_000L
+        alarm: JSONObject, hour: Int, minute: Int, nowMillis: Long
     ): Long? {
         val days = alarm.optJSONArray("weekDays") ?: JSONArray()
         if (days.length() == 0) return null
         var best: Long? = null
         val today = Calendar.getInstance()
-        // v2.15: grace period — if the user set the alarm for "right now",
-        // the candidate may be a few seconds in the past by the time it
-        // is saved.
-        val cutoff = nowMillis - graceMillis
         for (i in 0 until days.length()) {
             val target = dartWdToCalendar(days.optInt(i, 1))
             val current = today.get(Calendar.DAY_OF_WEEK)
@@ -119,21 +110,19 @@ object AlarmScheduler {
             val c = today.clone() as Calendar
             c.add(Calendar.DAY_OF_YEAR, delta)
             var cand = atMillis(c, hour, minute)
-            if (cand < cutoff) cand += 7L * 24 * 60 * 60 * 1000
+            if (cand < nowMillis) cand += 7L * 24 * 60 * 60 * 1000
             if (best == null || cand < best) best = cand
         }
         return best
     }
 
     private fun nextOnce(
-        alarm: JSONObject, hour: Int, minute: Int, nowMillis: Long,
-        graceMillis: Long = 120_000L
+        alarm: JSONObject, hour: Int, minute: Int, nowMillis: Long
     ): Long? {
         val ds = alarm.optString("onceDate", null) ?: return null
         val c = parseDate(ds) ?: return null
         val t = atMillis(c, hour, minute)
-        // v2.15: grace period — treat a just-passed time as "now", not "never".
-        return if (t < nowMillis - graceMillis) null else t
+        return if (t < nowMillis) null else t
     }
 
     private fun nextInterval(
@@ -277,18 +266,16 @@ object AlarmScheduler {
         }
         storeDef(context, id, alarmJson)
         val am = alarmManager(context)
-        // v2.15: never arm a trigger in the past — setAlarmClock with a
-        // past time may fire immediately or be dropped depending on the
-        // OEM. Clamp to now+2s so a "right now" alarm always fires.
-        var trigger = triggerAtMillis
+        // v2.16: ring exactly on time — no clamping. The next-trigger math
+        // never returns a past time (weekly rolls forward, once returns null),
+        // and the user asked for no grace/drift around the alarm time.
+        val trigger = triggerAtMillis
         val now = System.currentTimeMillis()
         if (trigger < now) {
             android.util.Log.w(
                 "AlarmHQ",
-                "schedule($id): trigger ${java.util.Date(trigger)} was in " +
-                    "the past, clamping to now",
+                "schedule($id): trigger ${java.util.Date(trigger)} was in the past",
             )
-            trigger = now + 2000
         }
         val info = AlarmManager.AlarmClockInfo(trigger, showIntent(context))
         am.setAlarmClock(info, fireIntent(context, id, alarmJson, 0, false))
