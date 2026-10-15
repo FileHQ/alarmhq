@@ -38,12 +38,20 @@ class _AlarmListScreenState extends State<AlarmListScreen>
   /// granted — shows a prominent banner that opens the settings page.
   bool _showFsBanner = false;
 
+  /// v2.22: true on ColorOS/Realme devices — shows a persistent banner
+  /// reminding the user to enable "Show on Lock screen" in
+  /// Settings → Apps → AlarmHQ. Cannot be checked via API, so it stays
+  /// visible on ColorOS (the toggle is off by default and the app can
+  /// never turn it on itself).
+  bool _showLockBanner = false;
+
   @override
   void initState() {
     super.initState();
     WidgetsBinding.instance.addObserver(this);
     _refreshSnoozeTriggers();
     _checkFsPermission();
+    _checkColorOs();
     // Refresh every 30s so "Rings in Xm" never goes stale.
     _refreshTimer =
         Timer.periodic(const Duration(seconds: 30), (_) {
@@ -74,6 +82,18 @@ class _AlarmListScreenState extends State<AlarmListScreen>
       final granted =
           needs ? await NativeBridge.canUseFullScreenIntent() : true;
       if (mounted) setState(() => _showFsBanner = needs && !granted);
+    } catch (_) {
+      // Best effort only.
+    }
+  }
+
+  /// v2.22: ColorOS devices need the "Show on Lock screen" toggle flipped
+  /// manually in Settings → Apps → AlarmHQ. The app cannot check or set
+  /// it, so the banner stays up on ColorOS as a persistent reminder.
+  Future<void> _checkColorOs() async {
+    try {
+      final isColorOs = await NativeBridge.isColorOsDevice();
+      if (mounted) setState(() => _showLockBanner = isColorOs);
     } catch (_) {
       // Best effort only.
     }
@@ -288,8 +308,7 @@ class _AlarmListScreenState extends State<AlarmListScreen>
         children: [
           // v2.17: prominent banner when the full-screen permission is off —
           // without it the alarm can't pop up on the lock screen.
-          if (_showFsBanner)
-            Padding(
+          if (_showFsBanner)            Padding(
               padding:
                   const EdgeInsets.fromLTRB(14, 8, 14, 0),
               child: InkWell(
@@ -327,6 +346,63 @@ class _AlarmListScreenState extends State<AlarmListScreen>
                             const SizedBox(height: 2),
                             Text(
                               l10n.fsBannerBody,
+                              style: const TextStyle(
+                                fontSize: 12,
+                                color: Colors.white70,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                      const Icon(Icons.chevron_right,
+                          color: Colors.redAccent),
+                    ],
+                  ),
+                ),
+              ),
+            ),
+          // v2.22: persistent ColorOS reminder — "Show on Lock screen"
+          // lives in Settings → Apps → AlarmHQ and is OFF by default.
+          // The app can't check or flip it, so the banner stays up.
+          if (_showLockBanner)
+            Padding(
+              padding:
+                  const EdgeInsets.fromLTRB(14, 8, 14, 0),
+              child: InkWell(
+                borderRadius: BorderRadius.circular(14),
+                onTap: () async {
+                  await NativeBridge.openAppDetailsSettings();
+                },
+                child: Container(
+                  padding: const EdgeInsets.symmetric(
+                      horizontal: 14, vertical: 12),
+                  decoration: BoxDecoration(
+                    color: const Color(0xFF3A2222),
+                    borderRadius: BorderRadius.circular(14),
+                    border: Border.all(
+                        color: Colors.redAccent, width: 2),
+                  ),
+                  child: Row(
+                    children: [
+                      const Text('⚠️',
+                          style: TextStyle(fontSize: 26)),
+                      const SizedBox(width: 10),
+                      Expanded(
+                        child: Column(
+                          crossAxisAlignment:
+                              CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              l10n.lockBannerTitle,
+                              style: const TextStyle(
+                                fontSize: 15,
+                                fontWeight: FontWeight.w800,
+                                color: Colors.white,
+                              ),
+                            ),
+                            const SizedBox(height: 2),
+                            Text(
+                              l10n.lockBannerBody,
                               style: const TextStyle(
                                 fontSize: 12,
                                 color: Colors.white70,

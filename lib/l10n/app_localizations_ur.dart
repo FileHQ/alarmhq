@@ -263,7 +263,7 @@ class AppLocalizationsUr extends AppLocalizations {
       'فون لاک ہو تو الارم نظر آئے۔ سیٹنگز ← ایپس ← AlarmHQ کھولیں اور \"Show on Lock screen\" آن کریں (\"Open new windows while running in the background\" بھی آن کریں)۔';
 
   @override
-  String get permUnusedTitle => 'غیر استعمال شدہ ایپ مینج کریں';
+  String get permUnusedTitle => 'خودکار اجازت منسوخی';
 
   @override
   String get permUnusedDesc =>
@@ -359,6 +359,13 @@ class AppLocalizationsUr extends AppLocalizations {
 
   @override
   String get fsBannerBody => 'لاک اسکرین پر الارم دکھانے کے لیے یہاں دبائیں';
+
+  @override
+  String get lockBannerTitle => 'لاک اسکرین پر دکھانا ضروری ہے';
+
+  @override
+  String get lockBannerBody =>
+      'سیٹنگز ← ایپس ← AlarmHQ کھولنے اور آن کرنے کے لیے دبائیں';
 
   @override
   String get permRequired => 'ضروری';

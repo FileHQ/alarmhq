@@ -563,7 +563,7 @@ abstract class AppLocalizations {
   /// No description provided for @permUnusedTitle.
   ///
   /// In en, this message translates to:
-  /// **'Manage app if unused'**
+  /// **'Auto-remove permissions'**
   String get permUnusedTitle;
 
   /// No description provided for @permUnusedDesc.
@@ -739,6 +739,18 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Tap to allow the alarm to pop up on the lock screen'**
   String get fsBannerBody;
+
+  /// No description provided for @lockBannerTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Show on Lock screen is needed'**
+  String get lockBannerTitle;
+
+  /// No description provided for @lockBannerBody.
+  ///
+  /// In en, this message translates to:
+  /// **'Tap to open Settings → Apps → AlarmHQ and turn it ON'**
+  String get lockBannerBody;
 
   /// No description provided for @permRequired.
   ///

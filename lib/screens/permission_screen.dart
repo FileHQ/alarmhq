@@ -229,6 +229,34 @@ class _PermissionScreenState extends State<PermissionScreen>
               textAlign: TextAlign.center,
             ),
             const SizedBox(height: 28),
+            // v2.22 (critical): on Realme/Oppo/OnePlus (ColorOS) the
+            // "Show on Lock screen" toggle lives inside the app's system
+            // settings page. Without it, the alarm NEVER appears on the
+            // lock screen. FIRST card on ColorOS so it can't be missed.
+            // v2.19: cannot be checked via API — never shown as "Granted".
+            // Never blocks Continue.
+            if (_showLockCard)
+              _permCard(
+                icon: '🔒',
+                title: l10n.permLockScreenTitle,
+                desc: l10n.permLockScreenDesc,
+                granted: false,
+                verifiable: false,
+                opened: _lockVisited,
+                onGrant: () async {
+                  // Fire-and-forget with timeout — never hang the UI.
+                  _lockOpened = true;
+                  try {
+                    await NativeBridge.openAppDetailsSettings()
+                        .timeout(const Duration(seconds: 2));
+                  } catch (_) {
+                    // Best effort: the settings page was still launched.
+                  }
+                  if (mounted) setState(() => _lockVisited = true);
+                },
+                l10n: l10n,
+                highlight: true,
+              ),
             _permCard(
               icon: '⏱️',
               title: l10n.permExactTitle,
@@ -305,33 +333,6 @@ class _PermissionScreenState extends State<PermissionScreen>
               },
               l10n: l10n,
             ),
-            // v2.18 (critical): on Realme/Oppo/OnePlus (ColorOS) the
-            // "Show on Lock screen" toggle lives inside the app's system
-            // settings page. Without it, the alarm NEVER appears on the
-            // lock screen. v2.19: cannot be checked via API — never shown
-            // as "Granted". Never blocks Continue.
-            if (_showLockCard)
-              _permCard(
-                icon: '🔒',
-                title: l10n.permLockScreenTitle,
-                desc: l10n.permLockScreenDesc,
-                granted: false,
-                verifiable: false,
-                opened: _lockVisited,
-                onGrant: () async {
-                  // Fire-and-forget with timeout — never hang the UI.
-                  _lockOpened = true;
-                  try {
-                    await NativeBridge.openAppDetailsSettings()
-                        .timeout(const Duration(seconds: 2));
-                  } catch (_) {
-                    // Best effort: the settings page was still launched.
-                  }
-                  if (mounted) setState(() => _lockVisited = true);
-                },
-                l10n: l10n,
-                highlight: true,
-              ),
             // v2.18: Android 12+ "Manage app if unused" silently removes
             // AlarmHQ's permissions. Warn + open the settings page.
             // v2.19: cannot be checked via API — never shown as "Granted".
@@ -458,6 +459,7 @@ class _PermissionScreenState extends State<PermissionScreen>
                     ),
                   ),
                 Text(title,
+                    softWrap: true,
                     style: const TextStyle(
                         fontSize: 16, fontWeight: FontWeight.w700)),
                 const SizedBox(height: 4),

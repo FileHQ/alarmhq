@@ -266,7 +266,7 @@ class AppLocalizationsEn extends AppLocalizations {
       'Lets the alarm appear when your phone is locked. Tap to open Settings → Apps → AlarmHQ and turn ON \"Show on Lock screen\" (also turn on \"Open new windows while running in the background\").';
 
   @override
-  String get permUnusedTitle => 'Manage app if unused';
+  String get permUnusedTitle => 'Auto-remove permissions';
 
   @override
   String get permUnusedDesc =>
@@ -363,6 +363,13 @@ class AppLocalizationsEn extends AppLocalizations {
   @override
   String get fsBannerBody =>
       'Tap to allow the alarm to pop up on the lock screen';
+
+  @override
+  String get lockBannerTitle => 'Show on Lock screen is needed';
+
+  @override
+  String get lockBannerBody =>
+      'Tap to open Settings → Apps → AlarmHQ and turn it ON';
 
   @override
   String get permRequired => 'Required';
