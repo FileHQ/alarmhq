@@ -35,6 +35,17 @@ class PermissionScreen extends StatefulWidget {
   static Future<void> markFsPromptShown() =>
       PrefsService.putString(_fsFlagKey, '1');
 
+  /// v2.18: the "Show on Lock screen" card was added for ColorOS
+  /// (Realme/Oppo/OnePlus). Users who onboarded before that never saw it,
+  /// so re-show the permission screen once for them.
+  static const String _lockFlagKey = 'permissions_lockscreen_prompt_shown';
+
+  static Future<bool> isLockScreenPromptShown() async =>
+      await PrefsService.getString(_lockFlagKey) == '1';
+
+  static Future<void> markLockScreenPromptShown() =>
+      PrefsService.putString(_lockFlagKey, '1');
+
   @override
   State<PermissionScreen> createState() => _PermissionScreenState();
 }
@@ -61,6 +72,20 @@ class _PermissionScreenState extends State<PermissionScreen>
   /// background-activity reminder snackbar when they return.
   bool _autostartOpened = false;
 
+  /// v2.18: Realme/ColorOS hides "Show on Lock screen" (+ "Open new
+  /// windows in background") inside the app's system settings page.
+  /// Cannot be checked via API — marked done once the user opens it.
+  /// Only shown on ColorOS devices; never blocks Continue.
+  bool _showLockCard = false;
+  bool? _lockDone;
+  bool _lockOpened = false;
+
+  /// v2.18: Android 12+ "Manage app if unused" silently revokes
+  /// permissions. Shown on API 31+. Marked done once the user opens
+  /// the settings page. Never blocks Continue.
+  bool _showUnusedCard = false;
+  bool? _unusedDone;
+
   @override
   void initState() {
     super.initState();
@@ -84,6 +109,21 @@ class _PermissionScreenState extends State<PermissionScreen>
       if (_autostartOpened) {
         _autostartOpened = false;
         _maybeShowBgActivityReminder();
+      }
+      // v2.18: after the user visits the app-details page from the
+      // "Show on Lock screen" card, remind them which toggles to turn on.
+      if (_lockOpened) {
+        _lockOpened = false;
+        if (mounted) {
+          final l10n = AppLocalizations.of(context)!;
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              content: Text(l10n.permLockScreenReminder),
+              duration: const Duration(seconds: 6),
+              behavior: SnackBarBehavior.floating,
+            ),
+          );
+        }
       }
     }
   }
@@ -117,21 +157,31 @@ class _PermissionScreenState extends State<PermissionScreen>
       NativeBridge.hasNotificationPermission(),
       NativeBridge.canDrawOverlays(),
       NativeBridge.needsFullScreenIntentCard(),
+      NativeBridge.isColorOsDevice(),
+      NativeBridge.getSdkInt(),
     ]);
-    final showFs = results[4];
+    final showFs = results[4] as bool;
     final fsGranted =
         showFs ? await NativeBridge.canUseFullScreenIntent() : true;
+    final isColorOs = results[5] as bool;
+    final sdkInt = results[6] as int;
     if (!mounted) return;
     setState(() {
-      _exact = results[0];
-      _battery = results[1];
-      _notif = results[2];
-      _overlay = results[3];
+      _exact = results[0] as bool;
+      _battery = results[1] as bool;
+      _notif = results[2] as bool;
+      _overlay = results[3] as bool;
       _showFsCard = showFs;
       _fsIntent = fsGranted;
       // v2.10: autostart was never set here → infinite spinner.
       // Default to false so the Grant button shows.
       _autostartDone ??= false;
+      // v2.18: ColorOS "Show on Lock screen" card + unused-app warning.
+      // "Manage app if unused" exists on Android 12+ (API 31+).
+      _showLockCard = isColorOs;
+      _lockDone ??= false;
+      _showUnusedCard = sdkInt >= 31;
+      _unusedDone ??= false;
     });
   }
 
@@ -147,6 +197,8 @@ class _PermissionScreenState extends State<PermissionScreen>
     // v2.17: if the full-screen card was part of this onboarding round,
     // don't ask again on later launches.
     if (_showFsCard) await PermissionScreen.markFsPromptShown();
+    // v2.18: same for the ColorOS "Show on Lock screen" card.
+    if (_showLockCard) await PermissionScreen.markLockScreenPromptShown();
     widget.onDone();
   }
 
@@ -253,6 +305,52 @@ class _PermissionScreenState extends State<PermissionScreen>
               },
               l10n: l10n,
             ),
+            // v2.18 (critical): on Realme/Oppo/OnePlus (ColorOS) the
+            // "Show on Lock screen" toggle lives inside the app's system
+            // settings page. Without it, the alarm NEVER appears on the
+            // lock screen. Cannot be checked via API — the card just
+            // opens the right page. Never blocks Continue.
+            if (_showLockCard)
+              _permCard(
+                icon: '🔒',
+                title: l10n.permLockScreenTitle,
+                desc: l10n.permLockScreenDesc,
+                granted: _lockDone,
+                onGrant: () async {
+                  // Fire-and-forget with timeout — never hang the UI.
+                  _lockOpened = true;
+                  try {
+                    await NativeBridge.openAppDetailsSettings()
+                        .timeout(const Duration(seconds: 2));
+                  } catch (_) {
+                    // Best effort: the settings page was still launched.
+                  }
+                  if (mounted) setState(() => _lockDone = true);
+                },
+                l10n: l10n,
+                highlight: _lockDone != true,
+              ),
+            // v2.18: Android 12+ "Manage app if unused" silently removes
+            // AlarmHQ's permissions. Warn + open the settings page.
+            // Never blocks Continue.
+            if (_showUnusedCard)
+              _permCard(
+                icon: '🗑️',
+                title: l10n.permUnusedTitle,
+                desc: l10n.permUnusedDesc,
+                granted: _unusedDone,
+                onGrant: () async {
+                  try {
+                    await NativeBridge.openAppDetailsSettings()
+                        .timeout(const Duration(seconds: 2));
+                  } catch (_) {
+                    // Best effort: the settings page was still launched.
+                  }
+                  if (mounted) setState(() => _unusedDone = true);
+                },
+                l10n: l10n,
+                highlight: _unusedDone != true,
+              ),
             const SizedBox(height: 24),
             SizedBox(
               width: double.infinity,

@@ -104,6 +104,20 @@ class NativeBridge {
   static Future<String> getManufacturer() async =>
       (await _alarm.invokeMethod<String>('getManufacturer')) ?? '';
 
+  /// True on Realme/Oppo/OnePlus (ColorOS family) — v2.18.
+  static Future<bool> isColorOsDevice() async =>
+      await _alarm.invokeMethod<bool>('isColorOsDevice') ?? false;
+
+  /// Open the app's system settings page. On Realme/ColorOS this is where
+  /// "Show on Lock screen" and "Open new windows in the background" live.
+  /// v2.18.
+  static Future<void> openAppDetailsSettings() async =>
+      await _alarm.invokeMethod('openAppDetailsSettings');
+
+  /// Android SDK int (e.g. 34) — v2.18.
+  static Future<int> getSdkInt() async =>
+      await _alarm.invokeMethod<int>('sdkInt') ?? 0;
+
   // ---- in-app ringing dialog support ----
 
   /// True while AlarmService is currently sounding an alarm.

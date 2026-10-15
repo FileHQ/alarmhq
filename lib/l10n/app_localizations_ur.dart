@@ -256,6 +256,24 @@ class AppLocalizationsUr extends AppLocalizations {
       'ایپ بند ہو تو بھی الارم بجے (Xiaomi، Oppo، Vivo، Huawei پر ضروری)۔';
 
   @override
+  String get permLockScreenTitle => 'لاک اسکرین پر دکھائیں';
+
+  @override
+  String get permLockScreenDesc =>
+      'فون لاک ہو تو الارم نظر آئے۔ سیٹنگز ← ایپس ← AlarmHQ کھولیں اور \"Show on Lock screen\" آن کریں (\"Open new windows while running in the background\" بھی آن کریں)۔';
+
+  @override
+  String get permUnusedTitle => 'غیر استعمال شدہ ایپ مینج کریں';
+
+  @override
+  String get permUnusedDesc =>
+      'AlarmHQ کے لیے اسے آف رکھیں، ورنہ Android اجازتیں ہٹا دے گا اور الارم بجنا بند ہو سکتا ہے۔';
+
+  @override
+  String get permLockScreenReminder =>
+      'سیٹنگز ← ایپس ← AlarmHQ میں \"Show on Lock screen\" آن کریں — اور \"Open new windows while running in the background\" بھی۔';
+
+  @override
   String get permSkip => 'ابھی چھوڑیں';
 
   @override

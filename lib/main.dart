@@ -74,6 +74,19 @@ class _AlarmHQAppState extends State<AlarmHQApp>
       } catch (_) {
         // Best effort only.
       }
+      // v2.18: ColorOS users who onboarded before the "Show on Lock
+      // screen" card existed never saw it — show the permission screen
+      // once more so they can't miss it.
+      if (_onboarded) {
+        try {
+          final isColorOs = await NativeBridge.isColorOsDevice();
+          final lockShown =
+              await PermissionScreen.isLockScreenPromptShown();
+          if (isColorOs && !lockShown) _onboarded = false;
+        } catch (_) {
+          // Best effort only.
+        }
+      }
     }
     _settings.addListener(_onSettingsChanged);
     // If exact-alarm permission was granted while we were away, make sure

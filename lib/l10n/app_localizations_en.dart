@@ -259,6 +259,24 @@ class AppLocalizationsEn extends AppLocalizations {
       'Lets the alarm ring even when the app is closed (needed on Xiaomi, Oppo, Vivo, Huawei).';
 
   @override
+  String get permLockScreenTitle => 'Show on Lock screen';
+
+  @override
+  String get permLockScreenDesc =>
+      'Lets the alarm appear when your phone is locked. Tap to open Settings → Apps → AlarmHQ and turn ON \"Show on Lock screen\" (also turn on \"Open new windows while running in the background\").';
+
+  @override
+  String get permUnusedTitle => 'Manage app if unused';
+
+  @override
+  String get permUnusedDesc =>
+      'Keep this OFF for AlarmHQ in Settings → Apps, or Android will remove AlarmHQ\'s permissions and the alarm may stop ringing.';
+
+  @override
+  String get permLockScreenReminder =>
+      'In Settings → Apps → AlarmHQ, turn ON \"Show on Lock screen\" — and also \"Open new windows while running in the background\".';
+
+  @override
   String get permSkip => 'Skip for now';
 
   @override

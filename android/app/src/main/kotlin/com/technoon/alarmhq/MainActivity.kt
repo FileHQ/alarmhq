@@ -247,6 +247,32 @@ class MainActivity : Activity() {
                 // ---- device info (v2.10) ----
                 "getManufacturer" ->
                     result.success(Build.MANUFACTURER ?: "")
+                // ---- OEM extras (v2.18): ColorOS (Realme/Oppo/OnePlus)
+                // hides critical toggles ("Show on Lock screen",
+                // "Open new windows in background") inside the app's
+                // system settings page — guide the user there.
+                "isColorOsDevice" -> {
+                    val m = (Build.MANUFACTURER ?: "").lowercase()
+                    result.success(
+                        m.contains("realme") ||
+                            m.contains("oppo") ||
+                            m.contains("oneplus"),
+                    )
+                }
+                "openAppDetailsSettings" -> {
+                    try {
+                        startActivity(
+                            Intent(
+                                Settings.ACTION_APPLICATION_DETAILS_SETTINGS,
+                                Uri.parse("package:$packageName"),
+                            ),
+                        )
+                    } catch (_: Exception) { /* best effort */ }
+                    result.success(null)
+                }
+                // ---- device info (v2.18) ----
+                "sdkInt" ->
+                    result.success(Build.VERSION.SDK_INT)
                 // ---- in-app ringing dialog support ----
                 "isAlarmRinging" ->
                     result.success(AlarmService.ringingAlarmJson != null)

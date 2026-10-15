@@ -548,6 +548,36 @@ abstract class AppLocalizations {
   /// **'Lets the alarm ring even when the app is closed (needed on Xiaomi, Oppo, Vivo, Huawei).'**
   String get permAutostartDesc;
 
+  /// No description provided for @permLockScreenTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Show on Lock screen'**
+  String get permLockScreenTitle;
+
+  /// No description provided for @permLockScreenDesc.
+  ///
+  /// In en, this message translates to:
+  /// **'Lets the alarm appear when your phone is locked. Tap to open Settings → Apps → AlarmHQ and turn ON \"Show on Lock screen\" (also turn on \"Open new windows while running in the background\").'**
+  String get permLockScreenDesc;
+
+  /// No description provided for @permUnusedTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Manage app if unused'**
+  String get permUnusedTitle;
+
+  /// No description provided for @permUnusedDesc.
+  ///
+  /// In en, this message translates to:
+  /// **'Keep this OFF for AlarmHQ in Settings → Apps, or Android will remove AlarmHQ\'s permissions and the alarm may stop ringing.'**
+  String get permUnusedDesc;
+
+  /// No description provided for @permLockScreenReminder.
+  ///
+  /// In en, this message translates to:
+  /// **'In Settings → Apps → AlarmHQ, turn ON \"Show on Lock screen\" — and also \"Open new windows while running in the background\".'**
+  String get permLockScreenReminder;
+
   /// No description provided for @permSkip.
   ///
   /// In en, this message translates to:
