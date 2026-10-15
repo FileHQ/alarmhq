@@ -20,11 +20,24 @@ class SettingsScreen extends StatefulWidget {
 class _SettingsScreenState extends State<SettingsScreen> {
   bool? _exactAlarm;
   bool? _battery;
+  String? _appVersion;
 
   @override
   void initState() {
     super.initState();
     _refreshPermissions();
+    _loadAppVersion();
+  }
+
+  /// v2.20: show the real installed version instead of a hardcoded string.
+  Future<void> _loadAppVersion() async {
+    try {
+      final v = await NativeBridge.getAppVersion();
+      if (!mounted) return;
+      setState(() => _appVersion = v);
+    } catch (_) {
+      // Best effort: subtitle falls back to a placeholder.
+    }
   }
 
   Future<void> _refreshPermissions() async {
@@ -168,7 +181,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
           _section(l10n.about),
           ListTile(
             title: Text(l10n.aboutText),
-            subtitle: const Text('v1.0.0'),
+            subtitle: Text('v${_appVersion ?? '…'}'),
           ),
         ],
       ),

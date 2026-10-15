@@ -273,6 +273,27 @@ class MainActivity : Activity() {
                 // ---- device info (v2.18) ----
                 "sdkInt" ->
                     result.success(Build.VERSION.SDK_INT)
+                // ---- app version (v2.20): dynamic version display instead
+                // of a hardcoded string in Settings.
+                "getAppVersion" -> {
+                    try {
+                        val pi = if (Build.VERSION.SDK_INT >=
+                            Build.VERSION_CODES.TIRAMISU
+                        ) {
+                            packageManager.getPackageInfo(
+                                packageName,
+                                android.content.pm.PackageManager
+                                    .PackageInfoFlags.of(0),
+                            )
+                        } else {
+                            @Suppress("DEPRECATION")
+                            packageManager.getPackageInfo(packageName, 0)
+                        }
+                        result.success(pi.versionName)
+                    } catch (_: Exception) {
+                        result.success(null)
+                    }
+                }
                 // ---- in-app ringing dialog support ----
                 "isAlarmRinging" ->
                     result.success(AlarmService.ringingAlarmJson != null)

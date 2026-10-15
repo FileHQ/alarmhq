@@ -118,6 +118,12 @@ class NativeBridge {
   static Future<int> getSdkInt() async =>
       await _alarm.invokeMethod<int>('sdkInt') ?? 0;
 
+  /// App version name from the APK (e.g. "1.0.20") — v2.20.
+  /// Used for dynamic version display in Settings instead of a
+  /// hardcoded string.
+  static Future<String?> getAppVersion() async =>
+      await _alarm.invokeMethod<String?>('getAppVersion');
+
   // ---- in-app ringing dialog support ----
 
   /// True while AlarmService is currently sounding an alarm.
