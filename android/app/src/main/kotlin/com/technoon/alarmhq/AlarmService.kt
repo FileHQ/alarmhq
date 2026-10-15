@@ -378,7 +378,20 @@ class AlarmService : Service() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
             builder.setCustomBigContentView(views)
         }
-        nm.notify(SNOOZED_NOTIF_ID, builder.build())
+        // v2.25: this service was started via startForegroundService()
+        // (see AlarmScheduler.scheduleSnooze), so on Android 8+ it MUST
+        // call startForeground() within ~5s or the system kills it and the
+        // "Snoozed until X" notification never appears. A plain nm.notify()
+        // is not enough here.
+        val snoozedNotif = builder.build()
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+            startForeground(
+                SNOOZED_NOTIF_ID, snoozedNotif,
+                android.content.pm.ServiceInfo.FOREGROUND_SERVICE_TYPE_MEDIA_PLAYBACK,
+            )
+        } else {
+            startForeground(SNOOZED_NOTIF_ID, snoozedNotif)
+        }
     }
 
     /** Remove the snoozed notification (snooze fired or was cancelled). */
