@@ -108,6 +108,8 @@
   "fsBannerTitle": "فل اسکرین الارم بند ہے",
   "fsBannerBody": "لاک اسکرین پر الارم دکھانے کے لیے یہاں دبائیں",
   "permRequired": "ضروری",
+  "permOpenSettings": "سیٹنگ کھولیں",
+  "permVerifyNote": "سیٹنگ میں سوئچ آن کریں، پھر ایپ میں واپس آئیں۔",
   "sound": "آواز",
   "startDate": "آغاز کی تاریخ",
   "theme": "تھیم",

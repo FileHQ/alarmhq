@@ -746,6 +746,18 @@ abstract class AppLocalizations {
   /// **'Required'**
   String get permRequired;
 
+  /// No description provided for @permOpenSettings.
+  ///
+  /// In en, this message translates to:
+  /// **'Open Settings'**
+  String get permOpenSettings;
+
+  /// No description provided for @permVerifyNote.
+  ///
+  /// In en, this message translates to:
+  /// **'Enable the toggle in Settings, then return to the app.'**
+  String get permVerifyNote;
+
   /// No description provided for @sound.
   ///
   /// In en, this message translates to:

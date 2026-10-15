@@ -368,6 +368,13 @@ class AppLocalizationsEn extends AppLocalizations {
   String get permRequired => 'Required';
 
   @override
+  String get permOpenSettings => 'Open Settings';
+
+  @override
+  String get permVerifyNote =>
+      'Enable the toggle in Settings, then return to the app.';
+
+  @override
   String get sound => 'Sound';
 
   @override

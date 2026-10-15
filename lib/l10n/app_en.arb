@@ -108,6 +108,8 @@
   "fsBannerTitle": "Full-screen alarm is off",
   "fsBannerBody": "Tap to allow the alarm to pop up on the lock screen",
   "permRequired": "Required",
+  "permOpenSettings": "Open Settings",
+  "permVerifyNote": "Enable the toggle in Settings, then return to the app.",
   "sound": "Sound",
   "startDate": "Start date",
   "theme": "Theme",

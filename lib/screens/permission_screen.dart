@@ -63,10 +63,11 @@ class _PermissionScreenState extends State<PermissionScreen>
   bool? _fsIntent;
   bool _showFsCard = false;
 
-  /// Autostart can't be checked via API; marked done once the user opens
-  /// the manufacturer's page. Never blocks Continue.
-  /// v2.10: initialized to false (was null → infinite spinner bug).
-  bool? _autostartDone;
+  /// Autostart can't be checked via API — v2.19: this card is never
+  /// shown as "Granted". Tapping only opens the manufacturer's page;
+  /// [_autostartVisited] then shows a "please verify" note instead.
+  /// Never blocks Continue.
+  bool _autostartVisited = false;
 
   /// Set when the user taps the autostart card; used to show the
   /// background-activity reminder snackbar when they return.
@@ -74,17 +75,17 @@ class _PermissionScreenState extends State<PermissionScreen>
 
   /// v2.18: Realme/ColorOS hides "Show on Lock screen" (+ "Open new
   /// windows in background") inside the app's system settings page.
-  /// Cannot be checked via API — marked done once the user opens it.
+  /// v2.19: cannot be checked via API — never shown as "Granted".
   /// Only shown on ColorOS devices; never blocks Continue.
   bool _showLockCard = false;
-  bool? _lockDone;
+  bool _lockVisited = false;
   bool _lockOpened = false;
 
   /// v2.18: Android 12+ "Manage app if unused" silently revokes
-  /// permissions. Shown on API 31+. Marked done once the user opens
-  /// the settings page. Never blocks Continue.
+  /// permissions. Shown on API 31+. v2.19: cannot be checked via API —
+  /// never shown as "Granted". Never blocks Continue.
   bool _showUnusedCard = false;
-  bool? _unusedDone;
+  bool _unusedVisited = false;
 
   @override
   void initState() {
@@ -173,15 +174,11 @@ class _PermissionScreenState extends State<PermissionScreen>
       _overlay = results[3] as bool;
       _showFsCard = showFs;
       _fsIntent = fsGranted;
-      // v2.10: autostart was never set here → infinite spinner.
-      // Default to false so the Grant button shows.
-      _autostartDone ??= false;
       // v2.18: ColorOS "Show on Lock screen" card + unused-app warning.
       // "Manage app if unused" exists on Android 12+ (API 31+).
+      // v2.19: OEM cards are never marked granted — no ??= false inits.
       _showLockCard = isColorOs;
-      _lockDone ??= false;
       _showUnusedCard = sdkInt >= 31;
-      _unusedDone ??= false;
     });
   }
 
@@ -285,13 +282,16 @@ class _PermissionScreenState extends State<PermissionScreen>
                 highlight: _fsIntent != true,
               ),
             // v2.4: autostart — Xiaomi/Oppo/Vivo/Huawei kill background
-            // alarms without it. Cannot be checked programmatically, so
-            // this card never blocks Continue; it just opens the right page.
+            // alarms without it. v2.19: cannot be checked via API — never
+            // shown as "Granted"; the button stays and a "please verify"
+            // note appears after the settings page is opened.
             _permCard(
               icon: '🚀',
               title: l10n.permAutostartTitle,
               desc: l10n.permAutostartDesc,
-              granted: _autostartDone,
+              granted: false,
+              verifiable: false,
+              opened: _autostartVisited,
               onGrant: () async {
                 // v2.10: fire-and-forget with timeout — never hang the UI.
                 _autostartOpened = true;
@@ -301,21 +301,23 @@ class _PermissionScreenState extends State<PermissionScreen>
                 } catch (_) {
                   // Best effort: the settings page was still launched.
                 }
-                if (mounted) setState(() => _autostartDone = true);
+                if (mounted) setState(() => _autostartVisited = true);
               },
               l10n: l10n,
             ),
             // v2.18 (critical): on Realme/Oppo/OnePlus (ColorOS) the
             // "Show on Lock screen" toggle lives inside the app's system
             // settings page. Without it, the alarm NEVER appears on the
-            // lock screen. Cannot be checked via API — the card just
-            // opens the right page. Never blocks Continue.
+            // lock screen. v2.19: cannot be checked via API — never shown
+            // as "Granted". Never blocks Continue.
             if (_showLockCard)
               _permCard(
                 icon: '🔒',
                 title: l10n.permLockScreenTitle,
                 desc: l10n.permLockScreenDesc,
-                granted: _lockDone,
+                granted: false,
+                verifiable: false,
+                opened: _lockVisited,
                 onGrant: () async {
                   // Fire-and-forget with timeout — never hang the UI.
                   _lockOpened = true;
@@ -325,20 +327,23 @@ class _PermissionScreenState extends State<PermissionScreen>
                   } catch (_) {
                     // Best effort: the settings page was still launched.
                   }
-                  if (mounted) setState(() => _lockDone = true);
+                  if (mounted) setState(() => _lockVisited = true);
                 },
                 l10n: l10n,
-                highlight: _lockDone != true,
+                highlight: true,
               ),
             // v2.18: Android 12+ "Manage app if unused" silently removes
             // AlarmHQ's permissions. Warn + open the settings page.
+            // v2.19: cannot be checked via API — never shown as "Granted".
             // Never blocks Continue.
             if (_showUnusedCard)
               _permCard(
                 icon: '🗑️',
                 title: l10n.permUnusedTitle,
                 desc: l10n.permUnusedDesc,
-                granted: _unusedDone,
+                granted: false,
+                verifiable: false,
+                opened: _unusedVisited,
                 onGrant: () async {
                   try {
                     await NativeBridge.openAppDetailsSettings()
@@ -346,10 +351,10 @@ class _PermissionScreenState extends State<PermissionScreen>
                   } catch (_) {
                     // Best effort: the settings page was still launched.
                   }
-                  if (mounted) setState(() => _unusedDone = true);
+                  if (mounted) setState(() => _unusedVisited = true);
                 },
                 l10n: l10n,
-                highlight: _unusedDone != true,
+                highlight: true,
               ),
             const SizedBox(height: 24),
             SizedBox(
@@ -394,8 +399,15 @@ class _PermissionScreenState extends State<PermissionScreen>
     // v2.17: when true and not granted, the card gets a red alert border
     // and a "Required" badge so it can't be missed.
     bool highlight = false,
+    // v2.19: OEM/manufacturer toggles (autostart, "Show on Lock screen",
+    // "Manage app if unused") cannot be checked via API. They are never
+    // shown as granted — the button stays and a "please verify" note
+    // appears once the settings page has been opened.
+    bool verifiable = true,
+    bool opened = false,
   }) {
-    final isGranted = granted == true;
+    // v2.19: unverifiable OEM cards never display the "Granted" check.
+    final isGranted = verifiable && granted == true;
     final alert = highlight && !isGranted;
     return Container(
       margin: const EdgeInsets.only(bottom: 12),
@@ -480,22 +492,46 @@ class _PermissionScreenState extends State<PermissionScreen>
               ],
             )
           else
-            ElevatedButton(
-              onPressed: () async {
-                await onGrant();
-                // Status re-checks on resume via the lifecycle observer.
-              },
-              style: ElevatedButton.styleFrom(
-                backgroundColor: AppTheme.emerald,
-                foregroundColor: Colors.black,
-                padding: const EdgeInsets.symmetric(
-                    horizontal: 18, vertical: 10),
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(10),
+            Column(
+              mainAxisSize: MainAxisSize.min,
+              crossAxisAlignment: CrossAxisAlignment.end,
+              children: [
+                ElevatedButton(
+                  onPressed: () async {
+                    await onGrant();
+                    // Status re-checks on resume via the lifecycle observer.
+                  },
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: AppTheme.emerald,
+                    foregroundColor: Colors.black,
+                    padding: const EdgeInsets.symmetric(
+                        horizontal: 18, vertical: 10),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(10),
+                    ),
+                  ),
+                  // v2.19: OEM toggles can't be granted from here —
+                  // the button opens the manufacturer's Settings page.
+                  child: Text(
+                      verifiable ? l10n.permGrant : l10n.permOpenSettings,
+                      style: const TextStyle(fontWeight: FontWeight.w700)),
                 ),
-              ),
-              child: Text(l10n.permGrant,
-                  style: const TextStyle(fontWeight: FontWeight.w700)),
+                // v2.19: after the settings page was opened, remind the
+                // user to flip the toggle themselves — never "Granted".
+                if (!verifiable && opened)
+                  Padding(
+                    padding: const EdgeInsets.only(top: 6),
+                    child: SizedBox(
+                      width: 150,
+                      child: Text(
+                        '⚠️ ${l10n.permVerifyNote}',
+                        textAlign: TextAlign.end,
+                        style: const TextStyle(
+                            fontSize: 11, color: Colors.amber, height: 1.35),
+                      ),
+                    ),
+                  ),
+              ],
             ),
         ],
       ),

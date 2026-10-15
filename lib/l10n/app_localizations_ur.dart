@@ -364,6 +364,12 @@ class AppLocalizationsUr extends AppLocalizations {
   String get permRequired => 'ضروری';
 
   @override
+  String get permOpenSettings => 'سیٹنگ کھولیں';
+
+  @override
+  String get permVerifyNote => 'سیٹنگ میں سوئچ آن کریں، پھر ایپ میں واپس آئیں۔';
+
+  @override
   String get sound => 'آواز';
 
   @override
