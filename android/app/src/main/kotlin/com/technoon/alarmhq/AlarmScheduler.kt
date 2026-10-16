@@ -313,10 +313,13 @@ object AlarmScheduler {
         // v2.21: mirror into the Dart prefs file ("alarmhq_prefs") as a
         // backup source for the card badge — belt and suspenders.
         // v2.24: synchronous too, same reason as above.
+        // v2.26: also mirror the raw Long key so the new
+        // getSnoozeTriggerBackup() fallback can read it directly.
         try {
             context.getSharedPreferences("alarmhq_prefs", Context.MODE_PRIVATE)
                 .edit()
                 .putString("dart_snooze_trigger_$id", trigger.toString())
+                .putLong("snooze_trigger_$id", trigger)
                 .commit()
         } catch (_: Exception) { }
         android.util.Log.i(
@@ -361,15 +364,40 @@ object AlarmScheduler {
         return miscPrefs(context).getInt("snooze_count_$id", 0)
     }
 
+    /**
+     * v2.26 fallback: read the snooze trigger for [id] directly from the
+     * "alarmhq_prefs" backup file (mirrored by scheduleSnooze). Returns the
+     * trigger when it is in the future, null otherwise. Logs the query so a
+     * logcat shows exactly which id was checked and what was found.
+     */
+    fun getSnoozeTriggerBackup(context: Context, id: Int): Long? {
+        val now = System.currentTimeMillis()
+        val prefs = try {
+            context.getSharedPreferences("alarmhq_prefs", Context.MODE_PRIVATE)
+        } catch (_: Exception) { null }
+        val rawLong = prefs?.getLong("snooze_trigger_$id", 0L) ?: 0L
+        val rawStr = prefs?.getString("dart_snooze_trigger_$id", null)
+        val fromStr = rawStr?.toLongOrNull() ?: 0L
+        val best = maxOf(rawLong, fromStr)
+        android.util.Log.i(
+            "AlarmHQ",
+            "getSnoozeTriggerBackup(id=$id): longKey=$rawLong " +
+                "strKey=$rawStr now=$now",
+        )
+        return if (best > now) best else null
+    }
+
     /** Clear a stored snooze trigger (fired, dismissed, or cancelled). */
     fun clearSnoozeTrigger(context: Context, id: Int) {
         miscPrefs(context).edit().remove("snooze_trigger_$id").apply()
         miscPrefs(context).edit().remove("snooze_count_$id").apply()
         // v2.21: also drop the Dart-prefs backup (see scheduleSnooze).
+        // v2.26: also the raw Long mirror.
         try {
             context.getSharedPreferences("alarmhq_prefs", Context.MODE_PRIVATE)
                 .edit()
                 .remove("dart_snooze_trigger_$id")
+                .remove("snooze_trigger_$id")
                 .apply()
         } catch (_: Exception) { }
     }

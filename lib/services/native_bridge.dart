@@ -157,4 +157,9 @@ class NativeBridge {
   /// Used to show "N left" on the snoozed badge.
   static Future<int> getSnoozeCount(int id) async =>
       await _alarm.invokeMethod<int>('getSnoozeCount', {'id': id}) ?? 0;
+
+  /// v2.26: fallback — reads the snooze trigger for [id] directly from the
+  /// "alarmhq_prefs" backup file when [getSnoozeTrigger] misses.
+  static Future<int?> getSnoozeTriggerBackup(int id) async =>
+      await _alarm.invokeMethod<int>('getSnoozeTriggerBackup', {'id': id});
 }

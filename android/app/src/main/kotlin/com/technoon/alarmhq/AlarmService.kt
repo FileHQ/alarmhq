@@ -32,6 +32,11 @@ class AlarmService : Service() {
         const val ACTION_START = "com.technoon.alarmhq.START"
         const val ACTION_PREVIEW = "com.technoon.alarmhq.PREVIEW"
         const val ACTION_STOP = "com.technoon.alarmhq.STOP"
+        // v2.26: stop the ringing sound/vibration ONLY — used after a
+        // successful snooze, where scheduleSnooze() has just shown the
+        // persistent "Snoozed until X" notification. Unlike ACTION_STOP,
+        // this must NOT cancel notifications or stop the service.
+        const val ACTION_STOP_RINGING = "com.technoon.alarmhq.STOP_RINGING"
         const val ACTION_SNOOZED = "com.technoon.alarmhq.SNOOZED"
         // v2.21: snooze directly from the ringing notification (lock screen).
         const val ACTION_SNOOZE = "com.technoon.alarmhq.SNOOZE"
@@ -93,11 +98,27 @@ class AlarmService : Service() {
                 }
                 stopEverything()
             }
+            ACTION_STOP_RINGING -> {
+                // v2.26: stop the ringing sound/vibration only. Sent by
+                // FullScreenAlarmActivity.doSnooze() (and the other snooze
+                // paths) AFTER scheduleSnooze() has shown the persistent
+                // "Snoozed until X" notification — that notification must
+                // survive, so no cancelSnoozedNotification(), no
+                // stopForeground(), no stopSelf() here.
+                stopRingingOnly()
+            }
             ACTION_SNOOZED -> {
                 // Persistent "Snoozed until X" notification (Xiaomi-style).
                 val trigger = intent.getLongExtra("snoozeTrigger", 0L)
                 val alarmId = intent.getIntExtra("snoozeAlarmId", -1)
-                if (trigger > 0L) showSnoozedNotification(trigger, alarmId)
+                if (trigger > 0L) {
+                    // v2.26: the ringing sound may still be playing — stop
+                    // it before showing the persistent snoozed notification.
+                    stopPlayback()
+                    ringingAlarmJson = null
+                    ringingSnoozeCount = 0
+                    showSnoozedNotification(trigger, alarmId)
+                }
             }
             ACTION_SNOOZE -> {
                 // v2.21: snooze tapped in the ringing notification (works
@@ -128,14 +149,22 @@ class AlarmService : Service() {
                             "AlarmHQ",
                             "ACTION_SNOOZE: id=$id for ${minutes}min",
                         )
+                        // v2.26: scheduleSnooze() just showed the persistent
+                        // "Snoozed until X" notification — stop only the
+                        // ringing, never stopEverything() (which would
+                        // cancel the notification we just created).
+                        stopRingingOnly()
                     } else {
                         android.util.Log.w(
                             "AlarmHQ",
                             "ACTION_SNOOZE rejected: id=$id canSnooze=$canSnooze",
                         )
+                        stopEverything()
                     }
+                } else {
+                    // No alarm JSON — nothing to snooze; just stop ringing.
+                    stopEverything()
                 }
-                stopEverything()
             }
             else -> { // ACTION_START (or null action = start)
                 val alarmJson = intent?.getStringExtra("alarmJson") ?: return START_NOT_STICKY
@@ -529,6 +558,18 @@ class AlarmService : Service() {
         cancelSnoozedNotification()
         try { stopForeground(STOP_FOREGROUND_REMOVE) } catch (_: Exception) {}
         stopSelf()
+    }
+
+    /**
+     * v2.26: stop the sound/vibration and clear the ringing state, but keep
+     * the service alive and leave notifications untouched. Used on every
+     * successful snooze path, right after scheduleSnooze() has shown the
+     * persistent "Snoozed until X" notification.
+     */
+    private fun stopRingingOnly() {
+        ringingAlarmJson = null
+        ringingSnoozeCount = 0
+        stopPlayback()
     }
 
     override fun onDestroy() {

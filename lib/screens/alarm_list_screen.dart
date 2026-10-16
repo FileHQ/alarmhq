@@ -136,15 +136,46 @@ class _AlarmListScreenState extends State<AlarmListScreen>
       }
       // v2.21: Dart-prefs backup (mirrored by native scheduleSnooze) —
       // belt and suspenders if the native read ever misses.
+      bool found = false;
       try {
         final backup =
             await PrefsService.getString('dart_snooze_trigger_${a.id}');
         final bms = int.tryParse(backup ?? '');
         if (bms != null && bms > nowMs) {
           map[a.id] = DateTime.fromMillisecondsSinceEpoch(bms);
+          found = true;
         }
       } catch (_) {
         // Best effort only.
+      }
+      // v2.26: final fallback — ask native to read the snooze_trigger_$id
+      // key directly from the "alarmhq_prefs" backup file. If that also
+      // misses, log the queried id so a logcat shows the dead end.
+      if (!found) {
+        try {
+          final fb = await NativeBridge.getSnoozeTriggerBackup(a.id);
+          if (fb != null && fb > nowMs) {
+            map[a.id] = DateTime.fromMillisecondsSinceEpoch(fb);
+            found = true;
+            // ignore: avoid_print
+            print('AlarmHQ snoozeCheck(id=${a.id}): fallback HIT trigger=$fb');
+          } else {
+            // ignore: avoid_print
+            print('AlarmHQ snoozeCheck(id=${a.id}): NO trigger found '
+                '(native=null, prefsBackup=null, directBackup=$fb)');
+          }
+        } catch (_) {
+          // Best effort only.
+        }
+      }
+      // v2.26: fetch the snooze count whenever any path found a trigger,
+      // so the "N left" badge text is accurate.
+      if (found && !counts.containsKey(a.id)) {
+        try {
+          counts[a.id] = await NativeBridge.getSnoozeCount(a.id);
+        } catch (_) {
+          // Best effort only.
+        }
       }
     }
     if (mounted) {

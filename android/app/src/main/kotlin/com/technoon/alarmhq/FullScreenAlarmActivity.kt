@@ -378,6 +378,9 @@ class FullScreenAlarmActivity : Activity() {
             return
         }
         if (alarmId >= 0) {
+            // v2.26: schedule FIRST — scheduleSnooze() shows the persistent
+            // "Snoozed until X" notification — then stop only the ringing
+            // sound. ACTION_STOP would kill the notification just created.
             AlarmScheduler.scheduleSnooze(
                 this, alarmId, alarmJsonStr, snoozeMinutes, snoozeCount + 1
             )
@@ -386,7 +389,7 @@ class FullScreenAlarmActivity : Activity() {
             this, getString(R.string.snoozing_for, snoozeMinutes),
             Toast.LENGTH_SHORT
         ).show()
-        stopAlarmService()
+        stopRinging()
         finish()
     }
 
@@ -398,6 +401,15 @@ class FullScreenAlarmActivity : Activity() {
     private fun stopAlarmService() {
         val i = Intent(this, AlarmService::class.java).apply {
             action = AlarmService.ACTION_STOP
+        }
+        startService(i)
+    }
+
+    /** v2.26: stop the ringing sound/vibration only — keeps the snoozed
+     *  notification (shown by scheduleSnooze) alive. */
+    private fun stopRinging() {
+        val i = Intent(this, AlarmService::class.java).apply {
+            action = AlarmService.ACTION_STOP_RINGING
         }
         startService(i)
     }

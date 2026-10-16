@@ -311,6 +311,15 @@ class MainActivity : Activity() {
                         AlarmScheduler.getSnoozeCount(this, id) else 0
                     result.success(c)
                 }
+                // v2.26: fallback — read the snooze trigger directly from
+                // the "alarmhq_prefs" backup file when getSnoozeTrigger
+                // (native misc) misses.
+                "getSnoozeTriggerBackup" -> {
+                    val id = call.argument<Number>("id")?.toInt() ?: -1
+                    val t = if (id >= 0)
+                        AlarmScheduler.getSnoozeTriggerBackup(this, id) else null
+                    result.success(t)
+                }
                 "getRingingAlarm" -> {
                     val json = AlarmService.ringingAlarmJson
                     if (json == null) {
@@ -370,10 +379,16 @@ class MainActivity : Activity() {
                             }
                         } catch (_: Exception) { /* parse failed */ }
                     }
-                    // Stop the current ringing either way.
+                    // Stop the current ringing either way — but on a successful
+                    // snooze, keep the "Snoozed until X" notification that
+                    // scheduleSnooze() just showed (v2.26: ACTION_STOP would
+                    // cancel it via stopEverything()).
                     startService(
                         Intent(this, AlarmService::class.java).apply {
-                            action = AlarmService.ACTION_STOP
+                            action = if (ok)
+                                AlarmService.ACTION_STOP_RINGING
+                            else
+                                AlarmService.ACTION_STOP
                         }
                     )
                     result.success(ok)
