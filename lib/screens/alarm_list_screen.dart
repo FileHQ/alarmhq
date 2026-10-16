@@ -31,6 +31,10 @@ class _AlarmListScreenState extends State<AlarmListScreen>
   final Map<int, DateTime> _snoozeTriggers = {};
   // v2.23: snooze count per alarm for the "N left" badge text.
   final Map<int, int> _snoozeCounts = {};
+  // v2.27: bulletproof "is snoozed" flags (alarm ids). Set when the native
+  // snoozed_active_$id flag is present but no trigger time could be read —
+  // the card then shows a generic "Snoozed" badge instead of nothing.
+  final Set<int> _snoozedActive = {};
 
   /// Periodic timer to keep countdowns fresh (and pick up snooze triggers
   /// set from the full-screen activity or in-app dialog).
@@ -115,6 +119,7 @@ class _AlarmListScreenState extends State<AlarmListScreen>
   Future<void> _refreshSnoozeTriggers({bool retried = false}) async {
     final map = <int, DateTime>{};
     final counts = <int, int>{};
+    final active = <int>{};
     final nowMs = DateTime.now().millisecondsSinceEpoch;
     for (final a in widget.repo.alarms) {
       try {
@@ -177,6 +182,22 @@ class _AlarmListScreenState extends State<AlarmListScreen>
           // Best effort only.
         }
       }
+      // v2.27: final fallback — the bulletproof snoozed_active flag. If the
+      // trigger time couldn't be read by any path but native marked this
+      // alarm as snoozed, show a generic badge rather than nothing.
+      if (!found) {
+        try {
+          final flag =
+              await PrefsService.getString('snoozed_active_${a.id}');
+          if (flag == '1') {
+            active.add(a.id);
+            // ignore: avoid_print
+            print('AlarmHQ snoozeCheck(id=${a.id}): snoozed_active flag HIT');
+          }
+        } catch (_) {
+          // Best effort only.
+        }
+      }
     }
     if (mounted) {
       setState(() {
@@ -186,6 +207,9 @@ class _AlarmListScreenState extends State<AlarmListScreen>
         _snoozeCounts
           ..clear()
           ..addAll(counts);
+        _snoozedActive
+          ..clear()
+          ..addAll(active);
       });
     }
     // v2.24: one retry shortly after a resume, when a native snooze write
@@ -636,7 +660,12 @@ class _AlarmListScreenState extends State<AlarmListScreen>
                       ],
                       // v2.17: prominent snoozed indicator.
                       // v2.23: also show how many snoozes are left.
-                      if (snoozedUntil != null && a.enabled) ...[
+                      // v2.27: also show a generic badge off the
+                      // _snoozedActive flag when the trigger time is
+                      // unavailable.
+                      if ((snoozedUntil != null ||
+                              _snoozedActive.contains(a.id)) &&
+                          a.enabled) ...[
                         const SizedBox(height: 8),
                         Container(
                           padding: const EdgeInsets.symmetric(
@@ -652,6 +681,18 @@ class _AlarmListScreenState extends State<AlarmListScreen>
                           ),
                           child: Builder(
                             builder: (context) {
+                              // v2.27: generic badge when the flag is set but
+                              // the exact trigger time couldn't be read.
+                              if (snoozedUntil == null) {
+                                return Text(
+                                  '⏰ ${l10n.snoozedGeneric}',
+                                  style: const TextStyle(
+                                    fontSize: 13,
+                                    fontWeight: FontWeight.w800,
+                                    color: AppTheme.emerald,
+                                  ),
+                                );
+                              }
                               final used = _snoozeCounts[a.id] ?? 0;
                               final max = a.maxSnoozes;
                               final timeStr = _timeText12(snoozedUntil.hour,

@@ -375,17 +375,28 @@ class _AlarmEditScreenState extends State<AlarmEditScreen> {
             ),
             ListTile(
               title: Text(l10n.fadeIn),
-              subtitle: Slider(
-                value: _fadeInSeconds.toDouble(),
-                min: 0,
-                max: 60,
-                divisions: 12,
-                label: _fadeInSeconds == 0
-                    ? l10n.noFadeIn
-                    : l10n.secondsUnit(_fadeInSeconds),
-                onChanged: (v) =>
-                    setState(() => _fadeInSeconds = v.round()),
-                onChangeEnd: (_) => _dirty = true,
+              // v2.27: explain what gradual volume does — the user asked.
+              subtitle: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    l10n.fadeInDesc,
+                    style: const TextStyle(
+                        fontSize: 12, color: Colors.white54),
+                  ),
+                  Slider(
+                    value: _fadeInSeconds.toDouble(),
+                    min: 0,
+                    max: 60,
+                    divisions: 12,
+                    label: _fadeInSeconds == 0
+                        ? l10n.noFadeIn
+                        : l10n.secondsUnit(_fadeInSeconds),
+                    onChanged: (v) =>
+                        setState(() => _fadeInSeconds = v.round()),
+                    onChangeEnd: (_) => _dirty = true,
+                  ),
+                ],
               ),
               trailing: Text(
                 _fadeInSeconds == 0

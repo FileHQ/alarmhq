@@ -24,6 +24,12 @@ class NativeBridge {
   static Future<bool> cancelAlarm(int id) async =>
       await _alarm.invokeMethod<bool>('cancelAlarm', {'id': id}) ?? false;
 
+  /// v2.27: cancel only the regular occurrence, keeping a pending snooze
+  /// one-shot alive. Used by reschedule() so app restarts don't kill snoozes.
+  static Future<bool> cancelRegularAlarm(int id) async =>
+      await _alarm.invokeMethod<bool>('cancelRegularAlarm', {'id': id}) ??
+      false;
+
   static Future<bool> cancelAllAlarms() async =>
       await _alarm.invokeMethod<bool>('cancelAllAlarms') ?? false;
 

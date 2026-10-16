@@ -74,6 +74,13 @@ class MainActivity : Activity() {
                     if (id >= 0) AlarmScheduler.cancel(this, id)
                     result.success(true)
                 }
+                // v2.27: cancel only the regular occurrence — keeps a
+                // pending snooze one-shot alive. Used by reschedule().
+                "cancelRegularAlarm" -> {
+                    val id = call.argument<Number>("id")?.toInt() ?: -1
+                    if (id >= 0) AlarmScheduler.cancelRegular(this, id)
+                    result.success(true)
+                }
                 "cancelAllAlarms" -> {
                     AlarmScheduler.cancelAll(this)
                     result.success(true)

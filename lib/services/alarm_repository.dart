@@ -84,7 +84,10 @@ class AlarmRepository {
     // v2.15: diagnostic logging to trace scheduling issues.
     // ignore: avoid_print
     print('AlarmHQ reschedule(id=${alarm.id}, enabled=${alarm.enabled})');
-    await NativeBridge.cancelAlarm(alarm.id);
+    // v2.27: cancel ONLY the regular occurrence — cancelAlarm() also kills
+    // the snooze one-shot, so every app start (rescheduleAll) was silently
+    // deleting pending snoozes and they never rang again.
+    await NativeBridge.cancelRegularAlarm(alarm.id);
     if (!alarm.enabled) return;
     final next = NextOccurrence.nextTrigger(alarm, DateTime.now());
     if (next == null) {

@@ -108,6 +108,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get fadeIn => 'Gradual volume';
 
   @override
+  String get fadeInDesc => 'Alarm starts quiet and gets louder gradually';
+
+  @override
   String get granted => 'Granted';
 
   @override
@@ -361,6 +364,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String snoozedUntilLeft(Object left, Object time) {
     return 'Snoozed until $time ($left left)';
   }
+
+  @override
+  String get snoozedGeneric => 'Snoozed';
 
   @override
   String get fsBannerTitle => 'Full-screen alarm is off';

@@ -272,6 +272,12 @@ abstract class AppLocalizations {
   /// **'Gradual volume'**
   String get fadeIn;
 
+  /// No description provided for @fadeInDesc.
+  ///
+  /// In en, this message translates to:
+  /// **'Alarm starts quiet and gets louder gradually'**
+  String get fadeInDesc;
+
   /// No description provided for @granted.
   ///
   /// In en, this message translates to:
@@ -733,6 +739,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Snoozed until {time} ({left} left)'**
   String snoozedUntilLeft(Object left, Object time);
+
+  /// No description provided for @snoozedGeneric.
+  ///
+  /// In en, this message translates to:
+  /// **'Snoozed'**
+  String get snoozedGeneric;
 
   /// No description provided for @fsBannerTitle.
   ///

@@ -107,6 +107,9 @@ class AppLocalizationsUr extends AppLocalizations {
   String get fadeIn => 'آواز آہستہ آہستہ بڑھے';
 
   @override
+  String get fadeInDesc => 'الارم ہلکی آواز سے شروع ہو کر آہستہ آہستہ تیز ہوگا';
+
+  @override
   String get granted => 'اجازت ہے';
 
   @override
@@ -358,6 +361,9 @@ class AppLocalizationsUr extends AppLocalizations {
   String snoozedUntilLeft(Object left, Object time) {
     return '$time تک اسنوز ($left باقی)';
   }
+
+  @override
+  String get snoozedGeneric => 'اسنوز ہے';
 
   @override
   String get fsBannerTitle => 'فل اسکرین الارم بند ہے';

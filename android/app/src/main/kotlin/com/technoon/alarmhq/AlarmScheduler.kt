@@ -235,10 +235,17 @@ object AlarmScheduler {
             putExtra("isSnooze", isSnooze)
         }
         val flags = PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
-        // Unique request code per alarm (+1 for snooze one-shots).
-        val rc = if (isSnooze) id * 10 + 7 else id
+        // Unique request code per alarm. v2.27: snooze one-shots use
+        // id + 100000 (was id * 10 + 7, which collided with a regular
+        // alarm whose id happened to equal id * 10 + 7 — e.g. alarm 1's
+        // snooze (rc 17) vs alarm 17's regular fire (rc 17) — silently
+        // overwriting each other's extras via FLAG_UPDATE_CURRENT).
+        val rc = if (isSnooze) id + 100000 else id
         return PendingIntent.getBroadcast(context, rc, intent, flags)
     }
+
+    /** v2.27: request code used by older builds for snooze one-shots. */
+    private fun legacySnoozeRc(id: Int) = id * 10 + 7
 
     private fun showIntent(context: Context): PendingIntent {
         val intent = Intent(context, MainActivity::class.java)
@@ -310,16 +317,15 @@ object AlarmScheduler {
             .putLong("snooze_trigger_$id", trigger)
             .putInt("snooze_count_$id", snoozeCount)
             .commit()
-        // v2.21: mirror into the Dart prefs file ("alarmhq_prefs") as a
-        // backup source for the card badge — belt and suspenders.
-        // v2.24: synchronous too, same reason as above.
-        // v2.26: also mirror the raw Long key so the new
-        // getSnoozeTriggerBackup() fallback can read it directly.
+        // v2.27: bulletproof "is snoozed" flag for the card badge. Even if
+        // every trigger-time read misses (id mismatch, clock skew), the
+        // Dart UI can still show a generic "Snoozed" badge off this flag.
         try {
             context.getSharedPreferences("alarmhq_prefs", Context.MODE_PRIVATE)
                 .edit()
                 .putString("dart_snooze_trigger_$id", trigger.toString())
                 .putLong("snooze_trigger_$id", trigger)
+                .putString("snoozed_active_$id", "1")
                 .commit()
         } catch (_: Exception) { }
         android.util.Log.i(
@@ -328,8 +334,14 @@ object AlarmScheduler {
         )
         val am = alarmManager(context)
         val info = AlarmManager.AlarmClockInfo(trigger, showIntent(context))
-        am.setAlarmClock(
-            info, fireIntent(context, id, alarmJson, snoozeCount, true)
+        val snoozePi = fireIntent(context, id, alarmJson, snoozeCount, true)
+        am.setAlarmClock(info, snoozePi)
+        // v2.27: diagnostic — setAlarmClock returns void, so log that we
+        // actually reached it and what we armed.
+        android.util.Log.i(
+            "AlarmHQ",
+            "scheduleSnooze($id): setAlarmClock armed for " +
+                "${java.util.Date(trigger)} (rc=${id + 100000})",
         )
         // v2.5: show the persistent Xiaomi-style "Snoozed until X"
         // notification with a working Stop action.
@@ -354,6 +366,12 @@ object AlarmScheduler {
         // Expired entries are stale — drop them.
         if (t <= System.currentTimeMillis()) {
             miscPrefs(context).edit().remove("snooze_trigger_$id").apply()
+            // v2.27: drop the badge flag too so a stale "Snoozed"
+            // indicator can't linger.
+            try {
+                context.getSharedPreferences("alarmhq_prefs", Context.MODE_PRIVATE)
+                    .edit().remove("snoozed_active_$id").apply()
+            } catch (_: Exception) { }
             return null
         }
         return t
@@ -393,12 +411,45 @@ object AlarmScheduler {
         miscPrefs(context).edit().remove("snooze_count_$id").apply()
         // v2.21: also drop the Dart-prefs backup (see scheduleSnooze).
         // v2.26: also the raw Long mirror.
+        // v2.27: also the bulletproof snoozed_active flag.
         try {
             context.getSharedPreferences("alarmhq_prefs", Context.MODE_PRIVATE)
                 .edit()
                 .remove("dart_snooze_trigger_$id")
                 .remove("snooze_trigger_$id")
+                .remove("snoozed_active_$id")
                 .apply()
+        } catch (_: Exception) { }
+    }
+
+    /**
+     * v2.27: cancel ONLY the regular occurrence of [id], leaving a pending
+     * snooze one-shot untouched. Used by reschedule(): the old code called
+     * cancel() here, which also killed the snooze PendingIntent — so any
+     * app start/resume (main.dart calls rescheduleAll on launch) silently
+     * deleted pending snoozes and they never rang again.
+     */
+    fun cancelRegular(context: Context, id: Int) {
+        val am = alarmManager(context)
+        am.cancel(fireIntent(context, id, "{}", 0, false))
+        updateWidget(context)
+    }
+
+    /** Cancel the snooze one-shot for [id], both current and legacy rcs. */
+    private fun cancelSnoozePi(context: Context, id: Int) {
+        val am = alarmManager(context)
+        am.cancel(fireIntent(context, id, "{}", 0, true))
+        // v2.27: also kill a one-shot armed by an older build (rc scheme
+        // changed from id * 10 + 7 to id + 100000).
+        try {
+            val legacy = Intent(context, AlarmReceiver::class.java)
+            val flags =
+                PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
+            am.cancel(
+                PendingIntent.getBroadcast(
+                    context, legacySnoozeRc(id), legacy, flags
+                )
+            )
         } catch (_: Exception) { }
     }
 
@@ -406,7 +457,7 @@ object AlarmScheduler {
         val am = alarmManager(context)
         // Cancel both the regular and any snooze pending intents.
         am.cancel(fireIntent(context, id, "{}", 0, false))
-        am.cancel(fireIntent(context, id, "{}", 0, true))
+        cancelSnoozePi(context, id)
         removeDef(context, id)
         // v2.4: drop any pending snooze trigger for the UI countdown.
         clearSnoozeTrigger(context, id)
@@ -415,8 +466,7 @@ object AlarmScheduler {
 
     /** Cancel only the pending snooze one-shot for [id] (keeps the def). */
     fun cancelSnoozeOnly(context: Context, id: Int) {
-        val am = alarmManager(context)
-        am.cancel(fireIntent(context, id, "{}", 0, true))
+        cancelSnoozePi(context, id)
         clearSnoozeTrigger(context, id)
         updateWidget(context)
     }

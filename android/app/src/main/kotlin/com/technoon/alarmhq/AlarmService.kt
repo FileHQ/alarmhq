@@ -448,6 +448,11 @@ class AlarmService : Service() {
 
     private fun playTone(toneUri: String, fadeInSeconds: Int, fixedVolume: Float?) {
         stopPlayback()
+        // v2.27: diagnostic — the user reported fade-in never ramps.
+        android.util.Log.i(
+            "AlarmHQ",
+            "playTone: fadeInSeconds=$fadeInSeconds fixedVolume=$fixedVolume uri=$toneUri",
+        )
         try {
             val mp = MediaPlayer().apply {
                 setAudioAttributes(
@@ -469,18 +474,26 @@ class AlarmService : Service() {
                 isLooping = true
                 prepare()
             }
-            val startVol = if (fadeInSeconds > 0 && fixedVolume == null) 0.05f
-            else (fixedVolume ?: 1.0f)
-            mp.setVolume(startVol, startVol)
+            // v2.27: set the start volume AFTER start(). On some OEM ROMs
+            // (incl. ColorOS/Realme) a setVolume() issued before start() is
+            // silently discarded, so the alarm blasted at full volume and
+            // the user-perceived "gradual volume" never worked.
             mp.start()
             player = mp
+            val startVol = if (fadeInSeconds > 0 && fixedVolume == null) 0.05f
+            else (fixedVolume ?: 1.0f)
+            try { mp.setVolume(startVol, startVol) } catch (_: Exception) { }
             if (fadeInSeconds > 0 && fixedVolume == null) {
                 val steps = 20
                 val delay = (fadeInSeconds * 1000L) / steps
                 var step = 1
                 rampRunnable = object : Runnable {
                     override fun run() {
-                        val v = 0.05f + 0.95f * step / steps
+                        // v2.27: bail out if this player is no longer the
+                        // active one (stopped/replaced) — never touch a
+                        // released MediaPlayer.
+                        if (player !== mp) return
+                        val v = 0.05f + (0.95f * step / steps)
                         try { mp.setVolume(v, v) } catch (_: Exception) { return }
                         if (++step <= steps) handler.postDelayed(this, delay)
                     }
@@ -490,11 +503,12 @@ class AlarmService : Service() {
         } catch (_: Exception) {
             // Tone failed (e.g. revoked file permission) — fall back to the
             // system default alarm sound so the alarm still makes noise.
-            tryFallbackTone()
+            // v2.27: carry the fade-in through so the fallback ramps too.
+            tryFallbackTone(fadeInSeconds)
         }
     }
 
-    private fun tryFallbackTone() {
+    private fun tryFallbackTone(fadeInSeconds: Int = 0) {
         try {
             val uri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_ALARM)
                 ?: return
@@ -508,10 +522,28 @@ class AlarmService : Service() {
                 setDataSource(applicationContext, uri)
                 isLooping = true
                 prepare()
-                setVolume(1.0f, 1.0f)
+                // v2.27: volume AFTER start (see playTone), and honor the
+                // fade-in here too so the fallback path also ramps.
                 start()
             }
             player = mp
+            if (fadeInSeconds > 0) {
+                try { mp.setVolume(0.05f, 0.05f) } catch (_: Exception) { }
+                val steps = 20
+                val delay = (fadeInSeconds * 1000L) / steps
+                var step = 1
+                rampRunnable = object : Runnable {
+                    override fun run() {
+                        if (player !== mp) return
+                        val v = 0.05f + (0.95f * step / steps)
+                        try { mp.setVolume(v, v) } catch (_: Exception) { return }
+                        if (++step <= steps) handler.postDelayed(this, delay)
+                    }
+                }
+                handler.postDelayed(rampRunnable!!, delay)
+            } else {
+                try { mp.setVolume(1.0f, 1.0f) } catch (_: Exception) { }
+            }
         } catch (_: Exception) { /* last resort: vibration only */ }
     }
 
