@@ -653,7 +653,7 @@ abstract class AppLocalizations {
   /// No description provided for @repeatOnce.
   ///
   /// In en, this message translates to:
-  /// **'One time'**
+  /// **'Once'**
   String get repeatOnce;
 
   /// No description provided for @repeatSpecificDates.
@@ -671,7 +671,7 @@ abstract class AppLocalizations {
   /// No description provided for @repeatWeeklyShort.
   ///
   /// In en, this message translates to:
-  /// **'Weekly'**
+  /// **'Week'**
   String get repeatWeeklyShort;
 
   /// No description provided for @ringsIn.

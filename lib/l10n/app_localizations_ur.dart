@@ -310,7 +310,7 @@ class AppLocalizationsUr extends AppLocalizations {
   String get repeatNDays => 'N دن';
 
   @override
-  String get repeatOnce => 'ایک بار';
+  String get repeatOnce => 'ایک دفعہ';
 
   @override
   String get repeatSpecificDates => 'مخصوص تاریخیں';
@@ -319,7 +319,7 @@ class AppLocalizationsUr extends AppLocalizations {
   String get repeatWeekly => 'ہفتہ وار دن';
 
   @override
-  String get repeatWeeklyShort => 'ہفتہ وار';
+  String get repeatWeeklyShort => 'ہفتہ';
 
   @override
   String ringsIn(Object duration) {
