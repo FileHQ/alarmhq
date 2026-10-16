@@ -23,7 +23,8 @@ import org.json.JSONObject
 
 /**
  * Foreground service that sounds the alarm: plays the tone (with optional
- * gradual volume ramp), vibrates, and brings up the full-screen UI.
+ * stepped gradual volume — 10%/35%/65%/100% on STREAM_ALARM), vibrates,
+ * and brings up the full-screen UI.
  * Also handles tone previews from the editor screen.
  */
 class AlarmService : Service() {
@@ -60,7 +61,11 @@ class AlarmService : Service() {
     private var wakeLock: PowerManager.WakeLock? = null
     private var vibrator: Vibrator? = null
     private val handler = Handler(Looper.getMainLooper())
-    private var rampRunnable: Runnable? = null
+    // v2.29: STREAM_ALARM fade state. MediaPlayer.setVolume() is silently
+    // ignored on some OEM ROMs (ColorOS/Realme), so the fade is done on the
+    // system alarm-stream volume instead.
+    private var savedAlarmVolume: Int = -1 // -1 = no fade active / nothing to restore
+    private var streamRampRunnable: Runnable? = null
 
     override fun onBind(intent: Intent?): IBinder? = null
 
@@ -449,10 +454,15 @@ class AlarmService : Service() {
     private fun playTone(toneUri: String, fadeInSeconds: Int, fixedVolume: Float?) {
         stopPlayback()
         // v2.27: diagnostic — the user reported fade-in never ramps.
+        // v2.29: also logs the STREAM_ALARM ramp path.
         android.util.Log.i(
             "AlarmHQ",
             "playTone: fadeInSeconds=$fadeInSeconds fixedVolume=$fixedVolume uri=$toneUri",
         )
+        // v2.29: fade on the system STREAM_ALARM volume — OEMs (Realme/
+        // ColorOS) may ignore MediaPlayer.setVolume(), but the stream
+        // volume always works. Not used for previews (fixedVolume != null).
+        val useStreamRamp = fadeInSeconds > 0 && fixedVolume == null
         try {
             val mp = MediaPlayer().apply {
                 setAudioAttributes(
@@ -468,43 +478,134 @@ class AlarmService : Service() {
                     setDataSource(afd.fileDescriptor, afd.startOffset, afd.length)
                     afd.close()
                 } else {
-                    val uri = resolveUri(toneUri) ?: return
+                    val uri = resolveUri(toneUri)
+                    if (uri == null) {
+                        android.util.Log.w(
+                            "AlarmHQ",
+                            "playTone: could not resolve $toneUri, aborting",
+                        )
+                        return
+                    }
                     setDataSource(applicationContext, uri)
                 }
                 isLooping = true
                 prepare()
             }
-            // v2.27: set the start volume AFTER start(). On some OEM ROMs
-            // (incl. ColorOS/Realme) a setVolume() issued before start() is
-            // silently discarded, so the alarm blasted at full volume and
-            // the user-perceived "gradual volume" never worked.
+            // v2.29: lower the stream right before the first audible frame
+            // so no full-volume blip escapes.
+            var rampTarget = -1
+            if (useStreamRamp) {
+                rampTarget = saveAndLowerAlarmVolume()
+            }
             mp.start()
             player = mp
-            val startVol = if (fadeInSeconds > 0 && fixedVolume == null) 0.05f
-            else (fixedVolume ?: 1.0f)
-            try { mp.setVolume(startVol, startVol) } catch (_: Exception) { }
-            if (fadeInSeconds > 0 && fixedVolume == null) {
-                val steps = 20
-                val delay = (fadeInSeconds * 1000L) / steps
-                var step = 1
-                rampRunnable = object : Runnable {
-                    override fun run() {
-                        // v2.27: bail out if this player is no longer the
-                        // active one (stopped/replaced) — never touch a
-                        // released MediaPlayer.
-                        if (player !== mp) return
-                        val v = 0.05f + (0.95f * step / steps)
-                        try { mp.setVolume(v, v) } catch (_: Exception) { return }
-                        if (++step <= steps) handler.postDelayed(this, delay)
-                    }
+            // Player at full — the audible fade comes from STREAM_ALARM.
+            try { mp.setVolume(1.0f, 1.0f) } catch (_: Exception) { }
+            if (useStreamRamp) {
+                if (rampTarget > 1) {
+                    startStreamVolumeRamp(rampTarget, fadeInSeconds)
+                } else {
+                    // Nothing to ramp (target already at/below minimum).
+                    savedAlarmVolume = -1
                 }
-                handler.postDelayed(rampRunnable!!, delay)
             }
         } catch (_: Exception) {
             // Tone failed (e.g. revoked file permission) — fall back to the
             // system default alarm sound so the alarm still makes noise.
-            // v2.27: carry the fade-in through so the fallback ramps too.
             tryFallbackTone(fadeInSeconds)
+        }
+    }
+
+    /**
+     * v2.29: remember the user's STREAM_ALARM volume (once per fade) and drop
+     * the stream to 1 (minimum audible). Returns the target volume to ramp
+     * back up to, or -1 when the stream volume could not be read.
+     */
+    private fun saveAndLowerAlarmVolume(): Int {
+        return try {
+            val am = getSystemService(Context.AUDIO_SERVICE) as AudioManager
+            val max = am.getStreamMaxVolume(AudioManager.STREAM_ALARM)
+            if (savedAlarmVolume < 0) {
+                savedAlarmVolume = am.getStreamVolume(AudioManager.STREAM_ALARM)
+            }
+            am.setStreamVolume(AudioManager.STREAM_ALARM, 1, 0)
+            android.util.Log.i(
+                "AlarmHQ",
+                "fadeIn: saved STREAM_ALARM=$savedAlarmVolume/$max, lowered to 1",
+            )
+            savedAlarmVolume
+        } catch (e: Exception) {
+            android.util.Log.w(
+                "AlarmHQ",
+                "fadeIn: could not adjust STREAM_ALARM: ${e.message}",
+            )
+            -1
+        }
+    }
+
+    /**
+     * v2.29: ramp STREAM_ALARM from 1 up to [target] over [fadeInSeconds],
+     * logging every step so a logcat shows exactly what happened.
+     */
+    private fun startStreamVolumeRamp(target: Int, fadeInSeconds: Int) {
+        val am = getSystemService(Context.AUDIO_SERVICE) as AudioManager
+        val max = try {
+            am.getStreamMaxVolume(AudioManager.STREAM_ALARM)
+        } catch (_: Exception) { target }
+        // v2.29: the stepped fade the user asked for — 4 distinct steps:
+        // 10% -> 35% -> 65% -> 100% of the saved volume, each step lasting
+        // fadeInSeconds/4 (e.g. 7.5s per step for a 30s fade).
+        val fractions = floatArrayOf(0.10f, 0.35f, 0.65f, 1.0f)
+        val stepDelay = (fadeInSeconds * 1000L) / 4
+        android.util.Log.i(
+            "AlarmHQ",
+            "fadeIn: stepped ramp STREAM_ALARM 1 -> $target/$max over " +
+                "${fadeInSeconds}s (10%/35%/65%/100%, ${stepDelay}ms per step)",
+        )
+        var step = 0
+        streamRampRunnable = object : Runnable {
+            override fun run() {
+                // Bail if the fade was cancelled (alarm stopped/dismissed).
+                if (savedAlarmVolume < 0) return
+                val f = fractions[step]
+                val v = Math.round(1 + (target - 1) * f)
+                try {
+                    am.setStreamVolume(AudioManager.STREAM_ALARM, v, 0)
+                    android.util.Log.i(
+                        "AlarmHQ",
+                        "fadeIn: step ${step + 1}/4 STREAM_ALARM=$v/$target " +
+                            "(${(f * 100).toInt()}%)",
+                    )
+                } catch (_: Exception) { return }
+                step++
+                if (step < 4) {
+                    handler.postDelayed(this, stepDelay)
+                } else {
+                    // Ramp complete — volume is back at the saved level.
+                    savedAlarmVolume = -1
+                }
+            }
+        }
+        // Step 1 (10%) applies immediately — the first "very low" seconds.
+        handler.post(streamRampRunnable!!)
+    }
+
+    /** v2.29: cancel any in-flight ramp and restore the saved stream volume. */
+    private fun restoreAlarmVolume() {
+        streamRampRunnable?.let { handler.removeCallbacks(it) }
+        streamRampRunnable = null
+        if (savedAlarmVolume >= 0) {
+            try {
+                val am = getSystemService(Context.AUDIO_SERVICE) as AudioManager
+                am.setStreamVolume(
+                    AudioManager.STREAM_ALARM, savedAlarmVolume, 0
+                )
+                android.util.Log.i(
+                    "AlarmHQ",
+                    "fadeIn: restored STREAM_ALARM=$savedAlarmVolume",
+                )
+            } catch (_: Exception) { }
+            savedAlarmVolume = -1
         }
     }
 
@@ -512,6 +613,7 @@ class AlarmService : Service() {
         try {
             val uri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_ALARM)
                 ?: return
+            val useStreamRamp = fadeInSeconds > 0
             val mp = MediaPlayer().apply {
                 setAudioAttributes(
                     AudioAttributes.Builder()
@@ -522,29 +624,27 @@ class AlarmService : Service() {
                 setDataSource(applicationContext, uri)
                 isLooping = true
                 prepare()
-                // v2.27: volume AFTER start (see playTone), and honor the
-                // fade-in here too so the fallback path also ramps.
-                start()
             }
+            // v2.29: lower the stream right before the first audible frame.
+            var rampTarget = -1
+            if (useStreamRamp) {
+                rampTarget = saveAndLowerAlarmVolume()
+            }
+            mp.start()
             player = mp
-            if (fadeInSeconds > 0) {
-                try { mp.setVolume(0.05f, 0.05f) } catch (_: Exception) { }
-                val steps = 20
-                val delay = (fadeInSeconds * 1000L) / steps
-                var step = 1
-                rampRunnable = object : Runnable {
-                    override fun run() {
-                        if (player !== mp) return
-                        val v = 0.05f + (0.95f * step / steps)
-                        try { mp.setVolume(v, v) } catch (_: Exception) { return }
-                        if (++step <= steps) handler.postDelayed(this, delay)
-                    }
+            try { mp.setVolume(1.0f, 1.0f) } catch (_: Exception) { }
+            if (useStreamRamp) {
+                if (rampTarget > 1) {
+                    startStreamVolumeRamp(rampTarget, fadeInSeconds)
+                } else {
+                    savedAlarmVolume = -1
                 }
-                handler.postDelayed(rampRunnable!!, delay)
-            } else {
-                try { mp.setVolume(1.0f, 1.0f) } catch (_: Exception) { }
             }
-        } catch (_: Exception) { /* last resort: vibration only */ }
+        } catch (_: Exception) {
+            // v2.29: failed before/while lowering — don't leave the stream
+            // stuck at 1. Last resort: vibration only.
+            restoreAlarmVolume()
+        }
     }
 
     private fun startVibration() {
@@ -575,8 +675,9 @@ class AlarmService : Service() {
     }
 
     private fun stopPlayback() {
-        rampRunnable?.let { handler.removeCallbacks(it) }
-        rampRunnable = null
+        // v2.29: stop the STREAM_ALARM ramp and give the user their
+        // original volume back.
+        restoreAlarmVolume()
         try { player?.stop() } catch (_: Exception) {}
         try { player?.release() } catch (_: Exception) {}
         player = null
