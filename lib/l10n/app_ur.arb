@@ -79,7 +79,7 @@
   "permLockScreenTitle": "لاک اسکرین پر دکھائیں",
   "permLockScreenDesc": "اس کے بغیر لاک اسکرین پر الارم کبھی نظر نہیں آئے گا۔ طریقہ: 1۔ نیچے 'Open Settings' دبائیں۔ 2۔ 'Show on Lock screen' آن کریں ('Open new windows while running in the background' بھی آن کریں)۔ 3۔ ایپ میں واپس آئیں۔",
   "permUnusedTitle": "خودکار اجازت منسوخی",
-  "permUnusedDesc": "AlarmHQ کے لیے اسے آف رکھیں، ورنہ Android اجازتیں ہٹا دے گا اور الارم بجنا بند ہو سکتا ہے۔",
+  "permUnusedDesc": "⚠️ اگر یہ آن ہے تو اینڈرائیڈ کچھ دن ایپ نہ کھولنے پر آپ کی الارم پرمیشنز خود ہٹا دے گا! اسے آف کریں۔",
   "permLockScreenReminder": "سیٹنگز ← ایپس ← AlarmHQ میں \"Show on Lock screen\" آن کریں — اور \"Open new windows while running in the background\" بھی۔",
   "permSkip": "ابھی چھوڑیں",
   "permTitle": "اجازتیں درکار ہیں",
@@ -144,5 +144,6 @@
   "weekdayTue": "منگل",
   "weekdayWed": "بدھ",
   "weeklySummary": "{days}",
-  "permBgActivityReminder": "سیٹنگز ← ایپس میں AlarmHQ کے لیے \"Allow background activity\" بھی آن کریں تاکہ ایپ بند ہو تو بھی الارم بجے۔"
+  "permBgActivityReminder": "سیٹنگز ← ایپس میں AlarmHQ کے لیے \"Allow background activity\" بھی آن کریں تاکہ ایپ بند ہو تو بھی الارم بجے۔",
+  "permUnusedBanner": "⚠️ اینڈرائیڈ AlarmHQ کی پرمیشنز خود ہٹا سکتا ہے — Settings → Apps → AlarmHQ میں \"Manage app if unused\" آف کریں۔"
 }

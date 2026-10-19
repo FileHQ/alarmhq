@@ -229,12 +229,58 @@ class _PermissionScreenState extends State<PermissionScreen>
               textAlign: TextAlign.center,
             ),
             const SizedBox(height: 28),
+            // v2.31 (critical): the user's full-screen permission was
+            // AUTO-REMOVED by Android's "Manage app if unused". This card
+            // is FIRST so it can't be missed, plus a red banner above.
+            if (_showUnusedCard)
+              Container(
+                margin: const EdgeInsets.only(bottom: 12),
+                padding: const EdgeInsets.all(14),
+                decoration: BoxDecoration(
+                  color: const Color(0xFF3A2222),
+                  borderRadius: BorderRadius.circular(14),
+                  border: Border.all(color: Colors.redAccent, width: 2),
+                ),
+                child: Text(
+                  l10n.permUnusedBanner,
+                  style: const TextStyle(
+                    fontSize: 14,
+                    fontWeight: FontWeight.w700,
+                    color: Colors.redAccent,
+                    height: 1.5,
+                  ),
+                  textAlign: TextAlign.center,
+                ),
+              ),
+            // v2.18: Android 12+ "Manage app if unused" silently removes
+            // AlarmHQ's permissions. Warn + open the settings page.
+            // v2.19: cannot be checked via API — never shown as "Granted".
+            // v2.31: FIRST card. Never blocks Continue.
+            if (_showUnusedCard)
+              _permCard(
+                icon: '🗑️',
+                title: l10n.permUnusedTitle,
+                desc: l10n.permUnusedDesc,
+                granted: false,
+                verifiable: false,
+                opened: _unusedVisited,
+                onGrant: () async {
+                  try {
+                    await NativeBridge.openAppDetailsSettings()
+                        .timeout(const Duration(seconds: 2));
+                  } catch (_) {
+                    // Best effort: the settings page was still launched.
+                  }
+                  if (mounted) setState(() => _unusedVisited = true);
+                },
+                l10n: l10n,
+                highlight: true,
+              ),
             // v2.22 (critical): on Realme/Oppo/OnePlus (ColorOS) the
             // "Show on Lock screen" toggle lives inside the app's system
             // settings page. Without it, the alarm NEVER appears on the
-            // lock screen. FIRST card on ColorOS so it can't be missed.
-            // v2.19: cannot be checked via API — never shown as "Granted".
-            // Never blocks Continue.
+            // lock screen. v2.19: cannot be checked via API — never shown
+            // as "Granted". Never blocks Continue.
             if (_showLockCard)
               _permCard(
                 icon: '🔒',
@@ -333,30 +379,6 @@ class _PermissionScreenState extends State<PermissionScreen>
               },
               l10n: l10n,
             ),
-            // v2.18: Android 12+ "Manage app if unused" silently removes
-            // AlarmHQ's permissions. Warn + open the settings page.
-            // v2.19: cannot be checked via API — never shown as "Granted".
-            // Never blocks Continue.
-            if (_showUnusedCard)
-              _permCard(
-                icon: '🗑️',
-                title: l10n.permUnusedTitle,
-                desc: l10n.permUnusedDesc,
-                granted: false,
-                verifiable: false,
-                opened: _unusedVisited,
-                onGrant: () async {
-                  try {
-                    await NativeBridge.openAppDetailsSettings()
-                        .timeout(const Duration(seconds: 2));
-                  } catch (_) {
-                    // Best effort: the settings page was still launched.
-                  }
-                  if (mounted) setState(() => _unusedVisited = true);
-                },
-                l10n: l10n,
-                highlight: true,
-              ),
             const SizedBox(height: 24),
             SizedBox(
               width: double.infinity,

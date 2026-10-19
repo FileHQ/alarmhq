@@ -273,7 +273,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get permUnusedDesc =>
-      'Keep this OFF for AlarmHQ in Settings → Apps, or Android will remove AlarmHQ\'s permissions and the alarm may stop ringing.';
+      '⚠️ If this is ON, Android will AUTOMATICALLY REMOVE your alarm permissions after a few days of not opening the app! Turn it OFF.';
 
   @override
   String get permLockScreenReminder =>
@@ -492,4 +492,8 @@ class AppLocalizationsEn extends AppLocalizations {
   @override
   String get permBgActivityReminder =>
       'Also enable \"Allow background activity\" for AlarmHQ in Settings > Apps, so the alarm rings when the app is closed.';
+
+  @override
+  String get permUnusedBanner =>
+      '⚠️ Android may AUTO-REMOVE AlarmHQ\'s permissions — turn OFF \"Manage app if unused\" in Settings → Apps → AlarmHQ.';
 }

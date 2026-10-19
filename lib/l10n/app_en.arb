@@ -79,7 +79,7 @@
   "permLockScreenTitle": "Show on Lock screen",
   "permLockScreenDesc": "Without this, the alarm NEVER appears on the lock screen. Steps: 1. Tap 'Open Settings' below. 2. Turn ON 'Show on Lock screen' (also turn ON 'Open new windows while running in the background'). 3. Return to the app.",
   "permUnusedTitle": "Auto-remove permissions",
-  "permUnusedDesc": "Keep this OFF for AlarmHQ in Settings → Apps, or Android will remove AlarmHQ's permissions and the alarm may stop ringing.",
+  "permUnusedDesc": "⚠️ If this is ON, Android will AUTOMATICALLY REMOVE your alarm permissions after a few days of not opening the app! Turn it OFF.",
   "permLockScreenReminder": "In Settings → Apps → AlarmHQ, turn ON \"Show on Lock screen\" — and also \"Open new windows while running in the background\".",
   "permSkip": "Skip for now",
   "permTitle": "Permissions needed",
@@ -144,5 +144,6 @@
   "weekdayTue": "Tue",
   "weekdayWed": "Wed",
   "weeklySummary": "{days}",
-  "permBgActivityReminder": "Also enable \"Allow background activity\" for AlarmHQ in Settings > Apps, so the alarm rings when the app is closed."
+  "permBgActivityReminder": "Also enable \"Allow background activity\" for AlarmHQ in Settings > Apps, so the alarm rings when the app is closed.",
+  "permUnusedBanner": "⚠️ Android may AUTO-REMOVE AlarmHQ's permissions — turn OFF \"Manage app if unused\" in Settings → Apps → AlarmHQ."
 }

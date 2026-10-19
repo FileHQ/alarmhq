@@ -270,7 +270,7 @@ class AppLocalizationsUr extends AppLocalizations {
 
   @override
   String get permUnusedDesc =>
-      'AlarmHQ کے لیے اسے آف رکھیں، ورنہ Android اجازتیں ہٹا دے گا اور الارم بجنا بند ہو سکتا ہے۔';
+      '⚠️ اگر یہ آن ہے تو اینڈرائیڈ کچھ دن ایپ نہ کھولنے پر آپ کی الارم پرمیشنز خود ہٹا دے گا! اسے آف کریں۔';
 
   @override
   String get permLockScreenReminder =>
@@ -487,4 +487,8 @@ class AppLocalizationsUr extends AppLocalizations {
   @override
   String get permBgActivityReminder =>
       'سیٹنگز ← ایپس میں AlarmHQ کے لیے \"Allow background activity\" بھی آن کریں تاکہ ایپ بند ہو تو بھی الارم بجے۔';
+
+  @override
+  String get permUnusedBanner =>
+      '⚠️ اینڈرائیڈ AlarmHQ کی پرمیشنز خود ہٹا سکتا ہے — Settings → Apps → AlarmHQ میں \"Manage app if unused\" آف کریں۔';
 }
