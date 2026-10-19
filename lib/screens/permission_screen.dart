@@ -276,6 +276,24 @@ class _PermissionScreenState extends State<PermissionScreen>
                 l10n: l10n,
                 highlight: true,
               ),
+            // v2.32: battery-optimization card moved to the TOP (right
+            // below the auto-revoke warning). The user couldn't find the
+            // setting on her Realme — this button opens the exact system
+            // dialog, so no hunting through Settings. Highlighted until
+            // granted, like the other critical cards.
+            _permCard(
+              icon: '🔋',
+              title: l10n.permBatteryTitle,
+              desc: l10n.permBatteryDesc,
+              granted: _battery,
+              grantLabel: l10n.permBatteryGrant,
+              onGrant: () async {
+                await NativeBridge.openBatteryOptimizationSettings();
+                // Status re-checks on resume via the lifecycle observer.
+              },
+              l10n: l10n,
+              highlight: _battery != true,
+            ),
             // v2.22 (critical): on Realme/Oppo/OnePlus (ColorOS) the
             // "Show on Lock screen" toggle lives inside the app's system
             // settings page. Without it, the alarm NEVER appears on the
@@ -309,14 +327,6 @@ class _PermissionScreenState extends State<PermissionScreen>
               desc: l10n.permExactDesc,
               granted: _exact,
               onGrant: NativeBridge.openExactAlarmSettings,
-              l10n: l10n,
-            ),
-            _permCard(
-              icon: '🔋',
-              title: l10n.permBatteryTitle,
-              desc: l10n.permBatteryDesc,
-              granted: _battery,
-              onGrant: NativeBridge.openBatteryOptimizationSettings,
               l10n: l10n,
             ),
             _permCard(
@@ -428,6 +438,9 @@ class _PermissionScreenState extends State<PermissionScreen>
     // appears once the settings page has been opened.
     bool verifiable = true,
     bool opened = false,
+    // v2.32: optional custom label for the grant button
+    // (e.g. "Allow" on the battery-optimization card).
+    String? grantLabel,
   }) {
     // v2.19: unverifiable OEM cards never display the "Granted" check.
     final isGranted = verifiable && granted == true;
@@ -526,7 +539,9 @@ class _PermissionScreenState extends State<PermissionScreen>
                 // v2.19: OEM toggles can't be granted from here —
                 // the button opens the manufacturer's Settings page.
                 child: Text(
-                    verifiable ? l10n.permGrant : l10n.permOpenSettings,
+                    verifiable
+                        ? (grantLabel ?? l10n.permGrant)
+                        : l10n.permOpenSettings,
                     style: const TextStyle(
                         fontWeight: FontWeight.w700, fontSize: 15)),
               ),

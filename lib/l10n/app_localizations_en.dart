@@ -208,10 +208,13 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get permBatteryDesc =>
-      'Prevents the phone from delaying or killing alarms to save battery.';
+      'Realme may kill AlarmHQ in the background and revoke its permissions. Tap Allow, then choose \"Don\'t optimize\", so alarms always ring.';
 
   @override
-  String get permBatteryTitle => 'Ignore battery optimizations';
+  String get permBatteryGrant => 'Allow';
+
+  @override
+  String get permBatteryTitle => 'Battery Optimization';
 
   @override
   String get permBody =>

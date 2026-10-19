@@ -207,10 +207,13 @@ class AppLocalizationsUr extends AppLocalizations {
 
   @override
   String get permBatteryDesc =>
-      'فون کو بیٹری بچانے کے لیے الارم میں تاخیر یا بند کرنے سے روکتا ہے۔';
+      'ریئلمی بیک گراؤنڈ میں ایپ بند کر سکتا ہے اور پرمیشنز ہٹا سکتا ہے۔ اجازت دیں پر ٹیپ کریں، پھر \"Don\'t optimize\" منتخب کریں تاکہ الارم ہمیشہ بجے۔';
 
   @override
-  String get permBatteryTitle => 'بیٹری آپٹیمائزیشن نظرانداز کریں';
+  String get permBatteryGrant => 'اجازت دیں';
+
+  @override
+  String get permBatteryTitle => 'بیٹری آپٹیمائزیشن';
 
   @override
   String get permBody =>

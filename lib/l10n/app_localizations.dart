@@ -461,13 +461,19 @@ abstract class AppLocalizations {
   /// No description provided for @permBatteryDesc.
   ///
   /// In en, this message translates to:
-  /// **'Prevents the phone from delaying or killing alarms to save battery.'**
+  /// **'Realme may kill AlarmHQ in the background and revoke its permissions. Tap Allow, then choose \"Don\'t optimize\", so alarms always ring.'**
   String get permBatteryDesc;
+
+  /// No description provided for @permBatteryGrant.
+  ///
+  /// In en, this message translates to:
+  /// **'Allow'**
+  String get permBatteryGrant;
 
   /// No description provided for @permBatteryTitle.
   ///
   /// In en, this message translates to:
-  /// **'Ignore battery optimizations'**
+  /// **'Battery Optimization'**
   String get permBatteryTitle;
 
   /// No description provided for @permBody.
