@@ -203,7 +203,9 @@ class _CalendarScreenState extends State<CalendarScreen> {
                       const TextStyle(fontSize: 11, color: Colors.white38),
                   children: [
                     const TextSpan(text: '✓ confirmed (sighted)  '),
-                    const TextSpan(text: '~ predicted (estimated)  '),
+                    // v2.37: predictions are Pakistan-adjusted (-1 day).
+                    const TextSpan(
+                        text: '~ predicted (Pakistan-adjusted estimate)  '),
                     TextSpan(
                       text: 'Amber = calculated',
                       style: TextStyle(color: Colors.amber.shade300),

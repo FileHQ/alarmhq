@@ -237,28 +237,36 @@ void main() {
 
     // v2.37: the API skipped day 1 of Jumada al-Thani 1448
     // (2026-11-11 labeled "30 (unconfirmed)", 2026-11-12 labeled "2").
-    // The tail (2..29, then 1 Rajab) is self-consistent only if
-    // 2026-11-11 is really the 1st, so it is relabeled as predicted.
-    test('24. Skipped day 1 relabeled: 2026-11-11 is 1 Jumada al-Thani',
+    // _fixSkippedDayOne relabels 2026-11-11 as the predicted 1st; then
+    // the Pakistan shift (-1 day) moves it to 30 Jumada al-Awwal and
+    // 2026-11-12 becomes 1 Jumada al-Thani. Final display must read
+    // ..., 29, ~30, ~1, ~2, ... with no duplicates and no 28-day month.
+    test('24. Skipped day 1 + Pakistan shift: Nov 2026 sequence',
         () async {
       await HijriService.instance.load();
       final svc = HijriService.instance;
-      final nov11 = svc.hijriFor(DateTime(2026, 11, 11));
-      expect(nov11.day, 1);
-      expect(nov11.month, 6);
-      expect(nov11.year, 1448);
-      expect(nov11.confidence, 'predicted');
-      // Continuity: ..., 29, 1, 2, ...
       final nov10 = svc.hijriFor(DateTime(2026, 11, 10));
+      final nov11 = svc.hijriFor(DateTime(2026, 11, 11));
       final nov12 = svc.hijriFor(DateTime(2026, 11, 12));
+      final nov13 = svc.hijriFor(DateTime(2026, 11, 13));
       expect(nov10.day, 29);
       expect(nov10.month, 5);
-      expect(nov12.day, 2);
+      expect(nov10.confidence, 'confirmed'); // not shifted
+      expect(nov11.day, 30);
+      expect(nov11.month, 5);
+      expect(nov11.confidence, 'predicted'); // shifted, "~" kept
+      expect(nov12.day, 1);
       expect(nov12.month, 6);
-      // No 28-day month created: Jumada al-Thani runs 1..29.
-      final dec9 = svc.hijriFor(DateTime(2026, 12, 9));
-      expect(dec9.day, 29);
-      expect(dec9.month, 6);
+      expect(nov12.confidence, 'predicted');
+      expect(nov13.day, 2);
+      expect(nov13.month, 6);
+      // No 28-day month: Jumada al-Thani runs 1..29 (Nov 12 -> Dec 10).
+      final dec10 = svc.hijriFor(DateTime(2026, 12, 10));
+      expect(dec10.day, 29);
+      expect(dec10.month, 6);
+      final dec11 = svc.hijriFor(DateTime(2026, 12, 11));
+      expect(dec11.day, 1);
+      expect(dec11.month, 7);
     });
 
     // v2.37: sweep the FULL coverage — every Hijri month boundary must
@@ -286,6 +294,26 @@ void main() {
       expect(problems, isEmpty,
           reason: 'month boundaries not starting at 1:\n'
               '${problems.take(10).join('\n')}');
+    });
+
+    // v2.37: Pakistan shift applies to predicted/unconfirmed only.
+    test('26. Pakistan shift: predicted -1 day, confirmed untouched',
+        () async {
+      await HijriService.instance.load();
+      final svc = HijriService.instance;
+      // A mid-month predicted date: raw API day decremented by 1.
+      // 2027-01-15 is predicted in the 1448 data (raw: 7 Sha'ban).
+      final jan15 = svc.hijriFor(DateTime(2027, 1, 15));
+      expect(jan15.confidence, 'predicted');
+      expect(jan15.day, 6); // raw 7 -> Pakistan-adjusted 6
+      expect(jan15.month, 8); // Sha'ban
+      // "~" marker kept (still an estimate).
+      expect(jan15.confidenceMarker, '~');
+      // A confirmed date is NOT shifted.
+      final oct20 = svc.hijriFor(DateTime(2026, 10, 20));
+      expect(oct20.confidence, 'confirmed');
+      expect(oct20.day, 8);
+      expect(oct20.month, 5);
     });
 
     test('13. Reverse lookup: 8 Jamadi-ul-Awwal 1448 = 2026-10-20',

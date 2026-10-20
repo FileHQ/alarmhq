@@ -181,8 +181,11 @@ class HijriService {
     // v2.37: the API's predicted data sometimes skips day 1 of a month
     // entirely (e.g. 2026-11-11 = 30 Jumada al-Awwal -> 2026-11-12 = 2
     // Jumada al-Thani). The grid must show a continuous sequence, so
-    // renumber the affected month's tail to start at 1.
+    // relabel the mislabeled "30 (unconfirmed)" as the predicted 1st.
     _fixSkippedDayOne();
+    // v2.37: Pakistan-adjust predictions (-1 day from Umm al-Qura).
+    // Pakistani sightings typically lag Umm al-Qura by a day.
+    _applyPakistanShift();
     // If any year came from cache, the whole set is "cached".
     // (Sync always writes all three together.)
   }
@@ -396,6 +399,80 @@ class HijriService {
     }
   }
 
+  /// v2.37: Pakistan-adjust predicted dates (-1 day from Umm al-Qura).
+  ///
+  /// Pakistani moon sightings typically lag Umm al-Qura by a day, so for
+  /// every PREDICTED or UNCONFIRMED (future, non-sighted) date the
+  /// displayed Hijri date is the Umm al-Qura date minus one Hijri day.
+  /// "Confirmed" and "estimated" dates are already Pakistani and are not
+  /// touched. The "~" marker is kept — these remain estimates.
+  ///
+  /// The subtraction is proper Hijri arithmetic, not a naive day-number
+  /// decrement (which would break month continuity):
+  /// - day > 1: decrement the day number.
+  /// - day == 1: the previous Gregorian day's ORIGINAL entry is the
+  ///   correct Umm al-Qura month end — unless it is confirmed/estimated
+  ///   (the sighting fixed the month): then a 30-day confirmed month
+  ///   means the API's 1st stands, while a 29-day one means Umm al-Qura
+  ///   likely has 30, so the 30th is shown.
+  void _applyPakistanShift() {
+    final keys = _byGregorian.keys.toList()..sort();
+    // Snapshot pre-shift values: the shift of G reads G-1's ORIGINAL.
+    final original = Map<String, HijriDate>.from(_byGregorian);
+    for (var i = 0; i < keys.length; i++) {
+      final cur = original[keys[i]]!;
+      if (cur.confidence != 'predicted' && cur.confidence != 'unconfirmed') {
+        continue;
+      }
+      HijriDate shifted;
+      if (cur.day > 1) {
+        shifted = HijriDate(
+          year: cur.year,
+          month: cur.month,
+          day: cur.day - 1,
+          monthNameEn: cur.monthNameEn,
+          monthNameUr: cur.monthNameUr,
+          confidence: cur.confidence,
+        );
+      } else {
+        if (i == 0) continue;
+        final prevDate = DateTime.tryParse(keys[i - 1]);
+        final curDate = DateTime.tryParse(keys[i]);
+        if (prevDate == null ||
+            curDate == null ||
+            curDate.difference(prevDate).inDays != 1) {
+          continue;
+        }
+        final prev = original[keys[i - 1]]!;
+        if (prev.confidence == 'predicted' ||
+            prev.confidence == 'unconfirmed') {
+          shifted = HijriDate(
+            year: prev.year,
+            month: prev.month,
+            day: prev.day,
+            monthNameEn: prev.monthNameEn,
+            monthNameUr: prev.monthNameUr,
+            confidence: cur.confidence,
+          );
+        } else if (prev.day >= 30) {
+          // Sighting fixed a 30-day month: the API's 1st stands.
+          shifted = cur;
+        } else {
+          // 29-day confirmed month: Umm al-Qura likely has 30.
+          shifted = HijriDate(
+            year: prev.year,
+            month: prev.month,
+            day: 30,
+            monthNameEn: prev.monthNameEn,
+            monthNameUr: prev.monthNameUr,
+            confidence: cur.confidence,
+          );
+        }
+      }
+      _byGregorian[keys[i]] = shifted;
+    }
+  }
+
   /// Gregorian date for a Hijri (year, month, day), or null when not
   /// found. Searches the loaded sighted data first, then scans a bounded
   /// calculated range (2020-01-01 .. 2032-12-31). Used by "Go to Date".
@@ -409,7 +486,8 @@ class HijriService {
     var dt = DateTime(2020, 1, 1);
     final end = DateTime(2032, 12, 31);
     while (!dt.isAfter(end)) {
-      final h = _calculate(dt);
+      // v2.37: match the Pakistan-shifted display.
+      final h = _calculate(dt.subtract(const Duration(days: 1)));
       if (h.year == year && h.month == month && h.day == day) return dt;
       dt = dt.add(const Duration(days: 1));
     }
@@ -419,11 +497,14 @@ class HijriService {
   /// Hijri date for [date]. Uses cached/bundled sighted data when
   /// available, otherwise the arithmetical (Kuwaiti) algorithm marked
   /// "calculated". Never returns null.
+  ///
+  /// v2.37: the arithmetical fallback is Pakistan-adjusted too (-1 day):
+  /// Pakistan(G) = UmmAlQura(G) - 1 Hijri day = UmmAlQura(G - 1 day).
   HijriDate hijriFor(DateTime date) {
     final key = _key(DateTime(date.year, date.month, date.day));
     final known = _byGregorian[key];
     if (known != null) return known;
-    return _calculate(date);
+    return _calculate(date.subtract(const Duration(days: 1)));
   }
 
   /// Arithmetical Hijri conversion (Kuwaiti algorithm). Approximate
