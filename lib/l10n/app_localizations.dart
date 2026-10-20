@@ -1081,6 +1081,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Close'**
   String get close;
+
+  /// No description provided for @predictedNote.
+  ///
+  /// In en, this message translates to:
+  /// **'~ predicted dates are estimates'**
+  String get predictedNote;
 }
 
 class _AppLocalizationsDelegate

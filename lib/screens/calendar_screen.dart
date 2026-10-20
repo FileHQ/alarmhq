@@ -295,13 +295,14 @@ class _CalendarScreenState extends State<CalendarScreen> {
         ? HijriService.monthNamesUr
         : HijriService.monthNamesEn;
     final now = DateTime.now();
-    int gYear = now.year.clamp(2020, 2035),
+    // v2.43: wide year range 1900–2100 (calculated fallback covers it).
+    int gYear = now.year.clamp(1900, 2100),
         gMonth = now.month,
         gDay = now.day;
     int hYear = 1448, hMonth = 5, hDay = 8;
     try {
       final h = HijriService.instance.hijriFor(now);
-      hYear = h.year.clamp(1446, 1450);
+      hYear = h.year.clamp(1318, 1525);
       hMonth = h.month.clamp(1, 12);
       hDay = h.day.clamp(1, 30);
     } catch (_) {}
@@ -320,11 +321,14 @@ class _CalendarScreenState extends State<CalendarScreen> {
         child: StatefulBuilder(
           builder: (dialogCtx, setDialogState) {
             /// One stepper row: label | [-] value [+] .
+            /// v2.43: the value is tappable — opens a numeric field so the
+            /// user can type directly (in addition to the +/- buttons).
             Widget stepper({
               required String label,
               required String value,
               required VoidCallback onMinus,
               required VoidCallback onPlus,
+              required VoidCallback onTapValue,
             }) {
               return Padding(
                 padding: const EdgeInsets.symmetric(vertical: 4),
@@ -340,18 +344,64 @@ class _CalendarScreenState extends State<CalendarScreen> {
                       onPressed: onMinus,
                     ),
                     Expanded(
-                      child: Text(
-                        // English digits only — plain toString().
-                        value,
-                        textAlign: TextAlign.center,
-                        style: const TextStyle(
-                            fontSize: 20,
-                            fontWeight: FontWeight.w800),
+                      child: GestureDetector(
+                        onTap: onTapValue,
+                        child: Text(
+                          // English digits only — plain toString().
+                          value,
+                          textAlign: TextAlign.center,
+                          style: const TextStyle(
+                              fontSize: 20,
+                              fontWeight: FontWeight.w800),
+                        ),
                       ),
                     ),
                     IconButton(
                       icon: const Icon(Icons.add_circle_outline),
                       onPressed: onPlus,
+                    ),
+                  ],
+                ),
+              );
+            }
+
+            /// v2.43: numeric input dialog for tap-to-type on stepper values.
+            /// Returns the validated (clamped) number, or null if cancelled.
+            Future<int?> promptNumber({
+              required String title,
+              required int current,
+              required int min,
+              required int max,
+            }) {
+              final ctrl = TextEditingController(text: '$current');
+              int? parse() {
+                final n = int.tryParse(ctrl.text.trim());
+                if (n == null) return null;
+                return n.clamp(min, max);
+              }
+
+              return showDialog<int>(
+                context: dialogCtx,
+                builder: (c) => AlertDialog(
+                  title: Text(title),
+                  content: TextField(
+                    controller: ctrl,
+                    autofocus: true,
+                    keyboardType: TextInputType.number,
+                    // English digits only.
+                    decoration: InputDecoration(
+                      hintText: '$min – $max',
+                      helperText: '$min – $max',
+                    ),
+                  ),
+                  actions: [
+                    TextButton(
+                      onPressed: () => Navigator.of(c).pop(),
+                      child: Text(l10n.cancel),
+                    ),
+                    FilledButton(
+                      onPressed: () => Navigator.of(c).pop(parse()),
+                      child: Text(l10n.go),
                     ),
                   ],
                 ),
@@ -385,15 +435,30 @@ class _CalendarScreenState extends State<CalendarScreen> {
                                   label: l10n.yearLabel,
                                   value: '$gYear',
                                   onMinus: () => setDialogState(() {
-                                    if (gYear > 2020) gYear--;
+                                    if (gYear > 1900) gYear--;
                                     gDay = gDay.clamp(
                                         1, gDaysIn(gYear, gMonth));
                                   }),
                                   onPlus: () => setDialogState(() {
-                                    if (gYear < 2035) gYear++;
+                                    if (gYear < 2100) gYear++;
                                     gDay = gDay.clamp(
                                         1, gDaysIn(gYear, gMonth));
                                   }),
+                                  onTapValue: () async {
+                                    final v = await promptNumber(
+                                      title: l10n.yearLabel,
+                                      current: gYear,
+                                      min: 1900,
+                                      max: 2100,
+                                    );
+                                    if (v != null) {
+                                      setDialogState(() {
+                                        gYear = v;
+                                        gDay = gDay.clamp(
+                                            1, gDaysIn(gYear, gMonth));
+                                      });
+                                    }
+                                  },
                                 ),
                                 stepper(
                                   label: l10n.monthLabel,
@@ -408,6 +473,22 @@ class _CalendarScreenState extends State<CalendarScreen> {
                                     gDay = gDay.clamp(
                                         1, gDaysIn(gYear, gMonth));
                                   }),
+                                  // v2.43: type the month number 1–12.
+                                  onTapValue: () async {
+                                    final v = await promptNumber(
+                                      title: l10n.monthLabel,
+                                      current: gMonth,
+                                      min: 1,
+                                      max: 12,
+                                    );
+                                    if (v != null) {
+                                      setDialogState(() {
+                                        gMonth = v;
+                                        gDay = gDay.clamp(
+                                            1, gDaysIn(gYear, gMonth));
+                                      });
+                                    }
+                                  },
                                 ),
                                 stepper(
                                   label: l10n.dayLabel,
@@ -422,6 +503,17 @@ class _CalendarScreenState extends State<CalendarScreen> {
                                         gDaysIn(gYear, gMonth);
                                     gDay = gDay == max ? 1 : gDay + 1;
                                   }),
+                                  onTapValue: () async {
+                                    final v = await promptNumber(
+                                      title: l10n.dayLabel,
+                                      current: gDay,
+                                      min: 1,
+                                      max: gDaysIn(gYear, gMonth),
+                                    );
+                                    if (v != null) {
+                                      setDialogState(() => gDay = v);
+                                    }
+                                  },
                                 ),
                               ],
                             ),
@@ -435,11 +527,22 @@ class _CalendarScreenState extends State<CalendarScreen> {
                                   label: l10n.yearLabel,
                                   value: '$hYear',
                                   onMinus: () => setDialogState(() {
-                                    if (hYear > 1446) hYear--;
+                                    if (hYear > 1318) hYear--;
                                   }),
                                   onPlus: () => setDialogState(() {
-                                    if (hYear < 1450) hYear++;
+                                    if (hYear < 1525) hYear++;
                                   }),
+                                  onTapValue: () async {
+                                    final v = await promptNumber(
+                                      title: l10n.yearLabel,
+                                      current: hYear,
+                                      min: 1318,
+                                      max: 1525,
+                                    );
+                                    if (v != null) {
+                                      setDialogState(() => hYear = v);
+                                    }
+                                  },
                                 ),
                                 stepper(
                                   label: l10n.monthLabel,
@@ -450,6 +553,18 @@ class _CalendarScreenState extends State<CalendarScreen> {
                                   onPlus: () => setDialogState(() {
                                     hMonth = hMonth == 12 ? 1 : hMonth + 1;
                                   }),
+                                  // v2.43: type the month number 1–12.
+                                  onTapValue: () async {
+                                    final v = await promptNumber(
+                                      title: l10n.monthLabel,
+                                      current: hMonth,
+                                      min: 1,
+                                      max: 12,
+                                    );
+                                    if (v != null) {
+                                      setDialogState(() => hMonth = v);
+                                    }
+                                  },
                                 ),
                                 stepper(
                                   label: l10n.dayLabel,
@@ -460,11 +575,23 @@ class _CalendarScreenState extends State<CalendarScreen> {
                                   onPlus: () => setDialogState(() {
                                     hDay = hDay == 30 ? 1 : hDay + 1;
                                   }),
+                                  onTapValue: () async {
+                                    final v = await promptNumber(
+                                      title: l10n.dayLabel,
+                                      current: hDay,
+                                      min: 1,
+                                      max: 30,
+                                    );
+                                    if (v != null) {
+                                      setDialogState(() => hDay = v);
+                                    }
+                                  },
                                 ),
                                 const SizedBox(height: 4),
-                                const Text(
-                                  '~ predicted dates are estimates',
-                                  style: TextStyle(
+                                // v2.43: localized (was hardcoded English).
+                                Text(
+                                  l10n.predictedNote,
+                                  style: const TextStyle(
                                       color: Colors.white38, fontSize: 11),
                                 ),
                               ],

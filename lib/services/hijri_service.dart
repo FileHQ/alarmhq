@@ -518,8 +518,11 @@ class HijriService {
         return DateTime.tryParse(entry.key);
       }
     }
-    var dt = DateTime(2020, 1, 1);
-    final end = DateTime(2032, 12, 31);
+    // v2.43: extended range (1900–2100 Gregorian / ~1318–1525 Hijri).
+    // Start the scan from an estimated Gregorian year to keep it fast.
+    final estYear = (year * 0.970229 + 621.5643).floor() - 2;
+    var dt = DateTime(estYear.clamp(1900, 2098), 1, 1);
+    final end = DateTime((estYear + 5).clamp(1902, 2100), 12, 31);
     while (!dt.isAfter(end)) {
       // v2.37: match the Pakistan-shifted display.
       final h = _calculate(dt.subtract(const Duration(days: 1)));

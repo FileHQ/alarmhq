@@ -546,4 +546,7 @@ class AppLocalizationsUr extends AppLocalizations {
 
   @override
   String get close => 'بند کریں';
+
+  @override
+  String get predictedNote => '~ اندازاً تاریخیں تخمینی ہیں';
 }

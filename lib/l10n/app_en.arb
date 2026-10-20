@@ -163,5 +163,6 @@
   "legendPredicted": "~ predicted (Pakistan-adjusted estimate)",
   "legendCalculated": "Orange = calculated",
   "calendarHint": "Top: Gregorian  •  Bottom: Hijri (tap a date for detail)",
-  "close": "Close"
+  "close": "Close",
+  "predictedNote": "~ predicted dates are estimates"
 }
