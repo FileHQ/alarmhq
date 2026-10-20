@@ -529,4 +529,19 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get dayLabel => 'Day';
+
+  @override
+  String get todayBtn => 'Today';
+
+  @override
+  String get dataUpdate => 'Data update:';
+
+  @override
+  String get legendConfirmed => '✓ confirmed (sighted)';
+
+  @override
+  String get legendPredicted => '~ predicted (Pakistan-adjusted estimate)';
+
+  @override
+  String get legendCalculated => 'Orange = calculated';
 }

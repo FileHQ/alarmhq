@@ -524,4 +524,19 @@ class AppLocalizationsUr extends AppLocalizations {
 
   @override
   String get dayLabel => 'تاریخ';
+
+  @override
+  String get todayBtn => 'آج';
+
+  @override
+  String get dataUpdate => 'ڈیٹا اپڈیٹ:';
+
+  @override
+  String get legendConfirmed => '✓ تصدیق شدہ';
+
+  @override
+  String get legendPredicted => '~ اندازاً';
+
+  @override
+  String get legendCalculated => 'اورنج = کیلکولیٹڈ';
 }

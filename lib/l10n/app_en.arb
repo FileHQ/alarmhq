@@ -156,5 +156,10 @@
   "dateNotFound": "Date not found",
   "yearLabel": "Year",
   "monthLabel": "Month",
-  "dayLabel": "Day"
+  "dayLabel": "Day",
+  "todayBtn": "Today",
+  "dataUpdate": "Data update:",
+  "legendConfirmed": "✓ confirmed (sighted)",
+  "legendPredicted": "~ predicted (Pakistan-adjusted estimate)",
+  "legendCalculated": "Orange = calculated"
 }

@@ -1039,6 +1039,36 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Day'**
   String get dayLabel;
+
+  /// No description provided for @todayBtn.
+  ///
+  /// In en, this message translates to:
+  /// **'Today'**
+  String get todayBtn;
+
+  /// No description provided for @dataUpdate.
+  ///
+  /// In en, this message translates to:
+  /// **'Data update:'**
+  String get dataUpdate;
+
+  /// No description provided for @legendConfirmed.
+  ///
+  /// In en, this message translates to:
+  /// **'✓ confirmed (sighted)'**
+  String get legendConfirmed;
+
+  /// No description provided for @legendPredicted.
+  ///
+  /// In en, this message translates to:
+  /// **'~ predicted (Pakistan-adjusted estimate)'**
+  String get legendPredicted;
+
+  /// No description provided for @legendCalculated.
+  ///
+  /// In en, this message translates to:
+  /// **'Orange = calculated'**
+  String get legendCalculated;
 }
 
 class _AppLocalizationsDelegate

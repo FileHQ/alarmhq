@@ -38,6 +38,13 @@ class _CalendarScreenState extends State<CalendarScreen> {
     'July', 'August', 'September', 'October', 'November', 'December',
   ];
 
+  // v2.38: abbreviated month names for the Go-to-Date steppers —
+  // "November" wrapped mid-word ("Novembe r") on narrow screens.
+  static const List<String> _monthNamesEnShort = [
+    'Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun',
+    'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec',
+  ];
+
   // v2.34: Urdu month names for Urdu locale. Digits stay English.
   static const List<String> _monthNamesUr = [
     'جنوری', 'فروری', 'مارچ', 'اپریل', 'مئی', 'جون',
@@ -57,6 +64,15 @@ class _CalendarScreenState extends State<CalendarScreen> {
     setState(() {
       _month = DateTime(_month.year, _month.month + delta, 1);
       // v2.37: manual navigation clears the jump highlight.
+      _jumpedDate = null;
+    });
+  }
+
+  // v2.38: "Today" button — jump back to the current month.
+  void _goToToday() {
+    final now = DateTime.now();
+    setState(() {
+      _month = DateTime(now.year, now.month, 1);
       _jumpedDate = null;
     });
   }
@@ -101,6 +117,12 @@ class _CalendarScreenState extends State<CalendarScreen> {
         title: Text(l10n.calendar),
         centerTitle: false,
         actions: [
+          // v2.38: "Today" — jump back to the current month.
+          TextButton(
+            onPressed: _goToToday,
+            child: Text(l10n.todayBtn,
+                style: const TextStyle(fontWeight: FontWeight.w700)),
+          ),
           // v2.34: "Go to Date" — jump via Gregorian or Hijri date.
           IconButton(
             icon: const Icon(Icons.event),
@@ -196,18 +218,16 @@ class _CalendarScreenState extends State<CalendarScreen> {
                 style: TextStyle(color: Colors.white38, fontSize: 11),
               ),
               const SizedBox(height: 2),
-              // v2.33: confidence legend — user asked for visible markers.
+              // v2.38: confidence legend — localized per user decision.
               RichText(
                 text: TextSpan(
                   style:
                       const TextStyle(fontSize: 11, color: Colors.white38),
                   children: [
-                    const TextSpan(text: '✓ confirmed (sighted)  '),
-                    // v2.37: predictions are Pakistan-adjusted (-1 day).
-                    const TextSpan(
-                        text: '~ predicted (Pakistan-adjusted estimate)  '),
+                    TextSpan(text: '${l10n.legendConfirmed}  '),
+                    TextSpan(text: '${l10n.legendPredicted}  '),
                     TextSpan(
-                      text: 'Amber = calculated',
+                      text: l10n.legendCalculated,
                       style: TextStyle(color: Colors.amber.shade300),
                     ),
                   ],
@@ -217,7 +237,9 @@ class _CalendarScreenState extends State<CalendarScreen> {
                 Padding(
                   padding: const EdgeInsets.only(top: 2),
                   child: Text(
-                    'Hijri data: ${HijriService.instance.dataUpdatedLabel}',
+                    // v2.38: "Data update: 17 Oct 2026" /
+                    // "ڈیٹا اپڈیٹ: 17 اکتوبر 2026".
+                    '${l10n.dataUpdate} ${isUrdu ? HijriService.instance.dataUpdatedLabelUr : HijriService.instance.dataUpdatedLabel}',
                     style: const TextStyle(
                         color: Colors.white24, fontSize: 10),
                   ),
@@ -241,8 +263,10 @@ class _CalendarScreenState extends State<CalendarScreen> {
   void _showGoToDate(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
     // v2.34: month names follow locale; digits stay English.
+    // v2.38: abbreviated Gregorian names in steppers ("November"
+    // wrapped mid-word as "Novembe r" on her phone).
     final isUrdu = l10n.localeName == 'ur';
-    final gMonthNames = isUrdu ? _monthNamesUr : _monthNamesEn;
+    final gMonthNames = isUrdu ? _monthNamesUr : _monthNamesEnShort;
     final hMonthNames = isUrdu
         ? HijriService.monthNamesUr
         : HijriService.monthNamesEn;
@@ -583,9 +607,10 @@ class _CalendarScreenState extends State<CalendarScreen> {
             ),
             const SizedBox(height: 1),
             Text(
-              // "~8" for predicted, "✓8" hidden — marker only for "~".
-              // Confirmed dates show plain number (legend explains).
-              '${marker == '~' ? '~' : ''}${hijri.day}',
+              // v2.38: "✓8" on confirmed (sighted) dates, "~8" on
+              // predicted — matches the legend the user asked for.
+              // Calculated dates show a plain amber number.
+              '$marker${hijri.day}',
               style: TextStyle(
                 fontSize: 10,
                 color: hijriColor,

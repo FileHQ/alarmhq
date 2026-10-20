@@ -156,5 +156,10 @@
   "dateNotFound": "تاریخ نہیں ملی",
   "yearLabel": "سال",
   "monthLabel": "مہینہ",
-  "dayLabel": "تاریخ"
+  "dayLabel": "تاریخ",
+  "todayBtn": "آج",
+  "dataUpdate": "ڈیٹا اپڈیٹ:",
+  "legendConfirmed": "✓ تصدیق شدہ",
+  "legendPredicted": "~ اندازاً",
+  "legendCalculated": "اورنج = کیلکولیٹڈ"
 }

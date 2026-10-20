@@ -154,6 +154,22 @@ class HijriService {
     }
   }
 
+  /// v2.38: Urdu version — "17 اکتوبر 2026" (Urdu month name,
+  /// English digits). Empty string when unknown.
+  String get dataUpdatedLabelUr {
+    if (_generatedAt.isEmpty) return '';
+    try {
+      final dt = DateTime.parse(_generatedAt).toLocal();
+      const months = [
+        'جنوری', 'فروری', 'مارچ', 'اپریل', 'مئی', 'جون',
+        'جولائی', 'اگست', 'ستمبر', 'اکتوبر', 'نومبر', 'دسمبر',
+      ];
+      return '${dt.day} ${months[dt.month - 1]} ${dt.year}';
+    } catch (_) {
+      return '';
+    }
+  }
+
   String get dataSource => _dataSource;
 
   /// Load cached data if present, else bundled JSON. Safe to call

@@ -516,5 +516,99 @@ void main() {
       expect(allText(tester).join(' '),
           contains('${en[now.month - 1]} ${now.year}'));
     });
+
+    // v2.38: Go-to-Date stepper shows abbreviated month ("Nov", not
+    // "November" which wrapped mid-word on her phone).
+    testWidgets('27. Go to Date stepper uses short month names',
+        (tester) async {
+      await HijriService.instance.load();
+      await pumpCalendar(tester, const Locale('en'));
+      await tester.tap(find.byIcon(Icons.event));
+      await tester.pump();
+      final texts = allText(tester).join(' ');
+      // Current month abbreviated must appear; full "November"
+      // must NOT appear in the stepper area.
+      const short = [
+        'Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun',
+        'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'
+      ];
+      final now = DateTime.now();
+      expect(texts, contains(short[now.month - 1]));
+      expect(tester.takeException(), isNull);
+      await tester.tap(find.text('Cancel'));
+      await tester.pump();
+    });
+
+    // v2.38: confirmed (sighted) dates show ✓ in day cells.
+    testWidgets('28. Confirmed dates show ✓ mark', (tester) async {
+      await HijriService.instance.load();
+      await pumpCalendar(tester, const Locale('en'));
+      final texts = allText(tester).join(' ');
+      // Oct 2026 dates are confirmed → cells show "✓8" style marks.
+      expect(texts, contains(RegExp(r'✓\d+')),
+          reason: 'No ✓ marks on confirmed dates in: $texts');
+      expect(tester.takeException(), isNull);
+    });
+
+    // v2.38: Today button jumps back to the current month.
+    testWidgets('29. Today button returns to current month',
+        (tester) async {
+      await HijriService.instance.load();
+      await pumpCalendar(tester, const Locale('en'));
+      // Navigate 3 months back.
+      for (var i = 0; i < 3; i++) {
+        await tester.tap(find.byIcon(Icons.chevron_left));
+        await tester.pump();
+      }
+      // Today button exists.
+      expect(find.text('Today'), findsOneWidget);
+      await tester.tap(find.text('Today'));
+      await tester.pump();
+      final now = DateTime.now();
+      const en = [
+        'January', 'February', 'March', 'April', 'May', 'June',
+        'July', 'August', 'September', 'October', 'November', 'December',
+      ];
+      expect(allText(tester).join(' '),
+          contains('${en[now.month - 1]} ${now.year}'));
+      expect(tester.takeException(), isNull);
+    });
+
+    // v2.38: legend uses "Orange = calculated" (user decision).
+    // NOTE: legend is a RichText (TextSpans), not Text widgets.
+    testWidgets('30. Legend shows Orange = calculated', (tester) async {
+      await HijriService.instance.load();
+      await pumpCalendar(tester, const Locale('en'));
+      final rich = tester
+          .widgetList<RichText>(find.byType(RichText))
+          .map((w) => w.text.toPlainText())
+          .join(' ');
+      expect(rich, contains('Orange = calculated'));
+      expect(rich, isNot(contains('Amber = calculated')));
+      expect(tester.takeException(), isNull);
+    });
+
+    // v2.38: data-update label reads "Data update: 17 Oct 2026".
+    testWidgets('31. Data update label (en + ur)', (tester) async {
+      String richText() => tester
+          .widgetList<RichText>(find.byType(RichText))
+          .map((w) => w.text.toPlainText())
+          .join(' ');
+
+      await HijriService.instance.load();
+      await pumpCalendar(tester, const Locale('en'));
+      var texts = allText(tester).join(' ');
+      expect(texts, contains('Data update: 17 Oct 2026'));
+      expect(texts, isNot(contains('Hijri data:')));
+      expect(richText(), contains('✓ confirmed (sighted)'));
+
+      await pumpCalendar(tester, const Locale('ur'));
+      texts = allText(tester).join(' ');
+      expect(texts, contains('ڈیٹا اپڈیٹ: 17 اکتوبر 2026'));
+      expect(richText(), contains('اورنج = کیلکولیٹڈ'));
+      expect(richText(), contains('✓ تصدیق شدہ'));
+      expect(texts, contains('آج')); // Today button in Urdu
+      expect(tester.takeException(), isNull);
+    });
   });
 }
