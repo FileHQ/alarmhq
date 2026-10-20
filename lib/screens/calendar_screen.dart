@@ -102,9 +102,21 @@ class _CalendarScreenState extends State<CalendarScreen> {
           ),
         ],
       ),
-      body: SingleChildScrollView(
-        padding: const EdgeInsets.all(16),
-        child: Container(
+      // v2.35: swipe left/right on the calendar card to change months
+      // (in addition to the arrow buttons).
+      body: GestureDetector(
+        onHorizontalDragEnd: (details) {
+          final v = details.primaryVelocity;
+          if (v == null) return;
+          if (v < 0) {
+            _changeMonth(1); // swipe left -> next month
+          } else if (v > 0) {
+            _changeMonth(-1); // swipe right -> previous month
+          }
+        },
+        child: SingleChildScrollView(
+          padding: const EdgeInsets.all(16),
+          child: Container(
           decoration: BoxDecoration(
             color: AppTheme.charcoalCard,
             borderRadius: BorderRadius.circular(16),
@@ -119,20 +131,29 @@ class _CalendarScreenState extends State<CalendarScreen> {
                     icon: const Icon(Icons.chevron_left),
                     onPressed: () => _changeMonth(-1),
                   ),
-                  Column(
-                    children: [
-                      Text(
-                        monthTitle,
-                        style: const TextStyle(
-                            fontWeight: FontWeight.w800, fontSize: 18),
-                      ),
-                      const SizedBox(height: 2),
-                      Text(
-                        hijriHeader,
-                        style: const TextStyle(
-                            color: Colors.white60, fontSize: 13),
-                      ),
-                    ],
+                  // v2.35: header wraps to 2 lines so long Hijri month
+                  // names (e.g. "Dhu al-Qa'dah 1446 / Dhu al-Hijjah 1446")
+                  // are never cut off at the screen edge.
+                  Expanded(
+                    child: Column(
+                      children: [
+                        Text(
+                          monthTitle,
+                          textAlign: TextAlign.center,
+                          style: const TextStyle(
+                              fontWeight: FontWeight.w800, fontSize: 18),
+                        ),
+                        const SizedBox(height: 2),
+                        Text(
+                          hijriHeader,
+                          textAlign: TextAlign.center,
+                          maxLines: 2,
+                          softWrap: true,
+                          style: const TextStyle(
+                              color: Colors.white60, fontSize: 12),
+                        ),
+                      ],
+                    ),
                   ),
                   IconButton(
                     icon: const Icon(Icons.chevron_right),
@@ -196,6 +217,7 @@ class _CalendarScreenState extends State<CalendarScreen> {
           ),
         ),
       ),
+      ),
     );
   }
 
@@ -219,18 +241,36 @@ class _CalendarScreenState extends State<CalendarScreen> {
       hDay = h.day;
     } catch (_) {}
 
+    // v2.35: track the selected Go-to-Date tab directly. The previous code
+    // used DefaultTabController.of(ctx).index, but the DefaultTabController
+    // is a CHILD of the dialog builder's ctx — .of() searches ancestors,
+    // returned null, and .index threw, so "Go" silently did nothing.
+    int tabIndex = 0;
+
     Widget dropdown<T>({
       required T value,
       required List<T> items,
       required String Function(T) label,
       required ValueChanged<T?> onChanged,
+      int flex = 1,
     }) {
       return Expanded(
+        flex: flex,
         child: DropdownButtonFormField<T>(
+          // v2.35: isExpanded lets long month names (e.g. "Jumada al-Awwal")
+          // shrink instead of being cut off.
+          isExpanded: true,
           initialValue: value,
           items: [
             for (final it in items)
-              DropdownMenuItem(value: it, child: Text(label(it))),
+              DropdownMenuItem(
+                value: it,
+                child: Text(
+                  label(it),
+                  overflow: TextOverflow.ellipsis,
+                  style: const TextStyle(fontSize: 14),
+                ),
+              ),
           ],
           onChanged: onChanged,
           decoration: const InputDecoration(
@@ -254,6 +294,9 @@ class _CalendarScreenState extends State<CalendarScreen> {
               mainAxisSize: MainAxisSize.min,
               children: [
                 TabBar(
+                  // v2.35: keep the selected tab in a local so "Go"
+                  // knows which tab was active (see tabIndex above).
+                  onTap: (i) => tabIndex = i,
                   tabs: [Tab(text: l10n.gregorian), Tab(text: l10n.hijri)],
                 ),
                 SizedBox(
@@ -279,6 +322,7 @@ class _CalendarScreenState extends State<CalendarScreen> {
                                 const SizedBox(width: 8),
                                 dropdown<int>(
                                   value: gMonth,
+                                  flex: 2,
                                   items: [
                                     for (var m = 1; m <= 12; m++) m
                                   ],
@@ -320,6 +364,7 @@ class _CalendarScreenState extends State<CalendarScreen> {
                                 const SizedBox(width: 8),
                                 dropdown<int>(
                                   value: hMonth,
+                                  flex: 2,
                                   items: [
                                     for (var m = 1; m <= 12; m++) m
                                   ],
@@ -362,8 +407,9 @@ class _CalendarScreenState extends State<CalendarScreen> {
             ),
             FilledButton(
               onPressed: () {
-                final tab =
-                    DefaultTabController.of(ctx).index;
+                // v2.35: use the locally tracked tabIndex (DefaultTabController
+                // is not an ancestor of this context — see above).
+                final tab = tabIndex;
                 Navigator.of(ctx).pop();
                 if (tab == 0) {
                   setState(() {

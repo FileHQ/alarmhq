@@ -307,5 +307,126 @@ void main() {
       // Digits still English.
       expect(texts, isNot(contains(urduDigits)));
     });
+
+    // v2.35: forward navigation must work indefinitely (user reported the
+    // ">" arrow did nothing for future months).
+    testWidgets('19. Forward navigation works 24 months ahead', (tester) async {
+      await HijriService.instance.load();
+      await pumpCalendar(tester, const Locale('en'));
+      for (var i = 0; i < 24; i++) {
+        await tester.tap(find.byIcon(Icons.chevron_right));
+        await tester.pump();
+      }
+      expect(tester.takeException(), isNull);
+      final now = DateTime.now();
+      final target = DateTime(now.year, now.month + 24, 1);
+      const en = [
+        'January', 'February', 'March', 'April', 'May', 'June',
+        'July', 'August', 'September', 'October', 'November', 'December',
+      ];
+      final texts = allText(tester).join(' ');
+      expect(texts, contains('${en[target.month - 1]} ${target.year}'),
+          reason: 'Header did not advance 24 months in: $texts');
+    });
+
+    // v2.35: swipe left/right on the calendar changes the month.
+    testWidgets('20. Swipe left/right changes month', (tester) async {
+      await HijriService.instance.load();
+      await pumpCalendar(tester, const Locale('en'));
+      final now = DateTime.now();
+      const en = [
+        'January', 'February', 'March', 'April', 'May', 'June',
+        'July', 'August', 'September', 'October', 'November', 'December',
+      ];
+      final next = DateTime(now.year, now.month + 1, 1);
+      await tester.fling(
+          find.byType(SingleChildScrollView), const Offset(-400, 0), 1000);
+      await tester.pump();
+      expect(allText(tester).join(' '),
+          contains('${en[next.month - 1]} ${next.year}'));
+      // Swipe right goes back.
+      await tester.fling(
+          find.byType(SingleChildScrollView), const Offset(400, 0), 1000);
+      await tester.pump();
+      expect(allText(tester).join(' '),
+          contains('${en[now.month - 1]} ${now.year}'));
+      expect(tester.takeException(), isNull);
+    });
+
+    // v2.35: long Hijri header wraps instead of overflowing.
+    // May 2025 spans "Dhu al-Qa'dah 1446 / Dhu al-Hijjah 1446".
+    testWidgets('21. Long Hijri header does not overflow', (tester) async {
+      await HijriService.instance.load();
+      await pumpCalendar(tester, const Locale('en'));
+      // Jump to May 2025 via Go to Date (also exercises the Go button).
+      await tester.tap(find.byIcon(Icons.event));
+      await tester.pump();
+      await tester.tap(find.byType(DropdownButtonFormField<int>).first);
+      await tester.pump();
+      await tester.tap(find.text('2025').last);
+      await tester.pump();
+      // Pick May in the month dropdown (second dropdown).
+      await tester.tap(find.byType(DropdownButtonFormField<int>).at(1));
+      await tester.pump();
+      await tester.tap(find.text('May').last);
+      await tester.pump();
+      await tester.tap(find.text('Go'));
+      await tester.pump();
+      await tester.pump();
+      expect(tester.takeException(), isNull);
+      final texts = allText(tester).join(' ');
+      expect(texts, contains('May 2025'));
+      expect(texts, contains("Dhu al-Qa'dah 1446"));
+      expect(texts, contains('Dhu al-Hijjah 1446'));
+    });
+
+    // v2.35: "Go" on the Gregorian tab navigates and closes the dialog.
+    testWidgets('22. Go button (Gregorian tab) navigates', (tester) async {
+      await HijriService.instance.load();
+      await pumpCalendar(tester, const Locale('en'));
+      await tester.tap(find.byIcon(Icons.event));
+      await tester.pump();
+      expect(find.text('Go to Date'), findsOneWidget);
+      // Pick year 2030 in the first dropdown.
+      await tester.tap(find.byType(DropdownButtonFormField<int>).first);
+      await tester.pump();
+      await tester.tap(find.text('2030').last);
+      await tester.pump();
+      await tester.tap(find.text('Go'));
+      await tester.pump();
+      await tester.pump();
+      expect(tester.takeException(), isNull);
+      // Dialog closed and calendar jumped to 2030.
+      expect(find.text('Go to Date'), findsNothing);
+      expect(allText(tester).join(' '), contains('2030'));
+    });
+
+    // v2.35: "Go" on the Hijri tab navigates and closes the dialog.
+    testWidgets('23. Go button (Hijri tab) navigates', (tester) async {
+      await HijriService.instance.load();
+      await pumpCalendar(tester, const Locale('en'));
+      // Move away from the current month first.
+      for (var i = 0; i < 3; i++) {
+        await tester.tap(find.byIcon(Icons.chevron_left));
+        await tester.pump();
+      }
+      await tester.tap(find.byIcon(Icons.event));
+      await tester.pump();
+      await tester.tap(find.text('Hijri'));
+      await tester.pump();
+      await tester.tap(find.text('Go'));
+      await tester.pump();
+      await tester.pump();
+      expect(tester.takeException(), isNull);
+      // Dialog closed; calendar jumped to today's Hijri month.
+      expect(find.text('Go to Date'), findsNothing);
+      final now = DateTime.now();
+      const en = [
+        'January', 'February', 'March', 'April', 'May', 'June',
+        'July', 'August', 'September', 'October', 'November', 'December',
+      ];
+      expect(allText(tester).join(' '),
+          contains('${en[now.month - 1]} ${now.year}'));
+    });
   });
 }
