@@ -220,22 +220,24 @@ class _CalendarScreenState extends State<CalendarScreen> {
               ),
               const SizedBox(height: 8),
               // v2.41: localized calendar hint (Urdu: "اوپر: عیسوی • ...").
+              // v2.42: reduced by 2sp per user request.
               Text(
                 l10n.calendarHint,
                 style: TextStyle(
                     color: Colors.white38,
-                    fontSize: isUrdu ? 14 : 11),
+                    fontSize: isUrdu ? 12 : 9),
               ),
               const SizedBox(height: 2),
               // v2.38: confidence legend — localized per user decision.
               // v2.41: larger size for Urdu (Jameel Noori unreadable at 11).
+              // v2.42: " • " separators between items per user request.
               RichText(
                 text: TextSpan(
                   style: TextStyle(
                       fontSize: isUrdu ? 15 : 11, color: Colors.white38),
                   children: [
-                    TextSpan(text: '${l10n.legendConfirmed}  '),
-                    TextSpan(text: '${l10n.legendPredicted}  '),
+                    TextSpan(text: '${l10n.legendConfirmed}   •   '),
+                    TextSpan(text: '${l10n.legendPredicted}   •   '),
                     TextSpan(
                       text: l10n.legendCalculated,
                       style: TextStyle(color: Colors.amber.shade300),
