@@ -178,6 +178,11 @@ class HijriService {
     // v2.34: consistency pass — a confirmed/predicted month start must not
     // leave a duplicate 1st or a 28-day month behind it.
     _enforceMonthBoundaries();
+    // v2.37: the API's predicted data sometimes skips day 1 of a month
+    // entirely (e.g. 2026-11-11 = 30 Jumada al-Awwal -> 2026-11-12 = 2
+    // Jumada al-Thani). The grid must show a continuous sequence, so
+    // renumber the affected month's tail to start at 1.
+    _fixSkippedDayOne();
     // If any year came from cache, the whole set is "cached".
     // (Sync always writes all three together.)
   }
@@ -329,6 +334,65 @@ class HijriService {
               cur.confidence == 'confirmed' ? 'confirmed' : prev.confidence,
         );
       }
+    }
+  }
+
+  /// v2.37: fix a skipped day 1 caused by a mislabeled "30 (unconfirmed)".
+  ///
+  /// Observed in the API data: 2026-11-11 is labeled "30 Jumada al-Awwal
+  /// (unconfirmed)" while 2026-11-12 is "2 Jumada al-Thani (predicted)" —
+  /// the ~1 never appears. But the tail (2..29, then 1 Rajab on Dec 10)
+  /// is self-consistent ONLY if 2026-11-11 is really the 1st: Jumada
+  /// al-Thani then runs 1..29 (29 days) and Jumada al-Awwal ends at 29.
+  /// (Renumbering the tail down instead would create an impossible
+  /// 28-day month.) So relabel that day as the predicted 1st of the new
+  /// month. Confirmed (sighted) entries are never touched, and the tail
+  /// length is sanity-checked (28 -> 29-day month, 29 -> 30-day month);
+  /// anything else is left alone rather than guessed at.
+  void _fixSkippedDayOne() {
+    final keys = _byGregorian.keys.toList()..sort();
+    for (var i = 1; i < keys.length; i++) {
+      final prevDate = DateTime.tryParse(keys[i - 1]);
+      final curDate = DateTime.tryParse(keys[i]);
+      if (prevDate == null ||
+          curDate == null ||
+          curDate.difference(prevDate).inDays != 1) {
+        continue; // Not consecutive days — leave alone.
+      }
+      final prev = _byGregorian[keys[i - 1]]!;
+      final cur = _byGregorian[keys[i]]!;
+      final isNewMonth = cur.year != prev.year || cur.month != prev.month;
+      final isMislabeledStart = isNewMonth &&
+          prev.day == 30 &&
+          cur.day == 2 &&
+          prev.confidence != 'confirmed' &&
+          cur.confidence != 'confirmed';
+      if (!isMislabeledStart) continue;
+      // Sanity-check the tail: it must run 2..29 (28 entries -> 29-day
+      // month) or 2..30 (29 entries -> 30-day month).
+      var tailLen = 0;
+      var j = i;
+      var expected = 2;
+      while (j < keys.length) {
+        final e = _byGregorian[keys[j]]!;
+        if (e.year != cur.year ||
+            e.month != cur.month ||
+            e.day != expected) {
+          break;
+        }
+        tailLen++;
+        expected++;
+        j++;
+      }
+      if (tailLen != 28 && tailLen != 29) continue;
+      _byGregorian[keys[i - 1]] = HijriDate(
+        year: cur.year,
+        month: cur.month,
+        day: 1,
+        monthNameEn: cur.monthNameEn,
+        monthNameUr: cur.monthNameUr,
+        confidence: 'predicted',
+      );
     }
   }
 

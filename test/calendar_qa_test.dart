@@ -235,6 +235,59 @@ void main() {
       }
     });
 
+    // v2.37: the API skipped day 1 of Jumada al-Thani 1448
+    // (2026-11-11 labeled "30 (unconfirmed)", 2026-11-12 labeled "2").
+    // The tail (2..29, then 1 Rajab) is self-consistent only if
+    // 2026-11-11 is really the 1st, so it is relabeled as predicted.
+    test('24. Skipped day 1 relabeled: 2026-11-11 is 1 Jumada al-Thani',
+        () async {
+      await HijriService.instance.load();
+      final svc = HijriService.instance;
+      final nov11 = svc.hijriFor(DateTime(2026, 11, 11));
+      expect(nov11.day, 1);
+      expect(nov11.month, 6);
+      expect(nov11.year, 1448);
+      expect(nov11.confidence, 'predicted');
+      // Continuity: ..., 29, 1, 2, ...
+      final nov10 = svc.hijriFor(DateTime(2026, 11, 10));
+      final nov12 = svc.hijriFor(DateTime(2026, 11, 12));
+      expect(nov10.day, 29);
+      expect(nov10.month, 5);
+      expect(nov12.day, 2);
+      expect(nov12.month, 6);
+      // No 28-day month created: Jumada al-Thani runs 1..29.
+      final dec9 = svc.hijriFor(DateTime(2026, 12, 9));
+      expect(dec9.day, 29);
+      expect(dec9.month, 6);
+    });
+
+    // v2.37: sweep the FULL coverage — every Hijri month boundary must
+    // start at day 1 (never 2+).
+    test('25. Every month boundary in loaded data starts at day 1',
+        () async {
+      await HijriService.instance.load();
+      final svc = HijriService.instance;
+      var dt = DateTime(2025, 6, 26); // coverage start
+      final end = DateTime(2028, 5, 24); // coverage end
+      var prev = svc.hijriFor(dt);
+      dt = dt.add(const Duration(days: 1));
+      final problems = <String>[];
+      while (!dt.isAfter(end)) {
+        final cur = svc.hijriFor(dt);
+        final isNewMonth =
+            cur.year != prev.year || cur.month != prev.month;
+        if (isNewMonth && cur.day != 1) {
+          problems.add(
+              '$dt: new month starts at day ${cur.day} (${cur.display})');
+        }
+        prev = cur;
+        dt = dt.add(const Duration(days: 1));
+      }
+      expect(problems, isEmpty,
+          reason: 'month boundaries not starting at 1:\n'
+              '${problems.take(10).join('\n')}');
+    });
+
     test('13. Reverse lookup: 8 Jamadi-ul-Awwal 1448 = 2026-10-20',
         () async {
       await HijriService.instance.load();
