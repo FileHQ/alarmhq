@@ -113,4 +113,35 @@ void main() {
     expect(h.display, '8 Jamadi-ul-Awwal 1448');
     expect(h.display, isNot(contains('Jumada')));
   });
+
+  // v2.44: Go to Date dialog content must be scrollable so the helper
+  // text ("~ predicted dates are estimates") is never clipped — a
+  // wrapped 2-line Hijri month name pushed it out of the fixed box.
+  testWidgets('v2.44 dialog tabs are scrollable (no clipped helper text)',
+      (WidgetTester tester) async {
+    await pumpCalendar(tester);
+    await openGoToDate(tester);
+    expect(find.text('Go to Date'), findsOneWidget);
+    // The Gregorian tab content must be scrollable.
+    expect(
+      find.descendant(
+        of: find.byType(TabBarView),
+        matching: find.byType(SingleChildScrollView),
+      ),
+      findsOneWidget,
+    );
+    // Switch to the Hijri tab: its helper text must be present AND sit
+    // inside a SingleChildScrollView so it can never be clipped.
+    await tester.tap(find.text('Hijri'));
+    await tester.pumpAndSettle();
+    final note = find.text('~ predicted dates are estimates');
+    expect(note, findsWidgets);
+    expect(
+      find.ancestor(
+        of: note.first,
+        matching: find.byType(SingleChildScrollView),
+      ),
+      findsWidgets,
+    );
+  });
 }

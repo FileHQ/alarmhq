@@ -422,14 +422,18 @@ class _CalendarScreenState extends State<CalendarScreen> {
                         Tab(text: l10n.hijri)
                       ],
                     ),
+                    // v2.44: scrollable so the helper text can never be clipped
+                    // (a wrapped 2-line month name pushed it out of the
+                    // fixed 220px box on the user's phone).
                     SizedBox(
-                      height: 220,
+                      height: 240,
                       child: TabBarView(
                         children: [
                           // Gregorian tab — steppers, no dropdowns.
-                          Padding(
-                            padding: const EdgeInsets.only(top: 12),
-                            child: Column(
+                          SingleChildScrollView(
+                            child: Padding(
+                              padding: const EdgeInsets.only(top: 12),
+                              child: Column(
                               children: [
                                 stepper(
                                   label: l10n.yearLabel,
@@ -517,11 +521,13 @@ class _CalendarScreenState extends State<CalendarScreen> {
                                 ),
                               ],
                             ),
+                            ),
                           ),
                           // Hijri tab — steppers, no dropdowns.
-                          Padding(
-                            padding: const EdgeInsets.only(top: 12),
-                            child: Column(
+                          SingleChildScrollView(
+                            child: Padding(
+                              padding: const EdgeInsets.only(top: 12),
+                              child: Column(
                               children: [
                                 stepper(
                                   label: l10n.yearLabel,
@@ -591,10 +597,13 @@ class _CalendarScreenState extends State<CalendarScreen> {
                                 // v2.43: localized (was hardcoded English).
                                 Text(
                                   l10n.predictedNote,
+                                  textAlign: TextAlign.center,
                                   style: const TextStyle(
                                       color: Colors.white38, fontSize: 11),
                                 ),
+                                const SizedBox(height: 8),
                               ],
+                            ),
                             ),
                           ),
                         ],
