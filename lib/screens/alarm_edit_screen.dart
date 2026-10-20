@@ -471,7 +471,8 @@ class _AlarmEditScreenState extends State<AlarmEditScreen> {
         child: Text(t, style: Theme.of(context).textTheme.titleMedium),
       );
 
-  /// Day circles M T W T F S S.
+  /// Day pills with full localized names (v2.39: user wants full Urdu names).
+  /// Uses FittedBox scaleDown so text always fits inside the pill.
   Widget _weeklyPicker(AppLocalizations l10n) {
     final names = [
       l10n.weekdayMon,
@@ -482,40 +483,45 @@ class _AlarmEditScreenState extends State<AlarmEditScreen> {
       l10n.weekdaySat,
       l10n.weekdaySun,
     ];
-    // Use first letter of each localized day name.
     return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: List.generate(7, (i) {
         final wd = i + 1;
         final selected = _weekDays.contains(wd);
-        final letter = names[i].isNotEmpty
-            ? names[i].characters.first
-            : '?';
-        return GestureDetector(
-          onTap: () => _markDirty(() {
-            if (selected) {
-              _weekDays.remove(wd);
-            } else {
-              _weekDays.add(wd);
-            }
-          }),
-          child: Container(
-            width: 42,
-            height: 42,
-            decoration: BoxDecoration(
-              shape: BoxShape.circle,
-              color: selected ? AppTheme.emerald : AppTheme.charcoalCard,
-              border: selected
-                  ? null
-                  : Border.all(color: Colors.white24, width: 1.5),
-            ),
-            alignment: Alignment.center,
-            child: Text(
-              letter,
-              style: TextStyle(
-                fontWeight: FontWeight.w800,
-                fontSize: 15,
-                color: selected ? Colors.black : Colors.white60,
+        final name = names[i].isNotEmpty ? names[i] : '?';
+        return Expanded(
+          child: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 2),
+            child: GestureDetector(
+              onTap: () => _markDirty(() {
+                if (selected) {
+                  _weekDays.remove(wd);
+                } else {
+                  _weekDays.add(wd);
+                }
+              }),
+              child: Container(
+                height: 42,
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(21),
+                  color: selected ? AppTheme.emerald : AppTheme.charcoalCard,
+                  border: selected
+                      ? null
+                      : Border.all(color: Colors.white24, width: 1.5),
+                ),
+                alignment: Alignment.center,
+                padding: const EdgeInsets.symmetric(horizontal: 4),
+                child: FittedBox(
+                  fit: BoxFit.scaleDown,
+                  child: Text(
+                    name,
+                    maxLines: 1,
+                    style: TextStyle(
+                      fontWeight: FontWeight.w800,
+                      fontSize: 13,
+                      color: selected ? Colors.black : Colors.white60,
+                    ),
+                  ),
+                ),
               ),
             ),
           ),
@@ -739,7 +745,21 @@ class _AlarmEditScreenState extends State<AlarmEditScreen> {
       l10n.weekdaySun,
     ].map((s) => s.isNotEmpty ? s.characters.first : '?').toList();
 
-    return Container(
+    return GestureDetector(
+      // v2.39: swipe left/right to change month (same as main Calendar tab).
+      onHorizontalDragEnd: (details) {
+        final v = details.primaryVelocity ?? 0;
+        if (v < -200) {
+          setState(() {
+            _calMonth = DateTime(_calMonth.year, _calMonth.month + 1, 1);
+          });
+        } else if (v > 200) {
+          setState(() {
+            _calMonth = DateTime(_calMonth.year, _calMonth.month - 1, 1);
+          });
+        }
+      },
+      child: Container(
       decoration: BoxDecoration(
         color: AppTheme.charcoalCard,
         borderRadius: BorderRadius.circular(16),
@@ -791,6 +811,7 @@ class _AlarmEditScreenState extends State<AlarmEditScreen> {
             ],
           ),
         ],
+      ),
       ),
     );
   }
