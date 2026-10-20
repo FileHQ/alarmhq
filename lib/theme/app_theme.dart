@@ -21,7 +21,7 @@ class AppTheme {
     return ThemeData(
       useMaterial3: true,
       // v2.39: embedded Noto Nastaliq Urdu (subset: Urdu script only). English text and digits fall back to system font.
-      fontFamily: 'NotoNastaliqUrdu',
+      fontFamily: 'JameelNoori',
       colorScheme: scheme,
       scaffoldBackgroundColor: charcoal,
       appBarTheme: const AppBarTheme(
@@ -56,7 +56,7 @@ class AppTheme {
     return ThemeData(
       useMaterial3: true,
       // v2.39: embedded Noto Nastaliq Urdu (subset: Urdu script only). English text and digits fall back to system font.
-      fontFamily: 'NotoNastaliqUrdu',
+      fontFamily: 'JameelNoori',
       colorScheme: scheme,
       scaffoldBackgroundColor: Colors.white,
       appBarTheme: AppBarTheme(
