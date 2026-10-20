@@ -505,4 +505,19 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get hijriDate => 'Hijri date';
+
+  @override
+  String get goToDate => 'Go to Date';
+
+  @override
+  String get gregorian => 'Gregorian';
+
+  @override
+  String get hijri => 'Hijri';
+
+  @override
+  String get go => 'Go';
+
+  @override
+  String get dateNotFound => 'Date not found';
 }

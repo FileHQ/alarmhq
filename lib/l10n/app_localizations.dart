@@ -991,6 +991,36 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Hijri date'**
   String get hijriDate;
+
+  /// No description provided for @goToDate.
+  ///
+  /// In en, this message translates to:
+  /// **'Go to Date'**
+  String get goToDate;
+
+  /// No description provided for @gregorian.
+  ///
+  /// In en, this message translates to:
+  /// **'Gregorian'**
+  String get gregorian;
+
+  /// No description provided for @hijri.
+  ///
+  /// In en, this message translates to:
+  /// **'Hijri'**
+  String get hijri;
+
+  /// No description provided for @go.
+  ///
+  /// In en, this message translates to:
+  /// **'Go'**
+  String get go;
+
+  /// No description provided for @dateNotFound.
+  ///
+  /// In en, this message translates to:
+  /// **'Date not found'**
+  String get dateNotFound;
 }
 
 class _AppLocalizationsDelegate

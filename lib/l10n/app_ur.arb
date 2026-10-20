@@ -148,5 +148,10 @@
   "permBgActivityReminder": "سیٹنگز ← ایپس میں AlarmHQ کے لیے \"Allow background activity\" بھی آن کریں تاکہ ایپ بند ہو تو بھی الارم بجے۔",
   "permUnusedBanner": "⚠️ اینڈرائیڈ AlarmHQ کی پرمیشنز خود ہٹا سکتا ہے — Settings → Apps → AlarmHQ میں \"Manage app if unused\" آف کریں۔",
   "calendar": "کیلنڈر",
-  "hijriDate": "ہجری تاریخ"
+  "hijriDate": "ہجری تاریخ",
+  "goToDate": "تاریخ پر جائیں",
+  "gregorian": "عیسوی",
+  "hijri": "ہجری",
+  "go": "جائیں",
+  "dateNotFound": "تاریخ نہیں ملی"
 }

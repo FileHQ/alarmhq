@@ -58,8 +58,15 @@ class _CalendarScreenState extends State<CalendarScreen> {
         DateTime(_month.year, _month.month, d),
     ];
 
-    // Hijri month/year for the 1st — representative for the header.
-    final hijriFirst = HijriService.instance.hijriFor(monthStart);
+    // v2.34: header shows EVERY Hijri month visible in the grid
+    // (e.g. "Dhu al-Hijjah 1446 / Muharram 1447"), like the mockup.
+    final hijriMonths = <String>[];
+    for (final cell in cells) {
+      if (cell == null) continue;
+      final my = HijriService.instance.hijriFor(cell).monthYear;
+      if (!hijriMonths.contains(my)) hijriMonths.add(my);
+    }
+    final hijriHeader = hijriMonths.join(' / ');
 
     final dow = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
 
@@ -67,6 +74,14 @@ class _CalendarScreenState extends State<CalendarScreen> {
       appBar: AppBar(
         title: Text(l10n.calendar),
         centerTitle: false,
+        actions: [
+          // v2.34: "Go to Date" — jump via Gregorian or Hijri date.
+          IconButton(
+            icon: const Icon(Icons.event),
+            tooltip: l10n.goToDate,
+            onPressed: () => _showGoToDate(context),
+          ),
+        ],
       ),
       body: SingleChildScrollView(
         padding: const EdgeInsets.all(16),
@@ -94,7 +109,7 @@ class _CalendarScreenState extends State<CalendarScreen> {
                       ),
                       const SizedBox(height: 2),
                       Text(
-                        hijriFirst.monthYear,
+                        hijriHeader,
                         style: const TextStyle(
                             color: Colors.white60, fontSize: 13),
                       ),
@@ -160,6 +175,195 @@ class _CalendarScreenState extends State<CalendarScreen> {
                 ),
             ],
           ),
+        ),
+      ),
+    );
+  }
+
+  /// v2.34: "Go to Date" dialog — jump the calendar via a Gregorian
+  /// or Hijri date. All digits English (toString only).
+  void _showGoToDate(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
+    final now = DateTime.now();
+    int gYear = now.year, gMonth = now.month, gDay = now.day;
+    int hYear = 1448, hMonth = 5, hDay = 8;
+    try {
+      final h = HijriService.instance.hijriFor(now);
+      hYear = h.year;
+      hMonth = h.month;
+      hDay = h.day;
+    } catch (_) {}
+
+    Widget dropdown<T>({
+      required T value,
+      required List<T> items,
+      required String Function(T) label,
+      required ValueChanged<T?> onChanged,
+    }) {
+      return Expanded(
+        child: DropdownButtonFormField<T>(
+          initialValue: value,
+          items: [
+            for (final it in items)
+              DropdownMenuItem(value: it, child: Text(label(it))),
+          ],
+          onChanged: onChanged,
+          decoration: const InputDecoration(
+            border: OutlineInputBorder(),
+            contentPadding:
+                EdgeInsets.symmetric(horizontal: 10, vertical: 8),
+          ),
+        ),
+      );
+    }
+
+    showDialog(
+      context: context,
+      builder: (ctx) => DefaultTabController(
+        length: 2,
+        child: AlertDialog(
+          title: Text(l10n.goToDate),
+          content: SizedBox(
+            width: double.maxFinite,
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                TabBar(
+                  tabs: [Tab(text: l10n.gregorian), Tab(text: l10n.hijri)],
+                ),
+                SizedBox(
+                  height: 190,
+                  child: TabBarView(
+                    children: [
+                      // Gregorian tab.
+                      Padding(
+                        padding: const EdgeInsets.only(top: 16),
+                        child: Column(
+                          children: [
+                            Row(
+                              children: [
+                                dropdown<int>(
+                                  value: gYear,
+                                  items: [
+                                    for (var y = 2020; y <= 2035; y++) y
+                                  ],
+                                  label: (y) => '$y',
+                                  onChanged: (v) =>
+                                      gYear = v ?? gYear,
+                                ),
+                                const SizedBox(width: 8),
+                                dropdown<int>(
+                                  value: gMonth,
+                                  items: [
+                                    for (var m = 1; m <= 12; m++) m
+                                  ],
+                                  label: (m) => _monthNamesEn[m - 1],
+                                  onChanged: (v) =>
+                                      gMonth = v ?? gMonth,
+                                ),
+                                const SizedBox(width: 8),
+                                dropdown<int>(
+                                  value: gDay,
+                                  items: [
+                                    for (var d = 1; d <= 31; d++) d
+                                  ],
+                                  label: (d) => '$d',
+                                  onChanged: (v) =>
+                                      gDay = v ?? gDay,
+                                ),
+                              ],
+                            ),
+                          ],
+                        ),
+                      ),
+                      // Hijri tab.
+                      Padding(
+                        padding: const EdgeInsets.only(top: 16),
+                        child: Column(
+                          children: [
+                            Row(
+                              children: [
+                                dropdown<int>(
+                                  value: hYear,
+                                  items: [
+                                    for (var y = 1446; y <= 1450; y++) y
+                                  ],
+                                  label: (y) => '$y',
+                                  onChanged: (v) =>
+                                      hYear = v ?? hYear,
+                                ),
+                                const SizedBox(width: 8),
+                                dropdown<int>(
+                                  value: hMonth,
+                                  items: [
+                                    for (var m = 1; m <= 12; m++) m
+                                  ],
+                                  label: (m) =>
+                                      HijriService.monthNamesEn[m - 1],
+                                  onChanged: (v) =>
+                                      hMonth = v ?? hMonth,
+                                ),
+                                const SizedBox(width: 8),
+                                dropdown<int>(
+                                  value: hDay,
+                                  items: [
+                                    for (var d = 1; d <= 30; d++) d
+                                  ],
+                                  label: (d) => '$d',
+                                  onChanged: (v) =>
+                                      hDay = v ?? hDay,
+                                ),
+                              ],
+                            ),
+                            const SizedBox(height: 8),
+                            const Text(
+                              '~ predicted dates are estimates',
+                              style: TextStyle(
+                                  color: Colors.white38, fontSize: 11),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ],
+            ),
+          ),
+          actions: [
+            TextButton(
+              onPressed: () => Navigator.of(ctx).pop(),
+              child: Text(l10n.cancel),
+            ),
+            FilledButton(
+              onPressed: () {
+                final tab =
+                    DefaultTabController.of(ctx).index;
+                Navigator.of(ctx).pop();
+                if (tab == 0) {
+                  setState(() {
+                    _month = DateTime(gYear, gMonth, 1);
+                  });
+                } else {
+                  final target =
+                      HijriService.instance.gregorianForHijri(
+                          hYear, hMonth, hDay);
+                  if (target != null) {
+                    setState(() {
+                      _month =
+                          DateTime(target.year, target.month, 1);
+                    });
+                  } else if (mounted) {
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      SnackBar(
+                          content: Text(l10n.dateNotFound)),
+                    );
+                  }
+                }
+              },
+              child: Text(l10n.go),
+            ),
+          ],
         ),
       ),
     );

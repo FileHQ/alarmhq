@@ -148,5 +148,10 @@
   "permBgActivityReminder": "Also enable \"Allow background activity\" for AlarmHQ in Settings > Apps, so the alarm rings when the app is closed.",
   "permUnusedBanner": "⚠️ Android may AUTO-REMOVE AlarmHQ's permissions — turn OFF \"Manage app if unused\" in Settings → Apps → AlarmHQ.",
   "calendar": "Calendar",
-  "hijriDate": "Hijri date"
+  "hijriDate": "Hijri date",
+  "goToDate": "Go to Date",
+  "gregorian": "Gregorian",
+  "hijri": "Hijri",
+  "go": "Go",
+  "dateNotFound": "Date not found"
 }

@@ -190,4 +190,78 @@ void main() {
           reason: 'No "~" predicted marker found in: ${texts.join(" ")}');
     });
   });
+
+  group('v2.34 calendar fixes', () {
+    test('11. No duplicate Hijri 1st: 2025-06-26 backfilled to 29',
+        () async {
+      await HijriService.instance.load();
+      final prev = HijriService.instance.hijriFor(DateTime(2025, 6, 26));
+      final cur = HijriService.instance.hijriFor(DateTime(2025, 6, 27));
+      // 1 Muharram 1447 confirmed on 2025-06-27 (sighted).
+      expect(cur.day, 1);
+      expect(cur.month, 1);
+      expect(cur.year, 1447);
+      expect(cur.confidence, 'confirmed');
+      // 2025-06-26 must be 29 Dhu al-Hijjah 1446, NOT a duplicate 1st.
+      expect(prev.day, 29);
+      expect(prev.month, 12);
+      expect(prev.year, 1446);
+      expect(prev.confidence, 'confirmed');
+    });
+
+    test('12. No duplicate day-1s and no 28-day months in data',
+        () async {
+      await HijriService.instance.load();
+      final svc = HijriService.instance;
+      var d = DateTime(2025, 6, 26);
+      final end = DateTime(2027, 6, 6);
+      HijriDate prevH = svc.hijriFor(d);
+      d = d.add(const Duration(days: 1));
+      while (!d.isAfter(end)) {
+        final h = svc.hijriFor(d);
+        // Skip calculated seams (outside sighted coverage).
+        if (!h.isCalculated && !prevH.isCalculated) {
+          if (h.day == 1 && prevH.day == 1 && h.month == prevH.month) {
+            fail('Duplicate 1st of ${h.monthNameEn} at $d');
+          }
+          if (prevH.day == 28 && h.day == 1) {
+            fail('28-day month ending at $d');
+          }
+        }
+        prevH = h;
+        d = d.add(const Duration(days: 1));
+      }
+    });
+
+    test('13. Reverse lookup: 8 Jumada al-Awwal 1448 = 2026-10-20',
+        () async {
+      await HijriService.instance.load();
+      final g =
+          HijriService.instance.gregorianForHijri(1448, 5, 8);
+      expect(g, isNotNull);
+      expect(g!.year, 2026);
+      expect(g.month, 10);
+      expect(g.day, 20);
+    });
+
+    test('14. Reverse lookup misses return null', () async {
+      await HijriService.instance.load();
+      // Day 31 never exists in a Hijri month.
+      expect(
+          HijriService.instance.gregorianForHijri(1448, 5, 31),
+          isNull);
+    });
+
+    testWidgets('15. Go-to-Date button exists in calendar AppBar',
+        (tester) async {
+      await pumpCalendar(tester, const Locale('en'));
+      expect(find.byIcon(Icons.event), findsOneWidget);
+      await tester.tap(find.byIcon(Icons.event));
+      await tester.pump(const Duration(milliseconds: 100));
+      // Dialog with both tabs opens.
+      expect(find.text('Go to Date'), findsWidgets);
+      expect(find.text('Gregorian'), findsOneWidget);
+      expect(find.text('Hijri'), findsOneWidget);
+    });
+  });
 }

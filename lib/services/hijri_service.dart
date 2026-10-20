@@ -148,6 +148,9 @@ class HijriService {
       if (raw == null) continue;
       _parseYear(raw);
     }
+    // v2.34: consistency pass — a confirmed/predicted month start must not
+    // leave a duplicate 1st or a 28-day month behind it.
+    _enforceMonthBoundaries();
     // If any year came from cache, the whole set is "cached".
     // (Sync always writes all three together.)
   }
@@ -249,6 +252,69 @@ class HijriService {
       '${d.year.toString().padLeft(4, '0')}-'
       '${d.month.toString().padLeft(2, '0')}-'
       '${d.day.toString().padLeft(2, '0')}';
+
+  /// v2.34: month-boundary consistency pass over the loaded sighted data.
+  ///
+  /// The hijri-api baseline can predict a month start one day before the
+  /// confirmed sighting (e.g. 2025-06-26 was baseline "1 Muharram" but the
+  /// Ruet-e-Hilal sighting confirmed 2025-06-27). That leaves a duplicate
+  /// 1st — or, equivalently, a 28-day month — in the grid.
+  ///
+  /// Rule: if date D is the 1st of Hijri month M, then D-1 MUST be the
+  /// 29th or 30th of the previous month. A 28-day Islamic month is
+  /// impossible. When the 1st is sighted-confirmed, the previous day is
+  /// logically certain too (the confirmed start proves the old month
+  /// ended), so it is marked confirmed as well.
+  void _enforceMonthBoundaries() {
+    final keys = _byGregorian.keys.toList()..sort();
+    for (var i = 1; i < keys.length; i++) {
+      final prevDate = DateTime.tryParse(keys[i - 1]);
+      final curDate = DateTime.tryParse(keys[i]);
+      if (prevDate == null ||
+          curDate == null ||
+          curDate.difference(prevDate).inDays != 1) {
+        continue; // Not consecutive days — leave alone.
+      }
+      final cur = _byGregorian[keys[i]]!;
+      if (cur.day != 1) continue;
+      final prevMonth = cur.month == 1 ? 12 : cur.month - 1;
+      final prevYear = cur.month == 1 ? cur.year - 1 : cur.year;
+      final prev = _byGregorian[keys[i - 1]]!;
+      final ok = prev.year == prevYear &&
+          prev.month == prevMonth &&
+          (prev.day == 29 || prev.day == 30);
+      if (!ok) {
+        _byGregorian[keys[i - 1]] = HijriDate(
+          year: prevYear,
+          month: prevMonth,
+          day: 29,
+          monthNameEn: monthNamesEn[prevMonth - 1],
+          confidence:
+              cur.confidence == 'confirmed' ? 'confirmed' : prev.confidence,
+        );
+      }
+    }
+  }
+
+  /// Gregorian date for a Hijri (year, month, day), or null when not
+  /// found. Searches the loaded sighted data first, then scans a bounded
+  /// calculated range (2020-01-01 .. 2032-12-31). Used by "Go to Date".
+  DateTime? gregorianForHijri(int year, int month, int day) {
+    for (final entry in _byGregorian.entries) {
+      final h = entry.value;
+      if (h.year == year && h.month == month && h.day == day) {
+        return DateTime.tryParse(entry.key);
+      }
+    }
+    var dt = DateTime(2020, 1, 1);
+    final end = DateTime(2032, 12, 31);
+    while (!dt.isAfter(end)) {
+      final h = _calculate(dt);
+      if (h.year == year && h.month == month && h.day == day) return dt;
+      dt = dt.add(const Duration(days: 1));
+    }
+    return null;
+  }
 
   /// Hijri date for [date]. Uses cached/bundled sighted data when
   /// available, otherwise the arithmetical (Kuwaiti) algorithm marked

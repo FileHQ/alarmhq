@@ -500,4 +500,19 @@ class AppLocalizationsUr extends AppLocalizations {
 
   @override
   String get hijriDate => 'ہجری تاریخ';
+
+  @override
+  String get goToDate => 'تاریخ پر جائیں';
+
+  @override
+  String get gregorian => 'عیسوی';
+
+  @override
+  String get hijri => 'ہجری';
+
+  @override
+  String get go => 'جائیں';
+
+  @override
+  String get dateNotFound => 'تاریخ نہیں ملی';
 }
