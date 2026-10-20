@@ -153,5 +153,8 @@
   "gregorian": "عیسوی",
   "hijri": "ہجری",
   "go": "جائیں",
-  "dateNotFound": "تاریخ نہیں ملی"
+  "dateNotFound": "تاریخ نہیں ملی",
+  "yearLabel": "سال",
+  "monthLabel": "مہینہ",
+  "dayLabel": "تاریخ"
 }

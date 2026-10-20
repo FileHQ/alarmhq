@@ -153,5 +153,8 @@
   "gregorian": "Gregorian",
   "hijri": "Hijri",
   "go": "Go",
-  "dateNotFound": "Date not found"
+  "dateNotFound": "Date not found",
+  "yearLabel": "Year",
+  "monthLabel": "Month",
+  "dayLabel": "Day"
 }

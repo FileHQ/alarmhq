@@ -1021,6 +1021,24 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Date not found'**
   String get dateNotFound;
+
+  /// No description provided for @yearLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Year'**
+  String get yearLabel;
+
+  /// No description provided for @monthLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Month'**
+  String get monthLabel;
+
+  /// No description provided for @dayLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Day'**
+  String get dayLabel;
 }
 
 class _AppLocalizationsDelegate

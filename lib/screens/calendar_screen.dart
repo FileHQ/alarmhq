@@ -16,6 +16,11 @@ class CalendarScreen extends StatefulWidget {
 class _CalendarScreenState extends State<CalendarScreen> {
   DateTime _month = DateTime(DateTime.now().year, DateTime.now().month, 1);
 
+  // v2.37: the date the user jumped to via "Go to Date" — highlighted in
+  // lime so she can see "we arrived here". Cleared on manual month change
+  // or when another date is tapped.
+  DateTime? _jumpedDate;
+
   @override
   void initState() {
     super.initState();
@@ -51,6 +56,8 @@ class _CalendarScreenState extends State<CalendarScreen> {
   void _changeMonth(int delta) {
     setState(() {
       _month = DateTime(_month.year, _month.month + delta, 1);
+      // v2.37: manual navigation clears the jump highlight.
+      _jumpedDate = null;
     });
   }
 
@@ -224,11 +231,11 @@ class _CalendarScreenState extends State<CalendarScreen> {
   /// v2.34: "Go to Date" dialog — jump the calendar via a Gregorian
   /// or Hijri date. All digits English (toString only).
   ///
-  /// v2.36: dialog content moved into a StatefulBuilder and the dropdowns
-  /// rewritten as plain DropdownButton with an explicit `value:` (plus
-  /// setState on change). v2.35 used DropdownButtonFormField with
-  /// `initialValue:` — on the user's phone the year/day dropdowns rendered
-  /// blank, and picks never repainted because onChanged didn't setState.
+  /// v2.37: DROPDOWNS REMOVED. They rendered blank on the user's Realme
+  /// (v2.35/v2.36 fixes didn't stick on device), so the dialog now uses
+  /// [-] value [+] steppers and [<] month [>] arrows — nothing that can
+  /// go blank. Also sets _jumpedDate so the landed date gets a lime
+  /// outline (today keeps its full fill).
   void _showGoToDate(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
     // v2.34: month names follow locale; digits stay English.
@@ -238,11 +245,9 @@ class _CalendarScreenState extends State<CalendarScreen> {
         ? HijriService.monthNamesUr
         : HijriService.monthNamesEn;
     final now = DateTime.now();
-    // v2.36: clamp to the dropdown ranges so `value:` always matches an
-    // item (DropdownButton asserts membership).
     int gYear = now.year.clamp(2020, 2035),
-        gMonth = now.month.clamp(1, 12),
-        gDay = now.day.clamp(1, 31);
+        gMonth = now.month,
+        gDay = now.day;
     int hYear = 1448, hMonth = 5, hDay = 8;
     try {
       final h = HijriService.instance.hijriFor(now);
@@ -251,57 +256,54 @@ class _CalendarScreenState extends State<CalendarScreen> {
       hDay = h.day.clamp(1, 30);
     } catch (_) {}
 
-    // v2.35: track the selected Go-to-Date tab directly. The previous code
-    // used DefaultTabController.of(ctx).index, but the DefaultTabController
-    // is a CHILD of the dialog builder's ctx — .of() searches ancestors,
-    // returned null, and .index threw, so "Go" silently did nothing.
+    // v2.35: track the selected Go-to-Date tab directly (DefaultTabController
+    // is a child of the dialog builder's ctx, so .of() returns null).
     int tabIndex = 0;
+
+    int gDaysIn(int y, int m) => DateTime(y, m + 1, 0).day;
 
     showDialog(
       context: context,
       builder: (ctx) => DefaultTabController(
         length: 2,
-        // v2.36: StatefulBuilder so dropdown selections repaint the
-        // dialog immediately.
+        // v2.37: StatefulBuilder so stepper taps repaint the dialog.
         child: StatefulBuilder(
           builder: (dialogCtx, setDialogState) {
-            Widget dropdown({
-              required int value,
-              required List<int> items,
-              required String Function(int) label,
-              required ValueChanged<int?> onChanged,
-              int flex = 1,
+            /// One stepper row: label | [-] value [+] .
+            Widget stepper({
+              required String label,
+              required String value,
+              required VoidCallback onMinus,
+              required VoidCallback onPlus,
             }) {
-              return Expanded(
-                flex: flex,
-                child: Container(
-                  padding: const EdgeInsets.symmetric(
-                      horizontal: 10, vertical: 2),
-                  decoration: BoxDecoration(
-                    border: Border.all(color: Colors.white38),
-                    borderRadius: BorderRadius.circular(4),
-                  ),
-                  // v2.36: explicit `value:` (never initialValue) — the
-                  // selected value is ALWAYS painted.
-                  child: DropdownButton<int>(
-                    value: value,
-                    isExpanded: true,
-                    isDense: true,
-                    underline: const SizedBox.shrink(),
-                    dropdownColor: const Color(0xFF2A2E3A),
-                    items: [
-                      for (final it in items)
-                        DropdownMenuItem(
-                          value: it,
-                          child: Text(
-                            label(it),
-                            overflow: TextOverflow.ellipsis,
-                            style: const TextStyle(fontSize: 14),
-                          ),
-                        ),
-                    ],
-                    onChanged: onChanged,
-                  ),
+              return Padding(
+                padding: const EdgeInsets.symmetric(vertical: 4),
+                child: Row(
+                  children: [
+                    SizedBox(
+                      width: 72,
+                      child: Text(label,
+                          style: const TextStyle(fontSize: 14)),
+                    ),
+                    IconButton(
+                      icon: const Icon(Icons.remove_circle_outline),
+                      onPressed: onMinus,
+                    ),
+                    Expanded(
+                      child: Text(
+                        // English digits only — plain toString().
+                        value,
+                        textAlign: TextAlign.center,
+                        style: const TextStyle(
+                            fontSize: 20,
+                            fontWeight: FontWeight.w800),
+                      ),
+                    ),
+                    IconButton(
+                      icon: const Icon(Icons.add_circle_outline),
+                      onPressed: onPlus,
+                    ),
+                  ],
                 ),
               );
             }
@@ -314,8 +316,6 @@ class _CalendarScreenState extends State<CalendarScreen> {
                   mainAxisSize: MainAxisSize.min,
                   children: [
                     TabBar(
-                      // v2.35: keep the selected tab in a local so "Go"
-                      // knows which tab was active (see tabIndex above).
                       onTap: (i) => tabIndex = i,
                       tabs: [
                         Tab(text: l10n.gregorian),
@@ -323,91 +323,95 @@ class _CalendarScreenState extends State<CalendarScreen> {
                       ],
                     ),
                     SizedBox(
-                      height: 190,
+                      height: 220,
                       child: TabBarView(
                         children: [
-                          // Gregorian tab.
+                          // Gregorian tab — steppers, no dropdowns.
                           Padding(
-                            padding: const EdgeInsets.only(top: 16),
+                            padding: const EdgeInsets.only(top: 12),
                             child: Column(
                               children: [
-                                Row(
-                                  children: [
-                                    dropdown(
-                                      value: gYear,
-                                      items: [
-                                        for (var y = 2020; y <= 2035; y++) y
-                                      ],
-                                      label: (y) => '$y',
-                                      onChanged: (v) => setDialogState(
-                                          () => gYear = v ?? gYear),
-                                    ),
-                                    const SizedBox(width: 8),
-                                    dropdown(
-                                      value: gMonth,
-                                      flex: 2,
-                                      items: [
-                                        for (var m = 1; m <= 12; m++) m
-                                      ],
-                                      label: (m) => gMonthNames[m - 1],
-                                      onChanged: (v) => setDialogState(
-                                          () => gMonth = v ?? gMonth),
-                                    ),
-                                    const SizedBox(width: 8),
-                                    dropdown(
-                                      value: gDay,
-                                      items: [
-                                        for (var d = 1; d <= 31; d++) d
-                                      ],
-                                      label: (d) => '$d',
-                                      onChanged: (v) => setDialogState(
-                                          () => gDay = v ?? gDay),
-                                    ),
-                                  ],
+                                stepper(
+                                  label: l10n.yearLabel,
+                                  value: '$gYear',
+                                  onMinus: () => setDialogState(() {
+                                    if (gYear > 2020) gYear--;
+                                    gDay = gDay.clamp(
+                                        1, gDaysIn(gYear, gMonth));
+                                  }),
+                                  onPlus: () => setDialogState(() {
+                                    if (gYear < 2035) gYear++;
+                                    gDay = gDay.clamp(
+                                        1, gDaysIn(gYear, gMonth));
+                                  }),
+                                ),
+                                stepper(
+                                  label: l10n.monthLabel,
+                                  value: gMonthNames[gMonth - 1],
+                                  onMinus: () => setDialogState(() {
+                                    gMonth = gMonth == 1 ? 12 : gMonth - 1;
+                                    gDay = gDay.clamp(
+                                        1, gDaysIn(gYear, gMonth));
+                                  }),
+                                  onPlus: () => setDialogState(() {
+                                    gMonth = gMonth == 12 ? 1 : gMonth + 1;
+                                    gDay = gDay.clamp(
+                                        1, gDaysIn(gYear, gMonth));
+                                  }),
+                                ),
+                                stepper(
+                                  label: l10n.dayLabel,
+                                  value: '$gDay',
+                                  onMinus: () => setDialogState(() {
+                                    final max =
+                                        gDaysIn(gYear, gMonth);
+                                    gDay = gDay == 1 ? max : gDay - 1;
+                                  }),
+                                  onPlus: () => setDialogState(() {
+                                    final max =
+                                        gDaysIn(gYear, gMonth);
+                                    gDay = gDay == max ? 1 : gDay + 1;
+                                  }),
                                 ),
                               ],
                             ),
                           ),
-                          // Hijri tab.
+                          // Hijri tab — steppers, no dropdowns.
                           Padding(
-                            padding: const EdgeInsets.only(top: 16),
+                            padding: const EdgeInsets.only(top: 12),
                             child: Column(
                               children: [
-                                Row(
-                                  children: [
-                                    dropdown(
-                                      value: hYear,
-                                      items: [
-                                        for (var y = 1446; y <= 1450; y++) y
-                                      ],
-                                      label: (y) => '$y',
-                                      onChanged: (v) => setDialogState(
-                                          () => hYear = v ?? hYear),
-                                    ),
-                                    const SizedBox(width: 8),
-                                    dropdown(
-                                      value: hMonth,
-                                      flex: 2,
-                                      items: [
-                                        for (var m = 1; m <= 12; m++) m
-                                      ],
-                                      label: (m) => hMonthNames[m - 1],
-                                      onChanged: (v) => setDialogState(
-                                          () => hMonth = v ?? hMonth),
-                                    ),
-                                    const SizedBox(width: 8),
-                                    dropdown(
-                                      value: hDay,
-                                      items: [
-                                        for (var d = 1; d <= 30; d++) d
-                                      ],
-                                      label: (d) => '$d',
-                                      onChanged: (v) => setDialogState(
-                                          () => hDay = v ?? hDay),
-                                    ),
-                                  ],
+                                stepper(
+                                  label: l10n.yearLabel,
+                                  value: '$hYear',
+                                  onMinus: () => setDialogState(() {
+                                    if (hYear > 1446) hYear--;
+                                  }),
+                                  onPlus: () => setDialogState(() {
+                                    if (hYear < 1450) hYear++;
+                                  }),
                                 ),
-                                const SizedBox(height: 8),
+                                stepper(
+                                  label: l10n.monthLabel,
+                                  value: hMonthNames[hMonth - 1],
+                                  onMinus: () => setDialogState(() {
+                                    hMonth = hMonth == 1 ? 12 : hMonth - 1;
+                                  }),
+                                  onPlus: () => setDialogState(() {
+                                    hMonth = hMonth == 12 ? 1 : hMonth + 1;
+                                  }),
+                                ),
+                                stepper(
+                                  label: l10n.dayLabel,
+                                  value: '$hDay',
+                                  onMinus: () => setDialogState(() {
+                                    hDay = hDay == 1 ? 30 : hDay - 1;
+                                  }),
+                                  onPlus: () => setDialogState(() {
+                                    hDay = hDay == 30 ? 1 : hDay + 1;
+                                  }),
+                                ),
+                                const SizedBox(height: 4),
                                 const Text(
                                   '~ predicted dates are estimates',
                                   style: TextStyle(
@@ -429,13 +433,16 @@ class _CalendarScreenState extends State<CalendarScreen> {
                 ),
                 FilledButton(
                   onPressed: () {
-                    // v2.35: use the locally tracked tabIndex (DefaultTabController
-                    // is not an ancestor of this context — see above).
                     final tab = tabIndex;
                     Navigator.of(dialogCtx).pop();
                     if (tab == 0) {
+                      // v2.37: jump + lime-highlight the landed date.
+                      final target = DateTime(gYear, gMonth,
+                          gDay.clamp(1, gDaysIn(gYear, gMonth)));
                       setState(() {
-                        _month = DateTime(gYear, gMonth, 1);
+                        _month =
+                            DateTime(target.year, target.month, 1);
+                        _jumpedDate = target;
                       });
                     } else {
                       final target =
@@ -445,6 +452,8 @@ class _CalendarScreenState extends State<CalendarScreen> {
                         setState(() {
                           _month =
                               DateTime(target.year, target.month, 1);
+                          _jumpedDate = DateTime(target.year,
+                              target.month, target.day);
                         });
                       } else if (mounted) {
                         ScaffoldMessenger.of(context).showSnackBar(
@@ -524,6 +533,13 @@ class _CalendarScreenState extends State<CalendarScreen> {
     final isToday = cell.year == today.year &&
         cell.month == today.month &&
         cell.day == today.day;
+    // v2.37: jumped-to date (via Go to Date) gets a lime OUTLINE only —
+    // today keeps its full lime fill, so the two are distinguishable.
+    final isJumped = !isToday &&
+        _jumpedDate != null &&
+        cell.year == _jumpedDate!.year &&
+        cell.month == _jumpedDate!.month &&
+        cell.day == _jumpedDate!.day;
     final hijri = HijriService.instance.hijriFor(cell);
     // v2.33: amber Hijri number marks arithmetical "calculated" dates
     // (outside sighted-data coverage), so the user knows the difference.
@@ -535,12 +551,21 @@ class _CalendarScreenState extends State<CalendarScreen> {
             : Colors.white38;
     final marker = hijri.confidenceMarker;
     return GestureDetector(
-      onTap: () => _showDateDetail(context, cell),
+      onTap: () {
+        // v2.37: tapping another date clears the jump highlight.
+        if (!isJumped) {
+          setState(() => _jumpedDate = null);
+        }
+        _showDateDetail(context, cell);
+      },
       child: Container(
         margin: const EdgeInsets.all(2),
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(10),
           color: isToday ? AppTheme.emerald : Colors.transparent,
+          border: isJumped
+              ? Border.all(color: AppTheme.emerald, width: 2)
+              : null,
         ),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,

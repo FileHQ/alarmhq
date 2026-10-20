@@ -515,4 +515,13 @@ class AppLocalizationsUr extends AppLocalizations {
 
   @override
   String get dateNotFound => 'تاریخ نہیں ملی';
+
+  @override
+  String get yearLabel => 'سال';
+
+  @override
+  String get monthLabel => 'مہینہ';
+
+  @override
+  String get dayLabel => 'تاریخ';
 }

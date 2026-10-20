@@ -520,4 +520,13 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get dateNotFound => 'Date not found';
+
+  @override
+  String get yearLabel => 'Year';
+
+  @override
+  String get monthLabel => 'Month';
+
+  @override
+  String get dayLabel => 'Day';
 }

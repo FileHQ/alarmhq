@@ -355,21 +355,26 @@ void main() {
 
     // v2.35: long Hijri header wraps instead of overflowing.
     // May 2025 spans "Zil-Qadah 1446 / Zil-Hajj 1446".
+    // v2.37: dropdowns replaced by steppers — navigate with [-]/[+].
     testWidgets('21. Long Hijri header does not overflow', (tester) async {
       await HijriService.instance.load();
       await pumpCalendar(tester, const Locale('en'));
       // Jump to May 2025 via Go to Date (also exercises the Go button).
       await tester.tap(find.byIcon(Icons.event));
       await tester.pump();
-      await tester.tap(find.byType(DropdownButton<int>).first);
-      await tester.pump();
-      await tester.tap(find.text('2025').last);
-      await tester.pump();
-      // Pick May in the month dropdown (second dropdown).
-      await tester.tap(find.byType(DropdownButton<int>).at(1));
-      await tester.pump();
-      await tester.tap(find.text('May').last);
-      await tester.pump();
+      // Year stepper minus down to 2025.
+      final now21 = DateTime.now();
+      for (var i = 0; i < now21.year - 2025; i++) {
+        await tester
+            .tap(find.byIcon(Icons.remove_circle_outline).first);
+        await tester.pump();
+      }
+      // Month stepper minus down to May (5).
+      final monthTaps = (now21.month - 5 + 12) % 12;
+      for (var i = 0; i < monthTaps; i++) {
+        await tester.tap(find.byIcon(Icons.remove_circle_outline).at(1));
+        await tester.pump();
+      }
       await tester.tap(find.text('Go'));
       await tester.pump();
       await tester.pump();
@@ -381,17 +386,19 @@ void main() {
     });
 
     // v2.35: "Go" on the Gregorian tab navigates and closes the dialog.
+    // v2.37: year picked with the [+] stepper (4x: 2026 -> 2030).
     testWidgets('22. Go button (Gregorian tab) navigates', (tester) async {
       await HijriService.instance.load();
       await pumpCalendar(tester, const Locale('en'));
       await tester.tap(find.byIcon(Icons.event));
       await tester.pump();
       expect(find.text('Go to Date'), findsOneWidget);
-      // Pick year 2030 in the first dropdown.
-      await tester.tap(find.byType(DropdownButton<int>).first);
-      await tester.pump();
-      await tester.tap(find.text('2030').last);
-      await tester.pump();
+      // Year stepper plus up to 2030.
+      final now22 = DateTime.now();
+      for (var i = 0; i < 2030 - now22.year; i++) {
+        await tester.tap(find.byIcon(Icons.add_circle_outline).first);
+        await tester.pump();
+      }
       await tester.tap(find.text('Go'));
       await tester.pump();
       await tester.pump();
