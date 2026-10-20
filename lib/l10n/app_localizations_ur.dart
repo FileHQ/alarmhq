@@ -548,5 +548,5 @@ class AppLocalizationsUr extends AppLocalizations {
   String get close => 'بند کریں';
 
   @override
-  String get predictedNote => '~ اندازاً تاریخیں تخمینی ہیں';
+  String get predictedNote => '~ یہ تاریخیں اندازاً ہیں';
 }
