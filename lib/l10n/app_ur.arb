@@ -161,5 +161,6 @@
   "dataUpdate": "ڈیٹا اپڈیٹ:",
   "legendConfirmed": "✓ تصدیق شدہ",
   "legendPredicted": "~ اندازاً",
-  "legendCalculated": "اورنج = کیلکولیٹڈ"
+  "legendCalculated": "اورنج = کیلکولیٹڈ",
+  "calendarHint": "اوپر: عیسوی • نیچے: ہجری (تفصیل کے لیے تاریخ دبائیں)"
 }

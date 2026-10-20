@@ -539,4 +539,8 @@ class AppLocalizationsUr extends AppLocalizations {
 
   @override
   String get legendCalculated => 'اورنج = کیلکولیٹڈ';
+
+  @override
+  String get calendarHint =>
+      'اوپر: عیسوی • نیچے: ہجری (تفصیل کے لیے تاریخ دبائیں)';
 }

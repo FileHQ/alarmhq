@@ -219,9 +219,12 @@ class _CalendarScreenState extends State<CalendarScreen> {
                 ],
               ),
               const SizedBox(height: 8),
-              const Text(
-                'Top: Gregorian  •  Bottom: Hijri (tap a date for detail)',
-                style: TextStyle(color: Colors.white38, fontSize: 11),
+              // v2.41: localized calendar hint (Urdu: "اوپر: عیسوی • ...").
+              Text(
+                l10n.calendarHint,
+                style: TextStyle(
+                    color: Colors.white38,
+                    fontSize: isUrdu ? 14 : 11),
               ),
               const SizedBox(height: 2),
               // v2.38: confidence legend — localized per user decision.

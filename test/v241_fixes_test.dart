@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 
@@ -89,4 +91,21 @@ void main() {
       expect(urduUpdateSize, greaterThan(enUpdateSize));
     });
   });
+
+  group('v2.41 calendar hint localization', () {
+    test('calendarHint exists in EN and UR arb with correct text', () async {
+      final en = await File('lib/l10n/app_en.arb').readAsString();
+      final ur = await File('lib/l10n/app_ur.arb').readAsString();
+      expect(en.contains('"calendarHint"'), isTrue);
+      expect(ur.contains('"calendarHint"'), isTrue);
+      expect(
+          ur.contains('اوپر: عیسوی • نیچے: ہجری (تفصیل کے لیے تاریخ دبائیں)'),
+          isTrue);
+      expect(
+          en.contains(
+              'Top: Gregorian  •  Bottom: Hijri (tap a date for detail)'),
+          isTrue);
+    });
+  });
+
 }

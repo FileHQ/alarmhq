@@ -161,5 +161,6 @@
   "dataUpdate": "Data update:",
   "legendConfirmed": "✓ confirmed (sighted)",
   "legendPredicted": "~ predicted (Pakistan-adjusted estimate)",
-  "legendCalculated": "Orange = calculated"
+  "legendCalculated": "Orange = calculated",
+  "calendarHint": "Top: Gregorian  •  Bottom: Hijri (tap a date for detail)"
 }

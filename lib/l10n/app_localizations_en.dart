@@ -544,4 +544,8 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get legendCalculated => 'Orange = calculated';
+
+  @override
+  String get calendarHint =>
+      'Top: Gregorian  •  Bottom: Hijri (tap a date for detail)';
 }

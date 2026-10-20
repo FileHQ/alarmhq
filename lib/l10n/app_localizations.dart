@@ -1069,6 +1069,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Orange = calculated'**
   String get legendCalculated;
+
+  /// No description provided for @calendarHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Top: Gregorian  •  Bottom: Hijri (tap a date for detail)'**
+  String get calendarHint;
 }
 
 class _AppLocalizationsDelegate
