@@ -651,10 +651,15 @@ class _AlarmListScreenState extends State<AlarmListScreen>
                         const SizedBox(height: 8),
                         Text(
                           '⏳ $countdown',
+                          // v2.41: explicit Roboto (Android system font).
+                          // JameelNoori has no Latin/digit glyphs; relying on
+                          // font fallback caused digits to render gray on
+                          // Realme. Explicit font = consistent emerald.
                           style: const TextStyle(
                             fontSize: 13,
                             fontWeight: FontWeight.w700,
                             color: AppTheme.emerald,
+                            fontFamily: 'Roboto',
                           ),
                         ),
                       ],

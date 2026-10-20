@@ -199,11 +199,17 @@ class _CalendarScreenState extends State<CalendarScreen> {
                 children: [
                   for (final h in dow)
                     Center(
-                      child: Text(h,
-                          style: const TextStyle(
-                              color: Colors.white38,
-                              fontWeight: FontWeight.w700,
-                              fontSize: 12)),
+                      // v2.41: FittedBox prevents جمعرات wrapping to 2 lines.
+                      // Jameel Noori is tall; scale down to fit one line.
+                      child: FittedBox(
+                        fit: BoxFit.scaleDown,
+                        child: Text(h,
+                            maxLines: 1,
+                            style: const TextStyle(
+                                color: Colors.white38,
+                                fontWeight: FontWeight.w700,
+                                fontSize: 12)),
+                      ),
                     ),
                   for (final cell in cells)
                     if (cell == null)
@@ -219,10 +225,11 @@ class _CalendarScreenState extends State<CalendarScreen> {
               ),
               const SizedBox(height: 2),
               // v2.38: confidence legend — localized per user decision.
+              // v2.41: larger size for Urdu (Jameel Noori unreadable at 11).
               RichText(
                 text: TextSpan(
-                  style:
-                      const TextStyle(fontSize: 11, color: Colors.white38),
+                  style: TextStyle(
+                      fontSize: isUrdu ? 15 : 11, color: Colors.white38),
                   children: [
                     TextSpan(text: '${l10n.legendConfirmed}  '),
                     TextSpan(text: '${l10n.legendPredicted}  '),
@@ -239,9 +246,11 @@ class _CalendarScreenState extends State<CalendarScreen> {
                   child: Text(
                     // v2.38: "Data update: 17 Oct 2026" /
                     // "ڈیٹا اپڈیٹ: 17 اکتوبر 2026".
+                    // v2.41: larger for Urdu readability.
                     '${l10n.dataUpdate} ${isUrdu ? HijriService.instance.dataUpdatedLabelUr : HijriService.instance.dataUpdatedLabel}',
-                    style: const TextStyle(
-                        color: Colors.white24, fontSize: 10),
+                    style: TextStyle(
+                        color: Colors.white24,
+                        fontSize: isUrdu ? 14 : 10),
                   ),
                 ),
             ],
