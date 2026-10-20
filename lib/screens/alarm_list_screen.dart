@@ -560,6 +560,19 @@ class _AlarmListScreenState extends State<AlarmListScreen>
     final (time, ampm) = _timeParts(a.hour, a.minute);
     final countdown = _countdownText(l10n, a);
     final dimmed = !a.enabled;
+    // v2.45: light-theme card colors (user chose light green tint).
+    // Dark theme is untouched.
+    final isLight = Theme.of(context).brightness == Brightness.light;
+    final cardBg = isLight ? AppTheme.lightCardBg : AppTheme.charcoalCard;
+    final leftBorder = a.enabled
+        ? (isLight ? AppTheme.lightCardBorder : AppTheme.emerald)
+        : (isLight ? Colors.black26 : Colors.white24);
+    final timeColor = isLight ? AppTheme.lightTimeText : Colors.white;
+    final ringsColor = isLight ? AppTheme.lightRingsText : AppTheme.emerald;
+    final labelColor = isLight ? Colors.black54 : Colors.white70;
+    final nextColor = isLight ? Colors.black45 : Colors.white54;
+    final pillBgOff = isLight ? Colors.black12 : Colors.white12;
+    final pillTextOff = isLight ? Colors.black45 : Colors.white60;
     // v2.17: when snoozed, show it prominently — the user couldn't tell
     // the alarm was snoozed from the card.
     final snoozedUntil = _snoozeTriggers[a.id];
@@ -568,11 +581,11 @@ class _AlarmListScreenState extends State<AlarmListScreen>
       child: Container(
         margin: const EdgeInsets.symmetric(vertical: 7),
         decoration: BoxDecoration(
-          color: AppTheme.charcoalCard,
+          color: cardBg,
           borderRadius: BorderRadius.circular(18),
           border: Border(
             left: BorderSide(
-              color: a.enabled ? AppTheme.emerald : Colors.white24,
+              color: leftBorder,
               width: 4,
             ),
           ),
@@ -604,10 +617,10 @@ class _AlarmListScreenState extends State<AlarmListScreen>
                           children: [
                             TextSpan(
                               text: time,
-                              style: const TextStyle(
+                              style: TextStyle(
                                 fontSize: 38,
                                 fontWeight: FontWeight.w800,
-                                color: Colors.white,
+                                color: timeColor,
                                 letterSpacing: -0.5,
                               ),
                             ),
@@ -625,8 +638,8 @@ class _AlarmListScreenState extends State<AlarmListScreen>
                       if (a.label.isNotEmpty) ...[
                         const SizedBox(height: 2),
                         Text(a.label,
-                            style: const TextStyle(
-                                fontSize: 14, color: Colors.white70)),
+                            style: TextStyle(
+                                fontSize: 14, color: labelColor)),
                       ],
                       const SizedBox(height: 8),
                       Container(
@@ -635,7 +648,7 @@ class _AlarmListScreenState extends State<AlarmListScreen>
                         decoration: BoxDecoration(
                           color: a.enabled
                               ? AppTheme.emerald
-                              : Colors.white12,
+                              : pillBgOff,
                           borderRadius: BorderRadius.circular(14),
                         ),
                         child: Text(
@@ -643,7 +656,7 @@ class _AlarmListScreenState extends State<AlarmListScreen>
                           style: TextStyle(
                             fontSize: 11,
                             fontWeight: FontWeight.w800,
-                            color: a.enabled ? Colors.black : Colors.white60,
+                            color: a.enabled ? Colors.black : pillTextOff,
                           ),
                         ),
                       ),
@@ -655,10 +668,10 @@ class _AlarmListScreenState extends State<AlarmListScreen>
                           // JameelNoori has no Latin/digit glyphs; relying on
                           // font fallback caused digits to render gray on
                           // Realme. Explicit font = consistent emerald.
-                          style: const TextStyle(
+                          style: TextStyle(
                             fontSize: 13,
                             fontWeight: FontWeight.w700,
-                            color: AppTheme.emerald,
+                            color: ringsColor,
                             fontFamily: 'Roboto',
                           ),
                         ),
@@ -722,8 +735,8 @@ class _AlarmListScreenState extends State<AlarmListScreen>
                       const SizedBox(height: 4),
                       Text(
                         _nextLine(l10n, a),
-                        style: const TextStyle(
-                            fontSize: 12, color: Colors.white54),
+                        style: TextStyle(
+                            fontSize: 12, color: nextColor),
                       ),
                     ],
                   ),

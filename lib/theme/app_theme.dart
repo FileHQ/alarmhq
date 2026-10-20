@@ -9,6 +9,12 @@ class AppTheme {
   static const charcoalSurface = Color(0xFF2C313A);
   static const charcoalCard = Color(0xFF343B46);
 
+  // v2.45: light-theme alarm card colors (user chose light green tint).
+  static const lightCardBg = Color(0xFFF4F9E8);
+  static const lightCardBorder = Color(0xFFD4E8B0);
+  static const lightTimeText = Color(0xFF333333);
+  static const lightRingsText = Color(0xFF4A7C0F);
+
   static ThemeData dark() {
     final scheme = ColorScheme.fromSeed(
       seedColor: emerald,
