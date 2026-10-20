@@ -78,7 +78,7 @@ class _CalendarScreenState extends State<CalendarScreen> {
     ];
 
     // v2.34: header shows EVERY Hijri month visible in the grid
-    // (e.g. "Dhu al-Hijjah 1446 / Muharram 1447"), like the mockup.
+    // (e.g. "Zil-Hajj 1446 / Muharram 1447"), like the mockup.
     // Urdu locale uses Urdu month names; digits stay English.
     final hijriMonths = <String>[];
     for (final cell in cells) {
@@ -132,7 +132,7 @@ class _CalendarScreenState extends State<CalendarScreen> {
                     onPressed: () => _changeMonth(-1),
                   ),
                   // v2.35: header wraps to 2 lines so long Hijri month
-                  // names (e.g. "Dhu al-Qa'dah 1446 / Dhu al-Hijjah 1446")
+                  // names (e.g. "Zil-Qadah 1446 / Zil-Hajj 1446")
                   // are never cut off at the screen edge.
                   Expanded(
                     child: Column(
@@ -223,6 +223,12 @@ class _CalendarScreenState extends State<CalendarScreen> {
 
   /// v2.34: "Go to Date" dialog — jump the calendar via a Gregorian
   /// or Hijri date. All digits English (toString only).
+  ///
+  /// v2.36: dialog content moved into a StatefulBuilder and the dropdowns
+  /// rewritten as plain DropdownButton with an explicit `value:` (plus
+  /// setState on change). v2.35 used DropdownButtonFormField with
+  /// `initialValue:` — on the user's phone the year/day dropdowns rendered
+  /// blank, and picks never repainted because onChanged didn't setState.
   void _showGoToDate(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
     // v2.34: month names follow locale; digits stay English.
@@ -232,13 +238,17 @@ class _CalendarScreenState extends State<CalendarScreen> {
         ? HijriService.monthNamesUr
         : HijriService.monthNamesEn;
     final now = DateTime.now();
-    int gYear = now.year, gMonth = now.month, gDay = now.day;
+    // v2.36: clamp to the dropdown ranges so `value:` always matches an
+    // item (DropdownButton asserts membership).
+    int gYear = now.year.clamp(2020, 2035),
+        gMonth = now.month.clamp(1, 12),
+        gDay = now.day.clamp(1, 31);
     int hYear = 1448, hMonth = 5, hDay = 8;
     try {
       final h = HijriService.instance.hijriFor(now);
-      hYear = h.year;
-      hMonth = h.month;
-      hDay = h.day;
+      hYear = h.year.clamp(1446, 1450);
+      hMonth = h.month.clamp(1, 12);
+      hDay = h.day.clamp(1, 30);
     } catch (_) {}
 
     // v2.35: track the selected Go-to-Date tab directly. The previous code
@@ -247,194 +257,208 @@ class _CalendarScreenState extends State<CalendarScreen> {
     // returned null, and .index threw, so "Go" silently did nothing.
     int tabIndex = 0;
 
-    Widget dropdown<T>({
-      required T value,
-      required List<T> items,
-      required String Function(T) label,
-      required ValueChanged<T?> onChanged,
-      int flex = 1,
-    }) {
-      return Expanded(
-        flex: flex,
-        child: DropdownButtonFormField<T>(
-          // v2.35: isExpanded lets long month names (e.g. "Jumada al-Awwal")
-          // shrink instead of being cut off.
-          isExpanded: true,
-          initialValue: value,
-          items: [
-            for (final it in items)
-              DropdownMenuItem(
-                value: it,
-                child: Text(
-                  label(it),
-                  overflow: TextOverflow.ellipsis,
-                  style: const TextStyle(fontSize: 14),
-                ),
-              ),
-          ],
-          onChanged: onChanged,
-          decoration: const InputDecoration(
-            border: OutlineInputBorder(),
-            contentPadding:
-                EdgeInsets.symmetric(horizontal: 10, vertical: 8),
-          ),
-        ),
-      );
-    }
-
     showDialog(
       context: context,
       builder: (ctx) => DefaultTabController(
         length: 2,
-        child: AlertDialog(
-          title: Text(l10n.goToDate),
-          content: SizedBox(
-            width: double.maxFinite,
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                TabBar(
-                  // v2.35: keep the selected tab in a local so "Go"
-                  // knows which tab was active (see tabIndex above).
-                  onTap: (i) => tabIndex = i,
-                  tabs: [Tab(text: l10n.gregorian), Tab(text: l10n.hijri)],
-                ),
-                SizedBox(
-                  height: 190,
-                  child: TabBarView(
-                    children: [
-                      // Gregorian tab.
-                      Padding(
-                        padding: const EdgeInsets.only(top: 16),
-                        child: Column(
-                          children: [
-                            Row(
-                              children: [
-                                dropdown<int>(
-                                  value: gYear,
-                                  items: [
-                                    for (var y = 2020; y <= 2035; y++) y
-                                  ],
-                                  label: (y) => '$y',
-                                  onChanged: (v) =>
-                                      gYear = v ?? gYear,
-                                ),
-                                const SizedBox(width: 8),
-                                dropdown<int>(
-                                  value: gMonth,
-                                  flex: 2,
-                                  items: [
-                                    for (var m = 1; m <= 12; m++) m
-                                  ],
-                                  label: (m) => gMonthNames[m - 1],
-                                  onChanged: (v) =>
-                                      gMonth = v ?? gMonth,
-                                ),
-                                const SizedBox(width: 8),
-                                dropdown<int>(
-                                  value: gDay,
-                                  items: [
-                                    for (var d = 1; d <= 31; d++) d
-                                  ],
-                                  label: (d) => '$d',
-                                  onChanged: (v) =>
-                                      gDay = v ?? gDay,
-                                ),
-                              ],
-                            ),
-                          ],
+        // v2.36: StatefulBuilder so dropdown selections repaint the
+        // dialog immediately.
+        child: StatefulBuilder(
+          builder: (dialogCtx, setDialogState) {
+            Widget dropdown({
+              required int value,
+              required List<int> items,
+              required String Function(int) label,
+              required ValueChanged<int?> onChanged,
+              int flex = 1,
+            }) {
+              return Expanded(
+                flex: flex,
+                child: Container(
+                  padding: const EdgeInsets.symmetric(
+                      horizontal: 10, vertical: 2),
+                  decoration: BoxDecoration(
+                    border: Border.all(color: Colors.white38),
+                    borderRadius: BorderRadius.circular(4),
+                  ),
+                  // v2.36: explicit `value:` (never initialValue) — the
+                  // selected value is ALWAYS painted.
+                  child: DropdownButton<int>(
+                    value: value,
+                    isExpanded: true,
+                    isDense: true,
+                    underline: const SizedBox.shrink(),
+                    dropdownColor: const Color(0xFF2A2E3A),
+                    items: [
+                      for (final it in items)
+                        DropdownMenuItem(
+                          value: it,
+                          child: Text(
+                            label(it),
+                            overflow: TextOverflow.ellipsis,
+                            style: const TextStyle(fontSize: 14),
+                          ),
                         ),
-                      ),
-                      // Hijri tab.
-                      Padding(
-                        padding: const EdgeInsets.only(top: 16),
-                        child: Column(
-                          children: [
-                            Row(
-                              children: [
-                                dropdown<int>(
-                                  value: hYear,
-                                  items: [
-                                    for (var y = 1446; y <= 1450; y++) y
-                                  ],
-                                  label: (y) => '$y',
-                                  onChanged: (v) =>
-                                      hYear = v ?? hYear,
-                                ),
-                                const SizedBox(width: 8),
-                                dropdown<int>(
-                                  value: hMonth,
-                                  flex: 2,
-                                  items: [
-                                    for (var m = 1; m <= 12; m++) m
-                                  ],
-                                  label: (m) =>
-                                      hMonthNames[m - 1],
-                                  onChanged: (v) =>
-                                      hMonth = v ?? hMonth,
-                                ),
-                                const SizedBox(width: 8),
-                                dropdown<int>(
-                                  value: hDay,
-                                  items: [
-                                    for (var d = 1; d <= 30; d++) d
-                                  ],
-                                  label: (d) => '$d',
-                                  onChanged: (v) =>
-                                      hDay = v ?? hDay,
-                                ),
-                              ],
-                            ),
-                            const SizedBox(height: 8),
-                            const Text(
-                              '~ predicted dates are estimates',
-                              style: TextStyle(
-                                  color: Colors.white38, fontSize: 11),
-                            ),
-                          ],
-                        ),
-                      ),
                     ],
+                    onChanged: onChanged,
                   ),
                 ),
+              );
+            }
+
+            return AlertDialog(
+              title: Text(l10n.goToDate),
+              content: SizedBox(
+                width: double.maxFinite,
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    TabBar(
+                      // v2.35: keep the selected tab in a local so "Go"
+                      // knows which tab was active (see tabIndex above).
+                      onTap: (i) => tabIndex = i,
+                      tabs: [
+                        Tab(text: l10n.gregorian),
+                        Tab(text: l10n.hijri)
+                      ],
+                    ),
+                    SizedBox(
+                      height: 190,
+                      child: TabBarView(
+                        children: [
+                          // Gregorian tab.
+                          Padding(
+                            padding: const EdgeInsets.only(top: 16),
+                            child: Column(
+                              children: [
+                                Row(
+                                  children: [
+                                    dropdown(
+                                      value: gYear,
+                                      items: [
+                                        for (var y = 2020; y <= 2035; y++) y
+                                      ],
+                                      label: (y) => '$y',
+                                      onChanged: (v) => setDialogState(
+                                          () => gYear = v ?? gYear),
+                                    ),
+                                    const SizedBox(width: 8),
+                                    dropdown(
+                                      value: gMonth,
+                                      flex: 2,
+                                      items: [
+                                        for (var m = 1; m <= 12; m++) m
+                                      ],
+                                      label: (m) => gMonthNames[m - 1],
+                                      onChanged: (v) => setDialogState(
+                                          () => gMonth = v ?? gMonth),
+                                    ),
+                                    const SizedBox(width: 8),
+                                    dropdown(
+                                      value: gDay,
+                                      items: [
+                                        for (var d = 1; d <= 31; d++) d
+                                      ],
+                                      label: (d) => '$d',
+                                      onChanged: (v) => setDialogState(
+                                          () => gDay = v ?? gDay),
+                                    ),
+                                  ],
+                                ),
+                              ],
+                            ),
+                          ),
+                          // Hijri tab.
+                          Padding(
+                            padding: const EdgeInsets.only(top: 16),
+                            child: Column(
+                              children: [
+                                Row(
+                                  children: [
+                                    dropdown(
+                                      value: hYear,
+                                      items: [
+                                        for (var y = 1446; y <= 1450; y++) y
+                                      ],
+                                      label: (y) => '$y',
+                                      onChanged: (v) => setDialogState(
+                                          () => hYear = v ?? hYear),
+                                    ),
+                                    const SizedBox(width: 8),
+                                    dropdown(
+                                      value: hMonth,
+                                      flex: 2,
+                                      items: [
+                                        for (var m = 1; m <= 12; m++) m
+                                      ],
+                                      label: (m) => hMonthNames[m - 1],
+                                      onChanged: (v) => setDialogState(
+                                          () => hMonth = v ?? hMonth),
+                                    ),
+                                    const SizedBox(width: 8),
+                                    dropdown(
+                                      value: hDay,
+                                      items: [
+                                        for (var d = 1; d <= 30; d++) d
+                                      ],
+                                      label: (d) => '$d',
+                                      onChanged: (v) => setDialogState(
+                                          () => hDay = v ?? hDay),
+                                    ),
+                                  ],
+                                ),
+                                const SizedBox(height: 8),
+                                const Text(
+                                  '~ predicted dates are estimates',
+                                  style: TextStyle(
+                                      color: Colors.white38, fontSize: 11),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+              actions: [
+                TextButton(
+                  onPressed: () => Navigator.of(dialogCtx).pop(),
+                  child: Text(l10n.cancel),
+                ),
+                FilledButton(
+                  onPressed: () {
+                    // v2.35: use the locally tracked tabIndex (DefaultTabController
+                    // is not an ancestor of this context — see above).
+                    final tab = tabIndex;
+                    Navigator.of(dialogCtx).pop();
+                    if (tab == 0) {
+                      setState(() {
+                        _month = DateTime(gYear, gMonth, 1);
+                      });
+                    } else {
+                      final target =
+                          HijriService.instance.gregorianForHijri(
+                              hYear, hMonth, hDay);
+                      if (target != null) {
+                        setState(() {
+                          _month =
+                              DateTime(target.year, target.month, 1);
+                        });
+                      } else if (mounted) {
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          SnackBar(
+                              content: Text(l10n.dateNotFound)),
+                        );
+                      }
+                    }
+                  },
+                  child: Text(l10n.go),
+                ),
               ],
-            ),
-          ),
-          actions: [
-            TextButton(
-              onPressed: () => Navigator.of(ctx).pop(),
-              child: Text(l10n.cancel),
-            ),
-            FilledButton(
-              onPressed: () {
-                // v2.35: use the locally tracked tabIndex (DefaultTabController
-                // is not an ancestor of this context — see above).
-                final tab = tabIndex;
-                Navigator.of(ctx).pop();
-                if (tab == 0) {
-                  setState(() {
-                    _month = DateTime(gYear, gMonth, 1);
-                  });
-                } else {
-                  final target =
-                      HijriService.instance.gregorianForHijri(
-                          hYear, hMonth, hDay);
-                  if (target != null) {
-                    setState(() {
-                      _month =
-                          DateTime(target.year, target.month, 1);
-                    });
-                  } else if (mounted) {
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      SnackBar(
-                          content: Text(l10n.dateNotFound)),
-                    );
-                  }
-                }
-              },
-              child: Text(l10n.go),
-            ),
-          ],
+            );
+          },
         ),
       ),
     );

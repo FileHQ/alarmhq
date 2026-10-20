@@ -20,7 +20,7 @@ class HijriDate {
   final int month;
   final int day;
 
-  /// English month name, e.g. "Jumada al-Awwal".
+  /// English month name, e.g. "Jamadi-ul-Awwal".
   final String monthNameEn;
 
   /// Urdu month name from the API, e.g. "جمادی الاول".
@@ -67,13 +67,13 @@ class HijriDate {
     }
   }
 
-  /// "8 Jumada al-Awwal 1448" — always English digits.
+  /// "8 Jamadi-ul-Awwal 1448" — always English digits.
   String get display => '$day $monthNameEn $year';
 
   /// "8 جمادی الاول 1448" — Urdu name, still English digits.
   String get displayUr => '$day $monthNameUr $year';
 
-  /// "Jumada al-Awwal 1448" — always English digits.
+  /// "Jamadi-ul-Awwal 1448" — always English digits.
   String get monthYear => '$monthNameEn $year';
 
   /// "جمادی الاول 1448" — Urdu name, still English digits.
@@ -92,19 +92,20 @@ class HijriService {
 
   static final HijriService instance = HijriService._();
 
+  /// v2.36: Pakistani spellings (user-specified 2026-10-20).
   static const List<String> monthNamesEn = [
     'Muharram',
     'Safar',
-    'Rabi al-Awwal',
-    'Rabi al-Thani',
-    'Jumada al-Awwal',
-    'Jumada al-Thani',
+    'Rabi-ul-Awwal',
+    'Rabi-ul-Sani',
+    'Jamadi-ul-Awwal',
+    'Jamadi-ul-Sani',
     'Rajab',
-    "Sha'ban",
+    'Shaban',
     'Ramadan',
     'Shawwal',
-    "Dhu al-Qa'dah",
-    'Dhu al-Hijjah',
+    'Zil-Qadah',
+    'Zil-Hajj',
   ];
 
   /// v2.34: Urdu month names (match the API's month_name.ur).
@@ -207,12 +208,15 @@ class HijriService {
       final days = decoded['days'] as Map<String, dynamic>;
       for (final entry in days.entries) {
         final v = entry.value as Map<String, dynamic>;
-        final monthName =
-            (v['month_name'] as Map<String, dynamic>)['en'] as String;
+        // v2.36: derive the English month name from the month NUMBER via
+        // the Pakistani-spelling static list — never trust the API's
+        // month_name.en string (it uses different transliterations).
+        final monthNum = ((v['month'] as num).toInt()).clamp(1, 12);
+        final monthName = monthNamesEn[monthNum - 1];
         // v2.34: Urdu month name from the API for Urdu locale.
         final monthNameUr =
             (v['month_name'] as Map<String, dynamic>)['ur'] as String? ??
-                monthNamesUr[((v['month'] as num).toInt() - 1).clamp(0, 11)];
+                monthNamesUr[(monthNum - 1).clamp(0, 11)];
         _byGregorian[entry.key] = HijriDate(
           year: (v['year'] as num).toInt(),
           month: (v['month'] as num).toInt(),

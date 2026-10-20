@@ -55,14 +55,14 @@ void main() {
       expect(texts, isNot(contains(urduDigits)));
     });
 
-    test('2. Hijri spot-check: Oct 20 2026 = 8 Jumada al-Awwal 1448', () async {
+    test('2. Hijri spot-check: Oct 20 2026 = 8 Jamadi-ul-Awwal 1448', () async {
       // Load bundled JSON (works in tests via asset bundle).
       await HijriService.instance.load();
       final h = HijriService.instance.hijriFor(DateTime(2026, 10, 20));
       expect(h.day, 8);
       expect(h.month, 5);
       expect(h.year, 1448);
-      expect(h.monthNameEn, 'Jumada al-Awwal');
+      expect(h.monthNameEn, 'Jamadi-ul-Awwal');
       expect(h.confidence, 'confirmed');
     });
 
@@ -156,13 +156,13 @@ void main() {
     test('9. Confidence markers: confirmed=✓, predicted=~, calculated=""', () {
       const confirmed = HijriDate(
         year: 1448, month: 5, day: 8,
-        monthNameEn: 'Jumada al-Awwal', monthNameUr: 'جمادی الاول', confidence: 'confirmed');
+        monthNameEn: 'Jamadi-ul-Awwal', monthNameUr: 'جمادی الاول', confidence: 'confirmed');
       const predicted = HijriDate(
         year: 1448, month: 6, day: 1,
-        monthNameEn: 'Jumada al-Thani', monthNameUr: 'جمادی الثانی', confidence: 'predicted');
+        monthNameEn: 'Jamadi-ul-Sani', monthNameUr: 'جمادی الثانی', confidence: 'predicted');
       const estimated = HijriDate(
         year: 1448, month: 6, day: 2,
-        monthNameEn: 'Jumada al-Thani', monthNameUr: 'جمادی الثانی', confidence: 'estimated');
+        monthNameEn: 'Jamadi-ul-Sani', monthNameUr: 'جمادی الثانی', confidence: 'estimated');
       const calculated = HijriDate(
         year: 1452, month: 1, day: 1,
         monthNameEn: 'Muharram', monthNameUr: 'محرم', confidence: 'calculated');
@@ -204,7 +204,7 @@ void main() {
       expect(cur.month, 1);
       expect(cur.year, 1447);
       expect(cur.confidence, 'confirmed');
-      // 2025-06-26 must be 29 Dhu al-Hijjah 1446, NOT a duplicate 1st.
+      // 2025-06-26 must be 29 Zil-Hajj 1446, NOT a duplicate 1st.
       expect(prev.day, 29);
       expect(prev.month, 12);
       expect(prev.year, 1446);
@@ -235,7 +235,7 @@ void main() {
       }
     });
 
-    test('13. Reverse lookup: 8 Jumada al-Awwal 1448 = 2026-10-20',
+    test('13. Reverse lookup: 8 Jamadi-ul-Awwal 1448 = 2026-10-20',
         () async {
       await HijriService.instance.load();
       final g =
@@ -354,19 +354,19 @@ void main() {
     });
 
     // v2.35: long Hijri header wraps instead of overflowing.
-    // May 2025 spans "Dhu al-Qa'dah 1446 / Dhu al-Hijjah 1446".
+    // May 2025 spans "Zil-Qadah 1446 / Zil-Hajj 1446".
     testWidgets('21. Long Hijri header does not overflow', (tester) async {
       await HijriService.instance.load();
       await pumpCalendar(tester, const Locale('en'));
       // Jump to May 2025 via Go to Date (also exercises the Go button).
       await tester.tap(find.byIcon(Icons.event));
       await tester.pump();
-      await tester.tap(find.byType(DropdownButtonFormField<int>).first);
+      await tester.tap(find.byType(DropdownButton<int>).first);
       await tester.pump();
       await tester.tap(find.text('2025').last);
       await tester.pump();
       // Pick May in the month dropdown (second dropdown).
-      await tester.tap(find.byType(DropdownButtonFormField<int>).at(1));
+      await tester.tap(find.byType(DropdownButton<int>).at(1));
       await tester.pump();
       await tester.tap(find.text('May').last);
       await tester.pump();
@@ -376,8 +376,8 @@ void main() {
       expect(tester.takeException(), isNull);
       final texts = allText(tester).join(' ');
       expect(texts, contains('May 2025'));
-      expect(texts, contains("Dhu al-Qa'dah 1446"));
-      expect(texts, contains('Dhu al-Hijjah 1446'));
+      expect(texts, contains("Zil-Qadah 1446"));
+      expect(texts, contains('Zil-Hajj 1446'));
     });
 
     // v2.35: "Go" on the Gregorian tab navigates and closes the dialog.
@@ -388,7 +388,7 @@ void main() {
       await tester.pump();
       expect(find.text('Go to Date'), findsOneWidget);
       // Pick year 2030 in the first dropdown.
-      await tester.tap(find.byType(DropdownButtonFormField<int>).first);
+      await tester.tap(find.byType(DropdownButton<int>).first);
       await tester.pump();
       await tester.tap(find.text('2030').last);
       await tester.pump();

@@ -23,12 +23,12 @@ void main() {
       expect(h.display.contains(RegExp(r'[۰-۹]')), isFalse);
     });
 
-    test('known conversion: 2026-10-20 is 8 Jumada al-Awwal 1448 (approx)', () {
+    test('known conversion: 2026-10-20 is 8 Jamadi-ul-Awwal 1448 (approx)', () {
       final svc = HijriService.instance;
       final h = svc.hijriFor(DateTime(2026, 10, 20));
       // Algorithmic may differ by a day from sighting; allow 7-9.
       expect(h.day, inInclusiveRange(7, 9));
-      expect(h.month, 5); // Jumada al-Awwal
+      expect(h.month, 5); // Jamadi-ul-Awwal
       expect(h.year, 1448);
     });
   });
