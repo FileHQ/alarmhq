@@ -67,6 +67,25 @@ class HijriDate {
     }
   }
 
+  /// Urdu variant of [confidenceLabel] for the Urdu locale.
+  /// Always English digits where digits appear.
+  String get confidenceLabelUr {
+    switch (confidence) {
+      case 'confirmed':
+        return 'تصدیق شدہ (چاند نظر آیا)';
+      case 'estimated':
+        return 'اندازاً (تصدیق شدہ ریکارڈ نہیں)';
+      case 'predicted':
+        return 'اندازاً (چاند نظر آنے تک)';
+      case 'unconfirmed':
+        return 'غیر تصدیق شدہ (چاند نظر آنا باقی)';
+      case 'calculated':
+        return 'کیلکولیٹڈ (حساب سے، چاند نہیں دیکھا گیا)';
+      default:
+        return confidence;
+    }
+  }
+
   /// "8 Jamadi-ul-Awwal 1448" — always English digits.
   String get display => '$day $monthNameEn $year';
 

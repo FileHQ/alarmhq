@@ -548,4 +548,7 @@ class AppLocalizationsEn extends AppLocalizations {
   @override
   String get calendarHint =>
       'Top: Gregorian  •  Bottom: Hijri (tap a date for detail)';
+
+  @override
+  String get close => 'Close';
 }

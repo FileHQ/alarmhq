@@ -231,19 +231,29 @@ class _CalendarScreenState extends State<CalendarScreen> {
               // v2.38: confidence legend — localized per user decision.
               // v2.41: larger size for Urdu (Jameel Noori unreadable at 11).
               // v2.42: " • " separators between items per user request.
-              RichText(
-                text: TextSpan(
-                  style: TextStyle(
-                      fontSize: isUrdu ? 15 : 11, color: Colors.white38),
-                  children: [
-                    TextSpan(text: '${l10n.legendConfirmed}   •   '),
-                    TextSpan(text: '${l10n.legendPredicted}   •   '),
-                    TextSpan(
-                      text: l10n.legendCalculated,
-                      style: TextStyle(color: Colors.amber.shade300),
-                    ),
-                  ],
-                ),
+              // v2.43: real visual spacing (Wrap with spacing, not just dots).
+              Wrap(
+                alignment: WrapAlignment.center,
+                spacing: 24,
+                runSpacing: 4,
+                children: [
+                  Text(
+                    l10n.legendConfirmed,
+                    style: TextStyle(
+                        fontSize: isUrdu ? 15 : 11, color: Colors.white38),
+                  ),
+                  Text(
+                    l10n.legendPredicted,
+                    style: TextStyle(
+                        fontSize: isUrdu ? 15 : 11, color: Colors.white38),
+                  ),
+                  Text(
+                    l10n.legendCalculated,
+                    style: TextStyle(
+                        fontSize: isUrdu ? 15 : 11,
+                        color: Colors.amber.shade300),
+                  ),
+                ],
               ),
               if (HijriService.instance.dataUpdatedLabel.isNotEmpty)
                 Padding(
@@ -520,8 +530,10 @@ class _CalendarScreenState extends State<CalendarScreen> {
     final hijri = HijriService.instance.hijriFor(cell);
     // v2.34: month names follow locale; digits stay English.
     final monthNames = isUrdu ? _monthNamesUr : _monthNamesEn;
-    final gregorian =
-        '${monthNames[cell.month - 1]} ${cell.day}, ${cell.year}';
+    // v2.43: Urdu uses day-first Pakistani format: "21 اکتوبر 2026".
+    final gregorian = isUrdu
+        ? '${cell.day} ${monthNames[cell.month - 1]} ${cell.year}'
+        : '${monthNames[cell.month - 1]} ${cell.day}, ${cell.year}';
     showDialog(
       context: context,
       builder: (ctx) => AlertDialog(
@@ -550,7 +562,8 @@ class _CalendarScreenState extends State<CalendarScreen> {
                 const SizedBox(width: 6),
                 Expanded(
                   child: Text(
-                    hijri.confidenceLabel,
+                    // v2.43: Urdu label in Urdu locale.
+                    isUrdu ? hijri.confidenceLabelUr : hijri.confidenceLabel,
                     style: const TextStyle(
                         fontSize: 13, color: Colors.white70),
                   ),
@@ -562,7 +575,7 @@ class _CalendarScreenState extends State<CalendarScreen> {
         actions: [
           TextButton(
             onPressed: () => Navigator.of(ctx).pop(),
-            child: const Text('Close'),
+            child: Text(l10n.close),
           ),
         ],
       ),

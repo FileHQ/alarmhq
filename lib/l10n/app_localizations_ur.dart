@@ -543,4 +543,7 @@ class AppLocalizationsUr extends AppLocalizations {
   @override
   String get calendarHint =>
       'اوپر: عیسوی • نیچے: ہجری (تفصیل کے لیے تاریخ دبائیں)';
+
+  @override
+  String get close => 'بند کریں';
 }
