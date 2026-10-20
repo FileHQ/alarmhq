@@ -147,6 +147,14 @@ class HijriService {
   static const List<int> _years = [1447, 1448, 1449];
 
   final Map<String, HijriDate> _byGregorian = {};
+
+  /// v2.43: Umm al-Qura month-start table (JDNs), 1937–2077, from
+  /// assets/hijri/ummalqura.json. Empty when the asset is unavailable
+  /// (widget tests) — the arithmetic fallback then covers everything.
+  List<int> _uqStarts = [];
+  int _uqStartHy = 0;
+  int _uqStartHm = 0;
+
   bool _loaded = false;
 
   /// ISO timestamp from the data's `generated_at` ("" if unknown).
@@ -221,8 +229,28 @@ class HijriService {
     // v2.37: Pakistan-adjust predictions (-1 day from Umm al-Qura).
     // Pakistani sightings typically lag Umm al-Qura by a day.
     _applyPakistanShift();
+    // v2.43: Umm al-Qura month-start table for out-of-API dates.
+    await _loadUmmalqura();
     // If any year came from cache, the whole set is "cached".
     // (Sync always writes all three together.)
+  }
+
+  /// Load the Umm al-Qura table; silently keep the arithmetic fallback
+  /// when the asset can't be read (e.g. widget tests without binding).
+  Future<void> _loadUmmalqura() async {
+    _uqStarts = [];
+    try {
+      final raw =
+          await rootBundle.loadString('assets/hijri/ummalqura.json');
+      final d = jsonDecode(raw) as Map<String, dynamic>;
+      _uqStartHy = (d['start_hy'] as num).toInt();
+      _uqStartHm = (d['start_hm'] as num).toInt();
+      _uqStarts = (d['month_start_jdns'] as List)
+          .map((e) => (e as num).toInt())
+          .toList();
+    } catch (_) {
+      _uqStarts = [];
+    }
   }
 
   /// Cached JSON from a previous sync. Null on miss or when the
@@ -525,24 +553,66 @@ class HijriService {
     final end = DateTime((estYear + 5).clamp(1902, 2100), 12, 31);
     while (!dt.isAfter(end)) {
       // v2.37: match the Pakistan-shifted display.
-      final h = _calculate(dt.subtract(const Duration(days: 1)));
+      // v2.43: same priority as hijriFor (Umm al-Qura → arithmetic).
+      final h = _estimatedHijri(dt);
       if (h.year == year && h.month == month && h.day == day) return dt;
       dt = dt.add(const Duration(days: 1));
     }
     return null;
   }
 
-  /// Hijri date for [date]. Uses cached/bundled sighted data when
-  /// available, otherwise the arithmetical (Kuwaiti) algorithm marked
-  /// "calculated". Never returns null.
-  ///
-  /// v2.37: the arithmetical fallback is Pakistan-adjusted too (-1 day):
-  /// Pakistan(G) = UmmAlQura(G) - 1 Hijri day = UmmAlQura(G - 1 day).
+  /// Hijri date for [date]. Priority:
+  /// 1. hijri-api sighted/predicted data (as loaded) — untouched.
+  /// 2-3. (below) out-of-API dates — Umm al-Qura table or arithmetic.
+  /// Never returns null.
   HijriDate hijriFor(DateTime date) {
     final key = _key(DateTime(date.year, date.month, date.day));
     final known = _byGregorian[key];
     if (known != null) return known;
-    return _calculate(date.subtract(const Duration(days: 1)));
+    return _estimatedHijri(date);
+  }
+
+  /// Out-of-API estimate. Pakistan(G) = UmmAlQura(G - 1 day) (v2.37).
+  /// v2.43 priority:
+  /// 3. inside 1937–2077 → Umm al-Qura table, marked "~" (predicted);
+  /// 4. outside → arithmetical (Kuwaiti) fallback, orange "calculated".
+  HijriDate _estimatedHijri(DateTime date) {
+    final shifted = date.subtract(const Duration(days: 1));
+    final uq = _ummalquraFor(shifted);
+    if (uq != null) return uq;
+    return _calculate(shifted);
+  }
+
+  /// Umm al-Qura Hijri date for [date] (caller applies the Pakistan
+  /// shift). Null when outside the table's 1937–2077 range or when the
+  /// asset failed to load (tests).
+  HijriDate? _ummalquraFor(DateTime date) {
+    if (_uqStarts.length < 2) return null;
+    final jdn = _gregorianToJd(date.year, date.month, date.day);
+    if (jdn < _uqStarts.first || jdn >= _uqStarts.last) return null;
+    // Binary search: largest i with _uqStarts[i] <= jdn.
+    var lo = 0, hi = _uqStarts.length - 1;
+    while (lo < hi) {
+      final mid = (lo + hi + 1) >> 1;
+      if (_uqStarts[mid] <= jdn) {
+        lo = mid;
+      } else {
+        hi = mid - 1;
+      }
+    }
+    final absMonth =
+        (_uqStartHy - 1) * 12 + (_uqStartHm - 1) + lo;
+    final hy = absMonth ~/ 12 + 1;
+    final hm = absMonth % 12 + 1;
+    final day = jdn - _uqStarts[lo] + 1;
+    return HijriDate(
+      year: hy,
+      month: hm,
+      day: day,
+      monthNameEn: monthNamesEn[hm - 1],
+      monthNameUr: monthNamesUr[hm - 1],
+      confidence: 'predicted',
+    );
   }
 
   /// Arithmetical Hijri conversion (Kuwaiti algorithm). Approximate

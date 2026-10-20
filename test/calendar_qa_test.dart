@@ -138,10 +138,27 @@ void main() {
 
     test('7. Out-of-range dates marked calculated (amber indicator)', () {
       final svc = HijriService.instance;
-      // 2030 is outside 1447-1449 coverage -> algorithmic fallback.
-      final h = svc.hijriFor(DateTime(2030, 6, 15));
+      // 1900 is outside both API coverage and the 1937-2077 Umm al-Qura
+      // table -> arithmetical fallback.
+      final h = svc.hijriFor(DateTime(1900, 6, 15));
       expect(h.isCalculated, isTrue);
       expect(h.confidence, 'calculated');
+    });
+
+    test('7b. v2.43: 1937-2077 out-of-API dates use Umm al-Qura (~)',
+        () async {
+      await HijriService.instance.load();
+      final svc = HijriService.instance;
+      // 2030 is outside 1447-1449 API coverage but inside the Umm al-Qura
+      // table -> Pakistan-shifted Umm al-Qura, marked predicted ("~").
+      final h = svc.hijriFor(DateTime(2030, 6, 15));
+      expect(h.isCalculated, isFalse);
+      expect(h.confidence, 'predicted');
+      expect(h.confidenceMarker, '~');
+      // 2100 is outside the table -> arithmetic fallback.
+      final h2 = svc.hijriFor(DateTime(2100, 6, 15));
+      expect(h2.isCalculated, isTrue);
+      expect(h2.confidence, 'calculated');
     });
 
     test('8. dataUpdatedLabel uses English digits', () {
@@ -362,10 +379,20 @@ void main() {
 
     test('17. Calculated fallback has Urdu month name', () async {
       await HijriService.instance.load();
-      final h = HijriService.instance.hijriFor(DateTime(2035, 1, 1));
+      // 2100 is outside the Umm al-Qura table -> arithmetical fallback.
+      final h = HijriService.instance.hijriFor(DateTime(2100, 1, 1));
       expect(h.isCalculated, isTrue);
       expect(h.monthNameUr, isNotEmpty);
       expect(HijriService.monthNamesUr.length, 12);
+    });
+
+    test('17b. v2.43: Umm al-Qura fallback has Urdu month name', () async {
+      await HijriService.instance.load();
+      // 2035 is outside API coverage but inside the Umm al-Qura table.
+      final h = HijriService.instance.hijriFor(DateTime(2035, 1, 1));
+      expect(h.isCalculated, isFalse);
+      expect(h.confidence, 'predicted');
+      expect(h.monthNameUr, isNotEmpty);
     });
 
     testWidgets('18. Urdu locale: Urdu month/weekday names, English digits',
