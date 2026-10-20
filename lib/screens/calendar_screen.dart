@@ -33,6 +33,21 @@ class _CalendarScreenState extends State<CalendarScreen> {
     'July', 'August', 'September', 'October', 'November', 'December',
   ];
 
+  // v2.34: Urdu month names for Urdu locale. Digits stay English.
+  static const List<String> _monthNamesUr = [
+    'جنوری', 'فروری', 'مارچ', 'اپریل', 'مئی', 'جون',
+    'جولائی', 'اگست', 'ستمبر', 'اکتوبر', 'نومبر', 'دسمبر',
+  ];
+
+  static const List<String> _dowEn = [
+    'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'
+  ];
+
+  // v2.34: Urdu weekday names.
+  static const List<String> _dowUr = [
+    'پیر', 'منگل', 'بدھ', 'جمعرات', 'جمعہ', 'ہفتہ', 'اتوار'
+  ];
+
   void _changeMonth(int delta) {
     setState(() {
       _month = DateTime(_month.year, _month.month + delta, 1);
@@ -42,12 +57,16 @@ class _CalendarScreenState extends State<CalendarScreen> {
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
+    // v2.34: month/weekday NAMES follow the locale; digits stay English.
+    final isUrdu = l10n.localeName == 'ur';
+    final monthNames = isUrdu ? _monthNamesUr : _monthNamesEn;
+    final dow = isUrdu ? _dowUr : _dowEn;
     final now = DateTime.now();
     final today = DateTime(now.year, now.month, now.day);
     final monthStart = DateTime(_month.year, _month.month, 1);
-    // English digits guaranteed: hardcoded English names + toString().
+    // English digits guaranteed: hardcoded names + toString().
     final monthTitle =
-        '${_monthNamesEn[monthStart.month - 1]} ${monthStart.year}';
+        '${monthNames[monthStart.month - 1]} ${monthStart.year}';
 
     // Monday-first offset.
     final leading = (monthStart.weekday - 1) % 7;
@@ -60,15 +79,15 @@ class _CalendarScreenState extends State<CalendarScreen> {
 
     // v2.34: header shows EVERY Hijri month visible in the grid
     // (e.g. "Dhu al-Hijjah 1446 / Muharram 1447"), like the mockup.
+    // Urdu locale uses Urdu month names; digits stay English.
     final hijriMonths = <String>[];
     for (final cell in cells) {
       if (cell == null) continue;
-      final my = HijriService.instance.hijriFor(cell).monthYear;
+      final h = HijriService.instance.hijriFor(cell);
+      final my = isUrdu ? h.monthYearUr : h.monthYear;
       if (!hijriMonths.contains(my)) hijriMonths.add(my);
     }
     final hijriHeader = hijriMonths.join(' / ');
-
-    final dow = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
 
     return Scaffold(
       appBar: AppBar(
@@ -184,6 +203,12 @@ class _CalendarScreenState extends State<CalendarScreen> {
   /// or Hijri date. All digits English (toString only).
   void _showGoToDate(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
+    // v2.34: month names follow locale; digits stay English.
+    final isUrdu = l10n.localeName == 'ur';
+    final gMonthNames = isUrdu ? _monthNamesUr : _monthNamesEn;
+    final hMonthNames = isUrdu
+        ? HijriService.monthNamesUr
+        : HijriService.monthNamesEn;
     final now = DateTime.now();
     int gYear = now.year, gMonth = now.month, gDay = now.day;
     int hYear = 1448, hMonth = 5, hDay = 8;
@@ -257,7 +282,7 @@ class _CalendarScreenState extends State<CalendarScreen> {
                                   items: [
                                     for (var m = 1; m <= 12; m++) m
                                   ],
-                                  label: (m) => _monthNamesEn[m - 1],
+                                  label: (m) => gMonthNames[m - 1],
                                   onChanged: (v) =>
                                       gMonth = v ?? gMonth,
                                 ),
@@ -299,7 +324,7 @@ class _CalendarScreenState extends State<CalendarScreen> {
                                     for (var m = 1; m <= 12; m++) m
                                   ],
                                   label: (m) =>
-                                      HijriService.monthNamesEn[m - 1],
+                                      hMonthNames[m - 1],
                                   onChanged: (v) =>
                                       hMonth = v ?? hMonth,
                                 ),
@@ -371,9 +396,13 @@ class _CalendarScreenState extends State<CalendarScreen> {
 
   /// Tap a date → detail dialog with full Hijri date + confidence.
   void _showDateDetail(BuildContext context, DateTime cell) {
+    final l10n = AppLocalizations.of(context)!;
+    final isUrdu = l10n.localeName == 'ur';
     final hijri = HijriService.instance.hijriFor(cell);
+    // v2.34: month names follow locale; digits stay English.
+    final monthNames = isUrdu ? _monthNamesUr : _monthNamesEn;
     final gregorian =
-        '${_monthNamesEn[cell.month - 1]} ${cell.day}, ${cell.year}';
+        '${monthNames[cell.month - 1]} ${cell.day}, ${cell.year}';
     showDialog(
       context: context,
       builder: (ctx) => AlertDialog(
@@ -383,7 +412,7 @@ class _CalendarScreenState extends State<CalendarScreen> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
-              hijri.display,
+              isUrdu ? hijri.displayUr : hijri.display,
               style: const TextStyle(
                   fontSize: 18, fontWeight: FontWeight.w700),
             ),

@@ -685,8 +685,11 @@ class _AlarmEditScreenState extends State<AlarmEditScreen> {
                               fontWeight: FontWeight.w600),
                         ),
                         // v2.33: Hijri date under each selected date.
+                        // v2.34: Urdu month name in Urdu locale (digits stay English).
                         Text(
-                          HijriService.instance.hijriFor(d).display,
+                          l10n.localeName == 'ur'
+                              ? HijriService.instance.hijriFor(d).displayUr
+                              : HijriService.instance.hijriFor(d).display,
                           style: const TextStyle(
                               fontSize: 11, color: Colors.white54),
                         ),
@@ -855,12 +858,18 @@ class _AlarmEditScreenState extends State<AlarmEditScreen> {
   }
 
   String _monthName(AppLocalizations l10n, int m) {
-    // v2.33: hardcoded English month names so the header ALWAYS shows
+    // v2.33: hardcoded month names so the header ALWAYS shows
     // English digits, even in Urdu locale.
-    const names = [
+    // v2.34: Urdu names in Urdu locale.
+    const namesEn = [
       'January', 'February', 'March', 'April', 'May', 'June',
       'July', 'August', 'September', 'October', 'November', 'December',
     ];
+    const namesUr = [
+      'جنوری', 'فروری', 'مارچ', 'اپریل', 'مئی', 'جون',
+      'جولائی', 'اگست', 'ستمبر', 'اکتوبر', 'نومبر', 'دسمبر',
+    ];
+    final names = l10n.localeName == 'ur' ? namesUr : namesEn;
     return '${names[m - 1]} ${_calMonth.year}';
   }
 

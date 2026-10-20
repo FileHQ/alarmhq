@@ -12,6 +12,7 @@ class HijriDate {
     required this.month,
     required this.day,
     required this.monthNameEn,
+    required this.monthNameUr,
     required this.confidence,
   });
 
@@ -21,6 +22,9 @@ class HijriDate {
 
   /// English month name, e.g. "Jumada al-Awwal".
   final String monthNameEn;
+
+  /// Urdu month name from the API, e.g. "جمادی الاول".
+  final String monthNameUr;
 
   /// "confirmed" | "estimated" | "predicted" | "unconfirmed" | "calculated".
   final String confidence;
@@ -66,8 +70,14 @@ class HijriDate {
   /// "8 Jumada al-Awwal 1448" — always English digits.
   String get display => '$day $monthNameEn $year';
 
+  /// "8 جمادی الاول 1448" — Urdu name, still English digits.
+  String get displayUr => '$day $monthNameUr $year';
+
   /// "Jumada al-Awwal 1448" — always English digits.
   String get monthYear => '$monthNameEn $year';
+
+  /// "جمادی الاول 1448" — Urdu name, still English digits.
+  String get monthYearUr => '$monthNameUr $year';
 }
 
 /// Offline Hijri calendar backed by bundled sighted data
@@ -95,6 +105,22 @@ class HijriService {
     'Shawwal',
     "Dhu al-Qa'dah",
     'Dhu al-Hijjah',
+  ];
+
+  /// v2.34: Urdu month names (match the API's month_name.ur).
+  static const List<String> monthNamesUr = [
+    'محرم',
+    'صفر',
+    'ربیع الاول',
+    'ربیع الثانی',
+    'جمادی الاول',
+    'جمادی الثانی',
+    'رجب',
+    'شعبان',
+    'رمضان',
+    'شوال',
+    'ذو القعدہ',
+    'ذو الحجہ',
   ];
 
   static const String _apiBase = 'https://shaheeranser.github.io/hijri-api';
@@ -183,11 +209,16 @@ class HijriService {
         final v = entry.value as Map<String, dynamic>;
         final monthName =
             (v['month_name'] as Map<String, dynamic>)['en'] as String;
+        // v2.34: Urdu month name from the API for Urdu locale.
+        final monthNameUr =
+            (v['month_name'] as Map<String, dynamic>)['ur'] as String? ??
+                monthNamesUr[((v['month'] as num).toInt() - 1).clamp(0, 11)];
         _byGregorian[entry.key] = HijriDate(
           year: (v['year'] as num).toInt(),
           month: (v['month'] as num).toInt(),
           day: (v['day'] as num).toInt(),
           monthNameEn: monthName,
+          monthNameUr: monthNameUr,
           confidence: v['confidence'] as String? ?? 'estimated',
         );
       }
@@ -289,6 +320,7 @@ class HijriService {
           month: prevMonth,
           day: 29,
           monthNameEn: monthNamesEn[prevMonth - 1],
+          monthNameUr: monthNamesUr[prevMonth - 1],
           confidence:
               cur.confidence == 'confirmed' ? 'confirmed' : prev.confidence,
         );
@@ -349,6 +381,7 @@ class HijriService {
       month: m,
       day: day.clamp(1, 30),
       monthNameEn: monthNamesEn[m - 1],
+      monthNameUr: monthNamesUr[m - 1],
       confidence: 'calculated',
     );
   }

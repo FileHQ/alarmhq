@@ -39,11 +39,13 @@ void main() {
       final texts = allText(tester).join(' ');
       expect(texts, isNot(contains(urduDigits)),
           reason: 'Found Urdu digits in: $texts');
-      // Header must show English digits like "October 2026".
+      // v2.34: in Urdu locale the header shows Urdu month names
+      // (e.g. "اکتوبر 2026") — digits must still be English.
       expect(
         texts,
-        contains(RegExp(r'[A-Z][a-z]+ 20\d\d')),
-        reason: 'Header missing English month+year in: $texts',
+        contains(RegExp(
+            '(جنوری|فروری|مارچ|اپریل|مئی|جون|جولائی|اگست|ستمبر|اکتوبر|نومبر|دسمبر) 20\\d\\d')),
+        reason: 'Header missing Urdu month+English year in: $texts',
       );
     });
 
@@ -154,16 +156,16 @@ void main() {
     test('9. Confidence markers: confirmed=✓, predicted=~, calculated=""', () {
       const confirmed = HijriDate(
         year: 1448, month: 5, day: 8,
-        monthNameEn: 'Jumada al-Awwal', confidence: 'confirmed');
+        monthNameEn: 'Jumada al-Awwal', monthNameUr: 'جمادی الاول', confidence: 'confirmed');
       const predicted = HijriDate(
         year: 1448, month: 6, day: 1,
-        monthNameEn: 'Jumada al-Thani', confidence: 'predicted');
+        monthNameEn: 'Jumada al-Thani', monthNameUr: 'جمادی الثانی', confidence: 'predicted');
       const estimated = HijriDate(
         year: 1448, month: 6, day: 2,
-        monthNameEn: 'Jumada al-Thani', confidence: 'estimated');
+        monthNameEn: 'Jumada al-Thani', monthNameUr: 'جمادی الثانی', confidence: 'estimated');
       const calculated = HijriDate(
         year: 1452, month: 1, day: 1,
-        monthNameEn: 'Muharram', confidence: 'calculated');
+        monthNameEn: 'Muharram', monthNameUr: 'محرم', confidence: 'calculated');
       expect(confirmed.confidenceMarker, '✓');
       expect(predicted.confidenceMarker, '~');
       expect(estimated.confidenceMarker, '~');
@@ -262,6 +264,48 @@ void main() {
       expect(find.text('Go to Date'), findsWidgets);
       expect(find.text('Gregorian'), findsOneWidget);
       expect(find.text('Hijri'), findsOneWidget);
+    });
+
+    test('16. Urdu Hijri month names from API data', () async {
+      await HijriService.instance.load();
+      final h = HijriService.instance.hijriFor(DateTime(2026, 10, 20));
+      expect(h.monthNameUr, 'جمادی الاول');
+      expect(h.displayUr, '8 جمادی الاول 1448');
+      // Digits stay English even in Urdu display.
+      expect(h.displayUr, isNot(contains(RegExp(r'[۰۱۲۳۴۵۶۷۸۹]'))));
+      // Backfilled date also carries the Urdu name.
+      final prev = HijriService.instance.hijriFor(DateTime(2025, 6, 26));
+      expect(prev.monthNameUr, 'ذو الحجہ');
+      expect(prev.displayUr, '29 ذو الحجہ 1446');
+    });
+
+    test('17. Calculated fallback has Urdu month name', () async {
+      await HijriService.instance.load();
+      final h = HijriService.instance.hijriFor(DateTime(2035, 1, 1));
+      expect(h.isCalculated, isTrue);
+      expect(h.monthNameUr, isNotEmpty);
+      expect(HijriService.monthNamesUr.length, 12);
+    });
+
+    testWidgets('18. Urdu locale: Urdu month/weekday names, English digits',
+        (tester) async {
+      await pumpCalendar(tester, const Locale('ur'));
+      final texts = allText(tester).join(' ');
+      // Urdu month name present (current month or neighbors).
+      final hasUrduMonth = HijriService.monthNamesUr
+          .any((m) => texts.contains(m));
+      expect(hasUrduMonth, isTrue,
+          reason: 'No Urdu Hijri month name in: $texts');
+      // Gregorian header in Urdu.
+      expect(
+          texts,
+          contains(RegExp(
+              'جنوری|فروری|مارچ|اپریل|مئی|جون|جولائی|اگست|ستمبر|اکتوبر|نومبر|دسمبر')),
+          reason: 'No Urdu Gregorian month in: $texts');
+      // Weekday headers in Urdu.
+      expect(texts, contains('پیر'));
+      // Digits still English.
+      expect(texts, isNot(contains(urduDigits)));
     });
   });
 }
