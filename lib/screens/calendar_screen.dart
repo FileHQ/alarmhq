@@ -16,6 +16,14 @@ class CalendarScreen extends StatefulWidget {
 class _CalendarScreenState extends State<CalendarScreen> {
   DateTime _month = DateTime(DateTime.now().year, DateTime.now().month, 1);
 
+  // v2.33: English month names hardcoded so the header ALWAYS shows
+  // English digits (e.g. "October 2026"), even in Urdu locale where
+  // MaterialLocalizations would render Urdu digits (۲۰۲۶).
+  static const List<String> _monthNamesEn = [
+    'January', 'February', 'March', 'April', 'May', 'June',
+    'July', 'August', 'September', 'October', 'November', 'December',
+  ];
+
   void _changeMonth(int delta) {
     setState(() {
       _month = DateTime(_month.year, _month.month + delta, 1);
@@ -28,8 +36,9 @@ class _CalendarScreenState extends State<CalendarScreen> {
     final now = DateTime.now();
     final today = DateTime(now.year, now.month, now.day);
     final monthStart = DateTime(_month.year, _month.month, 1);
-    final ml = MaterialLocalizations.of(context);
-    final monthTitle = ml.formatMonthYear(monthStart);
+    // English digits guaranteed: hardcoded English names + toString().
+    final monthTitle =
+        '${_monthNamesEn[monthStart.month - 1]} ${monthStart.year}';
 
     // Monday-first offset.
     final leading = (monthStart.weekday - 1) % 7;

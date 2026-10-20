@@ -851,9 +851,13 @@ class _AlarmEditScreenState extends State<AlarmEditScreen> {
   }
 
   String _monthName(AppLocalizations l10n, int m) {
-    // Locale-aware "October 2026" via MaterialLocalizations (no extra deps).
-    final ml = MaterialLocalizations.of(context);
-    return ml.formatMonthYear(DateTime(_calMonth.year, m));
+    // v2.33: hardcoded English month names so the header ALWAYS shows
+    // English digits, even in Urdu locale.
+    const names = [
+      'January', 'February', 'March', 'April', 'May', 'June',
+      'July', 'August', 'September', 'October', 'November', 'December',
+    ];
+    return '${names[m - 1]} ${_calMonth.year}';
   }
 
   /// Keeps a stored value selectable even when it isn't a preset.
