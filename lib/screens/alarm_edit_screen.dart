@@ -4,6 +4,7 @@ import 'package:alarmhq/l10n/app_localizations.dart';
 import '../models/alarm.dart';
 import '../services/alarm_repository.dart';
 import '../services/app_settings.dart';
+import '../services/hijri_service.dart';
 import '../services/native_bridge.dart';
 import '../services/next_occurrence.dart';
 import '../theme/app_theme.dart';
@@ -674,11 +675,24 @@ class _AlarmEditScreenState extends State<AlarmEditScreen> {
                   const Icon(Icons.alarm,
                       size: 16, color: AppTheme.emerald),
                   const SizedBox(width: 8),
-                  Text(
-                    '${_dateText(d)}  ${_timeText12()}',
-                    style: const TextStyle(fontWeight: FontWeight.w600),
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          '${_dateText(d)}  ${_timeText12()}',
+                          style: const TextStyle(
+                              fontWeight: FontWeight.w600),
+                        ),
+                        // v2.33: Hijri date under each selected date.
+                        Text(
+                          HijriService.instance.hijriFor(d).display,
+                          style: const TextStyle(
+                              fontSize: 11, color: Colors.white54),
+                        ),
+                      ],
+                    ),
                   ),
-                  const Spacer(),
                   GestureDetector(
                     onTap: () => _markDirty(() {
                       _specificDates.removeWhere(
@@ -781,6 +795,18 @@ class _AlarmEditScreenState extends State<AlarmEditScreen> {
   Widget _calCell(DateTime cell, DateTime today) {
     final selected = _isSelected(cell);
     final isPast = cell.isBefore(today);
+    // v2.33: Hijri date under each Gregorian date (English digits only).
+    final hijri = HijriService.instance.hijriFor(cell);
+    final dayColor = selected
+        ? Colors.black
+        : isPast
+            ? Colors.white24
+            : Colors.white;
+    final hijriColor = selected
+        ? Colors.black87
+        : isPast
+            ? Colors.white12
+            : Colors.white38;
     return GestureDetector(
       onTap: isPast
           ? null
@@ -794,23 +820,31 @@ class _AlarmEditScreenState extends State<AlarmEditScreen> {
                 }
               }),
       child: Container(
-        margin: const EdgeInsets.all(3),
+        margin: const EdgeInsets.all(2),
         decoration: BoxDecoration(
-          shape: BoxShape.circle,
+          borderRadius: BorderRadius.circular(10),
           color: selected ? AppTheme.emerald : Colors.transparent,
         ),
         alignment: Alignment.center,
-        child: Text(
-          '${cell.day}',
-          style: TextStyle(
-            fontWeight: selected ? FontWeight.w800 : FontWeight.w500,
-            fontSize: 14,
-            color: selected
-                ? Colors.black
-                : isPast
-                    ? Colors.white24
-                    : Colors.white,
-          ),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Text(
+              '${cell.day}',
+              style: TextStyle(
+                fontWeight: selected ? FontWeight.w800 : FontWeight.w500,
+                fontSize: 14,
+                color: dayColor,
+              ),
+            ),
+            Text(
+              '${hijri.day}',
+              style: TextStyle(
+                fontSize: 9,
+                color: hijriColor,
+              ),
+            ),
+          ],
         ),
       ),
     );

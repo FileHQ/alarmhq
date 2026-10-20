@@ -1,7 +1,7 @@
 name: alarmhq
 description: AlarmHQ - personal alarm app (Urdu + English).
 publish_to: 'none'
-version: 1.0.32+2033
+version: 1.0.33+2034
 
 environment:
   sdk: ^3.13.5
@@ -25,3 +25,4 @@ flutter:
   generate: true
   assets:
     - assets/tones/
+    - assets/hijri/

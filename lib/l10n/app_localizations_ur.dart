@@ -494,4 +494,10 @@ class AppLocalizationsUr extends AppLocalizations {
   @override
   String get permUnusedBanner =>
       '⚠️ اینڈرائیڈ AlarmHQ کی پرمیشنز خود ہٹا سکتا ہے — Settings → Apps → AlarmHQ میں \"Manage app if unused\" آف کریں۔';
+
+  @override
+  String get calendar => 'کیلنڈر';
+
+  @override
+  String get hijriDate => 'ہجری تاریخ';
 }

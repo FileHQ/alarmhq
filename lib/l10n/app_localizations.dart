@@ -979,6 +979,18 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'⚠️ Android may AUTO-REMOVE AlarmHQ\'s permissions — turn OFF \"Manage app if unused\" in Settings → Apps → AlarmHQ.'**
   String get permUnusedBanner;
+
+  /// No description provided for @calendar.
+  ///
+  /// In en, this message translates to:
+  /// **'Calendar'**
+  String get calendar;
+
+  /// No description provided for @hijriDate.
+  ///
+  /// In en, this message translates to:
+  /// **'Hijri date'**
+  String get hijriDate;
 }
 
 class _AppLocalizationsDelegate

@@ -499,4 +499,10 @@ class AppLocalizationsEn extends AppLocalizations {
   @override
   String get permUnusedBanner =>
       '⚠️ Android may AUTO-REMOVE AlarmHQ\'s permissions — turn OFF \"Manage app if unused\" in Settings → Apps → AlarmHQ.';
+
+  @override
+  String get calendar => 'Calendar';
+
+  @override
+  String get hijriDate => 'Hijri date';
 }

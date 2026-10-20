@@ -2,10 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:alarmhq/l10n/app_localizations.dart';
 
 import 'screens/alarm_list_screen.dart';
+import 'screens/calendar_screen.dart';
 import 'screens/permission_screen.dart';
 import 'screens/settings_screen.dart';
 import 'services/alarm_repository.dart';
 import 'services/app_settings.dart';
+import 'services/hijri_service.dart';
 import 'services/native_bridge.dart';
 import 'theme/app_theme.dart';
 import 'widgets/ringing_overlay.dart';
@@ -62,6 +64,9 @@ class _AlarmHQAppState extends State<AlarmHQApp>
   Future<void> _boot() async {
     await _settings.load();
     await _repo.load();
+    // v2.33: offline Hijri calendar data for the Calendar tab and
+    // the Dates picker.
+    await HijriService.instance.load();
     _onboarded = await PermissionScreen.isOnboarded();
     // v2.17: users who onboarded before v2.11 never saw the full-screen
     // permission card (Android 14+). Show the permission screen once more
@@ -132,7 +137,9 @@ class _AlarmHQAppState extends State<AlarmHQApp>
                   key: _scaffoldKey,
                   body: _tab == 0
                       ? AlarmListScreen(repo: _repo, settings: _settings)
-                      : SettingsScreen(repo: _repo, settings: _settings),
+                      : _tab == 1
+                          ? const CalendarScreen()
+                          : SettingsScreen(repo: _repo, settings: _settings),
                   bottomNavigationBar: NavigationBar(
                     selectedIndex: _tab,
                     onDestinationSelected: (i) => setState(() => _tab = i),
@@ -141,6 +148,11 @@ class _AlarmHQAppState extends State<AlarmHQApp>
                         icon: const Text('⏰',
                             style: TextStyle(fontSize: 24)),
                         label: l10n.alarms,
+                      ),
+                      NavigationDestination(
+                        icon: const Text('📅',
+                            style: TextStyle(fontSize: 24)),
+                        label: l10n.calendar,
                       ),
                       NavigationDestination(
                         icon: const Text('⚙️',
