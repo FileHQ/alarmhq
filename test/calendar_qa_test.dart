@@ -632,7 +632,7 @@ void main() {
       await pumpCalendar(tester, const Locale('ur'));
       texts = allText(tester).join(' ');
       expect(texts, contains('ڈیٹا اپڈیٹ: 17 اکتوبر 2026'));
-      expect(richText(), contains('اورنج = کیلکولیٹڈ'));
+      expect(richText(), contains('نارنجی = تخمینی'));
       expect(richText(), contains('✓ تصدیق شدہ'));
       expect(texts, contains('آج')); // Today button in Urdu
       expect(tester.takeException(), isNull);

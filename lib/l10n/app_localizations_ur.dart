@@ -538,7 +538,7 @@ class AppLocalizationsUr extends AppLocalizations {
   String get legendPredicted => '~ اندازاً';
 
   @override
-  String get legendCalculated => 'اورنج = کیلکولیٹڈ';
+  String get legendCalculated => 'نارنجی = تخمینی';
 
   @override
   String get calendarHint =>
