@@ -16,6 +16,15 @@ class CalendarScreen extends StatefulWidget {
 class _CalendarScreenState extends State<CalendarScreen> {
   DateTime _month = DateTime(DateTime.now().year, DateTime.now().month, 1);
 
+  @override
+  void initState() {
+    super.initState();
+    // v2.33: silent background sync — never blocks the UI.
+    HijriService.instance.syncFromNetwork().then((_) {
+      if (mounted) setState(() {});
+    });
+  }
+
   // v2.33: English month names hardcoded so the header ALWAYS shows
   // English digits (e.g. "October 2026"), even in Urdu locale where
   // MaterialLocalizations would render Urdu digits (۲۰۲۶).
@@ -121,12 +130,89 @@ class _CalendarScreenState extends State<CalendarScreen> {
               ),
               const SizedBox(height: 8),
               const Text(
-                'Top: Gregorian  •  Bottom: Hijri',
+                'Top: Gregorian  •  Bottom: Hijri (tap a date for detail)',
                 style: TextStyle(color: Colors.white38, fontSize: 11),
               ),
+              const SizedBox(height: 2),
+              // v2.33: confidence legend — user asked for visible markers.
+              RichText(
+                text: TextSpan(
+                  style:
+                      const TextStyle(fontSize: 11, color: Colors.white38),
+                  children: [
+                    const TextSpan(text: '✓ confirmed (sighted)  '),
+                    const TextSpan(text: '~ predicted (estimated)  '),
+                    TextSpan(
+                      text: 'Amber = calculated',
+                      style: TextStyle(color: Colors.amber.shade300),
+                    ),
+                  ],
+                ),
+              ),
+              if (HijriService.instance.dataUpdatedLabel.isNotEmpty)
+                Padding(
+                  padding: const EdgeInsets.only(top: 2),
+                  child: Text(
+                    'Hijri data: ${HijriService.instance.dataUpdatedLabel}',
+                    style: const TextStyle(
+                        color: Colors.white24, fontSize: 10),
+                  ),
+                ),
             ],
           ),
         ),
+      ),
+    );
+  }
+
+  /// Tap a date → detail dialog with full Hijri date + confidence.
+  void _showDateDetail(BuildContext context, DateTime cell) {
+    final hijri = HijriService.instance.hijriFor(cell);
+    final gregorian =
+        '${_monthNamesEn[cell.month - 1]} ${cell.day}, ${cell.year}';
+    showDialog(
+      context: context,
+      builder: (ctx) => AlertDialog(
+        title: Text(gregorian),
+        content: Column(
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(
+              hijri.display,
+              style: const TextStyle(
+                  fontSize: 18, fontWeight: FontWeight.w700),
+            ),
+            const SizedBox(height: 8),
+            Row(
+              children: [
+                Text(
+                  hijri.confidenceMarker,
+                  style: TextStyle(
+                    fontSize: 16,
+                    color: hijri.isCalculated
+                        ? Colors.amber.shade300
+                        : AppTheme.emerald,
+                  ),
+                ),
+                const SizedBox(width: 6),
+                Expanded(
+                  child: Text(
+                    hijri.confidenceLabel,
+                    style: const TextStyle(
+                        fontSize: 13, color: Colors.white70),
+                  ),
+                ),
+              ],
+            ),
+          ],
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.of(ctx).pop(),
+            child: const Text('Close'),
+          ),
+        ],
       ),
     );
   }
@@ -136,33 +222,47 @@ class _CalendarScreenState extends State<CalendarScreen> {
         cell.month == today.month &&
         cell.day == today.day;
     final hijri = HijriService.instance.hijriFor(cell);
-    return Container(
-      margin: const EdgeInsets.all(2),
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(10),
-        color: isToday ? AppTheme.emerald : Colors.transparent,
-      ),
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          Text(
-            // English digits only — plain toString().
-            '${cell.day}',
-            style: TextStyle(
-              fontWeight: isToday ? FontWeight.w800 : FontWeight.w600,
-              fontSize: 16,
-              color: isToday ? Colors.black : Colors.white,
+    // v2.33: amber Hijri number marks arithmetical "calculated" dates
+    // (outside sighted-data coverage), so the user knows the difference.
+    // "~" marks predicted/estimated (until moon sighting).
+    final hijriColor = isToday
+        ? Colors.black87
+        : hijri.isCalculated
+            ? Colors.amber.shade300
+            : Colors.white38;
+    final marker = hijri.confidenceMarker;
+    return GestureDetector(
+      onTap: () => _showDateDetail(context, cell),
+      child: Container(
+        margin: const EdgeInsets.all(2),
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(10),
+          color: isToday ? AppTheme.emerald : Colors.transparent,
+        ),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Text(
+              // English digits only — plain toString().
+              '${cell.day}',
+              style: TextStyle(
+                fontWeight: isToday ? FontWeight.w800 : FontWeight.w600,
+                fontSize: 16,
+                color: isToday ? Colors.black : Colors.white,
+              ),
             ),
-          ),
-          const SizedBox(height: 1),
-          Text(
-            '${hijri.day}',
-            style: TextStyle(
-              fontSize: 10,
-              color: isToday ? Colors.black87 : Colors.white38,
+            const SizedBox(height: 1),
+            Text(
+              // "~8" for predicted, "✓8" hidden — marker only for "~".
+              // Confirmed dates show plain number (legend explains).
+              '${marker == '~' ? '~' : ''}${hijri.day}',
+              style: TextStyle(
+                fontSize: 10,
+                color: hijriColor,
+              ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }

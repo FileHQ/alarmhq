@@ -65,8 +65,9 @@ class _AlarmHQAppState extends State<AlarmHQApp>
     await _settings.load();
     await _repo.load();
     // v2.33: offline Hijri calendar data for the Calendar tab and
-    // the Dates picker.
+    // the Dates picker. Sync silently in background (never blocks UI).
     await HijriService.instance.load();
+    HijriService.instance.syncFromNetwork();
     _onboarded = await PermissionScreen.isOnboarded();
     // v2.17: users who onboarded before v2.11 never saw the full-screen
     // permission card (Android 14+). Show the permission screen once more

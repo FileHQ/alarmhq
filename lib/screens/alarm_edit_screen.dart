@@ -796,6 +796,7 @@ class _AlarmEditScreenState extends State<AlarmEditScreen> {
     final selected = _isSelected(cell);
     final isPast = cell.isBefore(today);
     // v2.33: Hijri date under each Gregorian date (English digits only).
+    // Amber = arithmetical "calculated" (outside sighted-data coverage).
     final hijri = HijriService.instance.hijriFor(cell);
     final dayColor = selected
         ? Colors.black
@@ -806,7 +807,9 @@ class _AlarmEditScreenState extends State<AlarmEditScreen> {
         ? Colors.black87
         : isPast
             ? Colors.white12
-            : Colors.white38;
+            : hijri.isCalculated
+                ? Colors.amber.shade300
+                : Colors.white38;
     return GestureDetector(
       onTap: isPast
           ? null
@@ -838,7 +841,8 @@ class _AlarmEditScreenState extends State<AlarmEditScreen> {
               ),
             ),
             Text(
-              '${hijri.day}',
+              // "~" marks predicted/estimated (until moon sighting).
+              '${hijri.confidenceMarker == '~' ? '~' : ''}${hijri.day}',
               style: TextStyle(
                 fontSize: 9,
                 color: hijriColor,
