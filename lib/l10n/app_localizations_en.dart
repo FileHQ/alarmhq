@@ -208,7 +208,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get permBatteryDesc =>
-      'Realme may kill AlarmHQ in the background and revoke its permissions. Tap Allow, then choose \"Don\'t optimize\", so alarms always ring.';
+      'Your phone may kill AlarmHQ in the background and revoke its permissions. Tap Allow, then choose \"Don\'t optimize\", so alarms always ring.';
 
   @override
   String get permBatteryGrant => 'Allow';
@@ -262,7 +262,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get permAutostartDesc =>
-      'Lets the alarm ring even when the app is closed (needed on Xiaomi, Oppo, Vivo, Huawei).';
+      'Lets the alarm ring even when the app is closed (needed on many phones).';
 
   @override
   String get permLockScreenTitle => 'Show on Lock screen';

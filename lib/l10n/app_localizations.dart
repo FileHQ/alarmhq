@@ -461,7 +461,7 @@ abstract class AppLocalizations {
   /// No description provided for @permBatteryDesc.
   ///
   /// In en, this message translates to:
-  /// **'Realme may kill AlarmHQ in the background and revoke its permissions. Tap Allow, then choose \"Don\'t optimize\", so alarms always ring.'**
+  /// **'Your phone may kill AlarmHQ in the background and revoke its permissions. Tap Allow, then choose \"Don\'t optimize\", so alarms always ring.'**
   String get permBatteryDesc;
 
   /// No description provided for @permBatteryGrant.
@@ -557,7 +557,7 @@ abstract class AppLocalizations {
   /// No description provided for @permAutostartDesc.
   ///
   /// In en, this message translates to:
-  /// **'Lets the alarm ring even when the app is closed (needed on Xiaomi, Oppo, Vivo, Huawei).'**
+  /// **'Lets the alarm ring even when the app is closed (needed on many phones).'**
   String get permAutostartDesc;
 
   /// No description provided for @permLockScreenTitle.

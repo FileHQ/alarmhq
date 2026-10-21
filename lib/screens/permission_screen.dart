@@ -158,14 +158,12 @@ class _PermissionScreenState extends State<PermissionScreen>
       NativeBridge.hasNotificationPermission(),
       NativeBridge.canDrawOverlays(),
       NativeBridge.needsFullScreenIntentCard(),
-      NativeBridge.isColorOsDevice(),
       NativeBridge.getSdkInt(),
     ]);
     final showFs = results[4] as bool;
     final fsGranted =
         showFs ? await NativeBridge.canUseFullScreenIntent() : true;
-    final isColorOs = results[5] as bool;
-    final sdkInt = results[6] as int;
+    final sdkInt = results[5] as int;
     if (!mounted) return;
     setState(() {
       _exact = results[0] as bool;
@@ -174,10 +172,11 @@ class _PermissionScreenState extends State<PermissionScreen>
       _overlay = results[3] as bool;
       _showFsCard = showFs;
       _fsIntent = fsGranted;
-      // v2.18: ColorOS "Show on Lock screen" card + unused-app warning.
+      // v2.48: "Show on Lock screen" card now on ALL devices — every
+      // phone benefits from this guidance (user order 2026-10-21).
       // "Manage app if unused" exists on Android 12+ (API 31+).
       // v2.19: OEM cards are never marked granted — no ??= false inits.
-      _showLockCard = isColorOs;
+      _showLockCard = true;
       _showUnusedCard = sdkInt >= 31;
     });
   }

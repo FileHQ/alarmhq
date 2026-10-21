@@ -207,7 +207,7 @@ class AppLocalizationsUr extends AppLocalizations {
 
   @override
   String get permBatteryDesc =>
-      'ریئلمی بیک گراؤنڈ میں ایپ بند کر سکتا ہے اور پرمیشنز ہٹا سکتا ہے۔ اجازت دیں پر ٹیپ کریں، پھر \"Don\'t optimize\" منتخب کریں تاکہ الارم ہمیشہ بجے۔';
+      'آپ کا فون بیک گراؤنڈ میں ایپ بند کر سکتا ہے اور پرمیشنز ہٹا سکتا ہے۔ اجازت دیں پر ٹیپ کریں، پھر \"Don\'t optimize\" منتخب کریں تاکہ الارم ہمیشہ بجے۔';
 
   @override
   String get permBatteryGrant => 'اجازت دیں';
@@ -259,7 +259,7 @@ class AppLocalizationsUr extends AppLocalizations {
 
   @override
   String get permAutostartDesc =>
-      'ایپ بند ہو تو بھی الارم بجے (Xiaomi، Oppo، Vivo، Huawei پر ضروری)۔';
+      'ایپ بند ہو تو بھی الارم بجے (بہت سے فونز پر ضروری)۔';
 
   @override
   String get permLockScreenTitle => 'لاک اسکرین پر دکھائیں';
