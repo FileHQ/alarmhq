@@ -185,13 +185,17 @@ class AlarmService : Service() {
                 // A firing snooze replaces the "Snoozed until X" notice.
                 cancelSnoozedNotification()
                 startForegroundService(label, Pair(alarmJson, snoozeCount))
-                if (alarm.optBoolean("vibration", true)) startVibration()
+                // v2.47: start vibration AFTER playTone — playTone() begins
+                // with stopPlayback(), which cancels the vibrator. Starting
+                // it first meant the vibration was killed instantly and the
+                // phone never vibrated.
                 ensureAlarmVolume()
                 playTone(
-                    alarm.optString("toneUri", "asset://tones/alarmhq-classic.wav"),
+                    alarm.optString("toneUri", "asset://assets/tones/alarmhq-classic.wav"),
                     fadeInSeconds = alarm.optInt("fadeInSeconds", 30),
                     fixedVolume = null,
                 )
+                if (alarm.optBoolean("vibration", true)) startVibration()
                 launchFullScreen(alarmJson, snoozeCount)
             }
         }
@@ -472,9 +476,19 @@ class AlarmService : Service() {
                         .build()
                 )
                 if (toneUri.startsWith("asset://")) {
-                    val path = "flutter_assets/" +
-                        toneUri.removePrefix("asset://")
-                    val afd = applicationContext.assets.openFd(path)
+                    val rel = toneUri.removePrefix("asset://")
+                    // v2.47: pubspec assets are bundled under
+                    // flutter_assets/assets/… — the legacy URI form omits the
+                    // middle 'assets/'. Try the direct mapping first, then
+                    // the legacy form, so old saved alarms keep working.
+                    // (Before this fix the lookup always failed and every
+                    // "Classic" tone silently fell back to the system sound,
+                    // which is why Classic and System sounded identical.)
+                    val afd = try {
+                        applicationContext.assets.openFd("flutter_assets/$rel")
+                    } catch (_: Exception) {
+                        applicationContext.assets.openFd("flutter_assets/assets/$rel")
+                    }
                     setDataSource(afd.fileDescriptor, afd.startOffset, afd.length)
                     afd.close()
                 } else {

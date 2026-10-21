@@ -662,6 +662,12 @@ abstract class AppLocalizations {
   /// **'Once'**
   String get repeatOnce;
 
+  /// No description provided for @onceInfo24h.
+  ///
+  /// In en, this message translates to:
+  /// **'Rings within the next 24 hours'**
+  String get onceInfo24h;
+
   /// No description provided for @repeatSpecificDates.
   ///
   /// In en, this message translates to:

@@ -319,6 +319,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get repeatOnce => 'Once';
 
   @override
+  String get onceInfo24h => 'Rings within the next 24 hours';
+
+  @override
   String get repeatSpecificDates => 'Specific dates';
 
   @override

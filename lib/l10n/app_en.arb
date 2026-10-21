@@ -94,6 +94,7 @@
   "repeatInterval": "Every N days",
   "repeatNDays": "N days",
   "repeatOnce": "Once",
+  "onceInfo24h": "Rings within the next 24 hours",
   "repeatSpecificDates": "Specific dates",
   "repeatWeekly": "Weekly days",
   "repeatWeeklyShort": "Week",

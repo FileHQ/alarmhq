@@ -316,6 +316,9 @@ class AppLocalizationsUr extends AppLocalizations {
   String get repeatOnce => 'ایک دفعہ';
 
   @override
+  String get onceInfo24h => 'اگلے 24 گھنٹوں میں بجے گا';
+
+  @override
   String get repeatSpecificDates => 'مخصوص تاریخیں';
 
   @override
@@ -436,7 +439,7 @@ class AppLocalizationsUr extends AppLocalizations {
   String get tonePickFile => 'آڈیو فائل چنیں…';
 
   @override
-  String get tonePreview => 'سن کر دیکھیں';
+  String get tonePreview => 'بجا کر سنیں';
 
   @override
   String get toneStop => 'روکیں';

@@ -33,7 +33,6 @@ class _AlarmEditScreenState extends State<AlarmEditScreen> {
   final _labelCtrl = TextEditingController();
   late AlarmRepeatMode _mode;
   late List<int> _weekDays;
-  late DateTime _onceDate;
   late int _intervalDays;
   late DateTime _intervalStart;
   late int _ringDays;
@@ -61,7 +60,6 @@ class _AlarmEditScreenState extends State<AlarmEditScreen> {
     _labelCtrl.text = e?.label ?? '';
     _mode = e?.mode ?? AlarmRepeatMode.weekly;
     _weekDays = List<int>.from(e?.weekDays ?? [1, 2, 3, 4, 5, 6, 7]);
-    _onceDate = e?.onceDate ?? now.add(const Duration(days: 1));
     _intervalDays = e?.intervalDays ?? 5;
     _intervalStart =
         e?.intervalStart ?? DateTime(now.year, now.month, now.day);
@@ -74,7 +72,7 @@ class _AlarmEditScreenState extends State<AlarmEditScreen> {
     _calMonth = DateTime(now.year, now.month, 1);
     _snoozeMinutes = e?.snoozeMinutes ?? widget.settings.defaultSnoozeMinutes;
     _maxSnoozes = e?.maxSnoozes ?? 3;
-    _toneUri = e?.toneUri ?? 'asset://tones/alarmhq-classic.wav';
+    _toneUri = e?.toneUri ?? 'asset://assets/tones/alarmhq-classic.wav';
     _toneName = e?.toneName ?? 'Classic';
     _vibration = e?.vibration ?? true;
     _fadeInSeconds = e?.fadeInSeconds ?? 30;
@@ -104,7 +102,10 @@ class _AlarmEditScreenState extends State<AlarmEditScreen> {
         minute: _time.minute,
         mode: _mode,
         weekDays: List<int>.from(_weekDays)..sort(),
-        onceDate: DateTime(_onceDate.year, _onceDate.month, _onceDate.day),
+        // v2.47: one-time alarms have no user-visible date — the date is
+        // derived from the time: today if the time is still ahead, else
+        // tomorrow. Always within the next 24 hours.
+        onceDate: _computeOnceDate(),
         intervalDays: _intervalDays,
         intervalStart: DateTime(
             _intervalStart.year, _intervalStart.month, _intervalStart.day),
@@ -183,16 +184,13 @@ class _AlarmEditScreenState extends State<AlarmEditScreen> {
     if (t != null) _markDirty(() => _time = t);
   }
 
-  /// which: 0 = once date, 1 = interval start, 2 = cycle start.
+  /// which: 1 = interval start, 2 = cycle start.
+  /// (v2.47: one-time no longer has a date picker.)
   Future<void> _pickDate({required int which}) async {
     final now = DateTime.now();
     final d = await showDatePicker(
       context: context,
-      initialDate: which == 1
-          ? _intervalStart
-          : which == 2
-              ? _cycleStart
-              : _onceDate,
+      initialDate: which == 1 ? _intervalStart : _cycleStart,
       firstDate: DateTime(now.year - 1),
       lastDate: DateTime(now.year + 5),
     );
@@ -200,10 +198,8 @@ class _AlarmEditScreenState extends State<AlarmEditScreen> {
       _markDirty(() {
         if (which == 1) {
           _intervalStart = d;
-        } else if (which == 2) {
-          _cycleStart = d;
         } else {
-          _onceDate = d;
+          _cycleStart = d;
         }
       });
     }
@@ -231,6 +227,15 @@ class _AlarmEditScreenState extends State<AlarmEditScreen> {
 
   String _dateText(DateTime d) =>
       '${d.day.toString().padLeft(2, '0')}/${d.month.toString().padLeft(2, '0')}/${d.year}';
+
+  /// v2.47: one-time alarm date derived from the picked time — today when
+  /// the time is still ahead, otherwise tomorrow. Never a past time.
+  DateTime _computeOnceDate() {
+    final now = DateTime.now();
+    final today = DateTime(now.year, now.month, now.day);
+    final t = DateTime(today.year, today.month, today.day, _time.hour, _time.minute);
+    return t.isBefore(now) ? today.add(const Duration(days: 1)) : today;
+  }
 
   /// "6:32 PM"
   String _timeText12() {
@@ -306,7 +311,18 @@ class _AlarmEditScreenState extends State<AlarmEditScreen> {
             _modeSegment(l10n),
             const SizedBox(height: 12),
             if (_mode == AlarmRepeatMode.weekly) _weeklyPicker(l10n),
-            if (_mode == AlarmRepeatMode.once) _oncePicker(l10n),
+            // v2.47: one-time has no date — just the time, rings within 24h.
+            if (_mode == AlarmRepeatMode.once)
+              Padding(
+                padding: const EdgeInsets.only(top: 4),
+                child: Text(
+                  l10n.onceInfo24h,
+                  style: Theme.of(context)
+                      .textTheme
+                      .bodyMedium
+                      ?.copyWith(color: AppTheme.emerald),
+                ),
+              ),
             if (_mode == AlarmRepeatMode.interval) _intervalPicker(l10n),
             if (_mode == AlarmRepeatMode.specificDates)
               _specificDatesPicker(l10n),
@@ -349,7 +365,7 @@ class _AlarmEditScreenState extends State<AlarmEditScreen> {
               }),
               child: Column(
                 children: [
-                  _toneRow('asset://tones/alarmhq-classic.wav',
+                  _toneRow('asset://assets/tones/alarmhq-classic.wav',
                       l10n.toneClassic),
                   _toneRow('system://default', l10n.toneSystemDefault),
                   if (!_isBuiltInTone)
@@ -463,7 +479,7 @@ class _AlarmEditScreenState extends State<AlarmEditScreen> {
   }
 
   bool get _isBuiltInTone =>
-      _toneUri == 'asset://tones/alarmhq-classic.wav' ||
+      _toneUri == 'asset://assets/tones/alarmhq-classic.wav' ||
       _toneUri == 'system://default';
 
   Widget _sectionTitle(String t) => Padding(
@@ -529,13 +545,6 @@ class _AlarmEditScreenState extends State<AlarmEditScreen> {
       }),
     );
   }
-
-  Widget _oncePicker(AppLocalizations l10n) => ListTile(
-        title: Text(l10n.date),
-        subtitle: Text(_dateText(_onceDate)),
-        leading: const Icon(Icons.calendar_today, color: AppTheme.emerald),
-        onTap: () => _pickDate(which: 0),
-      );
 
   Widget _intervalPicker(AppLocalizations l10n) {
     final preview =
@@ -957,7 +966,7 @@ class _AlarmEditScreenState extends State<AlarmEditScreen> {
       );
 
   String _toneDisplayName(AppLocalizations l10n, String uri) {
-    if (uri == 'asset://tones/alarmhq-classic.wav') return l10n.toneClassic;
+    if (uri == 'asset://assets/tones/alarmhq-classic.wav') return l10n.toneClassic;
     if (uri == 'system://default') return l10n.toneSystemDefault;
     return uri.split('/').last;
   }
