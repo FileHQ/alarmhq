@@ -202,8 +202,13 @@ class _PermissionScreenState extends State<PermissionScreen>
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
+    // v2.46: theme-aware — light theme gets light cards, dark theme keeps
+    // the dark cards. (The screen previously hardcoded charcoal, so light
+    // theme showed dark cards with light-theme default text colors —
+    // black text on dark cards, unreadable.)
+    final isLight = Theme.of(context).brightness == Brightness.light;
     return Scaffold(
-      backgroundColor: AppTheme.charcoal,
+      backgroundColor: isLight ? Colors.white : AppTheme.charcoal,
       body: SafeArea(
         child: ListView(
           padding: const EdgeInsets.all(24),
@@ -224,7 +229,9 @@ class _PermissionScreenState extends State<PermissionScreen>
             const SizedBox(height: 12),
             Text(
               l10n.permBody,
-              style: const TextStyle(fontSize: 15, color: Colors.white70,
+              style: TextStyle(
+                  fontSize: 15,
+                  color: isLight ? Colors.black54 : Colors.white70,
                   height: 1.5),
               textAlign: TextAlign.center,
             ),
@@ -237,7 +244,9 @@ class _PermissionScreenState extends State<PermissionScreen>
                 margin: const EdgeInsets.only(bottom: 12),
                 padding: const EdgeInsets.all(14),
                 decoration: BoxDecoration(
-                  color: const Color(0xFF3A2222),
+                  color: isLight
+                      ? const Color(0xFFFFEBEE)
+                      : const Color(0xFF3A2222),
                   borderRadius: BorderRadius.circular(14),
                   border: Border.all(color: Colors.redAccent, width: 2),
                 ),
@@ -413,7 +422,9 @@ class _PermissionScreenState extends State<PermissionScreen>
               child: TextButton(
                 onPressed: _finish,
                 child: Text(l10n.permSkip,
-                    style: const TextStyle(color: Colors.white54)),
+                    style: TextStyle(
+                        color:
+                            isLight ? Colors.black54 : Colors.white54)),
               ),
             ),
           ],
@@ -445,6 +456,21 @@ class _PermissionScreenState extends State<PermissionScreen>
     // v2.19: unverifiable OEM cards never display the "Granted" check.
     final isGranted = verifiable && granted == true;
     final alert = highlight && !isGranted;
+    // v2.46: theme-aware card colors (fixes light theme showing dark
+    // cards, and wrong/unreadable text colors in both themes).
+    final isLight = Theme.of(context).brightness == Brightness.light;
+    final cardBg = alert
+        ? (isLight ? const Color(0xFFFFEBEE) : const Color(0xFF3A2222))
+        : (isLight ? AppTheme.lightCardBg : AppTheme.charcoalCard);
+    final titleColor = isLight ? Colors.black87 : Colors.white;
+    final descColor = isLight ? Colors.black54 : Colors.white60;
+    final borderColor = alert
+        ? Colors.redAccent
+        : isGranted
+            ? AppTheme.emerald.withValues(alpha: 0.6)
+            : (isLight ? Colors.black12 : Colors.white12);
+    final accentGreen = isLight ? AppTheme.emeraldDark : AppTheme.emerald;
+    final noteColor = isLight ? Colors.orange.shade800 : Colors.amber;
     // v2.23: VERTICAL layout. The old horizontal Row put the button on the
     // right, squeezing the text column to ~5 characters on narrow screens
     // and wrapping titles letter-by-letter vertically. Now the icon/title/
@@ -453,16 +479,10 @@ class _PermissionScreenState extends State<PermissionScreen>
       margin: const EdgeInsets.only(bottom: 12),
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
-        color: alert
-            ? const Color(0xFF3A2222)
-            : AppTheme.charcoalCard,
+        color: cardBg,
         borderRadius: BorderRadius.circular(16),
         border: Border.all(
-          color: alert
-              ? Colors.redAccent
-              : isGranted
-                  ? AppTheme.emerald.withValues(alpha: 0.6)
-                  : Colors.white12,
+          color: borderColor,
           width: alert ? 2 : 1,
         ),
       ),
@@ -498,8 +518,10 @@ class _PermissionScreenState extends State<PermissionScreen>
                       ),
                     Text(title,
                         softWrap: true,
-                        style: const TextStyle(
-                            fontSize: 16, fontWeight: FontWeight.w700)),
+                        style: TextStyle(
+                            fontSize: 16,
+                            fontWeight: FontWeight.w700,
+                            color: titleColor)),
                   ],
                 ),
               ),
@@ -511,14 +533,14 @@ class _PermissionScreenState extends State<PermissionScreen>
                   child: CircularProgressIndicator(strokeWidth: 2),
                 )
               else if (isGranted)
-                const Icon(Icons.check_circle,
-                    color: AppTheme.emerald, size: 24),
+                Icon(Icons.check_circle,
+                    color: accentGreen, size: 24),
             ],
           ),
           const SizedBox(height: 8),
           Text(desc,
-              style: const TextStyle(
-                  fontSize: 13, color: Colors.white60, height: 1.4)),
+              style: TextStyle(
+                  fontSize: 13, color: descColor, height: 1.4)),
           if (granted != null && !isGranted) ...[
             const SizedBox(height: 12),
             SizedBox(
@@ -553,16 +575,16 @@ class _PermissionScreenState extends State<PermissionScreen>
                 padding: const EdgeInsets.only(top: 8),
                 child: Text(
                   '⚠️ ${l10n.permVerifyNote}',
-                  style: const TextStyle(
-                      fontSize: 12, color: Colors.amber, height: 1.4),
+                  style: TextStyle(
+                      fontSize: 12, color: noteColor, height: 1.4),
                 ),
               ),
           ] else if (isGranted)
             Padding(
               padding: const EdgeInsets.only(top: 8),
               child: Text(l10n.permGranted,
-                  style: const TextStyle(
-                      color: AppTheme.emerald,
+                  style: TextStyle(
+                      color: accentGreen,
                       fontWeight: FontWeight.w700,
                       fontSize: 13)),
             ),

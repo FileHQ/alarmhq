@@ -4,6 +4,7 @@ import 'package:alarmhq/l10n/app_localizations.dart';
 import '../services/alarm_repository.dart';
 import '../services/app_settings.dart';
 import '../services/native_bridge.dart';
+import '../theme/app_theme.dart';
 import 'permission_screen.dart';
 
 /// Settings: language, theme, default snooze, permission helpers, about.
@@ -158,6 +159,10 @@ class _SettingsScreenState extends State<SettingsScreen> {
             padding: const EdgeInsets.only(top: 4),
             child: TextButton(
               onPressed: _refreshPermissions,
+              // v2.46: brand green #a3e635.
+              style: TextButton.styleFrom(
+                foregroundColor: AppTheme.emerald,
+              ),
               child: Text(l10n.openSettings),
             ),
           ),
@@ -204,6 +209,8 @@ class _SettingsScreenState extends State<SettingsScreen> {
     required VoidCallback onTap,
   }) {
     final l10n = AppLocalizations.of(context)!;
+    // v2.46: brand green #a3e635 (AppTheme.emerald) — was Material green.
+    final isLight = Theme.of(context).brightness == Brightness.light;
     return ListTile(
       title: Text(title),
       subtitle: Text(subtitle),
@@ -213,9 +220,13 @@ class _SettingsScreenState extends State<SettingsScreen> {
           : Chip(
               label: Text(
                   granted ? l10n.granted : l10n.notGranted,
-                  style: const TextStyle(fontSize: 12)),
+                  style: TextStyle(
+                      fontSize: 12,
+                      color: granted
+                          ? (isLight ? Colors.black87 : AppTheme.emerald)
+                          : null)),
               backgroundColor: granted
-                  ? Colors.green.withValues(alpha: 0.2)
+                  ? AppTheme.emerald.withValues(alpha: 0.25)
                   : Colors.orange.withValues(alpha: 0.2),
             ),
       onTap: onTap,
