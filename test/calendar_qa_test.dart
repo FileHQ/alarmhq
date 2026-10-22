@@ -170,7 +170,7 @@ void main() {
       }
     });
 
-    test('9. Confidence markers: confirmed=✓, predicted=~, calculated=""', () {
+    test('9. Confidence markers: confirmed=✓, predicted=~, calculated=~ (v2.49)', () {
       const confirmed = HijriDate(
         year: 1448, month: 5, day: 8,
         monthNameEn: 'Jamadi-ul-Awwal', monthNameUr: 'جمادی الاول', confidence: 'confirmed');
@@ -186,7 +186,7 @@ void main() {
       expect(confirmed.confidenceMarker, '✓');
       expect(predicted.confidenceMarker, '~');
       expect(estimated.confidenceMarker, '~');
-      expect(calculated.confidenceMarker, '');
+      expect(calculated.confidenceMarker, '~');
       expect(calculated.isCalculated, isTrue);
       // Labels are English.
       expect(confirmed.confidenceLabel, contains('sighted'));
@@ -258,6 +258,7 @@ void main() {
     // the Pakistan shift (-1 day) moves it to 30 Jumada al-Awwal and
     // 2026-11-12 becomes 1 Jumada al-Thani. Final display must read
     // ..., 29, ~30, ~1, ~2, ... with no duplicates and no 28-day month.
+    // v2.49: 2026-11-11 is now triple-verified (masthead) -> confirmed.
     test('24. Skipped day 1 + Pakistan shift: Nov 2026 sequence',
         () async {
       await HijriService.instance.load();
@@ -271,7 +272,7 @@ void main() {
       expect(nov10.confidence, 'confirmed'); // not shifted
       expect(nov11.day, 30);
       expect(nov11.month, 5);
-      expect(nov11.confidence, 'predicted'); // shifted, "~" kept
+      expect(nov11.confidence, 'confirmed'); // v2.49: verified masthead
       expect(nov12.day, 1);
       expect(nov12.month, 6);
       expect(nov12.confidence, 'predicted');
@@ -284,6 +285,49 @@ void main() {
       final dec11 = svc.hijriFor(DateTime(2026, 12, 11));
       expect(dec11.day, 1);
       expect(dec11.month, 7);
+    });
+
+    // v2.49: triple-verified masthead data (1424-12 -> 1448-05) is
+    // bundled and takes precedence as "confirmed".
+    test('24b. v2.49: verified dates resolve as confirmed', () async {
+      await HijriService.instance.load();
+      final svc = HijriService.instance;
+      // Spot checks across the verified range.
+      final checks = {
+        DateTime(2004, 1, 24): [1424, 12, 1], // chain start
+        DateTime(2010, 11, 8): [1431, 12, 1], // Zil-Hajj (BRec cross-check)
+        DateTime(2011, 1, 6): [1432, 2, 1], // Safar (her ruling)
+        DateTime(2014, 1, 3): [1435, 3, 1], // Rabi-ul-Awwal (her ruling)
+        DateTime(2024, 4, 10): [1445, 10, 1], // Shawwal (masthead vs toolbar)
+        DateTime(2026, 10, 13): [1448, 5, 1], // chain end
+      };
+      for (final e in checks.entries) {
+        final h = svc.hijriFor(e.key);
+        expect(h.year, e.value[0], reason: 'year for ${e.key}');
+        expect(h.month, e.value[1], reason: 'month for ${e.key}');
+        expect(h.day, e.value[2], reason: 'day for ${e.key}');
+        expect(h.confidence, 'confirmed', reason: 'confidence for ${e.key}');
+        expect(h.confidenceMarker, '✓');
+      }
+      // Mid-month day inside the verified range.
+      final mid = svc.hijriFor(DateTime(2024, 4, 25));
+      expect(mid.year, 1445);
+      expect(mid.month, 10);
+      expect(mid.day, 16);
+      expect(mid.confidence, 'confirmed');
+      // Just before the verified range -> not confirmed.
+      final before = svc.hijriFor(DateTime(2004, 1, 23));
+      expect(before.confidence, isNot('confirmed'));
+    });
+
+    test('24c. v2.49: gregorianForHijri uses verified months', () async {
+      await HijriService.instance.load();
+      final svc = HijriService.instance;
+      expect(svc.gregorianForHijri(1445, 9, 1), DateTime(2024, 3, 12));
+      expect(svc.gregorianForHijri(1448, 5, 1), DateTime(2026, 10, 13));
+      expect(svc.gregorianForHijri(1424, 12, 1), DateTime(2004, 1, 24));
+      // Day beyond the verified month length -> null.
+      expect(svc.gregorianForHijri(1445, 9, 31), isNull);
     });
 
     // v2.37: sweep the FULL coverage — every Hijri month boundary must
@@ -601,16 +645,16 @@ void main() {
       expect(tester.takeException(), isNull);
     });
 
-    // v2.38: legend uses "Orange = calculated" (user decision).
+    // v2.49: "Orange = calculated" removed per user (calculated uses ~ now).
     // NOTE: legend is a RichText (TextSpans), not Text widgets.
-    testWidgets('30. Legend shows Orange = calculated', (tester) async {
+    testWidgets('30. Legend does NOT show Orange = calculated (v2.49)', (tester) async {
       await HijriService.instance.load();
       await pumpCalendar(tester, const Locale('en'));
       final rich = tester
           .widgetList<RichText>(find.byType(RichText))
           .map((w) => w.text.toPlainText())
           .join(' ');
-      expect(rich, contains('Orange = calculated'));
+      expect(rich, isNot(contains('Orange = calculated')));
       expect(rich, isNot(contains('Amber = calculated')));
       expect(tester.takeException(), isNull);
     });
@@ -632,7 +676,7 @@ void main() {
       await pumpCalendar(tester, const Locale('ur'));
       texts = allText(tester).join(' ');
       expect(texts, contains('ڈیٹا اپڈیٹ: 17 اکتوبر 2026'));
-      expect(richText(), contains('نارنجی = تخمینی'));
+      expect(richText(), isNot(contains('نارنجی = تخمینی')));
       expect(richText(), contains('✓ تصدیق شدہ'));
       expect(texts, contains('آج')); // Today button in Urdu
       expect(tester.takeException(), isNull);

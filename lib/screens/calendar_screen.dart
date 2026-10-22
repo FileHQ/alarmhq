@@ -247,12 +247,6 @@ class _CalendarScreenState extends State<CalendarScreen> {
                     style: TextStyle(
                         fontSize: isUrdu ? 15 : 11, color: Colors.white38),
                   ),
-                  Text(
-                    l10n.legendCalculated,
-                    style: TextStyle(
-                        fontSize: isUrdu ? 15 : 11,
-                        color: Colors.amber.shade300),
-                  ),
                 ],
               ),
               if (HijriService.instance.dataUpdatedLabel.isNotEmpty)
@@ -688,11 +682,11 @@ class _CalendarScreenState extends State<CalendarScreen> {
               children: [
                 Text(
                   hijri.confidenceMarker,
-                  style: TextStyle(
+                  // v2.49: calculated shows exactly like estimated
+                  // (no separate amber color per user).
+                  style: const TextStyle(
                     fontSize: 16,
-                    color: hijri.isCalculated
-                        ? Colors.amber.shade300
-                        : AppTheme.emerald,
+                    color: AppTheme.emerald,
                   ),
                 ),
                 const SizedBox(width: 6),
@@ -730,14 +724,9 @@ class _CalendarScreenState extends State<CalendarScreen> {
         cell.month == _jumpedDate!.month &&
         cell.day == _jumpedDate!.day;
     final hijri = HijriService.instance.hijriFor(cell);
-    // v2.33: amber Hijri number marks arithmetical "calculated" dates
-    // (outside sighted-data coverage), so the user knows the difference.
-    // "~" marks predicted/estimated (until moon sighting).
-    final hijriColor = isToday
-        ? Colors.black87
-        : hijri.isCalculated
-            ? Colors.amber.shade300
-            : Colors.white38;
+    // v2.49: calculated dates use "~" like other estimates
+    // (amber color removed per user - "اندازاً بھی وہی کام کرتا ہے").
+    final hijriColor = isToday ? Colors.black87 : Colors.white38;
     final marker = hijri.confidenceMarker;
     return GestureDetector(
       onTap: () {
@@ -771,8 +760,8 @@ class _CalendarScreenState extends State<CalendarScreen> {
             const SizedBox(height: 1),
             Text(
               // v2.38: "✓8" on confirmed (sighted) dates, "~8" on
-              // predicted — matches the legend the user asked for.
-              // Calculated dates show a plain amber number.
+              // predicted/estimated/calculated — one style for all
+              // non-confirmed dates (v2.49 per user).
               '$marker${hijri.day}',
               style: TextStyle(
                 fontSize: 10,

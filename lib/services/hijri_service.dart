@@ -34,8 +34,8 @@ class HijriDate {
   bool get isCalculated => confidence == 'calculated';
 
   /// Short marker for day cells: "✓" = sighted-confirmed,
-  /// "~" = estimated/predicted (until moon sighting).
-  /// Calculated dates use amber color instead (no marker).
+  /// "~" = estimated/predicted/calculated (until moon sighting).
+  /// v2.49: calculated dates also use "~" (amber color removed per user).
   String get confidenceMarker {
     switch (confidence) {
       case 'confirmed':
@@ -43,6 +43,7 @@ class HijriDate {
       case 'estimated':
       case 'predicted':
       case 'unconfirmed':
+      case 'calculated':
         return '~';
       default:
         return '';
@@ -61,7 +62,7 @@ class HijriDate {
       case 'unconfirmed':
         return 'Unconfirmed (sighting pending)';
       case 'calculated':
-        return 'Calculated (arithmetical, not sighted)';
+        return 'Estimated (arithmetical)';
       default:
         return confidence;
     }
@@ -80,7 +81,7 @@ class HijriDate {
       case 'unconfirmed':
         return 'غیر تصدیق شدہ (چاند نظر آنا باقی)';
       case 'calculated':
-        return 'کیلکولیٹڈ (حساب سے، چاند نہیں دیکھا گیا)';
+        return 'اندازاً (حساب سے)';
       default:
         return confidence;
     }
@@ -154,6 +155,13 @@ class HijriService {
   List<int> _uqStarts = [];
   int _uqStartHy = 0;
   int _uqStartHm = 0;
+
+  /// v2.49: triple-verified Pakistan moon-sighting month starts
+  /// (1424-12 → 1448-05), from assets/hijri/verified.json.
+  /// Read directly from newspaper mastheads (Daily Express +
+  /// Business Recorder); masthead is final authority. These take
+  /// precedence over everything else and are always "confirmed".
+  final List<_VerifiedMonth> _verified = [];
 
   bool _loaded = false;
 
@@ -231,6 +239,8 @@ class HijriService {
     _applyPakistanShift();
     // v2.43: Umm al-Qura month-start table for out-of-API dates.
     await _loadUmmalqura();
+    // v2.49: triple-verified masthead data (confirmed, highest priority).
+    await _loadVerified();
     // If any year came from cache, the whole set is "cached".
     // (Sync always writes all three together.)
   }
@@ -251,6 +261,70 @@ class HijriService {
     } catch (_) {
       _uqStarts = [];
     }
+  }
+
+  /// v2.49: load the triple-verified month starts
+  /// (assets/hijri/verified.json, {"1424-12": "2004-01-24", ...}).
+  /// Silently empty when the asset can't be read (widget tests).
+  Future<void> _loadVerified() async {
+    _verified.clear();
+    try {
+      final raw =
+          await rootBundle.loadString('assets/hijri/verified.json');
+      final d = jsonDecode(raw) as Map<String, dynamic>;
+      for (final e in d.entries) {
+        final keyParts = e.key.split('-');
+        final dateParts = (e.value as String).split('-');
+        _verified.add(_VerifiedMonth(
+          DateTime(
+            int.parse(dateParts[0]),
+            int.parse(dateParts[1]),
+            int.parse(dateParts[2]),
+          ),
+          int.parse(keyParts[0]),
+          int.parse(keyParts[1]),
+        ));
+      }
+      _verified.sort((a, b) => a.start.compareTo(b.start));
+    } catch (_) {
+      _verified.clear();
+    }
+  }
+
+  /// v2.49: Hijri date from the verified month starts, or null when
+  /// [date] is outside the verified range. Always "confirmed".
+  HijriDate? _verifiedHijri(DateTime date) {
+    if (_verified.length < 2) return null;
+    final d = DateTime(date.year, date.month, date.day);
+    if (d.isBefore(_verified.first.start)) return null;
+    // Binary search: latest month start <= d.
+    var lo = 0, hi = _verified.length - 1, ans = -1;
+    while (lo <= hi) {
+      final mid = (lo + hi) >> 1;
+      if (!_verified[mid].start.isAfter(d)) {
+        ans = mid;
+        lo = mid + 1;
+      } else {
+        hi = mid - 1;
+      }
+    }
+    if (ans < 0) return null;
+    final m = _verified[ans];
+    // Month end = next month's start; the last verified month is
+    // capped at 30 days (a Hijri month is never longer).
+    final endExclusive = ans + 1 < _verified.length
+        ? _verified[ans + 1].start
+        : m.start.add(const Duration(days: 30));
+    if (!d.isBefore(endExclusive)) return null;
+    final day = d.difference(m.start).inDays + 1;
+    return HijriDate(
+      year: m.hy,
+      month: m.hm,
+      day: day,
+      monthNameEn: monthNamesEn[m.hm - 1],
+      monthNameUr: monthNamesUr[m.hm - 1],
+      confidence: 'confirmed',
+    );
   }
 
   /// Cached JSON from a previous sync. Null on miss or when the
@@ -537,9 +611,22 @@ class HijriService {
   }
 
   /// Gregorian date for a Hijri (year, month, day), or null when not
-  /// found. Searches the loaded sighted data first, then scans a bounded
-  /// calculated range (2020-01-01 .. 2032-12-31). Used by "Go to Date".
+  /// found. Searches the verified data first, then the loaded sighted
+  /// data, then scans a bounded calculated range (2020-01-01 ..
+  /// 2032-12-31). Used by "Go to Date".
   DateTime? gregorianForHijri(int year, int month, int day) {
+    // v2.49: verified months — exact, no scan needed.
+    for (var i = 0; i < _verified.length; i++) {
+      final m = _verified[i];
+      if (m.hy == year && m.hm == month) {
+        final endExclusive = i + 1 < _verified.length
+            ? _verified[i + 1].start
+            : m.start.add(const Duration(days: 30));
+        final monthLen = endExclusive.difference(m.start).inDays;
+        if (day < 1 || day > monthLen) return null;
+        return m.start.add(Duration(days: day - 1));
+      }
+    }
     for (final entry in _byGregorian.entries) {
       final h = entry.value;
       if (h.year == year && h.month == month && h.day == day) {
@@ -562,10 +649,13 @@ class HijriService {
   }
 
   /// Hijri date for [date]. Priority:
-  /// 1. hijri-api sighted/predicted data (as loaded) — untouched.
-  /// 2-3. (below) out-of-API dates — Umm al-Qura table or arithmetic.
+  /// 1. v2.49: triple-verified masthead month starts (confirmed).
+  /// 2. hijri-api sighted/predicted data (as loaded) — untouched.
+  /// 3-4. (below) out-of-API dates — Umm al-Qura table or arithmetic.
   /// Never returns null.
   HijriDate hijriFor(DateTime date) {
+    final verified = _verifiedHijri(date);
+    if (verified != null) return verified;
     final key = _key(DateTime(date.year, date.month, date.day));
     final known = _byGregorian[key];
     if (known != null) return known;
@@ -575,7 +665,8 @@ class HijriService {
   /// Out-of-API estimate. Pakistan(G) = UmmAlQura(G - 1 day) (v2.37).
   /// v2.43 priority:
   /// 3. inside 1937–2077 → Umm al-Qura table, marked "~" (predicted);
-  /// 4. outside → arithmetical (Kuwaiti) fallback, orange "calculated".
+  /// 4. outside → arithmetical (Kuwaiti) fallback, marked "~" like
+  ///    estimated (v2.49: no separate color/legend for calculated).
   HijriDate _estimatedHijri(DateTime date) {
     final shifted = date.subtract(const Duration(days: 1));
     final uq = _ummalquraFor(shifted);
@@ -656,4 +747,12 @@ class HijriService {
         (yy ~/ 400) -
         32045;
   }
+}
+
+/// v2.49: a triple-verified Hijri month start.
+class _VerifiedMonth {
+  const _VerifiedMonth(this.start, this.hy, this.hm);
+  final DateTime start;
+  final int hy;
+  final int hm;
 }
