@@ -357,16 +357,18 @@ void main() {
               '${problems.take(10).join('\n')}');
     });
 
-    // v2.37: Pakistan shift applies to predicted/unconfirmed only.
-    test('26. Pakistan shift: predicted -1 day, confirmed untouched',
+    // v2.49: Pakistan shift applies to Umm al-Qura predictions
+    // (Saudi - 1 day); confirmed dates untouched. API predicted entries
+    // are skipped (user order) — Umm al-Qura covers those dates.
+    test('26. Pakistan shift: Umm al-Qura -1 day, confirmed untouched',
         () async {
       await HijriService.instance.load();
       final svc = HijriService.instance;
-      // A mid-month predicted date: raw API day decremented by 1.
-      // 2027-01-15 is predicted in the 1448 data (raw: 7 Sha'ban).
+      // A mid-month predicted date from Umm al-Qura (Saudi - 1 day).
+      // 2027-01-15 -> 6 Sha'ban 1448.
       final jan15 = svc.hijriFor(DateTime(2027, 1, 15));
       expect(jan15.confidence, 'predicted');
-      expect(jan15.day, 6); // raw 7 -> Pakistan-adjusted 6
+      expect(jan15.day, 6);
       expect(jan15.month, 8); // Sha'ban
       // "~" marker kept (still an estimate).
       expect(jan15.confidenceMarker, '~');

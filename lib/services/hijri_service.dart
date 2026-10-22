@@ -627,8 +627,12 @@ class HijriService {
         return m.start.add(Duration(days: day - 1));
       }
     }
+    // v2.49: API contributes only confirmed dates (user order);
+    // predicted API entries are skipped so the Umm al-Qura scan below
+    // stays consistent with hijriFor.
     for (final entry in _byGregorian.entries) {
       final h = entry.value;
+      if (h.confidence != 'confirmed') continue;
       if (h.year == year && h.month == month && h.day == day) {
         return DateTime.tryParse(entry.key);
       }
@@ -648,17 +652,19 @@ class HijriService {
     return null;
   }
 
-  /// Hijri date for [date]. Priority:
-  /// 1. v2.49: triple-verified masthead month starts (confirmed).
-  /// 2. hijri-api sighted/predicted data (as loaded) — untouched.
-  /// 3-4. (below) out-of-API dates — Umm al-Qura table or arithmetic.
+  /// Hijri date for [date]. Priority (v2.49, user order):
+  /// 1. triple-verified masthead month starts (confirmed).
+  /// 2. hijri-api data — CONFIRMED entries only. The API's predicted /
+  ///    unconfirmed entries are skipped; Umm al-Qura covers those dates.
+  /// 3-4. (below) everything else — Umm al-Qura table or arithmetic.
   /// Never returns null.
   HijriDate hijriFor(DateTime date) {
     final verified = _verifiedHijri(date);
     if (verified != null) return verified;
     final key = _key(DateTime(date.year, date.month, date.day));
     final known = _byGregorian[key];
-    if (known != null) return known;
+    // v2.49: from the API, take only confirmed dates (user order).
+    if (known != null && known.confidence == 'confirmed') return known;
     return _estimatedHijri(date);
   }
 
