@@ -206,8 +206,36 @@ class _PermissionScreenState extends State<PermissionScreen>
     // theme showed dark cards with light-theme default text colors —
     // black text on dark cards, unreadable.)
     final isLight = Theme.of(context).brightness == Brightness.light;
-    return Scaffold(
-      backgroundColor: isLight ? Colors.white : AppTheme.charcoal,
+    // v2.50: back button exits the app instead of returning to the previous
+    // screen (user report). Handle explicitly: if pushed (e.g. from
+    // Settings), pop back; if shown as onboarding root, go to the main
+    // screen via onDone instead of exiting.
+    final canPop = Navigator.of(context).canPop();
+    return PopScope(
+      canPop: false,
+      onPopInvokedWithResult: (didPop, _) {
+        if (didPop) return;
+        if (canPop) {
+          Navigator.of(context).pop();
+        } else {
+          widget.onDone();
+        }
+      },
+      child: Scaffold(
+        backgroundColor: isLight ? Colors.white : AppTheme.charcoal,
+        appBar: canPop
+            ? AppBar(
+                backgroundColor: Colors.transparent,
+                elevation: 0,
+                leading: IconButton(
+                  icon: Icon(
+                    Icons.arrow_back,
+                    color: isLight ? Colors.black87 : Colors.white,
+                  ),
+                  onPressed: () => Navigator.of(context).pop(),
+                ),
+              )
+            : null,
       body: SafeArea(
         child: ListView(
           padding: const EdgeInsets.all(24),
@@ -220,7 +248,7 @@ class _PermissionScreenState extends State<PermissionScreen>
               l10n.permTitle,
               style: const TextStyle(
                 fontSize: 26,
-                fontWeight: FontWeight.w800,
+                fontWeight: FontWeight.w400,
                 color: AppTheme.emerald,
               ),
               textAlign: TextAlign.center,
@@ -253,7 +281,7 @@ class _PermissionScreenState extends State<PermissionScreen>
                   l10n.permUnusedBanner,
                   style: const TextStyle(
                     fontSize: 14,
-                    fontWeight: FontWeight.w700,
+                    fontWeight: FontWeight.w400,
                     color: Colors.redAccent,
                     height: 1.5,
                   ),
@@ -413,7 +441,7 @@ class _PermissionScreenState extends State<PermissionScreen>
                 child: Text(
                   l10n.permContinue,
                   style: const TextStyle(
-                      fontSize: 17, fontWeight: FontWeight.w700),
+                      fontSize: 17, fontWeight: FontWeight.w400),
                 ),
               ),
             ),
@@ -429,6 +457,7 @@ class _PermissionScreenState extends State<PermissionScreen>
           ],
         ),
       ),
+    ),
     );
   }
 
@@ -510,7 +539,7 @@ class _PermissionScreenState extends State<PermissionScreen>
                           l10n.permRequired,
                           style: const TextStyle(
                             fontSize: 11,
-                            fontWeight: FontWeight.w800,
+                            fontWeight: FontWeight.w400,
                             color: Colors.white,
                           ),
                         ),
@@ -519,7 +548,7 @@ class _PermissionScreenState extends State<PermissionScreen>
                         softWrap: true,
                         style: TextStyle(
                             fontSize: 16,
-                            fontWeight: FontWeight.w700,
+                            fontWeight: FontWeight.w400,
                             color: titleColor)),
                   ],
                 ),
@@ -564,7 +593,7 @@ class _PermissionScreenState extends State<PermissionScreen>
                         ? (grantLabel ?? l10n.permGrant)
                         : l10n.permOpenSettings,
                     style: const TextStyle(
-                        fontWeight: FontWeight.w700, fontSize: 15)),
+                        fontWeight: FontWeight.w400, fontSize: 15)),
               ),
             ),
             // v2.19: after the settings page was opened, remind the
@@ -584,7 +613,7 @@ class _PermissionScreenState extends State<PermissionScreen>
               child: Text(l10n.permGranted,
                   style: TextStyle(
                       color: accentGreen,
-                      fontWeight: FontWeight.w700,
+                      fontWeight: FontWeight.w400,
                       fontSize: 13)),
             ),
         ],
