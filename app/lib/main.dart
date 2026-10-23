@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:alarmhq/l10n/app_localizations.dart';
 
 import 'screens/alarm_list_screen.dart';
@@ -135,17 +136,63 @@ class _AlarmHQAppState extends State<AlarmHQApp>
               : Builder(
               builder: (context) {
                 final l10n = AppLocalizations.of(context)!;
-                return Scaffold(
-                  key: _scaffoldKey,
-                  body: _tab == 0
-                      ? AlarmListScreen(repo: _repo, settings: _settings)
-                      : _tab == 1
-                          ? const ClockScreen()
-                          : _tab == 2
-                              ? const CalendarScreen()
-                              : SettingsScreen(
-                                  repo: _repo, settings: _settings),
-                  bottomNavigationBar: NavigationBar(
+                // v2.56: back button behavior (her orders):
+                // - on non-main tab: go back to Alarms tab
+                // - on main tab (Alarms): confirm dialog "close app?"
+                return PopScope(
+                  canPop: false,
+                  onPopInvokedWithResult: (didPop, result) async {
+                    if (didPop) return;
+                    if (_tab != 0) {
+                      setState(() => _tab = 0);
+                      return;
+                    }
+                    // On main screen: ask "Do you want to close the app?"
+                    final confirm = await showDialog<bool>(
+                      context: context,
+                      builder: (ctx) => AlertDialog(
+                        title: Text(
+                          l10n.exitTitle,
+                          style: const TextStyle(
+                              fontWeight: FontWeight.w400, fontSize: 17),
+                        ),
+                        actions: [
+                          TextButton(
+                            onPressed: () =>
+                                Navigator.of(ctx).pop(false),
+                            child: Text(
+                              l10n.exitNo,
+                              style: const TextStyle(
+                                  fontWeight: FontWeight.w400),
+                            ),
+                          ),
+                          TextButton(
+                            onPressed: () =>
+                                Navigator.of(ctx).pop(true),
+                            child: Text(
+                              l10n.exitYes,
+                              style: const TextStyle(
+                                  fontWeight: FontWeight.w400),
+                            ),
+                          ),
+                        ],
+                      ),
+                    );
+                    if (confirm == true) {
+                      SystemNavigator.pop();
+                    }
+                  },
+                  child: Scaffold(
+                    key: _scaffoldKey,
+                    body: _tab == 0
+                        ? AlarmListScreen(repo: _repo, settings: _settings)
+                        : _tab == 1
+                            ? const ClockScreen()
+                            : _tab == 2
+                                ? const CalendarScreen()
+                                : SettingsScreen(
+                                    repo: _repo, settings: _settings),
+                    bottomNavigationBar: NavigationBar(
                     selectedIndex: _tab,
                     onDestinationSelected: (i) => setState(() => _tab = i),
                     destinations: [
@@ -170,6 +217,7 @@ class _AlarmHQAppState extends State<AlarmHQApp>
                         label: l10n.settings,
                       ),
                     ],
+                    ),
                   ),
                 );
               },
