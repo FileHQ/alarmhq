@@ -1,7 +1,7 @@
 name: alarmhq
 description: AlarmHQ - personal alarm app (Urdu + English).
 publish_to: 'none'
-version: 1.0.52+4053
+version: 1.0.53+4054
 
 environment:
   sdk: ^3.13.5
@@ -18,6 +18,8 @@ dependencies:
   ntp_dart: ^1.5.1
   timezone: ^0.10.1
   system_alert_window: ^2.0.0
+  # v2.53: HTTPS fallback for atomic time when NTP/UDP is blocked
+  http: ^1.2.0
 
 dev_dependencies:
   flutter_test:
