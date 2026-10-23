@@ -1,5 +1,7 @@
 import 'dart:async';
+import 'dart:convert';
 import 'package:flutter/foundation.dart';
+import 'package:http/http.dart' as http;
 import 'package:ntp_dart/ntp_dart.dart';
 
 /// v2.51: Atomic (NTP) time service.
@@ -27,6 +29,8 @@ class AtomicTimeService extends ChangeNotifier {
   bool get hasSync => _lastSync != null;
 
   /// Query NTP servers and compute the offset. Cached for [maxAge].
+  /// v2.53: NTP (UDP) first; falls back to HTTPS time API when UDP is
+  /// blocked (common on mobile networks).
   Future<bool> sync({Duration maxAge = const Duration(minutes: 5)}) async {
     if (_syncing) return hasSync;
     if (_lastSync != null &&
@@ -37,21 +41,54 @@ class AtomicTimeService extends ChangeNotifier {
     _error = null;
     notifyListeners();
     try {
-      // 3 samples for accuracy, Google + Cloudflare failover.
-      final resp = await NtpClient().query(samples: 3).timeout(
-        const Duration(seconds: 10),
-      );
-      // offset = serverTime - deviceTime (corrected for RTT/2).
-      _offset = resp.offset;
-      _lastSync = DateTime.now();
-      _error = null;
-      return true;
+      // 1. Try NTP (UDP) — 3 samples for accuracy.
+      try {
+        final resp = await NtpClient().query(samples: 3).timeout(
+          const Duration(seconds: 8),
+        );
+        _offset = resp.offset;
+        _lastSync = DateTime.now();
+        _error = null;
+        return true;
+      } catch (_) {
+        // NTP failed (UDP blocked?) — try HTTPS fallback below.
+      }
+      // 2. HTTPS fallback: worldtimeapi.org (works through firewalls).
+      final ok = await _syncViaHttps();
+      return ok;
     } catch (e) {
       _error = e.toString();
       return false;
     } finally {
       _syncing = false;
       notifyListeners();
+    }
+  }
+
+  /// HTTPS time sync via worldtimeapi.org. Returns true on success.
+  Future<bool> _syncViaHttps() async {
+    try {
+      final before = DateTime.now();
+      final resp = await http
+          .get(Uri.parse('https://worldtimeapi.org/api/timezone/Etc/UTC'))
+          .timeout(const Duration(seconds: 10));
+      final after = DateTime.now();
+      if (resp.statusCode != 200) return false;
+      final data = jsonDecode(resp.body) as Map<String, dynamic>;
+      final utcStr = data['utc_datetime'] as String?;
+      if (utcStr == null) return false;
+      final serverTime = DateTime.parse(utcStr);
+      // RTT/2 correction: assume symmetric latency.
+      final rtt = after.difference(before);
+      final corrected = serverTime.add(rtt ~/ 2);
+      // offset = serverTime - deviceTime.
+      _offset = corrected.difference(after);
+      _lastSync = DateTime.now();
+      _error = null;
+      return true;
+    } catch (e) {
+      _error = e.toString();
+      return false;
     }
   }
 
