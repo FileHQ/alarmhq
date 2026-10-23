@@ -1,6 +1,5 @@
 // ignore: unused_import
 import 'package:intl/intl.dart' as intl;
-
 import 'app_localizations.dart';
 
 // ignore_for_file: type=lint
@@ -13,8 +12,7 @@ class AppLocalizationsUr extends AppLocalizations {
   String get about => 'ایپ کے بارے میں';
 
   @override
-  String get aboutText =>
-      'AlarmHQ v1 — ذاتی استعمال کی الارم ایپ۔ نہ اشتہارات، نہ اکاؤنٹ، نہ ٹریکنگ۔';
+  String get aboutText => 'AlarmHQ v1 — ذاتی استعمال کی الارم ایپ۔ نہ اشتہارات، نہ اکاؤنٹ، نہ ٹریکنگ۔';
 
   @override
   String get addAlarm => 'الارم شامل کریں';
@@ -37,8 +35,7 @@ class AppLocalizationsUr extends AppLocalizations {
   String get appTitle => 'AlarmHQ';
 
   @override
-  String get batteryDesc =>
-      'فون کو بیٹری بچانے کے لیے الارم میں تاخیر یا بند کرنے سے روکتا ہے۔';
+  String get batteryDesc => 'فون کو بیٹری بچانے کے لیے الارم میں تاخیر یا بند کرنے سے روکتا ہے۔';
 
   @override
   String get batteryTitle => 'بیٹری آپٹیمائزیشن نظرانداز کریں';
@@ -206,8 +203,7 @@ class AppLocalizationsUr extends AppLocalizations {
   String get openSettings => 'سیٹنگز کھولیں';
 
   @override
-  String get permBatteryDesc =>
-      'آپ کا فون بیک گراؤنڈ میں ایپ بند کر سکتا ہے اور پرمیشنز ہٹا سکتا ہے۔ اجازت دیں پر ٹیپ کریں، پھر \"Don\'t optimize\" منتخب کریں تاکہ الارم ہمیشہ بجے۔';
+  String get permBatteryDesc => 'آپ کا فون بیک گراؤنڈ میں ایپ بند کر سکتا ہے اور پرمیشنز ہٹا سکتا ہے۔ اجازت دیں پر ٹیپ کریں، پھر \"Don\'t optimize\" منتخب کریں تاکہ الارم ہمیشہ بجے۔';
 
   @override
   String get permBatteryGrant => 'اجازت دیں';
@@ -216,15 +212,13 @@ class AppLocalizationsUr extends AppLocalizations {
   String get permBatteryTitle => 'بیٹری آپٹیمائزیشن';
 
   @override
-  String get permBody =>
-      'AlarmHQ کو یہ اجازتیں چاہییں تاکہ آپ کے الارم ہمیشہ وقت پر بجیں — چاہے فون لاک ہو یا بیٹری بچا رہا ہو۔';
+  String get permBody => 'AlarmHQ کو یہ اجازتیں چاہییں تاکہ آپ کے الارم ہمیشہ وقت پر بجیں — چاہے فون لاک ہو یا بیٹری بچا رہا ہو۔';
 
   @override
   String get permContinue => 'آگے بڑھیں';
 
   @override
-  String get permExactDesc =>
-      'الارم ٹھیک اسی منٹ پر بجتا ہے، چاہے فون Doze موڈ میں ہو۔';
+  String get permExactDesc => 'الارم ٹھیک اسی منٹ پر بجتا ہے، چاہے فون Doze موڈ میں ہو۔';
 
   @override
   String get permExactTitle => 'عین وقت پر الارم';
@@ -251,33 +245,28 @@ class AppLocalizationsUr extends AppLocalizations {
   String get permFsTitle => 'فل اسکرین الارم';
 
   @override
-  String get permFsDesc =>
-      'لاک اسکرین پر الارم دکھانے دیتا ہے (Android 14+ پر ضروری)۔';
+  String get permFsDesc => 'لاک اسکرین پر الارم دکھانے دیتا ہے (Android 14+ پر ضروری)۔';
 
   @override
   String get permAutostartTitle => 'آٹو اسٹارٹ کی اجازت';
 
   @override
-  String get permAutostartDesc =>
-      'ایپ بند ہو تو بھی الارم بجے (بہت سے فونز پر ضروری)۔';
+  String get permAutostartDesc => 'ایپ بند ہو تو بھی الارم بجے (بہت سے فونز پر ضروری)۔';
 
   @override
   String get permLockScreenTitle => 'لاک اسکرین پر دکھائیں';
 
   @override
-  String get permLockScreenDesc =>
-      'اس کے بغیر لاک اسکرین پر الارم کبھی نظر نہیں آئے گا۔ طریقہ: 1۔ نیچے \'Open Settings\' دبائیں۔ 2۔ \'Show on Lock screen\' آن کریں (\'Open new windows while running in the background\' بھی آن کریں)۔ 3۔ ایپ میں واپس آئیں۔';
+  String get permLockScreenDesc => 'اس کے بغیر لاک اسکرین پر الارم کبھی نظر نہیں آئے گا۔ طریقہ: 1۔ نیچے \'Open Settings\' دبائیں۔ 2۔ \'Show on Lock screen\' آن کریں (\'Open new windows while running in the background\' بھی آن کریں)۔ 3۔ ایپ میں واپس آئیں۔';
 
   @override
   String get permUnusedTitle => 'خودکار اجازت منسوخی';
 
   @override
-  String get permUnusedDesc =>
-      '⚠️ اگر یہ آن ہے تو اینڈرائیڈ کچھ دن ایپ نہ کھولنے پر آپ کی الارم پرمیشنز خود ہٹا دے گا! اسے آف کریں۔';
+  String get permUnusedDesc => '⚠️ اگر یہ آن ہے تو اینڈرائیڈ کچھ دن ایپ نہ کھولنے پر آپ کی الارم پرمیشنز خود ہٹا دے گا! اسے آف کریں۔';
 
   @override
-  String get permLockScreenReminder =>
-      'سیٹنگز ← ایپس ← AlarmHQ میں \"Show on Lock screen\" آن کریں — اور \"Open new windows while running in the background\" بھی۔';
+  String get permLockScreenReminder => 'سیٹنگز ← ایپس ← AlarmHQ میں \"Show on Lock screen\" آن کریں — اور \"Open new windows while running in the background\" بھی۔';
 
   @override
   String get permSkip => 'ابھی چھوڑیں';
@@ -381,8 +370,7 @@ class AppLocalizationsUr extends AppLocalizations {
   String get lockBannerTitle => 'لاک اسکرین پر دکھانا ضروری ہے';
 
   @override
-  String get lockBannerBody =>
-      'سیٹنگز ← ایپس ← AlarmHQ کھولنے اور آن کرنے کے لیے دبائیں';
+  String get lockBannerBody => 'سیٹنگز ← ایپس ← AlarmHQ کھولنے اور آن کرنے کے لیے دبائیں';
 
   @override
   String get permRequired => 'ضروری';
@@ -491,12 +479,10 @@ class AppLocalizationsUr extends AppLocalizations {
   }
 
   @override
-  String get permBgActivityReminder =>
-      'سیٹنگز ← ایپس میں AlarmHQ کے لیے \"Allow background activity\" بھی آن کریں تاکہ ایپ بند ہو تو بھی الارم بجے۔';
+  String get permBgActivityReminder => 'سیٹنگز ← ایپس میں AlarmHQ کے لیے \"Allow background activity\" بھی آن کریں تاکہ ایپ بند ہو تو بھی الارم بجے۔';
 
   @override
-  String get permUnusedBanner =>
-      '⚠️ اینڈرائیڈ AlarmHQ کی پرمیشنز خود ہٹا سکتا ہے — Settings → Apps → AlarmHQ میں \"Manage app if unused\" آف کریں۔';
+  String get permUnusedBanner => '⚠️ اینڈرائیڈ AlarmHQ کی پرمیشنز خود ہٹا سکتا ہے — Settings → Apps → AlarmHQ میں \"Manage app if unused\" آف کریں۔';
 
   @override
   String get calendar => 'کیلنڈر';
@@ -544,8 +530,7 @@ class AppLocalizationsUr extends AppLocalizations {
   String get legendCalculated => 'نارنجی = تخمینی';
 
   @override
-  String get calendarHint =>
-      'اوپر: عیسوی • نیچے: ہجری (تفصیل کے لیے تاریخ دبائیں)';
+  String get calendarHint => 'اوپر: عیسوی • نیچے: ہجری (تفصیل کے لیے تاریخ دبائیں)';
 
   @override
   String get close => 'بند کریں';
@@ -597,15 +582,13 @@ class AppLocalizationsUr extends AppLocalizations {
   String get fixPhoneTime => 'فون کا ٹائم ٹھیک کریں';
 
   @override
-  String get fixPhoneTimeDesc =>
-      'Date & Time سیٹنگ کھولیں، اوپر live اٹامک ٹائم نظر آئے گا تاکہ بالکل ملا سکیں۔';
+  String get fixPhoneTimeDesc => 'Date & Time سیٹنگ کھولیں، اوپر live اٹامک ٹائم نظر آئے گا تاکہ بالکل ملا سکیں۔';
 
   @override
   String get overlayTitle => 'دوسری ایپس کے اوپر دکھائیں';
 
   @override
-  String get overlayDesc =>
-      'فون کا ٹائم ٹھیک کرتے وقت سیٹنگ کے اوپر چھوٹا تیرتا ہوا اٹامک کلاک دکھاتا ہے۔';
+  String get overlayDesc => 'فون کا ٹائم ٹھیک کرتے وقت سیٹنگ کے اوپر چھوٹا تیرتا ہوا اٹامک کلاک دکھاتا ہے۔';
 
   @override
   String get swStart => 'شروع کریں';
@@ -654,4 +637,7 @@ class AppLocalizationsUr extends AppLocalizations {
 
   @override
   String get deleted => 'حذف کر دیا گیا';
+
+  @override
+  String get atomicTab => 'اٹامک';
 }
