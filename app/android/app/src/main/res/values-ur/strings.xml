@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="alarm">الارم</string>
+    <string name="dismiss">بند کریں</string>
+    <string name="stop">بند کریں</string>
+    <string name="snooze">اسنوز</string>
+    <string name="alarm_channel_name">الارمز</string>
+    <string name="alarm_channel_desc">AlarmHQ الارم کی اطلاعات</string>
+    <string name="alarm_service_notif">AlarmHQ کا الارم بج رہا ہے</string>
+    <string name="widget_name">AlarmHQ</string>
+    <string name="widget_desc">اگلے AlarmHQ الارم کا وقت دکھاتا ہے</string>
+    <string name="no_alarms_set">کوئی الارم نہیں</string>
+    <string name="snoozing_for">%1$d منٹ کے لیے سنوز کر دیا</string>
+    <string name="no_more_snoozes">مزید اسنوز باقی نہیں</string>
+    <string name="swipe_hints">↑ اسنوز کے لیے اوپر سوائپ کریں · ↓ بند کرنے کے لیے نیچے سوائپ کریں</string>
+    <string name="snoozed_until">⏰ %1$s تک اسنوز کیا گیا</string>
+    <string name="notif_stop">بند کریں</string>
+    <string name="drag_down_snooze">↓ نیچے ڈریگ کریں اسنوز کے لیے</string>
+    <string name="drag_up_stop">↑ اوپر ڈریگ کریں بند کرنے کے لیے</string>
+    <string name="slider_hint">بند کرنے کے لیے گھڑی کو اوپر سلائیڈ کریں · اسنوز کے لیے نیچے سلائیڈ کریں</string>
+</resources>

@@ -1,0 +1,235 @@
+import 'package:flutter/material.dart';
+import 'package:alarmhq/l10n/app_localizations.dart';
+
+import '../services/alarm_repository.dart';
+import '../services/app_settings.dart';
+import '../services/native_bridge.dart';
+import '../theme/app_theme.dart';
+import 'permission_screen.dart';
+
+/// Settings: language, theme, default snooze, permission helpers, about.
+class SettingsScreen extends StatefulWidget {
+  final AlarmRepository repo;
+  final AppSettings settings;
+
+  const SettingsScreen({super.key, required this.repo, required this.settings});
+
+  @override
+  State<SettingsScreen> createState() => _SettingsScreenState();
+}
+
+class _SettingsScreenState extends State<SettingsScreen> {
+  bool? _exactAlarm;
+  bool? _battery;
+  String? _appVersion;
+
+  @override
+  void initState() {
+    super.initState();
+    _refreshPermissions();
+    _loadAppVersion();
+  }
+
+  /// v2.20: show the real installed version instead of a hardcoded string.
+  Future<void> _loadAppVersion() async {
+    try {
+      final v = await NativeBridge.getAppVersion();
+      if (!mounted) return;
+      setState(() => _appVersion = v);
+    } catch (_) {
+      // Best effort: subtitle falls back to a placeholder.
+    }
+  }
+
+  Future<void> _refreshPermissions() async {
+    final exact = await NativeBridge.hasExactAlarmPermission();
+    final battery = await NativeBridge.isIgnoringBatteryOptimizations();
+    if (!mounted) return;
+    setState(() {
+      _exactAlarm = exact;
+      _battery = battery;
+    });
+    if (exact) {
+      // Permission may have been granted in system settings; make sure
+      // native schedules exist for all enabled alarms.
+      await widget.repo.rescheduleAll();
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
+    final s = widget.settings;
+    return Scaffold(
+      appBar: AppBar(title: Text(l10n.settings)),
+      body: ListView(
+        padding: const EdgeInsets.all(16),
+        children: [
+          _section(l10n.language),
+          RadioGroup<String>(
+            groupValue: s.language,
+            onChanged: (v) => s.setLanguage(v!),
+            child: Column(
+              children: [
+                RadioListTile<String>(
+                  title: Text(l10n.languageSystem),
+                  value: 'system',
+                ),
+                RadioListTile<String>(
+                  title: Text(l10n.languageEnglish),
+                  value: 'en',
+                ),
+                RadioListTile<String>(
+                  title: Text(l10n.languageUrdu),
+                  value: 'ur',
+                ),
+              ],
+            ),
+          ),
+          const Divider(height: 32),
+          _section(l10n.theme),
+          RadioGroup<String>(
+            groupValue: s.themeMode,
+            onChanged: (v) => s.setThemeMode(v!),
+            child: Column(
+              children: [
+                RadioListTile<String>(
+                  title: Text(l10n.themeSystem),
+                  value: 'system',
+                ),
+                RadioListTile<String>(
+                  title: Text(l10n.themeDark),
+                  value: 'dark',
+                ),
+                RadioListTile<String>(
+                  title: Text(l10n.themeLight),
+                  value: 'light',
+                ),
+              ],
+            ),
+          ),
+          const Divider(height: 32),
+          _section(l10n.snooze),
+          ListTile(
+            title: Text(l10n.defaultSnooze),
+            trailing: Row(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                IconButton(
+                  icon: const Icon(Icons.remove_circle_outline),
+                  onPressed: s.defaultSnoozeMinutes > 1
+                      ? () => s.setDefaultSnooze(s.defaultSnoozeMinutes - 1)
+                      : null,
+                ),
+                SizedBox(
+                  width: 72,
+                  child: Text(
+                    l10n.minutesUnit(s.defaultSnoozeMinutes),
+                    textAlign: TextAlign.center,
+                  ),
+                ),
+                IconButton(
+                  icon: const Icon(Icons.add_circle_outline),
+                  onPressed: s.defaultSnoozeMinutes < 60
+                      ? () => s.setDefaultSnooze(s.defaultSnoozeMinutes + 1)
+                      : null,
+                ),
+              ],
+            ),
+          ),
+          const Divider(height: 32),
+          _section(l10n.permissions),
+          _permissionTile(
+            title: l10n.exactAlarmTitle,
+            subtitle: l10n.exactAlarmDesc,
+            granted: _exactAlarm,
+            onTap: () async {
+              await NativeBridge.openExactAlarmSettings();
+            },
+          ),
+          _permissionTile(
+            title: l10n.batteryTitle,
+            subtitle: l10n.batteryDesc,
+            granted: _battery,
+            onTap: () async {
+              await NativeBridge.openBatteryOptimizationSettings();
+            },
+          ),
+          Padding(
+            padding: const EdgeInsets.only(top: 4),
+            child: TextButton(
+              onPressed: _refreshPermissions,
+              // v2.46: brand green #a3e635.
+              style: TextButton.styleFrom(
+                foregroundColor: AppTheme.emerald,
+              ),
+              child: Text(l10n.openSettings),
+            ),
+          ),
+          ListTile(
+            leading: const Text('🔐', style: TextStyle(fontSize: 24)),
+            title: Text(l10n.openPermissionScreen),
+            trailing: const Icon(Icons.chevron_right),
+            onTap: () async {
+              await Navigator.of(context).push(
+                MaterialPageRoute(
+                  builder: (_) => PermissionScreen(
+                    onDone: () => Navigator.of(context).pop(),
+                  ),
+                ),
+              );
+              // Statuses may have changed; refresh the tiles above.
+              _refreshPermissions();
+            },
+          ),
+          const Divider(height: 32),
+          _section(l10n.about),
+          ListTile(
+            title: Text(l10n.aboutText),
+            subtitle: Text('v${_appVersion ?? '…'}'),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _section(String t) => Padding(
+        padding: const EdgeInsets.only(bottom: 4),
+        child: Text(t,
+            style: Theme.of(context)
+                .textTheme
+                .titleMedium
+                ?.copyWith(fontWeight: FontWeight.bold)),
+      );
+
+  Widget _permissionTile({
+    required String title,
+    required String subtitle,
+    required bool? granted,
+    required VoidCallback onTap,
+  }) {
+    final l10n = AppLocalizations.of(context)!;
+    // v2.46: brand green #a3e635 (AppTheme.emerald) — was Material green.
+    final isLight = Theme.of(context).brightness == Brightness.light;
+    return ListTile(
+      title: Text(title),
+      subtitle: Text(subtitle),
+      trailing: granted == null
+          ? const SizedBox(
+              width: 20, height: 20, child: CircularProgressIndicator())
+          : Chip(
+              label: Text(
+                  granted ? l10n.granted : l10n.notGranted,
+                  style: TextStyle(
+                      fontSize: 12,
+                      color: granted
+                          ? (isLight ? Colors.black87 : AppTheme.emerald)
+                          : null)),
+              backgroundColor: granted
+                  ? AppTheme.emerald.withValues(alpha: 0.25)
+                  : Colors.orange.withValues(alpha: 0.2),
+            ),
+      onTap: onTap,
+    );
+  }
+}

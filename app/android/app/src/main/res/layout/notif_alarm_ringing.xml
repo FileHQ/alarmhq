@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  Slim alarm notification: compact single row — time + info on the left,
+  Snooze and Stop round buttons on the right.
+  v2.21: slimmer (20sp time, 4dp padding, 40dp buttons) per user feedback —
+  the v2.17 slimming wasn't enough vs the system clock style.
+  v2.21: added Snooze button (notif_snooze); hidden for the persistent
+  "Snoozed until X" notice and when no snoozes remain.
+  Used via RemoteViews from AlarmService while the alarm is ringing.
+-->
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal"
+    android:gravity="center_vertical"
+    android:paddingStart="8dp"
+    android:paddingEnd="8dp"
+    android:paddingTop="4dp"
+    android:paddingBottom="4dp"
+    android:background="#23272E">
+
+    <LinearLayout
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/notif_time"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="09:40"
+            android:textSize="20sp"
+            android:textStyle="bold"
+            android:textColor="#FFFFFF"
+            android:maxLines="1"
+            android:singleLine="true" />
+
+        <TextView
+            android:id="@+id/notif_info"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Alarm"
+            android:textSize="11sp"
+            android:textColor="#B0B7C3"
+            android:maxLines="1"
+            android:ellipsize="end"
+            android:singleLine="true" />
+    </LinearLayout>
+
+    <Button
+        android:id="@+id/notif_snooze"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:layout_marginStart="6dp"
+        android:text="@string/snooze"
+        android:textSize="8sp"
+        android:textStyle="bold"
+        android:textColor="#FFFFFF"
+        android:maxLines="1"
+        android:singleLine="true"
+        android:background="@drawable/notif_stop_circle" />
+
+    <Button
+        android:id="@+id/notif_stop"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:layout_marginStart="6dp"
+        android:text="@string/notif_stop"
+        android:textSize="9sp"
+        android:textStyle="bold"
+        android:textColor="#FFFFFF"
+        android:maxLines="1"
+        android:singleLine="true"
+        android:background="@drawable/notif_stop_circle" />
+</LinearLayout>

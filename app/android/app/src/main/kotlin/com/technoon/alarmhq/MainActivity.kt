@@ -277,14 +277,6 @@ class MainActivity : Activity() {
                     } catch (_: Exception) { /* best effort */ }
                     result.success(null)
                 }
-                // ---- atomic clock (v2.51): open system Date & Time settings
-                // so the user can match the floating atomic clock.
-                "openDateTimeSettings" -> {
-                    try {
-                        startActivity(Intent(Settings.ACTION_DATE_SETTINGS))
-                    } catch (_: Exception) { /* best effort */ }
-                    result.success(null)
-                }
                 // ---- device info (v2.18) ----
                 "sdkInt" ->
                     result.success(Build.VERSION.SDK_INT)
