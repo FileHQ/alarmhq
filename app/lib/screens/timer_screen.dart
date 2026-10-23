@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:audioplayers/audioplayers.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
@@ -121,18 +122,29 @@ class _TimerScreenState extends State<TimerScreen> {
     _showDoneDialog();
   }
 
-  /// Three short system beeps with 400ms gaps + vibration.
-  /// No audio packages needed.
+  /// Three loud beeps (bundled WAV) + vibration.
+  /// v2.54: audioplayers is reliable across devices; SystemSound.alert
+  /// was silent on some phones.
   Future<void> _playBeeps() async {
     if (_beeping) return;
     _beeping = true;
-    for (var i = 0; i < 3; i++) {
-      if (!mounted) return;
-      SystemSound.play(SystemSoundType.alert);
-      HapticFeedback.vibrate();
-      await Future.delayed(const Duration(milliseconds: 400));
+    final player = AudioPlayer();
+    try {
+      for (var i = 0; i < 3; i++) {
+        if (!mounted) break;
+        try {
+          await player.play(AssetSource('tones/timer_beep.wav'));
+        } catch (_) {
+          // Fallback to system sound if asset fails.
+          SystemSound.play(SystemSoundType.alert);
+        }
+        HapticFeedback.vibrate();
+        await Future.delayed(const Duration(milliseconds: 600));
+      }
+    } finally {
+      await player.dispose();
+      if (mounted) setState(() => _beeping = false);
     }
-    if (mounted) setState(() => _beeping = false);
   }
 
   void _showDoneDialog() {
