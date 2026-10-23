@@ -485,24 +485,31 @@ class _CityPickerScreenState extends State<_CityPickerScreen> {
       appBar: AppBar(
         backgroundColor: Colors.transparent,
         elevation: 0,
-        title: TextField(
-          controller: _controller,
-          autofocus: true,
-          onChanged: (v) => setState(() => _query = v),
-          style: const TextStyle(fontWeight: FontWeight.w400),
-          decoration: InputDecoration(
-            hintText: l10n.searchCityHint,
-            hintStyle: const TextStyle(fontWeight: FontWeight.w400),
-            border: InputBorder.none,
-            suffixIcon: _query.isEmpty
-                ? null
-                : IconButton(
-                    icon: const Icon(Icons.clear),
-                    onPressed: () {
-                      _controller.clear();
-                      setState(() => _query = '');
-                    },
-                  ),
+        // v2.56: proper padding for the search field (was cramped).
+        titleSpacing: 0,
+        title: Padding(
+          padding: const EdgeInsets.symmetric(vertical: 8),
+          child: TextField(
+            controller: _controller,
+            autofocus: true,
+            onChanged: (v) => setState(() => _query = v),
+            style: const TextStyle(fontWeight: FontWeight.w400),
+            decoration: InputDecoration(
+              hintText: l10n.searchCityHint,
+              hintStyle: const TextStyle(fontWeight: FontWeight.w400),
+              border: InputBorder.none,
+              contentPadding: const EdgeInsets.symmetric(
+                  horizontal: 12, vertical: 12),
+              suffixIcon: _query.isEmpty
+                  ? null
+                  : IconButton(
+                      icon: const Icon(Icons.clear),
+                      onPressed: () {
+                        _controller.clear();
+                        setState(() => _query = '');
+                      },
+                    ),
+            ),
           ),
         ),
       ),
