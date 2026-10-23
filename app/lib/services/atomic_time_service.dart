@@ -65,19 +65,19 @@ class AtomicTimeService extends ChangeNotifier {
     }
   }
 
-  /// HTTPS time sync via worldtimeapi.org. Returns true on success.
+  /// HTTPS time sync via timeapi.io. Returns true on success.
   Future<bool> _syncViaHttps() async {
     try {
       final before = DateTime.now();
       final resp = await http
-          .get(Uri.parse('https://worldtimeapi.org/api/timezone/Etc/UTC'))
+          .get(Uri.parse('https://timeapi.io/api/time/current/zone?timeZone=UTC'))
           .timeout(const Duration(seconds: 10));
       final after = DateTime.now();
       if (resp.statusCode != 200) return false;
       final data = jsonDecode(resp.body) as Map<String, dynamic>;
-      final utcStr = data['utc_datetime'] as String?;
-      if (utcStr == null) return false;
-      final serverTime = DateTime.parse(utcStr);
+      final dtStr = data['dateTime'] as String?;
+      if (dtStr == null) return false;
+      final serverTime = DateTime.parse(dtStr);
       // RTT/2 correction: assume symmetric latency.
       final rtt = after.difference(before);
       final corrected = serverTime.add(rtt ~/ 2);
