@@ -49,6 +49,51 @@ class _AlarmHQAppState extends State<AlarmHQApp>
     if (state == AppLifecycleState.resumed) _checkRinging();
   }
 
+  /// v2.61: System back button handler (her order).
+  /// PopScope inside home: doesn't work — the root Navigator handles
+  /// back at app level. didPopRoute is the correct hook.
+  /// - On non-main tab: go back to Alarms tab.
+  /// - On main tab: confirm dialog "Do you want to close the app?"
+  @override
+  Future<bool> didPopRoute() async {
+    if (!_onboarded || !_ready) return false;
+    if (_tab != 0) {
+      setState(() => _tab = 0);
+      return true;
+    }
+    // On main screen: ask "Do you want to close the app?"
+    final l10n = AppLocalizations.of(_scaffoldKey.currentContext!);
+    final confirm = await showDialog<bool>(
+      context: _scaffoldKey.currentContext!,
+      builder: (ctx) => AlertDialog(
+        title: Text(
+          l10n?.exitTitle ?? 'Close app?',
+          style: const TextStyle(fontWeight: FontWeight.w400, fontSize: 17),
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.of(ctx).pop(false),
+            child: Text(
+              l10n?.exitNo ?? 'No',
+              style: const TextStyle(fontWeight: FontWeight.w400),
+            ),
+          ),
+          TextButton(
+            onPressed: () => Navigator.of(ctx).pop(true),
+            child: Text(
+              l10n?.exitYes ?? 'Yes',
+              style: const TextStyle(fontWeight: FontWeight.w400),
+            ),
+          ),
+        ],
+      ),
+    );
+    if (confirm == true) {
+      SystemNavigator.pop();
+    }
+    return true;
+  }
+
   Future<void> _checkRinging() async {
     if (!_ready || _ringingDialogOpen) return;
     final ctx = _scaffoldKey.currentContext;
@@ -136,53 +181,7 @@ class _AlarmHQAppState extends State<AlarmHQApp>
               : Builder(
               builder: (context) {
                 final l10n = AppLocalizations.of(context)!;
-                // v2.60: back button behavior (her orders):
-                // - on non-main tab: go back to Alarms tab
-                // - on main tab (Alarms): confirm dialog "close app?"
-                return PopScope(
-                  canPop: false,
-                  onPopInvokedWithResult: (didPop, result) async {
-                    if (didPop) return;
-                    if (_tab != 0) {
-                      setState(() => _tab = 0);
-                      return;
-                    }
-                    // On main screen: ask "Do you want to close the app?"
-                    final confirm = await showDialog<bool>(
-                      context: context,
-                      builder: (ctx) => AlertDialog(
-                        title: Text(
-                          l10n.exitTitle,
-                          style: const TextStyle(
-                              fontWeight: FontWeight.w400, fontSize: 17),
-                        ),
-                        actions: [
-                          TextButton(
-                            onPressed: () =>
-                                Navigator.of(ctx).pop(false),
-                            child: Text(
-                              l10n.exitNo,
-                              style: const TextStyle(
-                                  fontWeight: FontWeight.w400),
-                            ),
-                          ),
-                          TextButton(
-                            onPressed: () =>
-                                Navigator.of(ctx).pop(true),
-                            child: Text(
-                              l10n.exitYes,
-                              style: const TextStyle(
-                                  fontWeight: FontWeight.w400),
-                            ),
-                          ),
-                        ],
-                      ),
-                    );
-                    if (confirm == true) {
-                      SystemNavigator.pop();
-                    }
-                  },
-                  child: Scaffold(
+                return Scaffold(
                     key: _scaffoldKey,
                     body: _tab == 0
                         ? AlarmListScreen(repo: _repo, settings: _settings)
@@ -218,8 +217,7 @@ class _AlarmHQAppState extends State<AlarmHQApp>
                       ),
                     ],
                     ),
-                  ),
-                );
+                  );
               },
             ),
     );
