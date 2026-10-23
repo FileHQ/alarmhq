@@ -33,18 +33,32 @@ class _CityEntry {
   final String city;
   final String country;
   final String zone;
+  final String cityUr;
+  final String countryUr;
 
   const _CityEntry({
     required this.city,
     required this.country,
     required this.zone,
+    this.cityUr = '',
+    this.countryUr = '',
   });
 
   factory _CityEntry.fromJson(Map<String, dynamic> j) => _CityEntry(
         city: (j['city'] as String?) ?? '',
         country: (j['country'] as String?) ?? '',
         zone: (j['zone'] as String?) ?? '',
+        cityUr: (j['city_ur'] as String?) ?? '',
+        countryUr: (j['country_ur'] as String?) ?? '',
       );
+
+  Map<String, dynamic> toJson() => {
+        'city': city,
+        'country': country,
+        'zone': zone,
+        if (cityUr.isNotEmpty) 'city_ur': cityUr,
+        if (countryUr.isNotEmpty) 'country_ur': countryUr,
+      };
 }
 
 class _WorldClockScreenState extends State<WorldClockScreen> {
@@ -156,9 +170,7 @@ class _WorldClockScreenState extends State<WorldClockScreen> {
 
   Future<void> _save() async {
     try {
-      final list = _cities
-          .map((c) => {'city': c.city, 'country': c.country, 'zone': c.zone})
-          .toList();
+      final list = _cities.map((c) => c.toJson()).toList();
       await PrefsService.putString(_prefsKey, jsonEncode(list));
     } catch (_) {}
   }
@@ -179,8 +191,11 @@ class _WorldClockScreenState extends State<WorldClockScreen> {
   }
 
   String _fmtTime(tz.TZDateTime t) {
+    // v2.55: 12-hour format with AM/PM (her order).
+    final h12 = t.hour % 12 == 0 ? 12 : t.hour % 12;
+    final ampm = t.hour < 12 ? 'AM' : 'PM';
     String p2(int n) => n.toString().padLeft(2, '0');
-    return '${p2(t.hour)}:${p2(t.minute)}:${p2(t.second)}';
+    return '$h12:${p2(t.minute)}:${p2(t.second)} $ampm';
   }
 
   String _fmtDate(tz.TZDateTime t) {
@@ -353,6 +368,13 @@ class _WorldClockScreenState extends State<WorldClockScreen> {
     final t = _cityTime(city.zone);
     final timeColor = isLight ? AppTheme.lightRingsText : AppTheme.emerald;
     final subColor = isLight ? Colors.black54 : Colors.white70;
+    // v2.55: Urdu names when app is in Urdu.
+    final isUrdu =
+        Localizations.localeOf(context).languageCode == 'ur';
+    final cityName =
+        isUrdu && city.cityUr.isNotEmpty ? city.cityUr : city.city;
+    final countryName =
+        isUrdu && city.countryUr.isNotEmpty ? city.countryUr : city.country;
     return Container(
       margin: const EdgeInsets.only(bottom: 12),
       padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
@@ -371,15 +393,15 @@ class _WorldClockScreenState extends State<WorldClockScreen> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  city.city,
+                  cityName,
                   style: const TextStyle(
                     fontWeight: FontWeight.w400,
                     fontSize: 17,
                   ),
                 ),
-                const SizedBox(height: 2),
+                const SizedBox(height: 6),
                 Text(
-                  city.country,
+                  countryName,
                   style: TextStyle(
                     fontWeight: FontWeight.w400,
                     fontSize: 13,
@@ -447,7 +469,9 @@ class _CityPickerScreenState extends State<_CityPickerScreen> {
     if (q.isEmpty) return widget.allCities;
     return widget.allCities.where((e) {
       return e.city.toLowerCase().contains(q) ||
-          e.country.toLowerCase().contains(q);
+          e.country.toLowerCase().contains(q) ||
+          e.cityUr.contains(_query.trim()) ||
+          e.countryUr.contains(_query.trim());
     }).toList();
   }
 
@@ -494,48 +518,67 @@ class _CityPickerScreenState extends State<_CityPickerScreen> {
             offset = '';
           }
           final subColor = isLight ? Colors.black54 : Colors.white70;
-          return ListTile(
-            title: Text(
-              e.city,
-              style: const TextStyle(fontWeight: FontWeight.w400, fontSize: 16),
-            ),
-            subtitle: Text(
-              e.country,
-              style: TextStyle(
-                fontWeight: FontWeight.w400,
-                fontSize: 13,
-                color: subColor,
-              ),
-            ),
-            trailing: Row(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                if (offset.isNotEmpty)
-                  Container(
-                    padding: const EdgeInsets.symmetric(
-                        horizontal: 8, vertical: 4),
-                    decoration: BoxDecoration(
-                      color: isLight
-                          ? AppTheme.lightCardBg
-                          : AppTheme.charcoalSurface,
-                      borderRadius: BorderRadius.circular(8),
-                    ),
-                    child: Text(
-                      offset,
-                      style: const TextStyle(
-                        fontWeight: FontWeight.w400,
-                        fontSize: 12,
-                      ),
+          final isUrdu =
+              Localizations.localeOf(context).languageCode == 'ur';
+          // v2.55: custom layout with proper spacing (ListTile was cramped),
+          // Urdu names when app is in Urdu.
+          final cityName = isUrdu && e.cityUr.isNotEmpty ? e.cityUr : e.city;
+          final countryName =
+              isUrdu && e.countryUr.isNotEmpty ? e.countryUr : e.country;
+          return InkWell(
+            onTap: added ? null : () => Navigator.of(context).pop(e),
+            child: Padding(
+              padding: const EdgeInsets.symmetric(
+                  horizontal: 16, vertical: 12),
+              child: Row(
+                children: [
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          cityName,
+                          style: const TextStyle(
+                              fontWeight: FontWeight.w400, fontSize: 16),
+                        ),
+                        const SizedBox(height: 6),
+                        Text(
+                          countryName,
+                          style: TextStyle(
+                            fontWeight: FontWeight.w400,
+                            fontSize: 13,
+                            color: subColor,
+                          ),
+                        ),
+                      ],
                     ),
                   ),
-                const SizedBox(width: 8),
-                Icon(
-                  added ? Icons.check_circle : Icons.add_circle_outline,
-                  color: added ? AppTheme.emerald : subColor,
-                ),
-              ],
+                  if (offset.isNotEmpty)
+                    Container(
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 8, vertical: 4),
+                      decoration: BoxDecoration(
+                        color: isLight
+                            ? AppTheme.lightCardBg
+                            : AppTheme.charcoalSurface,
+                        borderRadius: BorderRadius.circular(8),
+                      ),
+                      child: Text(
+                        offset,
+                        style: const TextStyle(
+                          fontWeight: FontWeight.w400,
+                          fontSize: 12,
+                        ),
+                      ),
+                    ),
+                  const SizedBox(width: 8),
+                  Icon(
+                    added ? Icons.check_circle : Icons.add_circle_outline,
+                    color: added ? AppTheme.emerald : subColor,
+                  ),
+                ],
+              ),
             ),
-            onTap: added ? null : () => Navigator.of(context).pop(e),
           );
         },
       ),
