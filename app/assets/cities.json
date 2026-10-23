@@ -185,6 +185,11 @@
   "zone": "Australia/Sydney"
  },
  {
+  "city": "Salzburg",
+  "country": "Austria",
+  "zone": "Europe/Vienna"
+ },
+ {
   "city": "Vienna",
   "country": "Austria",
   "zone": "Europe/Vienna"
@@ -193,6 +198,16 @@
   "city": "Baku",
   "country": "Azerbaijan",
   "zone": "Asia/Baku"
+ },
+ {
+  "city": "Manama",
+  "country": "Bahrain",
+  "zone": "Asia/Bahrain"
+ },
+ {
+  "city": "Chittagong",
+  "country": "Bangladesh",
+  "zone": "Asia/Dhaka"
  },
  {
   "city": "Dhaka",
@@ -208,6 +223,11 @@
   "city": "Minsk",
   "country": "Belarus",
   "zone": "Europe/Minsk"
+ },
+ {
+  "city": "Antwerp",
+  "country": "Belgium",
+  "zone": "Europe/Brussels"
  },
  {
   "city": "Brussels",
@@ -253,6 +273,11 @@
   "city": "Boa Vista",
   "country": "Brazil",
   "zone": "America/Boa_Vista"
+ },
+ {
+  "city": "Brasilia",
+  "country": "Brazil",
+  "zone": "America/Sao_Paulo"
  },
  {
   "city": "Campo Grande",
@@ -303,6 +328,11 @@
   "city": "Rio Branco",
   "country": "Brazil",
   "zone": "America/Rio_Branco"
+ },
+ {
+  "city": "Rio de Janeiro",
+  "country": "Brazil",
+  "zone": "America/Sao_Paulo"
  },
  {
   "city": "Santarem",
@@ -380,6 +410,11 @@
   "zone": "America/Moncton"
  },
  {
+  "city": "Montreal",
+  "country": "Canada",
+  "zone": "America/Toronto"
+ },
+ {
   "city": "Rankin Inlet",
   "country": "Canada",
   "zone": "America/Rankin_Inlet"
@@ -455,7 +490,22 @@
   "zone": "America/Santiago"
  },
  {
+  "city": "Beijing",
+  "country": "China",
+  "zone": "Asia/Shanghai"
+ },
+ {
+  "city": "Guangzhou",
+  "country": "China",
+  "zone": "Asia/Shanghai"
+ },
+ {
   "city": "Shanghai",
+  "country": "China",
+  "zone": "Asia/Shanghai"
+ },
+ {
+  "city": "Shenzhen",
   "country": "China",
   "zone": "Asia/Shanghai"
  },
@@ -500,6 +550,11 @@
   "zone": "Europe/Prague"
  },
  {
+  "city": "Aarhus",
+  "country": "Denmark",
+  "zone": "Europe/Copenhagen"
+ },
+ {
   "city": "Santo Domingo",
   "country": "Dominican Republic",
   "zone": "America/Santo_Domingo"
@@ -513,6 +568,11 @@
   "city": "Guayaquil",
   "country": "Ecuador",
   "zone": "America/Guayaquil"
+ },
+ {
+  "city": "Alexandria",
+  "country": "Egypt",
+  "zone": "Africa/Cairo"
  },
  {
   "city": "Cairo",
@@ -550,6 +610,21 @@
   "zone": "Europe/Helsinki"
  },
  {
+  "city": "Tampere",
+  "country": "Finland",
+  "zone": "Europe/Helsinki"
+ },
+ {
+  "city": "Lyon",
+  "country": "France",
+  "zone": "Europe/Paris"
+ },
+ {
+  "city": "Marseille",
+  "country": "France",
+  "zone": "Europe/Paris"
+ },
+ {
   "city": "Paris",
   "country": "France",
   "zone": "Europe/Paris"
@@ -581,6 +656,21 @@
  },
  {
   "city": "Berlin",
+  "country": "Germany",
+  "zone": "Europe/Berlin"
+ },
+ {
+  "city": "Frankfurt",
+  "country": "Germany",
+  "zone": "Europe/Berlin"
+ },
+ {
+  "city": "Hamburg",
+  "country": "Germany",
+  "zone": "Europe/Berlin"
+ },
+ {
+  "city": "Munich",
   "country": "Germany",
   "zone": "Europe/Berlin"
  },
@@ -655,7 +745,37 @@
   "zone": "Europe/Budapest"
  },
  {
+  "city": "Ahmedabad",
+  "country": "India",
+  "zone": "Asia/Kolkata"
+ },
+ {
+  "city": "Bangalore",
+  "country": "India",
+  "zone": "Asia/Kolkata"
+ },
+ {
+  "city": "Chennai",
+  "country": "India",
+  "zone": "Asia/Kolkata"
+ },
+ {
+  "city": "Delhi",
+  "country": "India",
+  "zone": "Asia/Kolkata"
+ },
+ {
+  "city": "Hyderabad",
+  "country": "India",
+  "zone": "Asia/Kolkata"
+ },
+ {
   "city": "Kolkata",
+  "country": "India",
+  "zone": "Asia/Kolkata"
+ },
+ {
+  "city": "Mumbai",
   "country": "India",
   "zone": "Asia/Kolkata"
  },
@@ -675,9 +795,29 @@
   "zone": "Asia/Makassar"
  },
  {
+  "city": "Medan",
+  "country": "Indonesia",
+  "zone": "Asia/Jakarta"
+ },
+ {
   "city": "Pontianak",
   "country": "Indonesia",
   "zone": "Asia/Pontianak"
+ },
+ {
+  "city": "Surabaya",
+  "country": "Indonesia",
+  "zone": "Asia/Jakarta"
+ },
+ {
+  "city": "Isfahan",
+  "country": "Iran",
+  "zone": "Asia/Tehran"
+ },
+ {
+  "city": "Mashhad",
+  "country": "Iran",
+  "zone": "Asia/Tehran"
  },
  {
   "city": "Tehran",
@@ -690,14 +830,34 @@
   "zone": "Asia/Baghdad"
  },
  {
+  "city": "Basra",
+  "country": "Iraq",
+  "zone": "Asia/Baghdad"
+ },
+ {
   "city": "Dublin",
   "country": "Ireland",
   "zone": "Europe/Dublin"
  },
  {
+  "city": "Haifa",
+  "country": "Israel",
+  "zone": "Asia/Jerusalem"
+ },
+ {
   "city": "Jerusalem",
   "country": "Israel",
   "zone": "Asia/Jerusalem"
+ },
+ {
+  "city": "Milan",
+  "country": "Italy",
+  "zone": "Europe/Rome"
+ },
+ {
+  "city": "Naples",
+  "country": "Italy",
+  "zone": "Europe/Rome"
  },
  {
   "city": "Rome",
@@ -713,6 +873,16 @@
   "city": "Jamaica",
   "country": "Jamaica",
   "zone": "America/Jamaica"
+ },
+ {
+  "city": "Kyoto",
+  "country": "Japan",
+  "zone": "Asia/Tokyo"
+ },
+ {
+  "city": "Osaka",
+  "country": "Japan",
+  "zone": "Asia/Tokyo"
  },
  {
   "city": "Tokyo",
@@ -780,6 +950,11 @@
   "zone": "Pacific/Tarawa"
  },
  {
+  "city": "Kuwait City",
+  "country": "Kuwait",
+  "zone": "Asia/Kuwait"
+ },
+ {
   "city": "Bishkek",
   "country": "Kyrgyzstan",
   "zone": "Asia/Bishkek"
@@ -813,6 +988,11 @@
   "city": "Macau",
   "country": "Macau",
   "zone": "Asia/Macau"
+ },
+ {
+  "city": "George Town",
+  "country": "Malaysia",
+  "zone": "Asia/Kuala_Lumpur"
  },
  {
   "city": "Kuching",
@@ -955,6 +1135,11 @@
   "zone": "Asia/Kathmandu"
  },
  {
+  "city": "Rotterdam",
+  "country": "Netherlands",
+  "zone": "Europe/Amsterdam"
+ },
+ {
   "city": "Noumea",
   "country": "New Caledonia",
   "zone": "Pacific/Noumea"
@@ -995,7 +1180,57 @@
   "zone": "Asia/Pyongyang"
  },
  {
+  "city": "Bergen",
+  "country": "Norway",
+  "zone": "Europe/Oslo"
+ },
+ {
+  "city": "Muscat",
+  "country": "Oman",
+  "zone": "Asia/Muscat"
+ },
+ {
+  "city": "Faisalabad",
+  "country": "Pakistan",
+  "zone": "Asia/Karachi"
+ },
+ {
+  "city": "Islamabad",
+  "country": "Pakistan",
+  "zone": "Asia/Karachi"
+ },
+ {
   "city": "Karachi",
+  "country": "Pakistan",
+  "zone": "Asia/Karachi"
+ },
+ {
+  "city": "Lahore",
+  "country": "Pakistan",
+  "zone": "Asia/Karachi"
+ },
+ {
+  "city": "Multan",
+  "country": "Pakistan",
+  "zone": "Asia/Karachi"
+ },
+ {
+  "city": "Peshawar",
+  "country": "Pakistan",
+  "zone": "Asia/Karachi"
+ },
+ {
+  "city": "Quetta",
+  "country": "Pakistan",
+  "zone": "Asia/Karachi"
+ },
+ {
+  "city": "Rawalpindi",
+  "country": "Pakistan",
+  "zone": "Asia/Karachi"
+ },
+ {
+  "city": "Sialkot",
   "country": "Pakistan",
   "zone": "Asia/Karachi"
  },
@@ -1040,6 +1275,11 @@
   "zone": "America/Lima"
  },
  {
+  "city": "Cebu",
+  "country": "Philippines",
+  "zone": "Asia/Manila"
+ },
+ {
   "city": "Manila",
   "country": "Philippines",
   "zone": "Asia/Manila"
@@ -1048,6 +1288,11 @@
   "city": "Pitcairn",
   "country": "Pitcairn Islands",
   "zone": "Pacific/Pitcairn"
+ },
+ {
+  "city": "Krakow",
+  "country": "Poland",
+  "zone": "Europe/Warsaw"
  },
  {
   "city": "Warsaw",
@@ -1073,6 +1318,11 @@
   "city": "Puerto Rico",
   "country": "Puerto Rico",
   "zone": "America/Puerto_Rico"
+ },
+ {
+  "city": "Doha",
+  "country": "Qatar",
+  "zone": "Asia/Qatar"
  },
  {
   "city": "Qatar",
@@ -1160,6 +1410,11 @@
   "zone": "Asia/Omsk"
  },
  {
+  "city": "Saint Petersburg",
+  "country": "Russia",
+  "zone": "Europe/Moscow"
+ },
+ {
   "city": "Sakhalin",
   "country": "Russia",
   "zone": "Asia/Sakhalin"
@@ -1235,6 +1490,26 @@
   "zone": "Africa/Sao_Tome"
  },
  {
+  "city": "Dammam",
+  "country": "Saudi Arabia",
+  "zone": "Asia/Riyadh"
+ },
+ {
+  "city": "Jeddah",
+  "country": "Saudi Arabia",
+  "zone": "Asia/Riyadh"
+ },
+ {
+  "city": "Madinah",
+  "country": "Saudi Arabia",
+  "zone": "Asia/Riyadh"
+ },
+ {
+  "city": "Makkah",
+  "country": "Saudi Arabia",
+  "zone": "Asia/Riyadh"
+ },
+ {
   "city": "Riyadh",
   "country": "Saudi Arabia",
   "zone": "Asia/Riyadh"
@@ -1255,6 +1530,16 @@
   "zone": "Pacific/Guadalcanal"
  },
  {
+  "city": "Cape Town",
+  "country": "South Africa",
+  "zone": "Africa/Johannesburg"
+ },
+ {
+  "city": "Durban",
+  "country": "South Africa",
+  "zone": "Africa/Johannesburg"
+ },
+ {
   "city": "Johannesburg",
   "country": "South Africa",
   "zone": "Africa/Johannesburg"
@@ -1265,6 +1550,11 @@
   "zone": "Atlantic/South_Georgia"
  },
  {
+  "city": "Busan",
+  "country": "South Korea",
+  "zone": "Asia/Seoul"
+ },
+ {
   "city": "Seoul",
   "country": "South Korea",
   "zone": "Asia/Seoul"
@@ -1273,6 +1563,11 @@
   "city": "Juba",
   "country": "South Sudan",
   "zone": "Africa/Juba"
+ },
+ {
+  "city": "Barcelona",
+  "country": "Spain",
+  "zone": "Europe/Madrid"
  },
  {
   "city": "Canary",
@@ -1305,6 +1600,16 @@
   "zone": "America/Paramaribo"
  },
  {
+  "city": "Gothenburg",
+  "country": "Sweden",
+  "zone": "Europe/Stockholm"
+ },
+ {
+  "city": "Geneva",
+  "country": "Switzerland",
+  "zone": "Europe/Zurich"
+ },
+ {
   "city": "Zurich",
   "country": "Switzerland",
   "zone": "Europe/Zurich"
@@ -1330,6 +1635,11 @@
   "zone": "Asia/Bangkok"
  },
  {
+  "city": "Chiang Mai",
+  "country": "Thailand",
+  "zone": "Asia/Bangkok"
+ },
+ {
   "city": "Dili",
   "country": "Timor-Leste",
   "zone": "Asia/Dili"
@@ -1350,7 +1660,17 @@
   "zone": "Africa/Tunis"
  },
  {
+  "city": "Ankara",
+  "country": "Turkey",
+  "zone": "Europe/Istanbul"
+ },
+ {
   "city": "Istanbul",
+  "country": "Turkey",
+  "zone": "Europe/Istanbul"
+ },
+ {
+  "city": "Izmir",
   "country": "Turkey",
   "zone": "Europe/Istanbul"
  },
@@ -1370,12 +1690,32 @@
   "zone": "Europe/Kyiv"
  },
  {
+  "city": "Abu Dhabi",
+  "country": "United Arab Emirates",
+  "zone": "Asia/Dubai"
+ },
+ {
   "city": "Dubai",
   "country": "United Arab Emirates",
   "zone": "Asia/Dubai"
  },
  {
+  "city": "Sharjah",
+  "country": "United Arab Emirates",
+  "zone": "Asia/Dubai"
+ },
+ {
+  "city": "Birmingham",
+  "country": "United Kingdom",
+  "zone": "Europe/London"
+ },
+ {
   "city": "London",
+  "country": "United Kingdom",
+  "zone": "Europe/London"
+ },
+ {
+  "city": "Manchester",
   "country": "United Kingdom",
   "zone": "Europe/London"
  },
@@ -1398,6 +1738,11 @@
   "city": "Boise",
   "country": "United States",
   "zone": "America/Boise"
+ },
+ {
+  "city": "Boston",
+  "country": "United States",
+  "zone": "America/New_York"
  },
  {
   "city": "Center",
@@ -1423,6 +1768,11 @@
   "city": "Honolulu",
   "country": "United States",
   "zone": "Pacific/Honolulu"
+ },
+ {
+  "city": "Houston",
+  "country": "United States",
+  "zone": "America/Chicago"
  },
  {
   "city": "Indianapolis",
@@ -1495,6 +1845,11 @@
   "zone": "America/Phoenix"
  },
  {
+  "city": "San Francisco",
+  "country": "United States",
+  "zone": "America/Los_Angeles"
+ },
+ {
   "city": "Sitka",
   "country": "United States",
   "zone": "America/Sitka"
@@ -1513,6 +1868,11 @@
   "city": "Vincennes",
   "country": "United States",
   "zone": "America/Indiana/Vincennes"
+ },
+ {
+  "city": "Washington",
+  "country": "United States",
+  "zone": "America/New_York"
  },
  {
   "city": "Winamac",
@@ -1548,6 +1908,11 @@
   "city": "Caracas",
   "country": "Venezuela",
   "zone": "America/Caracas"
+ },
+ {
+  "city": "Hanoi",
+  "country": "Vietnam",
+  "zone": "Asia/Ho_Chi_Minh"
  },
  {
   "city": "Ho Chi Minh",
