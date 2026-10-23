@@ -1,0 +1,5329 @@
+{
+  "hijri_year": 1447,
+  "coverage_start": "2025-06-27",
+  "generated_at": "2026-10-17T14:38:12.542Z",
+  "baseline": "islamic-umalqura (Intl)",
+  "days": {
+    "2025-06-26": {
+      "hijri": "1447-01-01",
+      "year": 1447,
+      "month": 1,
+      "day": 1,
+      "month_name": {
+        "en": "Muharram",
+        "ur": "محرم"
+      },
+      "confidence": "estimated"
+    },
+    "2025-06-27": {
+      "hijri": "1447-01-01",
+      "year": 1447,
+      "month": 1,
+      "day": 1,
+      "month_name": {
+        "en": "Muharram",
+        "ur": "محرم"
+      },
+      "confidence": "confirmed",
+      "sources": [
+        "https://www.radio.gov.pk/26-06-2025/muharram-ul-haram-moon-sighted-in-country-tomorrow-will-be-1st-of-muharram-1447-hijri",
+        "https://www.dawn.com/news/1920308"
+      ]
+    },
+    "2025-06-28": {
+      "hijri": "1447-01-02",
+      "year": 1447,
+      "month": 1,
+      "day": 2,
+      "month_name": {
+        "en": "Muharram",
+        "ur": "محرم"
+      },
+      "confidence": "confirmed",
+      "sources": [
+        "https://www.radio.gov.pk/26-06-2025/muharram-ul-haram-moon-sighted-in-country-tomorrow-will-be-1st-of-muharram-1447-hijri",
+        "https://www.dawn.com/news/1920308"
+      ]
+    },
+    "2025-06-29": {
+      "hijri": "1447-01-03",
+      "year": 1447,
+      "month": 1,
+      "day": 3,
+      "month_name": {
+        "en": "Muharram",
+        "ur": "محرم"
+      },
+      "confidence": "confirmed",
+      "sources": [
+        "https://www.radio.gov.pk/26-06-2025/muharram-ul-haram-moon-sighted-in-country-tomorrow-will-be-1st-of-muharram-1447-hijri",
+        "https://www.dawn.com/news/1920308"
+      ]
+    },
+    "2025-06-30": {
+      "hijri": "1447-01-04",
+      "year": 1447,
+      "month": 1,
+      "day": 4,
+      "month_name": {
+        "en": "Muharram",
+        "ur": "محرم"
+      },
+      "confidence": "confirmed",
+      "sources": [
+        "https://www.radio.gov.pk/26-06-2025/muharram-ul-haram-moon-sighted-in-country-tomorrow-will-be-1st-of-muharram-1447-hijri",
+        "https://www.dawn.com/news/1920308"
+      ]
+    },
+    "2025-07-01": {
+      "hijri": "1447-01-05",
+      "year": 1447,
+      "month": 1,
+      "day": 5,
+      "month_name": {
+        "en": "Muharram",
+        "ur": "محرم"
+      },
+      "confidence": "confirmed",
+      "sources": [
+        "https://www.radio.gov.pk/26-06-2025/muharram-ul-haram-moon-sighted-in-country-tomorrow-will-be-1st-of-muharram-1447-hijri",
+        "https://www.dawn.com/news/1920308"
+      ]
+    },
+    "2025-07-02": {
+      "hijri": "1447-01-06",
+      "year": 1447,
+      "month": 1,
+      "day": 6,
+      "month_name": {
+        "en": "Muharram",
+        "ur": "محرم"
+      },
+      "confidence": "confirmed",
+      "sources": [
+        "https://www.radio.gov.pk/26-06-2025/muharram-ul-haram-moon-sighted-in-country-tomorrow-will-be-1st-of-muharram-1447-hijri",
+        "https://www.dawn.com/news/1920308"
+      ]
+    },
+    "2025-07-03": {
+      "hijri": "1447-01-07",
+      "year": 1447,
+      "month": 1,
+      "day": 7,
+      "month_name": {
+        "en": "Muharram",
+        "ur": "محرم"
+      },
+      "confidence": "confirmed",
+      "sources": [
+        "https://www.radio.gov.pk/26-06-2025/muharram-ul-haram-moon-sighted-in-country-tomorrow-will-be-1st-of-muharram-1447-hijri",
+        "https://www.dawn.com/news/1920308"
+      ]
+    },
+    "2025-07-04": {
+      "hijri": "1447-01-08",
+      "year": 1447,
+      "month": 1,
+      "day": 8,
+      "month_name": {
+        "en": "Muharram",
+        "ur": "محرم"
+      },
+      "confidence": "confirmed",
+      "sources": [
+        "https://www.radio.gov.pk/26-06-2025/muharram-ul-haram-moon-sighted-in-country-tomorrow-will-be-1st-of-muharram-1447-hijri",
+        "https://www.dawn.com/news/1920308"
+      ]
+    },
+    "2025-07-05": {
+      "hijri": "1447-01-09",
+      "year": 1447,
+      "month": 1,
+      "day": 9,
+      "month_name": {
+        "en": "Muharram",
+        "ur": "محرم"
+      },
+      "confidence": "confirmed",
+      "sources": [
+        "https://www.radio.gov.pk/26-06-2025/muharram-ul-haram-moon-sighted-in-country-tomorrow-will-be-1st-of-muharram-1447-hijri",
+        "https://www.dawn.com/news/1920308"
+      ]
+    },
+    "2025-07-06": {
+      "hijri": "1447-01-10",
+      "year": 1447,
+      "month": 1,
+      "day": 10,
+      "month_name": {
+        "en": "Muharram",
+        "ur": "محرم"
+      },
+      "confidence": "confirmed",
+      "sources": [
+        "https://www.radio.gov.pk/26-06-2025/muharram-ul-haram-moon-sighted-in-country-tomorrow-will-be-1st-of-muharram-1447-hijri",
+        "https://www.dawn.com/news/1920308"
+      ]
+    },
+    "2025-07-07": {
+      "hijri": "1447-01-11",
+      "year": 1447,
+      "month": 1,
+      "day": 11,
+      "month_name": {
+        "en": "Muharram",
+        "ur": "محرم"
+      },
+      "confidence": "confirmed",
+      "sources": [
+        "https://www.radio.gov.pk/26-06-2025/muharram-ul-haram-moon-sighted-in-country-tomorrow-will-be-1st-of-muharram-1447-hijri",
+        "https://www.dawn.com/news/1920308"
+      ]
+    },
+    "2025-07-08": {
+      "hijri": "1447-01-12",
+      "year": 1447,
+      "month": 1,
+      "day": 12,
+      "month_name": {
+        "en": "Muharram",
+        "ur": "محرم"
+      },
+      "confidence": "confirmed",
+      "sources": [
+        "https://www.radio.gov.pk/26-06-2025/muharram-ul-haram-moon-sighted-in-country-tomorrow-will-be-1st-of-muharram-1447-hijri",
+        "https://www.dawn.com/news/1920308"
+      ]
+    },
+    "2025-07-09": {
+      "hijri": "1447-01-13",
+      "year": 1447,
+      "month": 1,
+      "day": 13,
+      "month_name": {
+        "en": "Muharram",
+        "ur": "محرم"
+      },
+      "confidence": "confirmed",
+      "sources": [
+        "https://www.radio.gov.pk/26-06-2025/muharram-ul-haram-moon-sighted-in-country-tomorrow-will-be-1st-of-muharram-1447-hijri",
+        "https://www.dawn.com/news/1920308"
+      ]
+    },
+    "2025-07-10": {
+      "hijri": "1447-01-14",
+      "year": 1447,
+      "month": 1,
+      "day": 14,
+      "month_name": {
+        "en": "Muharram",
+        "ur": "محرم"
+      },
+      "confidence": "confirmed",
+      "sources": [
+        "https://www.radio.gov.pk/26-06-2025/muharram-ul-haram-moon-sighted-in-country-tomorrow-will-be-1st-of-muharram-1447-hijri",
+        "https://www.dawn.com/news/1920308"
+      ]
+    },
+    "2025-07-11": {
+      "hijri": "1447-01-15",
+      "year": 1447,
+      "month": 1,
+      "day": 15,
+      "month_name": {
+        "en": "Muharram",
+        "ur": "محرم"
+      },
+      "confidence": "confirmed",
+      "sources": [
+        "https://www.radio.gov.pk/26-06-2025/muharram-ul-haram-moon-sighted-in-country-tomorrow-will-be-1st-of-muharram-1447-hijri",
+        "https://www.dawn.com/news/1920308"
+      ]
+    },
+    "2025-07-12": {
+      "hijri": "1447-01-16",
+      "year": 1447,
+      "month": 1,
+      "day": 16,
+      "month_name": {
+        "en": "Muharram",
+        "ur": "محرم"
+      },
+      "confidence": "confirmed",
+      "sources": [
+        "https://www.radio.gov.pk/26-06-2025/muharram-ul-haram-moon-sighted-in-country-tomorrow-will-be-1st-of-muharram-1447-hijri",
+        "https://www.dawn.com/news/1920308"
+      ]
+    },
+    "2025-07-13": {
+      "hijri": "1447-01-17",
+      "year": 1447,
+      "month": 1,
+      "day": 17,
+      "month_name": {
+        "en": "Muharram",
+        "ur": "محرم"
+      },
+      "confidence": "confirmed",
+      "sources": [
+        "https://www.radio.gov.pk/26-06-2025/muharram-ul-haram-moon-sighted-in-country-tomorrow-will-be-1st-of-muharram-1447-hijri",
+        "https://www.dawn.com/news/1920308"
+      ]
+    },
+    "2025-07-14": {
+      "hijri": "1447-01-18",
+      "year": 1447,
+      "month": 1,
+      "day": 18,
+      "month_name": {
+        "en": "Muharram",
+        "ur": "محرم"
+      },
+      "confidence": "confirmed",
+      "sources": [
+        "https://www.radio.gov.pk/26-06-2025/muharram-ul-haram-moon-sighted-in-country-tomorrow-will-be-1st-of-muharram-1447-hijri",
+        "https://www.dawn.com/news/1920308"
+      ]
+    },
+    "2025-07-15": {
+      "hijri": "1447-01-19",
+      "year": 1447,
+      "month": 1,
+      "day": 19,
+      "month_name": {
+        "en": "Muharram",
+        "ur": "محرم"
+      },
+      "confidence": "confirmed",
+      "sources": [
+        "https://www.radio.gov.pk/26-06-2025/muharram-ul-haram-moon-sighted-in-country-tomorrow-will-be-1st-of-muharram-1447-hijri",
+        "https://www.dawn.com/news/1920308"
+      ]
+    },
+    "2025-07-16": {
+      "hijri": "1447-01-20",
+      "year": 1447,
+      "month": 1,
+      "day": 20,
+      "month_name": {
+        "en": "Muharram",
+        "ur": "محرم"
+      },
+      "confidence": "confirmed",
+      "sources": [
+        "https://www.radio.gov.pk/26-06-2025/muharram-ul-haram-moon-sighted-in-country-tomorrow-will-be-1st-of-muharram-1447-hijri",
+        "https://www.dawn.com/news/1920308"
+      ]
+    },
+    "2025-07-17": {
+      "hijri": "1447-01-21",
+      "year": 1447,
+      "month": 1,
+      "day": 21,
+      "month_name": {
+        "en": "Muharram",
+        "ur": "محرم"
+      },
+      "confidence": "confirmed",
+      "sources": [
+        "https://www.radio.gov.pk/26-06-2025/muharram-ul-haram-moon-sighted-in-country-tomorrow-will-be-1st-of-muharram-1447-hijri",
+        "https://www.dawn.com/news/1920308"
+      ]
+    },
+    "2025-07-18": {
+      "hijri": "1447-01-22",
+      "year": 1447,
+      "month": 1,
+      "day": 22,
+      "month_name": {
+        "en": "Muharram",
+        "ur": "محرم"
+      },
+      "confidence": "confirmed",
+      "sources": [
+        "https://www.radio.gov.pk/26-06-2025/muharram-ul-haram-moon-sighted-in-country-tomorrow-will-be-1st-of-muharram-1447-hijri",
+        "https://www.dawn.com/news/1920308"
+      ]
+    },
+    "2025-07-19": {
+      "hijri": "1447-01-23",
+      "year": 1447,
+      "month": 1,
+      "day": 23,
+      "month_name": {
+        "en": "Muharram",
+        "ur": "محرم"
+      },
+      "confidence": "confirmed",
+      "sources": [
+        "https://www.radio.gov.pk/26-06-2025/muharram-ul-haram-moon-sighted-in-country-tomorrow-will-be-1st-of-muharram-1447-hijri",
+        "https://www.dawn.com/news/1920308"
+      ]
+    },
+    "2025-07-20": {
+      "hijri": "1447-01-24",
+      "year": 1447,
+      "month": 1,
+      "day": 24,
+      "month_name": {
+        "en": "Muharram",
+        "ur": "محرم"
+      },
+      "confidence": "confirmed",
+      "sources": [
+        "https://www.radio.gov.pk/26-06-2025/muharram-ul-haram-moon-sighted-in-country-tomorrow-will-be-1st-of-muharram-1447-hijri",
+        "https://www.dawn.com/news/1920308"
+      ]
+    },
+    "2025-07-21": {
+      "hijri": "1447-01-25",
+      "year": 1447,
+      "month": 1,
+      "day": 25,
+      "month_name": {
+        "en": "Muharram",
+        "ur": "محرم"
+      },
+      "confidence": "confirmed",
+      "sources": [
+        "https://www.radio.gov.pk/26-06-2025/muharram-ul-haram-moon-sighted-in-country-tomorrow-will-be-1st-of-muharram-1447-hijri",
+        "https://www.dawn.com/news/1920308"
+      ]
+    },
+    "2025-07-22": {
+      "hijri": "1447-01-26",
+      "year": 1447,
+      "month": 1,
+      "day": 26,
+      "month_name": {
+        "en": "Muharram",
+        "ur": "محرم"
+      },
+      "confidence": "confirmed",
+      "sources": [
+        "https://www.radio.gov.pk/26-06-2025/muharram-ul-haram-moon-sighted-in-country-tomorrow-will-be-1st-of-muharram-1447-hijri",
+        "https://www.dawn.com/news/1920308"
+      ]
+    },
+    "2025-07-23": {
+      "hijri": "1447-01-27",
+      "year": 1447,
+      "month": 1,
+      "day": 27,
+      "month_name": {
+        "en": "Muharram",
+        "ur": "محرم"
+      },
+      "confidence": "confirmed",
+      "sources": [
+        "https://www.radio.gov.pk/26-06-2025/muharram-ul-haram-moon-sighted-in-country-tomorrow-will-be-1st-of-muharram-1447-hijri",
+        "https://www.dawn.com/news/1920308"
+      ]
+    },
+    "2025-07-24": {
+      "hijri": "1447-01-28",
+      "year": 1447,
+      "month": 1,
+      "day": 28,
+      "month_name": {
+        "en": "Muharram",
+        "ur": "محرم"
+      },
+      "confidence": "confirmed",
+      "sources": [
+        "https://www.radio.gov.pk/26-06-2025/muharram-ul-haram-moon-sighted-in-country-tomorrow-will-be-1st-of-muharram-1447-hijri",
+        "https://www.dawn.com/news/1920308"
+      ]
+    },
+    "2025-07-25": {
+      "hijri": "1447-01-29",
+      "year": 1447,
+      "month": 1,
+      "day": 29,
+      "month_name": {
+        "en": "Muharram",
+        "ur": "محرم"
+      },
+      "confidence": "confirmed",
+      "sources": [
+        "https://www.radio.gov.pk/26-06-2025/muharram-ul-haram-moon-sighted-in-country-tomorrow-will-be-1st-of-muharram-1447-hijri",
+        "https://www.dawn.com/news/1920308"
+      ]
+    },
+    "2025-07-26": {
+      "hijri": "1447-01-30",
+      "year": 1447,
+      "month": 1,
+      "day": 30,
+      "month_name": {
+        "en": "Muharram",
+        "ur": "محرم"
+      },
+      "confidence": "confirmed",
+      "sources": [
+        "https://www.radio.gov.pk/26-06-2025/muharram-ul-haram-moon-sighted-in-country-tomorrow-will-be-1st-of-muharram-1447-hijri",
+        "https://www.dawn.com/news/1920308"
+      ]
+    },
+    "2025-07-27": {
+      "hijri": "1447-02-01",
+      "year": 1447,
+      "month": 2,
+      "day": 1,
+      "month_name": {
+        "en": "Safar",
+        "ur": "صفر"
+      },
+      "confidence": "confirmed",
+      "sources": [
+        "https://www.app.com.pk/national/safar-moon-not-sighted-islamic-month-to-begin-on-sunday-mora/",
+        "https://www.nation.com.pk/25-Jul-2025/safar-moon-not-sighted-announces-ruet-e-hilal-committee"
+      ]
+    },
+    "2025-07-28": {
+      "hijri": "1447-02-02",
+      "year": 1447,
+      "month": 2,
+      "day": 2,
+      "month_name": {
+        "en": "Safar",
+        "ur": "صفر"
+      },
+      "confidence": "confirmed",
+      "sources": [
+        "https://www.app.com.pk/national/safar-moon-not-sighted-islamic-month-to-begin-on-sunday-mora/",
+        "https://www.nation.com.pk/25-Jul-2025/safar-moon-not-sighted-announces-ruet-e-hilal-committee"
+      ]
+    },
+    "2025-07-29": {
+      "hijri": "1447-02-03",
+      "year": 1447,
+      "month": 2,
+      "day": 3,
+      "month_name": {
+        "en": "Safar",
+        "ur": "صفر"
+      },
+      "confidence": "confirmed",
+      "sources": [
+        "https://www.app.com.pk/national/safar-moon-not-sighted-islamic-month-to-begin-on-sunday-mora/",
+        "https://www.nation.com.pk/25-Jul-2025/safar-moon-not-sighted-announces-ruet-e-hilal-committee"
+      ]
+    },
+    "2025-07-30": {
+      "hijri": "1447-02-04",
+      "year": 1447,
+      "month": 2,
+      "day": 4,
+      "month_name": {
+        "en": "Safar",
+        "ur": "صفر"
+      },
+      "confidence": "confirmed",
+      "sources": [
+        "https://www.app.com.pk/national/safar-moon-not-sighted-islamic-month-to-begin-on-sunday-mora/",
+        "https://www.nation.com.pk/25-Jul-2025/safar-moon-not-sighted-announces-ruet-e-hilal-committee"
+      ]
+    },
+    "2025-07-31": {
+      "hijri": "1447-02-05",
+      "year": 1447,
+      "month": 2,
+      "day": 5,
+      "month_name": {
+        "en": "Safar",
+        "ur": "صفر"
+      },
+      "confidence": "confirmed",
+      "sources": [
+        "https://www.app.com.pk/national/safar-moon-not-sighted-islamic-month-to-begin-on-sunday-mora/",
+        "https://www.nation.com.pk/25-Jul-2025/safar-moon-not-sighted-announces-ruet-e-hilal-committee"
+      ]
+    },
+    "2025-08-01": {
+      "hijri": "1447-02-06",
+      "year": 1447,
+      "month": 2,
+      "day": 6,
+      "month_name": {
+        "en": "Safar",
+        "ur": "صفر"
+      },
+      "confidence": "confirmed",
+      "sources": [
+        "https://www.app.com.pk/national/safar-moon-not-sighted-islamic-month-to-begin-on-sunday-mora/",
+        "https://www.nation.com.pk/25-Jul-2025/safar-moon-not-sighted-announces-ruet-e-hilal-committee"
+      ]
+    },
+    "2025-08-02": {
+      "hijri": "1447-02-07",
+      "year": 1447,
+      "month": 2,
+      "day": 7,
+      "month_name": {
+        "en": "Safar",
+        "ur": "صفر"
+      },
+      "confidence": "confirmed",
+      "sources": [
+        "https://www.app.com.pk/national/safar-moon-not-sighted-islamic-month-to-begin-on-sunday-mora/",
+        "https://www.nation.com.pk/25-Jul-2025/safar-moon-not-sighted-announces-ruet-e-hilal-committee"
+      ]
+    },
+    "2025-08-03": {
+      "hijri": "1447-02-08",
+      "year": 1447,
+      "month": 2,
+      "day": 8,
+      "month_name": {
+        "en": "Safar",
+        "ur": "صفر"
+      },
+      "confidence": "confirmed",
+      "sources": [
+        "https://www.app.com.pk/national/safar-moon-not-sighted-islamic-month-to-begin-on-sunday-mora/",
+        "https://www.nation.com.pk/25-Jul-2025/safar-moon-not-sighted-announces-ruet-e-hilal-committee"
+      ]
+    },
+    "2025-08-04": {
+      "hijri": "1447-02-09",
+      "year": 1447,
+      "month": 2,
+      "day": 9,
+      "month_name": {
+        "en": "Safar",
+        "ur": "صفر"
+      },
+      "confidence": "confirmed",
+      "sources": [
+        "https://www.app.com.pk/national/safar-moon-not-sighted-islamic-month-to-begin-on-sunday-mora/",
+        "https://www.nation.com.pk/25-Jul-2025/safar-moon-not-sighted-announces-ruet-e-hilal-committee"
+      ]
+    },
+    "2025-08-05": {
+      "hijri": "1447-02-10",
+      "year": 1447,
+      "month": 2,
+      "day": 10,
+      "month_name": {
+        "en": "Safar",
+        "ur": "صفر"
+      },
+      "confidence": "confirmed",
+      "sources": [
+        "https://www.app.com.pk/national/safar-moon-not-sighted-islamic-month-to-begin-on-sunday-mora/",
+        "https://www.nation.com.pk/25-Jul-2025/safar-moon-not-sighted-announces-ruet-e-hilal-committee"
+      ]
+    },
+    "2025-08-06": {
+      "hijri": "1447-02-11",
+      "year": 1447,
+      "month": 2,
+      "day": 11,
+      "month_name": {
+        "en": "Safar",
+        "ur": "صفر"
+      },
+      "confidence": "confirmed",
+      "sources": [
+        "https://www.app.com.pk/national/safar-moon-not-sighted-islamic-month-to-begin-on-sunday-mora/",
+        "https://www.nation.com.pk/25-Jul-2025/safar-moon-not-sighted-announces-ruet-e-hilal-committee"
+      ]
+    },
+    "2025-08-07": {
+      "hijri": "1447-02-12",
+      "year": 1447,
+      "month": 2,
+      "day": 12,
+      "month_name": {
+        "en": "Safar",
+        "ur": "صفر"
+      },
+      "confidence": "confirmed",
+      "sources": [
+        "https://www.app.com.pk/national/safar-moon-not-sighted-islamic-month-to-begin-on-sunday-mora/",
+        "https://www.nation.com.pk/25-Jul-2025/safar-moon-not-sighted-announces-ruet-e-hilal-committee"
+      ]
+    },
+    "2025-08-08": {
+      "hijri": "1447-02-13",
+      "year": 1447,
+      "month": 2,
+      "day": 13,
+      "month_name": {
+        "en": "Safar",
+        "ur": "صفر"
+      },
+      "confidence": "confirmed",
+      "sources": [
+        "https://www.app.com.pk/national/safar-moon-not-sighted-islamic-month-to-begin-on-sunday-mora/",
+        "https://www.nation.com.pk/25-Jul-2025/safar-moon-not-sighted-announces-ruet-e-hilal-committee"
+      ]
+    },
+    "2025-08-09": {
+      "hijri": "1447-02-14",
+      "year": 1447,
+      "month": 2,
+      "day": 14,
+      "month_name": {
+        "en": "Safar",
+        "ur": "صفر"
+      },
+      "confidence": "confirmed",
+      "sources": [
+        "https://www.app.com.pk/national/safar-moon-not-sighted-islamic-month-to-begin-on-sunday-mora/",
+        "https://www.nation.com.pk/25-Jul-2025/safar-moon-not-sighted-announces-ruet-e-hilal-committee"
+      ]
+    },
+    "2025-08-10": {
+      "hijri": "1447-02-15",
+      "year": 1447,
+      "month": 2,
+      "day": 15,
+      "month_name": {
+        "en": "Safar",
+        "ur": "صفر"
+      },
+      "confidence": "confirmed",
+      "sources": [
+        "https://www.app.com.pk/national/safar-moon-not-sighted-islamic-month-to-begin-on-sunday-mora/",
+        "https://www.nation.com.pk/25-Jul-2025/safar-moon-not-sighted-announces-ruet-e-hilal-committee"
+      ]
+    },
+    "2025-08-11": {
+      "hijri": "1447-02-16",
+      "year": 1447,
+      "month": 2,
+      "day": 16,
+      "month_name": {
+        "en": "Safar",
+        "ur": "صفر"
+      },
+      "confidence": "confirmed",
+      "sources": [
+        "https://www.app.com.pk/national/safar-moon-not-sighted-islamic-month-to-begin-on-sunday-mora/",
+        "https://www.nation.com.pk/25-Jul-2025/safar-moon-not-sighted-announces-ruet-e-hilal-committee"
+      ]
+    },
+    "2025-08-12": {
+      "hijri": "1447-02-17",
+      "year": 1447,
+      "month": 2,
+      "day": 17,
+      "month_name": {
+        "en": "Safar",
+        "ur": "صفر"
+      },
+      "confidence": "confirmed",
+      "sources": [
+        "https://www.app.com.pk/national/safar-moon-not-sighted-islamic-month-to-begin-on-sunday-mora/",
+        "https://www.nation.com.pk/25-Jul-2025/safar-moon-not-sighted-announces-ruet-e-hilal-committee"
+      ]
+    },
+    "2025-08-13": {
+      "hijri": "1447-02-18",
+      "year": 1447,
+      "month": 2,
+      "day": 18,
+      "month_name": {
+        "en": "Safar",
+        "ur": "صفر"
+      },
+      "confidence": "confirmed",
+      "sources": [
+        "https://www.app.com.pk/national/safar-moon-not-sighted-islamic-month-to-begin-on-sunday-mora/",
+        "https://www.nation.com.pk/25-Jul-2025/safar-moon-not-sighted-announces-ruet-e-hilal-committee"
+      ]
+    },
+    "2025-08-14": {
+      "hijri": "1447-02-19",
+      "year": 1447,
+      "month": 2,
+      "day": 19,
+      "month_name": {
+        "en": "Safar",
+        "ur": "صفر"
+      },
+      "confidence": "confirmed",
+      "sources": [
+        "https://www.app.com.pk/national/safar-moon-not-sighted-islamic-month-to-begin-on-sunday-mora/",
+        "https://www.nation.com.pk/25-Jul-2025/safar-moon-not-sighted-announces-ruet-e-hilal-committee"
+      ]
+    },
+    "2025-08-15": {
+      "hijri": "1447-02-20",
+      "year": 1447,
+      "month": 2,
+      "day": 20,
+      "month_name": {
+        "en": "Safar",
+        "ur": "صفر"
+      },
+      "confidence": "confirmed",
+      "sources": [
+        "https://www.app.com.pk/national/safar-moon-not-sighted-islamic-month-to-begin-on-sunday-mora/",
+        "https://www.nation.com.pk/25-Jul-2025/safar-moon-not-sighted-announces-ruet-e-hilal-committee"
+      ]
+    },
+    "2025-08-16": {
+      "hijri": "1447-02-21",
+      "year": 1447,
+      "month": 2,
+      "day": 21,
+      "month_name": {
+        "en": "Safar",
+        "ur": "صفر"
+      },
+      "confidence": "confirmed",
+      "sources": [
+        "https://www.app.com.pk/national/safar-moon-not-sighted-islamic-month-to-begin-on-sunday-mora/",
+        "https://www.nation.com.pk/25-Jul-2025/safar-moon-not-sighted-announces-ruet-e-hilal-committee"
+      ]
+    },
+    "2025-08-17": {
+      "hijri": "1447-02-22",
+      "year": 1447,
+      "month": 2,
+      "day": 22,
+      "month_name": {
+        "en": "Safar",
+        "ur": "صفر"
+      },
+      "confidence": "confirmed",
+      "sources": [
+        "https://www.app.com.pk/national/safar-moon-not-sighted-islamic-month-to-begin-on-sunday-mora/",
+        "https://www.nation.com.pk/25-Jul-2025/safar-moon-not-sighted-announces-ruet-e-hilal-committee"
+      ]
+    },
+    "2025-08-18": {
+      "hijri": "1447-02-23",
+      "year": 1447,
+      "month": 2,
+      "day": 23,
+      "month_name": {
+        "en": "Safar",
+        "ur": "صفر"
+      },
+      "confidence": "confirmed",
+      "sources": [
+        "https://www.app.com.pk/national/safar-moon-not-sighted-islamic-month-to-begin-on-sunday-mora/",
+        "https://www.nation.com.pk/25-Jul-2025/safar-moon-not-sighted-announces-ruet-e-hilal-committee"
+      ]
+    },
+    "2025-08-19": {
+      "hijri": "1447-02-24",
+      "year": 1447,
+      "month": 2,
+      "day": 24,
+      "month_name": {
+        "en": "Safar",
+        "ur": "صفر"
+      },
+      "confidence": "confirmed",
+      "sources": [
+        "https://www.app.com.pk/national/safar-moon-not-sighted-islamic-month-to-begin-on-sunday-mora/",
+        "https://www.nation.com.pk/25-Jul-2025/safar-moon-not-sighted-announces-ruet-e-hilal-committee"
+      ]
+    },
+    "2025-08-20": {
+      "hijri": "1447-02-25",
+      "year": 1447,
+      "month": 2,
+      "day": 25,
+      "month_name": {
+        "en": "Safar",
+        "ur": "صفر"
+      },
+      "confidence": "confirmed",
+      "sources": [
+        "https://www.app.com.pk/national/safar-moon-not-sighted-islamic-month-to-begin-on-sunday-mora/",
+        "https://www.nation.com.pk/25-Jul-2025/safar-moon-not-sighted-announces-ruet-e-hilal-committee"
+      ]
+    },
+    "2025-08-21": {
+      "hijri": "1447-02-26",
+      "year": 1447,
+      "month": 2,
+      "day": 26,
+      "month_name": {
+        "en": "Safar",
+        "ur": "صفر"
+      },
+      "confidence": "confirmed",
+      "sources": [
+        "https://www.app.com.pk/national/safar-moon-not-sighted-islamic-month-to-begin-on-sunday-mora/",
+        "https://www.nation.com.pk/25-Jul-2025/safar-moon-not-sighted-announces-ruet-e-hilal-committee"
+      ]
+    },
+    "2025-08-22": {
+      "hijri": "1447-02-27",
+      "year": 1447,
+      "month": 2,
+      "day": 27,
+      "month_name": {
+        "en": "Safar",
+        "ur": "صفر"
+      },
+      "confidence": "confirmed",
+      "sources": [
+        "https://www.app.com.pk/national/safar-moon-not-sighted-islamic-month-to-begin-on-sunday-mora/",
+        "https://www.nation.com.pk/25-Jul-2025/safar-moon-not-sighted-announces-ruet-e-hilal-committee"
+      ]
+    },
+    "2025-08-23": {
+      "hijri": "1447-02-28",
+      "year": 1447,
+      "month": 2,
+      "day": 28,
+      "month_name": {
+        "en": "Safar",
+        "ur": "صفر"
+      },
+      "confidence": "confirmed",
+      "sources": [
+        "https://www.app.com.pk/national/safar-moon-not-sighted-islamic-month-to-begin-on-sunday-mora/",
+        "https://www.nation.com.pk/25-Jul-2025/safar-moon-not-sighted-announces-ruet-e-hilal-committee"
+      ]
+    },
+    "2025-08-24": {
+      "hijri": "1447-02-29",
+      "year": 1447,
+      "month": 2,
+      "day": 29,
+      "month_name": {
+        "en": "Safar",
+        "ur": "صفر"
+      },
+      "confidence": "confirmed",
+      "sources": [
+        "https://www.app.com.pk/national/safar-moon-not-sighted-islamic-month-to-begin-on-sunday-mora/",
+        "https://www.nation.com.pk/25-Jul-2025/safar-moon-not-sighted-announces-ruet-e-hilal-committee"
+      ]
+    },
+    "2025-08-25": {
+      "hijri": "1447-02-30",
+      "year": 1447,
+      "month": 2,
+      "day": 30,
+      "month_name": {
+        "en": "Safar",
+        "ur": "صفر"
+      },
+      "confidence": "confirmed",
+      "sources": [
+        "https://www.app.com.pk/national/safar-moon-not-sighted-islamic-month-to-begin-on-sunday-mora/",
+        "https://www.nation.com.pk/25-Jul-2025/safar-moon-not-sighted-announces-ruet-e-hilal-committee"
+      ]
+    },
+    "2025-08-26": {
+      "hijri": "1447-03-01",
+      "year": 1447,
+      "month": 3,
+      "day": 1,
+      "month_name": {
+        "en": "Rabi al-Awwal",
+        "ur": "ربیع الاول"
+      },
+      "confidence": "confirmed",
+      "sources": [
+        "https://www.app.com.pk/national/rabi-ul-awwal-moon-not-sighted-12th-rabi-ul-awwal-to-fall-on-september-6/",
+        "https://www.thenews.com.pk/latest/1338813-rabi-ul-awal-moon-not-sighted-eid-milad-un-nabi-on-sept-6"
+      ]
+    },
+    "2025-08-27": {
+      "hijri": "1447-03-02",
+      "year": 1447,
+      "month": 3,
+      "day": 2,
+      "month_name": {
+        "en": "Rabi al-Awwal",
+        "ur": "ربیع الاول"
+      },
+      "confidence": "confirmed",
+      "sources": [
+        "https://www.app.com.pk/national/rabi-ul-awwal-moon-not-sighted-12th-rabi-ul-awwal-to-fall-on-september-6/",
+        "https://www.thenews.com.pk/latest/1338813-rabi-ul-awal-moon-not-sighted-eid-milad-un-nabi-on-sept-6"
+      ]
+    },
+    "2025-08-28": {
+      "hijri": "1447-03-03",
+      "year": 1447,
+      "month": 3,
+      "day": 3,
+      "month_name": {
+        "en": "Rabi al-Awwal",
+        "ur": "ربیع الاول"
+      },
+      "confidence": "confirmed",
+      "sources": [
+        "https://www.app.com.pk/national/rabi-ul-awwal-moon-not-sighted-12th-rabi-ul-awwal-to-fall-on-september-6/",
+        "https://www.thenews.com.pk/latest/1338813-rabi-ul-awal-moon-not-sighted-eid-milad-un-nabi-on-sept-6"
+      ]
+    },
+    "2025-08-29": {
+      "hijri": "1447-03-04",
+      "year": 1447,
+      "month": 3,
+      "day": 4,
+      "month_name": {
+        "en": "Rabi al-Awwal",
+        "ur": "ربیع الاول"
+      },
+      "confidence": "confirmed",
+      "sources": [
+        "https://www.app.com.pk/national/rabi-ul-awwal-moon-not-sighted-12th-rabi-ul-awwal-to-fall-on-september-6/",
+        "https://www.thenews.com.pk/latest/1338813-rabi-ul-awal-moon-not-sighted-eid-milad-un-nabi-on-sept-6"
+      ]
+    },
+    "2025-08-30": {
+      "hijri": "1447-03-05",
+      "year": 1447,
+      "month": 3,
+      "day": 5,
+      "month_name": {
+        "en": "Rabi al-Awwal",
+        "ur": "ربیع الاول"
+      },
+      "confidence": "confirmed",
+      "sources": [
+        "https://www.app.com.pk/national/rabi-ul-awwal-moon-not-sighted-12th-rabi-ul-awwal-to-fall-on-september-6/",
+        "https://www.thenews.com.pk/latest/1338813-rabi-ul-awal-moon-not-sighted-eid-milad-un-nabi-on-sept-6"
+      ]
+    },
+    "2025-08-31": {
+      "hijri": "1447-03-06",
+      "year": 1447,
+      "month": 3,
+      "day": 6,
+      "month_name": {
+        "en": "Rabi al-Awwal",
+        "ur": "ربیع الاول"
+      },
+      "confidence": "confirmed",
+      "sources": [
+        "https://www.app.com.pk/national/rabi-ul-awwal-moon-not-sighted-12th-rabi-ul-awwal-to-fall-on-september-6/",
+        "https://www.thenews.com.pk/latest/1338813-rabi-ul-awal-moon-not-sighted-eid-milad-un-nabi-on-sept-6"
+      ]
+    },
+    "2025-09-01": {
+      "hijri": "1447-03-07",
+      "year": 1447,
+      "month": 3,
+      "day": 7,
+      "month_name": {
+        "en": "Rabi al-Awwal",
+        "ur": "ربیع الاول"
+      },
+      "confidence": "confirmed",
+      "sources": [
+        "https://www.app.com.pk/national/rabi-ul-awwal-moon-not-sighted-12th-rabi-ul-awwal-to-fall-on-september-6/",
+        "https://www.thenews.com.pk/latest/1338813-rabi-ul-awal-moon-not-sighted-eid-milad-un-nabi-on-sept-6"
+      ]
+    },
+    "2025-09-02": {
+      "hijri": "1447-03-08",
+      "year": 1447,
+      "month": 3,
+      "day": 8,
+      "month_name": {
+        "en": "Rabi al-Awwal",
+        "ur": "ربیع الاول"
+      },
+      "confidence": "confirmed",
+      "sources": [
+        "https://www.app.com.pk/national/rabi-ul-awwal-moon-not-sighted-12th-rabi-ul-awwal-to-fall-on-september-6/",
+        "https://www.thenews.com.pk/latest/1338813-rabi-ul-awal-moon-not-sighted-eid-milad-un-nabi-on-sept-6"
+      ]
+    },
+    "2025-09-03": {
+      "hijri": "1447-03-09",
+      "year": 1447,
+      "month": 3,
+      "day": 9,
+      "month_name": {
+        "en": "Rabi al-Awwal",
+        "ur": "ربیع الاول"
+      },
+      "confidence": "confirmed",
+      "sources": [
+        "https://www.app.com.pk/national/rabi-ul-awwal-moon-not-sighted-12th-rabi-ul-awwal-to-fall-on-september-6/",
+        "https://www.thenews.com.pk/latest/1338813-rabi-ul-awal-moon-not-sighted-eid-milad-un-nabi-on-sept-6"
+      ]
+    },
+    "2025-09-04": {
+      "hijri": "1447-03-10",
+      "year": 1447,
+      "month": 3,
+      "day": 10,
+      "month_name": {
+        "en": "Rabi al-Awwal",
+        "ur": "ربیع الاول"
+      },
+      "confidence": "confirmed",
+      "sources": [
+        "https://www.app.com.pk/national/rabi-ul-awwal-moon-not-sighted-12th-rabi-ul-awwal-to-fall-on-september-6/",
+        "https://www.thenews.com.pk/latest/1338813-rabi-ul-awal-moon-not-sighted-eid-milad-un-nabi-on-sept-6"
+      ]
+    },
+    "2025-09-05": {
+      "hijri": "1447-03-11",
+      "year": 1447,
+      "month": 3,
+      "day": 11,
+      "month_name": {
+        "en": "Rabi al-Awwal",
+        "ur": "ربیع الاول"
+      },
+      "confidence": "confirmed",
+      "sources": [
+        "https://www.app.com.pk/national/rabi-ul-awwal-moon-not-sighted-12th-rabi-ul-awwal-to-fall-on-september-6/",
+        "https://www.thenews.com.pk/latest/1338813-rabi-ul-awal-moon-not-sighted-eid-milad-un-nabi-on-sept-6"
+      ]
+    },
+    "2025-09-06": {
+      "hijri": "1447-03-12",
+      "year": 1447,
+      "month": 3,
+      "day": 12,
+      "month_name": {
+        "en": "Rabi al-Awwal",
+        "ur": "ربیع الاول"
+      },
+      "confidence": "confirmed",
+      "sources": [
+        "https://www.app.com.pk/national/rabi-ul-awwal-moon-not-sighted-12th-rabi-ul-awwal-to-fall-on-september-6/",
+        "https://www.thenews.com.pk/latest/1338813-rabi-ul-awal-moon-not-sighted-eid-milad-un-nabi-on-sept-6"
+      ]
+    },
+    "2025-09-07": {
+      "hijri": "1447-03-13",
+      "year": 1447,
+      "month": 3,
+      "day": 13,
+      "month_name": {
+        "en": "Rabi al-Awwal",
+        "ur": "ربیع الاول"
+      },
+      "confidence": "confirmed",
+      "sources": [
+        "https://www.app.com.pk/national/rabi-ul-awwal-moon-not-sighted-12th-rabi-ul-awwal-to-fall-on-september-6/",
+        "https://www.thenews.com.pk/latest/1338813-rabi-ul-awal-moon-not-sighted-eid-milad-un-nabi-on-sept-6"
+      ]
+    },
+    "2025-09-08": {
+      "hijri": "1447-03-14",
+      "year": 1447,
+      "month": 3,
+      "day": 14,
+      "month_name": {
+        "en": "Rabi al-Awwal",
+        "ur": "ربیع الاول"
+      },
+      "confidence": "confirmed",
+      "sources": [
+        "https://www.app.com.pk/national/rabi-ul-awwal-moon-not-sighted-12th-rabi-ul-awwal-to-fall-on-september-6/",
+        "https://www.thenews.com.pk/latest/1338813-rabi-ul-awal-moon-not-sighted-eid-milad-un-nabi-on-sept-6"
+      ]
+    },
+    "2025-09-09": {
+      "hijri": "1447-03-15",
+      "year": 1447,
+      "month": 3,
+      "day": 15,
+      "month_name": {
+        "en": "Rabi al-Awwal",
+        "ur": "ربیع الاول"
+      },
+      "confidence": "confirmed",
+      "sources": [
+        "https://www.app.com.pk/national/rabi-ul-awwal-moon-not-sighted-12th-rabi-ul-awwal-to-fall-on-september-6/",
+        "https://www.thenews.com.pk/latest/1338813-rabi-ul-awal-moon-not-sighted-eid-milad-un-nabi-on-sept-6"
+      ]
+    },
+    "2025-09-10": {
+      "hijri": "1447-03-16",
+      "year": 1447,
+      "month": 3,
+      "day": 16,
+      "month_name": {
+        "en": "Rabi al-Awwal",
+        "ur": "ربیع الاول"
+      },
+      "confidence": "confirmed",
+      "sources": [
+        "https://www.app.com.pk/national/rabi-ul-awwal-moon-not-sighted-12th-rabi-ul-awwal-to-fall-on-september-6/",
+        "https://www.thenews.com.pk/latest/1338813-rabi-ul-awal-moon-not-sighted-eid-milad-un-nabi-on-sept-6"
+      ]
+    },
+    "2025-09-11": {
+      "hijri": "1447-03-17",
+      "year": 1447,
+      "month": 3,
+      "day": 17,
+      "month_name": {
+        "en": "Rabi al-Awwal",
+        "ur": "ربیع الاول"
+      },
+      "confidence": "confirmed",
+      "sources": [
+        "https://www.app.com.pk/national/rabi-ul-awwal-moon-not-sighted-12th-rabi-ul-awwal-to-fall-on-september-6/",
+        "https://www.thenews.com.pk/latest/1338813-rabi-ul-awal-moon-not-sighted-eid-milad-un-nabi-on-sept-6"
+      ]
+    },
+    "2025-09-12": {
+      "hijri": "1447-03-18",
+      "year": 1447,
+      "month": 3,
+      "day": 18,
+      "month_name": {
+        "en": "Rabi al-Awwal",
+        "ur": "ربیع الاول"
+      },
+      "confidence": "confirmed",
+      "sources": [
+        "https://www.app.com.pk/national/rabi-ul-awwal-moon-not-sighted-12th-rabi-ul-awwal-to-fall-on-september-6/",
+        "https://www.thenews.com.pk/latest/1338813-rabi-ul-awal-moon-not-sighted-eid-milad-un-nabi-on-sept-6"
+      ]
+    },
+    "2025-09-13": {
+      "hijri": "1447-03-19",
+      "year": 1447,
+      "month": 3,
+      "day": 19,
+      "month_name": {
+        "en": "Rabi al-Awwal",
+        "ur": "ربیع الاول"
+      },
+      "confidence": "confirmed",
+      "sources": [
+        "https://www.app.com.pk/national/rabi-ul-awwal-moon-not-sighted-12th-rabi-ul-awwal-to-fall-on-september-6/",
+        "https://www.thenews.com.pk/latest/1338813-rabi-ul-awal-moon-not-sighted-eid-milad-un-nabi-on-sept-6"
+      ]
+    },
+    "2025-09-14": {
+      "hijri": "1447-03-20",
+      "year": 1447,
+      "month": 3,
+      "day": 20,
+      "month_name": {
+        "en": "Rabi al-Awwal",
+        "ur": "ربیع الاول"
+      },
+      "confidence": "confirmed",
+      "sources": [
+        "https://www.app.com.pk/national/rabi-ul-awwal-moon-not-sighted-12th-rabi-ul-awwal-to-fall-on-september-6/",
+        "https://www.thenews.com.pk/latest/1338813-rabi-ul-awal-moon-not-sighted-eid-milad-un-nabi-on-sept-6"
+      ]
+    },
+    "2025-09-15": {
+      "hijri": "1447-03-21",
+      "year": 1447,
+      "month": 3,
+      "day": 21,
+      "month_name": {
+        "en": "Rabi al-Awwal",
+        "ur": "ربیع الاول"
+      },
+      "confidence": "confirmed",
+      "sources": [
+        "https://www.app.com.pk/national/rabi-ul-awwal-moon-not-sighted-12th-rabi-ul-awwal-to-fall-on-september-6/",
+        "https://www.thenews.com.pk/latest/1338813-rabi-ul-awal-moon-not-sighted-eid-milad-un-nabi-on-sept-6"
+      ]
+    },
+    "2025-09-16": {
+      "hijri": "1447-03-22",
+      "year": 1447,
+      "month": 3,
+      "day": 22,
+      "month_name": {
+        "en": "Rabi al-Awwal",
+        "ur": "ربیع الاول"
+      },
+      "confidence": "confirmed",
+      "sources": [
+        "https://www.app.com.pk/national/rabi-ul-awwal-moon-not-sighted-12th-rabi-ul-awwal-to-fall-on-september-6/",
+        "https://www.thenews.com.pk/latest/1338813-rabi-ul-awal-moon-not-sighted-eid-milad-un-nabi-on-sept-6"
+      ]
+    },
+    "2025-09-17": {
+      "hijri": "1447-03-23",
+      "year": 1447,
+      "month": 3,
+      "day": 23,
+      "month_name": {
+        "en": "Rabi al-Awwal",
+        "ur": "ربیع الاول"
+      },
+      "confidence": "confirmed",
+      "sources": [
+        "https://www.app.com.pk/national/rabi-ul-awwal-moon-not-sighted-12th-rabi-ul-awwal-to-fall-on-september-6/",
+        "https://www.thenews.com.pk/latest/1338813-rabi-ul-awal-moon-not-sighted-eid-milad-un-nabi-on-sept-6"
+      ]
+    },
+    "2025-09-18": {
+      "hijri": "1447-03-24",
+      "year": 1447,
+      "month": 3,
+      "day": 24,
+      "month_name": {
+        "en": "Rabi al-Awwal",
+        "ur": "ربیع الاول"
+      },
+      "confidence": "confirmed",
+      "sources": [
+        "https://www.app.com.pk/national/rabi-ul-awwal-moon-not-sighted-12th-rabi-ul-awwal-to-fall-on-september-6/",
+        "https://www.thenews.com.pk/latest/1338813-rabi-ul-awal-moon-not-sighted-eid-milad-un-nabi-on-sept-6"
+      ]
+    },
+    "2025-09-19": {
+      "hijri": "1447-03-25",
+      "year": 1447,
+      "month": 3,
+      "day": 25,
+      "month_name": {
+        "en": "Rabi al-Awwal",
+        "ur": "ربیع الاول"
+      },
+      "confidence": "confirmed",
+      "sources": [
+        "https://www.app.com.pk/national/rabi-ul-awwal-moon-not-sighted-12th-rabi-ul-awwal-to-fall-on-september-6/",
+        "https://www.thenews.com.pk/latest/1338813-rabi-ul-awal-moon-not-sighted-eid-milad-un-nabi-on-sept-6"
+      ]
+    },
+    "2025-09-20": {
+      "hijri": "1447-03-26",
+      "year": 1447,
+      "month": 3,
+      "day": 26,
+      "month_name": {
+        "en": "Rabi al-Awwal",
+        "ur": "ربیع الاول"
+      },
+      "confidence": "confirmed",
+      "sources": [
+        "https://www.app.com.pk/national/rabi-ul-awwal-moon-not-sighted-12th-rabi-ul-awwal-to-fall-on-september-6/",
+        "https://www.thenews.com.pk/latest/1338813-rabi-ul-awal-moon-not-sighted-eid-milad-un-nabi-on-sept-6"
+      ]
+    },
+    "2025-09-21": {
+      "hijri": "1447-03-27",
+      "year": 1447,
+      "month": 3,
+      "day": 27,
+      "month_name": {
+        "en": "Rabi al-Awwal",
+        "ur": "ربیع الاول"
+      },
+      "confidence": "confirmed",
+      "sources": [
+        "https://www.app.com.pk/national/rabi-ul-awwal-moon-not-sighted-12th-rabi-ul-awwal-to-fall-on-september-6/",
+        "https://www.thenews.com.pk/latest/1338813-rabi-ul-awal-moon-not-sighted-eid-milad-un-nabi-on-sept-6"
+      ]
+    },
+    "2025-09-22": {
+      "hijri": "1447-03-28",
+      "year": 1447,
+      "month": 3,
+      "day": 28,
+      "month_name": {
+        "en": "Rabi al-Awwal",
+        "ur": "ربیع الاول"
+      },
+      "confidence": "confirmed",
+      "sources": [
+        "https://www.app.com.pk/national/rabi-ul-awwal-moon-not-sighted-12th-rabi-ul-awwal-to-fall-on-september-6/",
+        "https://www.thenews.com.pk/latest/1338813-rabi-ul-awal-moon-not-sighted-eid-milad-un-nabi-on-sept-6"
+      ]
+    },
+    "2025-09-23": {
+      "hijri": "1447-03-29",
+      "year": 1447,
+      "month": 3,
+      "day": 29,
+      "month_name": {
+        "en": "Rabi al-Awwal",
+        "ur": "ربیع الاول"
+      },
+      "confidence": "confirmed",
+      "sources": [
+        "https://www.app.com.pk/national/rabi-ul-awwal-moon-not-sighted-12th-rabi-ul-awwal-to-fall-on-september-6/",
+        "https://www.thenews.com.pk/latest/1338813-rabi-ul-awal-moon-not-sighted-eid-milad-un-nabi-on-sept-6"
+      ]
+    },
+    "2025-09-24": {
+      "hijri": "1447-03-30",
+      "year": 1447,
+      "month": 3,
+      "day": 30,
+      "month_name": {
+        "en": "Rabi al-Awwal",
+        "ur": "ربیع الاول"
+      },
+      "confidence": "confirmed",
+      "sources": [
+        "https://www.app.com.pk/national/rabi-ul-awwal-moon-not-sighted-12th-rabi-ul-awwal-to-fall-on-september-6/",
+        "https://www.thenews.com.pk/latest/1338813-rabi-ul-awal-moon-not-sighted-eid-milad-un-nabi-on-sept-6"
+      ]
+    },
+    "2025-09-25": {
+      "hijri": "1447-04-01",
+      "year": 1447,
+      "month": 4,
+      "day": 1,
+      "month_name": {
+        "en": "Rabi al-Thani",
+        "ur": "ربیع الثانی"
+      },
+      "confidence": "confirmed",
+      "sources": [
+        "https://www.nation.com.pk/23-Sep-2025/rabi-ul-sani-moon-sighted-pakistan-month-begin-september-25",
+        "https://www.dunyanews.tv/en/Pakistan/908061-no-sighting-of-rabi-ulsani-moon-in-pakistan"
+      ]
+    },
+    "2025-09-26": {
+      "hijri": "1447-04-02",
+      "year": 1447,
+      "month": 4,
+      "day": 2,
+      "month_name": {
+        "en": "Rabi al-Thani",
+        "ur": "ربیع الثانی"
+      },
+      "confidence": "confirmed",
+      "sources": [
+        "https://www.nation.com.pk/23-Sep-2025/rabi-ul-sani-moon-sighted-pakistan-month-begin-september-25",
+        "https://www.dunyanews.tv/en/Pakistan/908061-no-sighting-of-rabi-ulsani-moon-in-pakistan"
+      ]
+    },
+    "2025-09-27": {
+      "hijri": "1447-04-03",
+      "year": 1447,
+      "month": 4,
+      "day": 3,
+      "month_name": {
+        "en": "Rabi al-Thani",
+        "ur": "ربیع الثانی"
+      },
+      "confidence": "confirmed",
+      "sources": [
+        "https://www.nation.com.pk/23-Sep-2025/rabi-ul-sani-moon-sighted-pakistan-month-begin-september-25",
+        "https://www.dunyanews.tv/en/Pakistan/908061-no-sighting-of-rabi-ulsani-moon-in-pakistan"
+      ]
+    },
+    "2025-09-28": {
+      "hijri": "1447-04-04",
+      "year": 1447,
+      "month": 4,
+      "day": 4,
+      "month_name": {
+        "en": "Rabi al-Thani",
+        "ur": "ربیع الثانی"
+      },
+      "confidence": "confirmed",
+      "sources": [
+        "https://www.nation.com.pk/23-Sep-2025/rabi-ul-sani-moon-sighted-pakistan-month-begin-september-25",
+        "https://www.dunyanews.tv/en/Pakistan/908061-no-sighting-of-rabi-ulsani-moon-in-pakistan"
+      ]
+    },
+    "2025-09-29": {
+      "hijri": "1447-04-05",
+      "year": 1447,
+      "month": 4,
+      "day": 5,
+      "month_name": {
+        "en": "Rabi al-Thani",
+        "ur": "ربیع الثانی"
+      },
+      "confidence": "confirmed",
+      "sources": [
+        "https://www.nation.com.pk/23-Sep-2025/rabi-ul-sani-moon-sighted-pakistan-month-begin-september-25",
+        "https://www.dunyanews.tv/en/Pakistan/908061-no-sighting-of-rabi-ulsani-moon-in-pakistan"
+      ]
+    },
+    "2025-09-30": {
+      "hijri": "1447-04-06",
+      "year": 1447,
+      "month": 4,
+      "day": 6,
+      "month_name": {
+        "en": "Rabi al-Thani",
+        "ur": "ربیع الثانی"
+      },
+      "confidence": "confirmed",
+      "sources": [
+        "https://www.nation.com.pk/23-Sep-2025/rabi-ul-sani-moon-sighted-pakistan-month-begin-september-25",
+        "https://www.dunyanews.tv/en/Pakistan/908061-no-sighting-of-rabi-ulsani-moon-in-pakistan"
+      ]
+    },
+    "2025-10-01": {
+      "hijri": "1447-04-07",
+      "year": 1447,
+      "month": 4,
+      "day": 7,
+      "month_name": {
+        "en": "Rabi al-Thani",
+        "ur": "ربیع الثانی"
+      },
+      "confidence": "confirmed",
+      "sources": [
+        "https://www.nation.com.pk/23-Sep-2025/rabi-ul-sani-moon-sighted-pakistan-month-begin-september-25",
+        "https://www.dunyanews.tv/en/Pakistan/908061-no-sighting-of-rabi-ulsani-moon-in-pakistan"
+      ]
+    },
+    "2025-10-02": {
+      "hijri": "1447-04-08",
+      "year": 1447,
+      "month": 4,
+      "day": 8,
+      "month_name": {
+        "en": "Rabi al-Thani",
+        "ur": "ربیع الثانی"
+      },
+      "confidence": "confirmed",
+      "sources": [
+        "https://www.nation.com.pk/23-Sep-2025/rabi-ul-sani-moon-sighted-pakistan-month-begin-september-25",
+        "https://www.dunyanews.tv/en/Pakistan/908061-no-sighting-of-rabi-ulsani-moon-in-pakistan"
+      ]
+    },
+    "2025-10-03": {
+      "hijri": "1447-04-09",
+      "year": 1447,
+      "month": 4,
+      "day": 9,
+      "month_name": {
+        "en": "Rabi al-Thani",
+        "ur": "ربیع الثانی"
+      },
+      "confidence": "confirmed",
+      "sources": [
+        "https://www.nation.com.pk/23-Sep-2025/rabi-ul-sani-moon-sighted-pakistan-month-begin-september-25",
+        "https://www.dunyanews.tv/en/Pakistan/908061-no-sighting-of-rabi-ulsani-moon-in-pakistan"
+      ]
+    },
+    "2025-10-04": {
+      "hijri": "1447-04-10",
+      "year": 1447,
+      "month": 4,
+      "day": 10,
+      "month_name": {
+        "en": "Rabi al-Thani",
+        "ur": "ربیع الثانی"
+      },
+      "confidence": "confirmed",
+      "sources": [
+        "https://www.nation.com.pk/23-Sep-2025/rabi-ul-sani-moon-sighted-pakistan-month-begin-september-25",
+        "https://www.dunyanews.tv/en/Pakistan/908061-no-sighting-of-rabi-ulsani-moon-in-pakistan"
+      ]
+    },
+    "2025-10-05": {
+      "hijri": "1447-04-11",
+      "year": 1447,
+      "month": 4,
+      "day": 11,
+      "month_name": {
+        "en": "Rabi al-Thani",
+        "ur": "ربیع الثانی"
+      },
+      "confidence": "confirmed",
+      "sources": [
+        "https://www.nation.com.pk/23-Sep-2025/rabi-ul-sani-moon-sighted-pakistan-month-begin-september-25",
+        "https://www.dunyanews.tv/en/Pakistan/908061-no-sighting-of-rabi-ulsani-moon-in-pakistan"
+      ]
+    },
+    "2025-10-06": {
+      "hijri": "1447-04-12",
+      "year": 1447,
+      "month": 4,
+      "day": 12,
+      "month_name": {
+        "en": "Rabi al-Thani",
+        "ur": "ربیع الثانی"
+      },
+      "confidence": "confirmed",
+      "sources": [
+        "https://www.nation.com.pk/23-Sep-2025/rabi-ul-sani-moon-sighted-pakistan-month-begin-september-25",
+        "https://www.dunyanews.tv/en/Pakistan/908061-no-sighting-of-rabi-ulsani-moon-in-pakistan"
+      ]
+    },
+    "2025-10-07": {
+      "hijri": "1447-04-13",
+      "year": 1447,
+      "month": 4,
+      "day": 13,
+      "month_name": {
+        "en": "Rabi al-Thani",
+        "ur": "ربیع الثانی"
+      },
+      "confidence": "confirmed",
+      "sources": [
+        "https://www.nation.com.pk/23-Sep-2025/rabi-ul-sani-moon-sighted-pakistan-month-begin-september-25",
+        "https://www.dunyanews.tv/en/Pakistan/908061-no-sighting-of-rabi-ulsani-moon-in-pakistan"
+      ]
+    },
+    "2025-10-08": {
+      "hijri": "1447-04-14",
+      "year": 1447,
+      "month": 4,
+      "day": 14,
+      "month_name": {
+        "en": "Rabi al-Thani",
+        "ur": "ربیع الثانی"
+      },
+      "confidence": "confirmed",
+      "sources": [
+        "https://www.nation.com.pk/23-Sep-2025/rabi-ul-sani-moon-sighted-pakistan-month-begin-september-25",
+        "https://www.dunyanews.tv/en/Pakistan/908061-no-sighting-of-rabi-ulsani-moon-in-pakistan"
+      ]
+    },
+    "2025-10-09": {
+      "hijri": "1447-04-15",
+      "year": 1447,
+      "month": 4,
+      "day": 15,
+      "month_name": {
+        "en": "Rabi al-Thani",
+        "ur": "ربیع الثانی"
+      },
+      "confidence": "confirmed",
+      "sources": [
+        "https://www.nation.com.pk/23-Sep-2025/rabi-ul-sani-moon-sighted-pakistan-month-begin-september-25",
+        "https://www.dunyanews.tv/en/Pakistan/908061-no-sighting-of-rabi-ulsani-moon-in-pakistan"
+      ]
+    },
+    "2025-10-10": {
+      "hijri": "1447-04-16",
+      "year": 1447,
+      "month": 4,
+      "day": 16,
+      "month_name": {
+        "en": "Rabi al-Thani",
+        "ur": "ربیع الثانی"
+      },
+      "confidence": "confirmed",
+      "sources": [
+        "https://www.nation.com.pk/23-Sep-2025/rabi-ul-sani-moon-sighted-pakistan-month-begin-september-25",
+        "https://www.dunyanews.tv/en/Pakistan/908061-no-sighting-of-rabi-ulsani-moon-in-pakistan"
+      ]
+    },
+    "2025-10-11": {
+      "hijri": "1447-04-17",
+      "year": 1447,
+      "month": 4,
+      "day": 17,
+      "month_name": {
+        "en": "Rabi al-Thani",
+        "ur": "ربیع الثانی"
+      },
+      "confidence": "confirmed",
+      "sources": [
+        "https://www.nation.com.pk/23-Sep-2025/rabi-ul-sani-moon-sighted-pakistan-month-begin-september-25",
+        "https://www.dunyanews.tv/en/Pakistan/908061-no-sighting-of-rabi-ulsani-moon-in-pakistan"
+      ]
+    },
+    "2025-10-12": {
+      "hijri": "1447-04-18",
+      "year": 1447,
+      "month": 4,
+      "day": 18,
+      "month_name": {
+        "en": "Rabi al-Thani",
+        "ur": "ربیع الثانی"
+      },
+      "confidence": "confirmed",
+      "sources": [
+        "https://www.nation.com.pk/23-Sep-2025/rabi-ul-sani-moon-sighted-pakistan-month-begin-september-25",
+        "https://www.dunyanews.tv/en/Pakistan/908061-no-sighting-of-rabi-ulsani-moon-in-pakistan"
+      ]
+    },
+    "2025-10-13": {
+      "hijri": "1447-04-19",
+      "year": 1447,
+      "month": 4,
+      "day": 19,
+      "month_name": {
+        "en": "Rabi al-Thani",
+        "ur": "ربیع الثانی"
+      },
+      "confidence": "confirmed",
+      "sources": [
+        "https://www.nation.com.pk/23-Sep-2025/rabi-ul-sani-moon-sighted-pakistan-month-begin-september-25",
+        "https://www.dunyanews.tv/en/Pakistan/908061-no-sighting-of-rabi-ulsani-moon-in-pakistan"
+      ]
+    },
+    "2025-10-14": {
+      "hijri": "1447-04-20",
+      "year": 1447,
+      "month": 4,
+      "day": 20,
+      "month_name": {
+        "en": "Rabi al-Thani",
+        "ur": "ربیع الثانی"
+      },
+      "confidence": "confirmed",
+      "sources": [
+        "https://www.nation.com.pk/23-Sep-2025/rabi-ul-sani-moon-sighted-pakistan-month-begin-september-25",
+        "https://www.dunyanews.tv/en/Pakistan/908061-no-sighting-of-rabi-ulsani-moon-in-pakistan"
+      ]
+    },
+    "2025-10-15": {
+      "hijri": "1447-04-21",
+      "year": 1447,
+      "month": 4,
+      "day": 21,
+      "month_name": {
+        "en": "Rabi al-Thani",
+        "ur": "ربیع الثانی"
+      },
+      "confidence": "confirmed",
+      "sources": [
+        "https://www.nation.com.pk/23-Sep-2025/rabi-ul-sani-moon-sighted-pakistan-month-begin-september-25",
+        "https://www.dunyanews.tv/en/Pakistan/908061-no-sighting-of-rabi-ulsani-moon-in-pakistan"
+      ]
+    },
+    "2025-10-16": {
+      "hijri": "1447-04-22",
+      "year": 1447,
+      "month": 4,
+      "day": 22,
+      "month_name": {
+        "en": "Rabi al-Thani",
+        "ur": "ربیع الثانی"
+      },
+      "confidence": "confirmed",
+      "sources": [
+        "https://www.nation.com.pk/23-Sep-2025/rabi-ul-sani-moon-sighted-pakistan-month-begin-september-25",
+        "https://www.dunyanews.tv/en/Pakistan/908061-no-sighting-of-rabi-ulsani-moon-in-pakistan"
+      ]
+    },
+    "2025-10-17": {
+      "hijri": "1447-04-23",
+      "year": 1447,
+      "month": 4,
+      "day": 23,
+      "month_name": {
+        "en": "Rabi al-Thani",
+        "ur": "ربیع الثانی"
+      },
+      "confidence": "confirmed",
+      "sources": [
+        "https://www.nation.com.pk/23-Sep-2025/rabi-ul-sani-moon-sighted-pakistan-month-begin-september-25",
+        "https://www.dunyanews.tv/en/Pakistan/908061-no-sighting-of-rabi-ulsani-moon-in-pakistan"
+      ]
+    },
+    "2025-10-18": {
+      "hijri": "1447-04-24",
+      "year": 1447,
+      "month": 4,
+      "day": 24,
+      "month_name": {
+        "en": "Rabi al-Thani",
+        "ur": "ربیع الثانی"
+      },
+      "confidence": "confirmed",
+      "sources": [
+        "https://www.nation.com.pk/23-Sep-2025/rabi-ul-sani-moon-sighted-pakistan-month-begin-september-25",
+        "https://www.dunyanews.tv/en/Pakistan/908061-no-sighting-of-rabi-ulsani-moon-in-pakistan"
+      ]
+    },
+    "2025-10-19": {
+      "hijri": "1447-04-25",
+      "year": 1447,
+      "month": 4,
+      "day": 25,
+      "month_name": {
+        "en": "Rabi al-Thani",
+        "ur": "ربیع الثانی"
+      },
+      "confidence": "confirmed",
+      "sources": [
+        "https://www.nation.com.pk/23-Sep-2025/rabi-ul-sani-moon-sighted-pakistan-month-begin-september-25",
+        "https://www.dunyanews.tv/en/Pakistan/908061-no-sighting-of-rabi-ulsani-moon-in-pakistan"
+      ]
+    },
+    "2025-10-20": {
+      "hijri": "1447-04-26",
+      "year": 1447,
+      "month": 4,
+      "day": 26,
+      "month_name": {
+        "en": "Rabi al-Thani",
+        "ur": "ربیع الثانی"
+      },
+      "confidence": "confirmed",
+      "sources": [
+        "https://www.nation.com.pk/23-Sep-2025/rabi-ul-sani-moon-sighted-pakistan-month-begin-september-25",
+        "https://www.dunyanews.tv/en/Pakistan/908061-no-sighting-of-rabi-ulsani-moon-in-pakistan"
+      ]
+    },
+    "2025-10-21": {
+      "hijri": "1447-04-27",
+      "year": 1447,
+      "month": 4,
+      "day": 27,
+      "month_name": {
+        "en": "Rabi al-Thani",
+        "ur": "ربیع الثانی"
+      },
+      "confidence": "confirmed",
+      "sources": [
+        "https://www.nation.com.pk/23-Sep-2025/rabi-ul-sani-moon-sighted-pakistan-month-begin-september-25",
+        "https://www.dunyanews.tv/en/Pakistan/908061-no-sighting-of-rabi-ulsani-moon-in-pakistan"
+      ]
+    },
+    "2025-10-22": {
+      "hijri": "1447-04-28",
+      "year": 1447,
+      "month": 4,
+      "day": 28,
+      "month_name": {
+        "en": "Rabi al-Thani",
+        "ur": "ربیع الثانی"
+      },
+      "confidence": "confirmed",
+      "sources": [
+        "https://www.nation.com.pk/23-Sep-2025/rabi-ul-sani-moon-sighted-pakistan-month-begin-september-25",
+        "https://www.dunyanews.tv/en/Pakistan/908061-no-sighting-of-rabi-ulsani-moon-in-pakistan"
+      ]
+    },
+    "2025-10-23": {
+      "hijri": "1447-04-29",
+      "year": 1447,
+      "month": 4,
+      "day": 29,
+      "month_name": {
+        "en": "Rabi al-Thani",
+        "ur": "ربیع الثانی"
+      },
+      "confidence": "confirmed",
+      "sources": [
+        "https://www.nation.com.pk/23-Sep-2025/rabi-ul-sani-moon-sighted-pakistan-month-begin-september-25",
+        "https://www.dunyanews.tv/en/Pakistan/908061-no-sighting-of-rabi-ulsani-moon-in-pakistan"
+      ]
+    },
+    "2025-10-24": {
+      "hijri": "1447-05-01",
+      "year": 1447,
+      "month": 5,
+      "day": 1,
+      "month_name": {
+        "en": "Jumada al-Awwal",
+        "ur": "جمادی الاول"
+      },
+      "confidence": "confirmed",
+      "sources": [
+        "https://www.nation.com.pk/24-Oct-2025/jamadi-ul-awwal-moon-sighted",
+        "https://www.dunyanews.tv/en/Pakistan/913705-moon-sighted-in-pakistan-jumada-alawwal-1447-begins-tomorrow"
+      ]
+    },
+    "2025-10-25": {
+      "hijri": "1447-05-02",
+      "year": 1447,
+      "month": 5,
+      "day": 2,
+      "month_name": {
+        "en": "Jumada al-Awwal",
+        "ur": "جمادی الاول"
+      },
+      "confidence": "confirmed",
+      "sources": [
+        "https://www.nation.com.pk/24-Oct-2025/jamadi-ul-awwal-moon-sighted",
+        "https://www.dunyanews.tv/en/Pakistan/913705-moon-sighted-in-pakistan-jumada-alawwal-1447-begins-tomorrow"
+      ]
+    },
+    "2025-10-26": {
+      "hijri": "1447-05-03",
+      "year": 1447,
+      "month": 5,
+      "day": 3,
+      "month_name": {
+        "en": "Jumada al-Awwal",
+        "ur": "جمادی الاول"
+      },
+      "confidence": "confirmed",
+      "sources": [
+        "https://www.nation.com.pk/24-Oct-2025/jamadi-ul-awwal-moon-sighted",
+        "https://www.dunyanews.tv/en/Pakistan/913705-moon-sighted-in-pakistan-jumada-alawwal-1447-begins-tomorrow"
+      ]
+    },
+    "2025-10-27": {
+      "hijri": "1447-05-04",
+      "year": 1447,
+      "month": 5,
+      "day": 4,
+      "month_name": {
+        "en": "Jumada al-Awwal",
+        "ur": "جمادی الاول"
+      },
+      "confidence": "confirmed",
+      "sources": [
+        "https://www.nation.com.pk/24-Oct-2025/jamadi-ul-awwal-moon-sighted",
+        "https://www.dunyanews.tv/en/Pakistan/913705-moon-sighted-in-pakistan-jumada-alawwal-1447-begins-tomorrow"
+      ]
+    },
+    "2025-10-28": {
+      "hijri": "1447-05-05",
+      "year": 1447,
+      "month": 5,
+      "day": 5,
+      "month_name": {
+        "en": "Jumada al-Awwal",
+        "ur": "جمادی الاول"
+      },
+      "confidence": "confirmed",
+      "sources": [
+        "https://www.nation.com.pk/24-Oct-2025/jamadi-ul-awwal-moon-sighted",
+        "https://www.dunyanews.tv/en/Pakistan/913705-moon-sighted-in-pakistan-jumada-alawwal-1447-begins-tomorrow"
+      ]
+    },
+    "2025-10-29": {
+      "hijri": "1447-05-06",
+      "year": 1447,
+      "month": 5,
+      "day": 6,
+      "month_name": {
+        "en": "Jumada al-Awwal",
+        "ur": "جمادی الاول"
+      },
+      "confidence": "confirmed",
+      "sources": [
+        "https://www.nation.com.pk/24-Oct-2025/jamadi-ul-awwal-moon-sighted",
+        "https://www.dunyanews.tv/en/Pakistan/913705-moon-sighted-in-pakistan-jumada-alawwal-1447-begins-tomorrow"
+      ]
+    },
+    "2025-10-30": {
+      "hijri": "1447-05-07",
+      "year": 1447,
+      "month": 5,
+      "day": 7,
+      "month_name": {
+        "en": "Jumada al-Awwal",
+        "ur": "جمادی الاول"
+      },
+      "confidence": "confirmed",
+      "sources": [
+        "https://www.nation.com.pk/24-Oct-2025/jamadi-ul-awwal-moon-sighted",
+        "https://www.dunyanews.tv/en/Pakistan/913705-moon-sighted-in-pakistan-jumada-alawwal-1447-begins-tomorrow"
+      ]
+    },
+    "2025-10-31": {
+      "hijri": "1447-05-08",
+      "year": 1447,
+      "month": 5,
+      "day": 8,
+      "month_name": {
+        "en": "Jumada al-Awwal",
+        "ur": "جمادی الاول"
+      },
+      "confidence": "confirmed",
+      "sources": [
+        "https://www.nation.com.pk/24-Oct-2025/jamadi-ul-awwal-moon-sighted",
+        "https://www.dunyanews.tv/en/Pakistan/913705-moon-sighted-in-pakistan-jumada-alawwal-1447-begins-tomorrow"
+      ]
+    },
+    "2025-11-01": {
+      "hijri": "1447-05-09",
+      "year": 1447,
+      "month": 5,
+      "day": 9,
+      "month_name": {
+        "en": "Jumada al-Awwal",
+        "ur": "جمادی الاول"
+      },
+      "confidence": "confirmed",
+      "sources": [
+        "https://www.nation.com.pk/24-Oct-2025/jamadi-ul-awwal-moon-sighted",
+        "https://www.dunyanews.tv/en/Pakistan/913705-moon-sighted-in-pakistan-jumada-alawwal-1447-begins-tomorrow"
+      ]
+    },
+    "2025-11-02": {
+      "hijri": "1447-05-10",
+      "year": 1447,
+      "month": 5,
+      "day": 10,
+      "month_name": {
+        "en": "Jumada al-Awwal",
+        "ur": "جمادی الاول"
+      },
+      "confidence": "confirmed",
+      "sources": [
+        "https://www.nation.com.pk/24-Oct-2025/jamadi-ul-awwal-moon-sighted",
+        "https://www.dunyanews.tv/en/Pakistan/913705-moon-sighted-in-pakistan-jumada-alawwal-1447-begins-tomorrow"
+      ]
+    },
+    "2025-11-03": {
+      "hijri": "1447-05-11",
+      "year": 1447,
+      "month": 5,
+      "day": 11,
+      "month_name": {
+        "en": "Jumada al-Awwal",
+        "ur": "جمادی الاول"
+      },
+      "confidence": "confirmed",
+      "sources": [
+        "https://www.nation.com.pk/24-Oct-2025/jamadi-ul-awwal-moon-sighted",
+        "https://www.dunyanews.tv/en/Pakistan/913705-moon-sighted-in-pakistan-jumada-alawwal-1447-begins-tomorrow"
+      ]
+    },
+    "2025-11-04": {
+      "hijri": "1447-05-12",
+      "year": 1447,
+      "month": 5,
+      "day": 12,
+      "month_name": {
+        "en": "Jumada al-Awwal",
+        "ur": "جمادی الاول"
+      },
+      "confidence": "confirmed",
+      "sources": [
+        "https://www.nation.com.pk/24-Oct-2025/jamadi-ul-awwal-moon-sighted",
+        "https://www.dunyanews.tv/en/Pakistan/913705-moon-sighted-in-pakistan-jumada-alawwal-1447-begins-tomorrow"
+      ]
+    },
+    "2025-11-05": {
+      "hijri": "1447-05-13",
+      "year": 1447,
+      "month": 5,
+      "day": 13,
+      "month_name": {
+        "en": "Jumada al-Awwal",
+        "ur": "جمادی الاول"
+      },
+      "confidence": "confirmed",
+      "sources": [
+        "https://www.nation.com.pk/24-Oct-2025/jamadi-ul-awwal-moon-sighted",
+        "https://www.dunyanews.tv/en/Pakistan/913705-moon-sighted-in-pakistan-jumada-alawwal-1447-begins-tomorrow"
+      ]
+    },
+    "2025-11-06": {
+      "hijri": "1447-05-14",
+      "year": 1447,
+      "month": 5,
+      "day": 14,
+      "month_name": {
+        "en": "Jumada al-Awwal",
+        "ur": "جمادی الاول"
+      },
+      "confidence": "confirmed",
+      "sources": [
+        "https://www.nation.com.pk/24-Oct-2025/jamadi-ul-awwal-moon-sighted",
+        "https://www.dunyanews.tv/en/Pakistan/913705-moon-sighted-in-pakistan-jumada-alawwal-1447-begins-tomorrow"
+      ]
+    },
+    "2025-11-07": {
+      "hijri": "1447-05-15",
+      "year": 1447,
+      "month": 5,
+      "day": 15,
+      "month_name": {
+        "en": "Jumada al-Awwal",
+        "ur": "جمادی الاول"
+      },
+      "confidence": "confirmed",
+      "sources": [
+        "https://www.nation.com.pk/24-Oct-2025/jamadi-ul-awwal-moon-sighted",
+        "https://www.dunyanews.tv/en/Pakistan/913705-moon-sighted-in-pakistan-jumada-alawwal-1447-begins-tomorrow"
+      ]
+    },
+    "2025-11-08": {
+      "hijri": "1447-05-16",
+      "year": 1447,
+      "month": 5,
+      "day": 16,
+      "month_name": {
+        "en": "Jumada al-Awwal",
+        "ur": "جمادی الاول"
+      },
+      "confidence": "confirmed",
+      "sources": [
+        "https://www.nation.com.pk/24-Oct-2025/jamadi-ul-awwal-moon-sighted",
+        "https://www.dunyanews.tv/en/Pakistan/913705-moon-sighted-in-pakistan-jumada-alawwal-1447-begins-tomorrow"
+      ]
+    },
+    "2025-11-09": {
+      "hijri": "1447-05-17",
+      "year": 1447,
+      "month": 5,
+      "day": 17,
+      "month_name": {
+        "en": "Jumada al-Awwal",
+        "ur": "جمادی الاول"
+      },
+      "confidence": "confirmed",
+      "sources": [
+        "https://www.nation.com.pk/24-Oct-2025/jamadi-ul-awwal-moon-sighted",
+        "https://www.dunyanews.tv/en/Pakistan/913705-moon-sighted-in-pakistan-jumada-alawwal-1447-begins-tomorrow"
+      ]
+    },
+    "2025-11-10": {
+      "hijri": "1447-05-18",
+      "year": 1447,
+      "month": 5,
+      "day": 18,
+      "month_name": {
+        "en": "Jumada al-Awwal",
+        "ur": "جمادی الاول"
+      },
+      "confidence": "confirmed",
+      "sources": [
+        "https://www.nation.com.pk/24-Oct-2025/jamadi-ul-awwal-moon-sighted",
+        "https://www.dunyanews.tv/en/Pakistan/913705-moon-sighted-in-pakistan-jumada-alawwal-1447-begins-tomorrow"
+      ]
+    },
+    "2025-11-11": {
+      "hijri": "1447-05-19",
+      "year": 1447,
+      "month": 5,
+      "day": 19,
+      "month_name": {
+        "en": "Jumada al-Awwal",
+        "ur": "جمادی الاول"
+      },
+      "confidence": "confirmed",
+      "sources": [
+        "https://www.nation.com.pk/24-Oct-2025/jamadi-ul-awwal-moon-sighted",
+        "https://www.dunyanews.tv/en/Pakistan/913705-moon-sighted-in-pakistan-jumada-alawwal-1447-begins-tomorrow"
+      ]
+    },
+    "2025-11-12": {
+      "hijri": "1447-05-20",
+      "year": 1447,
+      "month": 5,
+      "day": 20,
+      "month_name": {
+        "en": "Jumada al-Awwal",
+        "ur": "جمادی الاول"
+      },
+      "confidence": "confirmed",
+      "sources": [
+        "https://www.nation.com.pk/24-Oct-2025/jamadi-ul-awwal-moon-sighted",
+        "https://www.dunyanews.tv/en/Pakistan/913705-moon-sighted-in-pakistan-jumada-alawwal-1447-begins-tomorrow"
+      ]
+    },
+    "2025-11-13": {
+      "hijri": "1447-05-21",
+      "year": 1447,
+      "month": 5,
+      "day": 21,
+      "month_name": {
+        "en": "Jumada al-Awwal",
+        "ur": "جمادی الاول"
+      },
+      "confidence": "confirmed",
+      "sources": [
+        "https://www.nation.com.pk/24-Oct-2025/jamadi-ul-awwal-moon-sighted",
+        "https://www.dunyanews.tv/en/Pakistan/913705-moon-sighted-in-pakistan-jumada-alawwal-1447-begins-tomorrow"
+      ]
+    },
+    "2025-11-14": {
+      "hijri": "1447-05-22",
+      "year": 1447,
+      "month": 5,
+      "day": 22,
+      "month_name": {
+        "en": "Jumada al-Awwal",
+        "ur": "جمادی الاول"
+      },
+      "confidence": "confirmed",
+      "sources": [
+        "https://www.nation.com.pk/24-Oct-2025/jamadi-ul-awwal-moon-sighted",
+        "https://www.dunyanews.tv/en/Pakistan/913705-moon-sighted-in-pakistan-jumada-alawwal-1447-begins-tomorrow"
+      ]
+    },
+    "2025-11-15": {
+      "hijri": "1447-05-23",
+      "year": 1447,
+      "month": 5,
+      "day": 23,
+      "month_name": {
+        "en": "Jumada al-Awwal",
+        "ur": "جمادی الاول"
+      },
+      "confidence": "confirmed",
+      "sources": [
+        "https://www.nation.com.pk/24-Oct-2025/jamadi-ul-awwal-moon-sighted",
+        "https://www.dunyanews.tv/en/Pakistan/913705-moon-sighted-in-pakistan-jumada-alawwal-1447-begins-tomorrow"
+      ]
+    },
+    "2025-11-16": {
+      "hijri": "1447-05-24",
+      "year": 1447,
+      "month": 5,
+      "day": 24,
+      "month_name": {
+        "en": "Jumada al-Awwal",
+        "ur": "جمادی الاول"
+      },
+      "confidence": "confirmed",
+      "sources": [
+        "https://www.nation.com.pk/24-Oct-2025/jamadi-ul-awwal-moon-sighted",
+        "https://www.dunyanews.tv/en/Pakistan/913705-moon-sighted-in-pakistan-jumada-alawwal-1447-begins-tomorrow"
+      ]
+    },
+    "2025-11-17": {
+      "hijri": "1447-05-25",
+      "year": 1447,
+      "month": 5,
+      "day": 25,
+      "month_name": {
+        "en": "Jumada al-Awwal",
+        "ur": "جمادی الاول"
+      },
+      "confidence": "confirmed",
+      "sources": [
+        "https://www.nation.com.pk/24-Oct-2025/jamadi-ul-awwal-moon-sighted",
+        "https://www.dunyanews.tv/en/Pakistan/913705-moon-sighted-in-pakistan-jumada-alawwal-1447-begins-tomorrow"
+      ]
+    },
+    "2025-11-18": {
+      "hijri": "1447-05-26",
+      "year": 1447,
+      "month": 5,
+      "day": 26,
+      "month_name": {
+        "en": "Jumada al-Awwal",
+        "ur": "جمادی الاول"
+      },
+      "confidence": "confirmed",
+      "sources": [
+        "https://www.nation.com.pk/24-Oct-2025/jamadi-ul-awwal-moon-sighted",
+        "https://www.dunyanews.tv/en/Pakistan/913705-moon-sighted-in-pakistan-jumada-alawwal-1447-begins-tomorrow"
+      ]
+    },
+    "2025-11-19": {
+      "hijri": "1447-05-27",
+      "year": 1447,
+      "month": 5,
+      "day": 27,
+      "month_name": {
+        "en": "Jumada al-Awwal",
+        "ur": "جمادی الاول"
+      },
+      "confidence": "confirmed",
+      "sources": [
+        "https://www.nation.com.pk/24-Oct-2025/jamadi-ul-awwal-moon-sighted",
+        "https://www.dunyanews.tv/en/Pakistan/913705-moon-sighted-in-pakistan-jumada-alawwal-1447-begins-tomorrow"
+      ]
+    },
+    "2025-11-20": {
+      "hijri": "1447-05-28",
+      "year": 1447,
+      "month": 5,
+      "day": 28,
+      "month_name": {
+        "en": "Jumada al-Awwal",
+        "ur": "جمادی الاول"
+      },
+      "confidence": "confirmed",
+      "sources": [
+        "https://www.nation.com.pk/24-Oct-2025/jamadi-ul-awwal-moon-sighted",
+        "https://www.dunyanews.tv/en/Pakistan/913705-moon-sighted-in-pakistan-jumada-alawwal-1447-begins-tomorrow"
+      ]
+    },
+    "2025-11-21": {
+      "hijri": "1447-05-29",
+      "year": 1447,
+      "month": 5,
+      "day": 29,
+      "month_name": {
+        "en": "Jumada al-Awwal",
+        "ur": "جمادی الاول"
+      },
+      "confidence": "confirmed",
+      "sources": [
+        "https://www.nation.com.pk/24-Oct-2025/jamadi-ul-awwal-moon-sighted",
+        "https://www.dunyanews.tv/en/Pakistan/913705-moon-sighted-in-pakistan-jumada-alawwal-1447-begins-tomorrow"
+      ]
+    },
+    "2025-11-22": {
+      "hijri": "1447-05-30",
+      "year": 1447,
+      "month": 5,
+      "day": 30,
+      "month_name": {
+        "en": "Jumada al-Awwal",
+        "ur": "جمادی الاول"
+      },
+      "confidence": "confirmed",
+      "sources": [
+        "https://www.nation.com.pk/24-Oct-2025/jamadi-ul-awwal-moon-sighted",
+        "https://www.dunyanews.tv/en/Pakistan/913705-moon-sighted-in-pakistan-jumada-alawwal-1447-begins-tomorrow"
+      ]
+    },
+    "2025-11-23": {
+      "hijri": "1447-06-01",
+      "year": 1447,
+      "month": 6,
+      "day": 1,
+      "month_name": {
+        "en": "Jumada al-Thani",
+        "ur": "جمادی الثانی"
+      },
+      "confidence": "confirmed",
+      "sources": [
+        "https://www.dunyanews.tv/en/Pakistan/919332-central-ruetehilal-committee-announces-jamadi-althani-moon-not-sigh",
+        "https://dailyausaf.com/en/pakistan/jamadi-ul-thani-447h-moon-not-sighted/"
+      ]
+    },
+    "2025-11-24": {
+      "hijri": "1447-06-02",
+      "year": 1447,
+      "month": 6,
+      "day": 2,
+      "month_name": {
+        "en": "Jumada al-Thani",
+        "ur": "جمادی الثانی"
+      },
+      "confidence": "confirmed",
+      "sources": [
+        "https://www.dunyanews.tv/en/Pakistan/919332-central-ruetehilal-committee-announces-jamadi-althani-moon-not-sigh",
+        "https://dailyausaf.com/en/pakistan/jamadi-ul-thani-447h-moon-not-sighted/"
+      ]
+    },
+    "2025-11-25": {
+      "hijri": "1447-06-03",
+      "year": 1447,
+      "month": 6,
+      "day": 3,
+      "month_name": {
+        "en": "Jumada al-Thani",
+        "ur": "جمادی الثانی"
+      },
+      "confidence": "confirmed",
+      "sources": [
+        "https://www.dunyanews.tv/en/Pakistan/919332-central-ruetehilal-committee-announces-jamadi-althani-moon-not-sigh",
+        "https://dailyausaf.com/en/pakistan/jamadi-ul-thani-447h-moon-not-sighted/"
+      ]
+    },
+    "2025-11-26": {
+      "hijri": "1447-06-04",
+      "year": 1447,
+      "month": 6,
+      "day": 4,
+      "month_name": {
+        "en": "Jumada al-Thani",
+        "ur": "جمادی الثانی"
+      },
+      "confidence": "confirmed",
+      "sources": [
+        "https://www.dunyanews.tv/en/Pakistan/919332-central-ruetehilal-committee-announces-jamadi-althani-moon-not-sigh",
+        "https://dailyausaf.com/en/pakistan/jamadi-ul-thani-447h-moon-not-sighted/"
+      ]
+    },
+    "2025-11-27": {
+      "hijri": "1447-06-05",
+      "year": 1447,
+      "month": 6,
+      "day": 5,
+      "month_name": {
+        "en": "Jumada al-Thani",
+        "ur": "جمادی الثانی"
+      },
+      "confidence": "confirmed",
+      "sources": [
+        "https://www.dunyanews.tv/en/Pakistan/919332-central-ruetehilal-committee-announces-jamadi-althani-moon-not-sigh",
+        "https://dailyausaf.com/en/pakistan/jamadi-ul-thani-447h-moon-not-sighted/"
+      ]
+    },
+    "2025-11-28": {
+      "hijri": "1447-06-06",
+      "year": 1447,
+      "month": 6,
+      "day": 6,
+      "month_name": {
+        "en": "Jumada al-Thani",
+        "ur": "جمادی الثانی"
+      },
+      "confidence": "confirmed",
+      "sources": [
+        "https://www.dunyanews.tv/en/Pakistan/919332-central-ruetehilal-committee-announces-jamadi-althani-moon-not-sigh",
+        "https://dailyausaf.com/en/pakistan/jamadi-ul-thani-447h-moon-not-sighted/"
+      ]
+    },
+    "2025-11-29": {
+      "hijri": "1447-06-07",
+      "year": 1447,
+      "month": 6,
+      "day": 7,
+      "month_name": {
+        "en": "Jumada al-Thani",
+        "ur": "جمادی الثانی"
+      },
+      "confidence": "confirmed",
+      "sources": [
+        "https://www.dunyanews.tv/en/Pakistan/919332-central-ruetehilal-committee-announces-jamadi-althani-moon-not-sigh",
+        "https://dailyausaf.com/en/pakistan/jamadi-ul-thani-447h-moon-not-sighted/"
+      ]
+    },
+    "2025-11-30": {
+      "hijri": "1447-06-08",
+      "year": 1447,
+      "month": 6,
+      "day": 8,
+      "month_name": {
+        "en": "Jumada al-Thani",
+        "ur": "جمادی الثانی"
+      },
+      "confidence": "confirmed",
+      "sources": [
+        "https://www.dunyanews.tv/en/Pakistan/919332-central-ruetehilal-committee-announces-jamadi-althani-moon-not-sigh",
+        "https://dailyausaf.com/en/pakistan/jamadi-ul-thani-447h-moon-not-sighted/"
+      ]
+    },
+    "2025-12-01": {
+      "hijri": "1447-06-09",
+      "year": 1447,
+      "month": 6,
+      "day": 9,
+      "month_name": {
+        "en": "Jumada al-Thani",
+        "ur": "جمادی الثانی"
+      },
+      "confidence": "confirmed",
+      "sources": [
+        "https://www.dunyanews.tv/en/Pakistan/919332-central-ruetehilal-committee-announces-jamadi-althani-moon-not-sigh",
+        "https://dailyausaf.com/en/pakistan/jamadi-ul-thani-447h-moon-not-sighted/"
+      ]
+    },
+    "2025-12-02": {
+      "hijri": "1447-06-10",
+      "year": 1447,
+      "month": 6,
+      "day": 10,
+      "month_name": {
+        "en": "Jumada al-Thani",
+        "ur": "جمادی الثانی"
+      },
+      "confidence": "confirmed",
+      "sources": [
+        "https://www.dunyanews.tv/en/Pakistan/919332-central-ruetehilal-committee-announces-jamadi-althani-moon-not-sigh",
+        "https://dailyausaf.com/en/pakistan/jamadi-ul-thani-447h-moon-not-sighted/"
+      ]
+    },
+    "2025-12-03": {
+      "hijri": "1447-06-11",
+      "year": 1447,
+      "month": 6,
+      "day": 11,
+      "month_name": {
+        "en": "Jumada al-Thani",
+        "ur": "جمادی الثانی"
+      },
+      "confidence": "confirmed",
+      "sources": [
+        "https://www.dunyanews.tv/en/Pakistan/919332-central-ruetehilal-committee-announces-jamadi-althani-moon-not-sigh",
+        "https://dailyausaf.com/en/pakistan/jamadi-ul-thani-447h-moon-not-sighted/"
+      ]
+    },
+    "2025-12-04": {
+      "hijri": "1447-06-12",
+      "year": 1447,
+      "month": 6,
+      "day": 12,
+      "month_name": {
+        "en": "Jumada al-Thani",
+        "ur": "جمادی الثانی"
+      },
+      "confidence": "confirmed",
+      "sources": [
+        "https://www.dunyanews.tv/en/Pakistan/919332-central-ruetehilal-committee-announces-jamadi-althani-moon-not-sigh",
+        "https://dailyausaf.com/en/pakistan/jamadi-ul-thani-447h-moon-not-sighted/"
+      ]
+    },
+    "2025-12-05": {
+      "hijri": "1447-06-13",
+      "year": 1447,
+      "month": 6,
+      "day": 13,
+      "month_name": {
+        "en": "Jumada al-Thani",
+        "ur": "جمادی الثانی"
+      },
+      "confidence": "confirmed",
+      "sources": [
+        "https://www.dunyanews.tv/en/Pakistan/919332-central-ruetehilal-committee-announces-jamadi-althani-moon-not-sigh",
+        "https://dailyausaf.com/en/pakistan/jamadi-ul-thani-447h-moon-not-sighted/"
+      ]
+    },
+    "2025-12-06": {
+      "hijri": "1447-06-14",
+      "year": 1447,
+      "month": 6,
+      "day": 14,
+      "month_name": {
+        "en": "Jumada al-Thani",
+        "ur": "جمادی الثانی"
+      },
+      "confidence": "confirmed",
+      "sources": [
+        "https://www.dunyanews.tv/en/Pakistan/919332-central-ruetehilal-committee-announces-jamadi-althani-moon-not-sigh",
+        "https://dailyausaf.com/en/pakistan/jamadi-ul-thani-447h-moon-not-sighted/"
+      ]
+    },
+    "2025-12-07": {
+      "hijri": "1447-06-15",
+      "year": 1447,
+      "month": 6,
+      "day": 15,
+      "month_name": {
+        "en": "Jumada al-Thani",
+        "ur": "جمادی الثانی"
+      },
+      "confidence": "confirmed",
+      "sources": [
+        "https://www.dunyanews.tv/en/Pakistan/919332-central-ruetehilal-committee-announces-jamadi-althani-moon-not-sigh",
+        "https://dailyausaf.com/en/pakistan/jamadi-ul-thani-447h-moon-not-sighted/"
+      ]
+    },
+    "2025-12-08": {
+      "hijri": "1447-06-16",
+      "year": 1447,
+      "month": 6,
+      "day": 16,
+      "month_name": {
+        "en": "Jumada al-Thani",
+        "ur": "جمادی الثانی"
+      },
+      "confidence": "confirmed",
+      "sources": [
+        "https://www.dunyanews.tv/en/Pakistan/919332-central-ruetehilal-committee-announces-jamadi-althani-moon-not-sigh",
+        "https://dailyausaf.com/en/pakistan/jamadi-ul-thani-447h-moon-not-sighted/"
+      ]
+    },
+    "2025-12-09": {
+      "hijri": "1447-06-17",
+      "year": 1447,
+      "month": 6,
+      "day": 17,
+      "month_name": {
+        "en": "Jumada al-Thani",
+        "ur": "جمادی الثانی"
+      },
+      "confidence": "confirmed",
+      "sources": [
+        "https://www.dunyanews.tv/en/Pakistan/919332-central-ruetehilal-committee-announces-jamadi-althani-moon-not-sigh",
+        "https://dailyausaf.com/en/pakistan/jamadi-ul-thani-447h-moon-not-sighted/"
+      ]
+    },
+    "2025-12-10": {
+      "hijri": "1447-06-18",
+      "year": 1447,
+      "month": 6,
+      "day": 18,
+      "month_name": {
+        "en": "Jumada al-Thani",
+        "ur": "جمادی الثانی"
+      },
+      "confidence": "confirmed",
+      "sources": [
+        "https://www.dunyanews.tv/en/Pakistan/919332-central-ruetehilal-committee-announces-jamadi-althani-moon-not-sigh",
+        "https://dailyausaf.com/en/pakistan/jamadi-ul-thani-447h-moon-not-sighted/"
+      ]
+    },
+    "2025-12-11": {
+      "hijri": "1447-06-19",
+      "year": 1447,
+      "month": 6,
+      "day": 19,
+      "month_name": {
+        "en": "Jumada al-Thani",
+        "ur": "جمادی الثانی"
+      },
+      "confidence": "confirmed",
+      "sources": [
+        "https://www.dunyanews.tv/en/Pakistan/919332-central-ruetehilal-committee-announces-jamadi-althani-moon-not-sigh",
+        "https://dailyausaf.com/en/pakistan/jamadi-ul-thani-447h-moon-not-sighted/"
+      ]
+    },
+    "2025-12-12": {
+      "hijri": "1447-06-20",
+      "year": 1447,
+      "month": 6,
+      "day": 20,
+      "month_name": {
+        "en": "Jumada al-Thani",
+        "ur": "جمادی الثانی"
+      },
+      "confidence": "confirmed",
+      "sources": [
+        "https://www.dunyanews.tv/en/Pakistan/919332-central-ruetehilal-committee-announces-jamadi-althani-moon-not-sigh",
+        "https://dailyausaf.com/en/pakistan/jamadi-ul-thani-447h-moon-not-sighted/"
+      ]
+    },
+    "2025-12-13": {
+      "hijri": "1447-06-21",
+      "year": 1447,
+      "month": 6,
+      "day": 21,
+      "month_name": {
+        "en": "Jumada al-Thani",
+        "ur": "جمادی الثانی"
+      },
+      "confidence": "confirmed",
+      "sources": [
+        "https://www.dunyanews.tv/en/Pakistan/919332-central-ruetehilal-committee-announces-jamadi-althani-moon-not-sigh",
+        "https://dailyausaf.com/en/pakistan/jamadi-ul-thani-447h-moon-not-sighted/"
+      ]
+    },
+    "2025-12-14": {
+      "hijri": "1447-06-22",
+      "year": 1447,
+      "month": 6,
+      "day": 22,
+      "month_name": {
+        "en": "Jumada al-Thani",
+        "ur": "جمادی الثانی"
+      },
+      "confidence": "confirmed",
+      "sources": [
+        "https://www.dunyanews.tv/en/Pakistan/919332-central-ruetehilal-committee-announces-jamadi-althani-moon-not-sigh",
+        "https://dailyausaf.com/en/pakistan/jamadi-ul-thani-447h-moon-not-sighted/"
+      ]
+    },
+    "2025-12-15": {
+      "hijri": "1447-06-23",
+      "year": 1447,
+      "month": 6,
+      "day": 23,
+      "month_name": {
+        "en": "Jumada al-Thani",
+        "ur": "جمادی الثانی"
+      },
+      "confidence": "confirmed",
+      "sources": [
+        "https://www.dunyanews.tv/en/Pakistan/919332-central-ruetehilal-committee-announces-jamadi-althani-moon-not-sigh",
+        "https://dailyausaf.com/en/pakistan/jamadi-ul-thani-447h-moon-not-sighted/"
+      ]
+    },
+    "2025-12-16": {
+      "hijri": "1447-06-24",
+      "year": 1447,
+      "month": 6,
+      "day": 24,
+      "month_name": {
+        "en": "Jumada al-Thani",
+        "ur": "جمادی الثانی"
+      },
+      "confidence": "confirmed",
+      "sources": [
+        "https://www.dunyanews.tv/en/Pakistan/919332-central-ruetehilal-committee-announces-jamadi-althani-moon-not-sigh",
+        "https://dailyausaf.com/en/pakistan/jamadi-ul-thani-447h-moon-not-sighted/"
+      ]
+    },
+    "2025-12-17": {
+      "hijri": "1447-06-25",
+      "year": 1447,
+      "month": 6,
+      "day": 25,
+      "month_name": {
+        "en": "Jumada al-Thani",
+        "ur": "جمادی الثانی"
+      },
+      "confidence": "confirmed",
+      "sources": [
+        "https://www.dunyanews.tv/en/Pakistan/919332-central-ruetehilal-committee-announces-jamadi-althani-moon-not-sigh",
+        "https://dailyausaf.com/en/pakistan/jamadi-ul-thani-447h-moon-not-sighted/"
+      ]
+    },
+    "2025-12-18": {
+      "hijri": "1447-06-26",
+      "year": 1447,
+      "month": 6,
+      "day": 26,
+      "month_name": {
+        "en": "Jumada al-Thani",
+        "ur": "جمادی الثانی"
+      },
+      "confidence": "confirmed",
+      "sources": [
+        "https://www.dunyanews.tv/en/Pakistan/919332-central-ruetehilal-committee-announces-jamadi-althani-moon-not-sigh",
+        "https://dailyausaf.com/en/pakistan/jamadi-ul-thani-447h-moon-not-sighted/"
+      ]
+    },
+    "2025-12-19": {
+      "hijri": "1447-06-27",
+      "year": 1447,
+      "month": 6,
+      "day": 27,
+      "month_name": {
+        "en": "Jumada al-Thani",
+        "ur": "جمادی الثانی"
+      },
+      "confidence": "confirmed",
+      "sources": [
+        "https://www.dunyanews.tv/en/Pakistan/919332-central-ruetehilal-committee-announces-jamadi-althani-moon-not-sigh",
+        "https://dailyausaf.com/en/pakistan/jamadi-ul-thani-447h-moon-not-sighted/"
+      ]
+    },
+    "2025-12-20": {
+      "hijri": "1447-06-28",
+      "year": 1447,
+      "month": 6,
+      "day": 28,
+      "month_name": {
+        "en": "Jumada al-Thani",
+        "ur": "جمادی الثانی"
+      },
+      "confidence": "confirmed",
+      "sources": [
+        "https://www.dunyanews.tv/en/Pakistan/919332-central-ruetehilal-committee-announces-jamadi-althani-moon-not-sigh",
+        "https://dailyausaf.com/en/pakistan/jamadi-ul-thani-447h-moon-not-sighted/"
+      ]
+    },
+    "2025-12-21": {
+      "hijri": "1447-06-29",
+      "year": 1447,
+      "month": 6,
+      "day": 29,
+      "month_name": {
+        "en": "Jumada al-Thani",
+        "ur": "جمادی الثانی"
+      },
+      "confidence": "confirmed",
+      "sources": [
+        "https://www.dunyanews.tv/en/Pakistan/919332-central-ruetehilal-committee-announces-jamadi-althani-moon-not-sigh",
+        "https://dailyausaf.com/en/pakistan/jamadi-ul-thani-447h-moon-not-sighted/"
+      ]
+    },
+    "2025-12-22": {
+      "hijri": "1447-07-01",
+      "year": 1447,
+      "month": 7,
+      "day": 1,
+      "month_name": {
+        "en": "Rajab",
+        "ur": "رجب"
+      },
+      "confidence": "confirmed",
+      "sources": [
+        "https://www.nation.com.pk/22-Dec-2025/rajab-al-murajjab-moon-sighted-pakistan",
+        "https://www.pakistantoday.com.pk/2025/12/21/rajab-moon-sighted-across-pakistan"
+      ]
+    },
+    "2025-12-23": {
+      "hijri": "1447-07-02",
+      "year": 1447,
+      "month": 7,
+      "day": 2,
+      "month_name": {
+        "en": "Rajab",
+        "ur": "رجب"
+      },
+      "confidence": "confirmed",
+      "sources": [
+        "https://www.nation.com.pk/22-Dec-2025/rajab-al-murajjab-moon-sighted-pakistan",
+        "https://www.pakistantoday.com.pk/2025/12/21/rajab-moon-sighted-across-pakistan"
+      ]
+    },
+    "2025-12-24": {
+      "hijri": "1447-07-03",
+      "year": 1447,
+      "month": 7,
+      "day": 3,
+      "month_name": {
+        "en": "Rajab",
+        "ur": "رجب"
+      },
+      "confidence": "confirmed",
+      "sources": [
+        "https://www.nation.com.pk/22-Dec-2025/rajab-al-murajjab-moon-sighted-pakistan",
+        "https://www.pakistantoday.com.pk/2025/12/21/rajab-moon-sighted-across-pakistan"
+      ]
+    },
+    "2025-12-25": {
+      "hijri": "1447-07-04",
+      "year": 1447,
+      "month": 7,
+      "day": 4,
+      "month_name": {
+        "en": "Rajab",
+        "ur": "رجب"
+      },
+      "confidence": "confirmed",
+      "sources": [
+        "https://www.nation.com.pk/22-Dec-2025/rajab-al-murajjab-moon-sighted-pakistan",
+        "https://www.pakistantoday.com.pk/2025/12/21/rajab-moon-sighted-across-pakistan"
+      ]
+    },
+    "2025-12-26": {
+      "hijri": "1447-07-05",
+      "year": 1447,
+      "month": 7,
+      "day": 5,
+      "month_name": {
+        "en": "Rajab",
+        "ur": "رجب"
+      },
+      "confidence": "confirmed",
+      "sources": [
+        "https://www.nation.com.pk/22-Dec-2025/rajab-al-murajjab-moon-sighted-pakistan",
+        "https://www.pakistantoday.com.pk/2025/12/21/rajab-moon-sighted-across-pakistan"
+      ]
+    },
+    "2025-12-27": {
+      "hijri": "1447-07-06",
+      "year": 1447,
+      "month": 7,
+      "day": 6,
+      "month_name": {
+        "en": "Rajab",
+        "ur": "رجب"
+      },
+      "confidence": "confirmed",
+      "sources": [
+        "https://www.nation.com.pk/22-Dec-2025/rajab-al-murajjab-moon-sighted-pakistan",
+        "https://www.pakistantoday.com.pk/2025/12/21/rajab-moon-sighted-across-pakistan"
+      ]
+    },
+    "2025-12-28": {
+      "hijri": "1447-07-07",
+      "year": 1447,
+      "month": 7,
+      "day": 7,
+      "month_name": {
+        "en": "Rajab",
+        "ur": "رجب"
+      },
+      "confidence": "confirmed",
+      "sources": [
+        "https://www.nation.com.pk/22-Dec-2025/rajab-al-murajjab-moon-sighted-pakistan",
+        "https://www.pakistantoday.com.pk/2025/12/21/rajab-moon-sighted-across-pakistan"
+      ]
+    },
+    "2025-12-29": {
+      "hijri": "1447-07-08",
+      "year": 1447,
+      "month": 7,
+      "day": 8,
+      "month_name": {
+        "en": "Rajab",
+        "ur": "رجب"
+      },
+      "confidence": "confirmed",
+      "sources": [
+        "https://www.nation.com.pk/22-Dec-2025/rajab-al-murajjab-moon-sighted-pakistan",
+        "https://www.pakistantoday.com.pk/2025/12/21/rajab-moon-sighted-across-pakistan"
+      ]
+    },
+    "2025-12-30": {
+      "hijri": "1447-07-09",
+      "year": 1447,
+      "month": 7,
+      "day": 9,
+      "month_name": {
+        "en": "Rajab",
+        "ur": "رجب"
+      },
+      "confidence": "confirmed",
+      "sources": [
+        "https://www.nation.com.pk/22-Dec-2025/rajab-al-murajjab-moon-sighted-pakistan",
+        "https://www.pakistantoday.com.pk/2025/12/21/rajab-moon-sighted-across-pakistan"
+      ]
+    },
+    "2025-12-31": {
+      "hijri": "1447-07-10",
+      "year": 1447,
+      "month": 7,
+      "day": 10,
+      "month_name": {
+        "en": "Rajab",
+        "ur": "رجب"
+      },
+      "confidence": "confirmed",
+      "sources": [
+        "https://www.nation.com.pk/22-Dec-2025/rajab-al-murajjab-moon-sighted-pakistan",
+        "https://www.pakistantoday.com.pk/2025/12/21/rajab-moon-sighted-across-pakistan"
+      ]
+    },
+    "2026-01-01": {
+      "hijri": "1447-07-11",
+      "year": 1447,
+      "month": 7,
+      "day": 11,
+      "month_name": {
+        "en": "Rajab",
+        "ur": "رجب"
+      },
+      "confidence": "confirmed",
+      "sources": [
+        "https://www.nation.com.pk/22-Dec-2025/rajab-al-murajjab-moon-sighted-pakistan",
+        "https://www.pakistantoday.com.pk/2025/12/21/rajab-moon-sighted-across-pakistan"
+      ]
+    },
+    "2026-01-02": {
+      "hijri": "1447-07-12",
+      "year": 1447,
+      "month": 7,
+      "day": 12,
+      "month_name": {
+        "en": "Rajab",
+        "ur": "رجب"
+      },
+      "confidence": "confirmed",
+      "sources": [
+        "https://www.nation.com.pk/22-Dec-2025/rajab-al-murajjab-moon-sighted-pakistan",
+        "https://www.pakistantoday.com.pk/2025/12/21/rajab-moon-sighted-across-pakistan"
+      ]
+    },
+    "2026-01-03": {
+      "hijri": "1447-07-13",
+      "year": 1447,
+      "month": 7,
+      "day": 13,
+      "month_name": {
+        "en": "Rajab",
+        "ur": "رجب"
+      },
+      "confidence": "confirmed",
+      "sources": [
+        "https://www.nation.com.pk/22-Dec-2025/rajab-al-murajjab-moon-sighted-pakistan",
+        "https://www.pakistantoday.com.pk/2025/12/21/rajab-moon-sighted-across-pakistan"
+      ]
+    },
+    "2026-01-04": {
+      "hijri": "1447-07-14",
+      "year": 1447,
+      "month": 7,
+      "day": 14,
+      "month_name": {
+        "en": "Rajab",
+        "ur": "رجب"
+      },
+      "confidence": "confirmed",
+      "sources": [
+        "https://www.nation.com.pk/22-Dec-2025/rajab-al-murajjab-moon-sighted-pakistan",
+        "https://www.pakistantoday.com.pk/2025/12/21/rajab-moon-sighted-across-pakistan"
+      ]
+    },
+    "2026-01-05": {
+      "hijri": "1447-07-15",
+      "year": 1447,
+      "month": 7,
+      "day": 15,
+      "month_name": {
+        "en": "Rajab",
+        "ur": "رجب"
+      },
+      "confidence": "confirmed",
+      "sources": [
+        "https://www.nation.com.pk/22-Dec-2025/rajab-al-murajjab-moon-sighted-pakistan",
+        "https://www.pakistantoday.com.pk/2025/12/21/rajab-moon-sighted-across-pakistan"
+      ]
+    },
+    "2026-01-06": {
+      "hijri": "1447-07-16",
+      "year": 1447,
+      "month": 7,
+      "day": 16,
+      "month_name": {
+        "en": "Rajab",
+        "ur": "رجب"
+      },
+      "confidence": "confirmed",
+      "sources": [
+        "https://www.nation.com.pk/22-Dec-2025/rajab-al-murajjab-moon-sighted-pakistan",
+        "https://www.pakistantoday.com.pk/2025/12/21/rajab-moon-sighted-across-pakistan"
+      ]
+    },
+    "2026-01-07": {
+      "hijri": "1447-07-17",
+      "year": 1447,
+      "month": 7,
+      "day": 17,
+      "month_name": {
+        "en": "Rajab",
+        "ur": "رجب"
+      },
+      "confidence": "confirmed",
+      "sources": [
+        "https://www.nation.com.pk/22-Dec-2025/rajab-al-murajjab-moon-sighted-pakistan",
+        "https://www.pakistantoday.com.pk/2025/12/21/rajab-moon-sighted-across-pakistan"
+      ]
+    },
+    "2026-01-08": {
+      "hijri": "1447-07-18",
+      "year": 1447,
+      "month": 7,
+      "day": 18,
+      "month_name": {
+        "en": "Rajab",
+        "ur": "رجب"
+      },
+      "confidence": "confirmed",
+      "sources": [
+        "https://www.nation.com.pk/22-Dec-2025/rajab-al-murajjab-moon-sighted-pakistan",
+        "https://www.pakistantoday.com.pk/2025/12/21/rajab-moon-sighted-across-pakistan"
+      ]
+    },
+    "2026-01-09": {
+      "hijri": "1447-07-19",
+      "year": 1447,
+      "month": 7,
+      "day": 19,
+      "month_name": {
+        "en": "Rajab",
+        "ur": "رجب"
+      },
+      "confidence": "confirmed",
+      "sources": [
+        "https://www.nation.com.pk/22-Dec-2025/rajab-al-murajjab-moon-sighted-pakistan",
+        "https://www.pakistantoday.com.pk/2025/12/21/rajab-moon-sighted-across-pakistan"
+      ]
+    },
+    "2026-01-10": {
+      "hijri": "1447-07-20",
+      "year": 1447,
+      "month": 7,
+      "day": 20,
+      "month_name": {
+        "en": "Rajab",
+        "ur": "رجب"
+      },
+      "confidence": "confirmed",
+      "sources": [
+        "https://www.nation.com.pk/22-Dec-2025/rajab-al-murajjab-moon-sighted-pakistan",
+        "https://www.pakistantoday.com.pk/2025/12/21/rajab-moon-sighted-across-pakistan"
+      ]
+    },
+    "2026-01-11": {
+      "hijri": "1447-07-21",
+      "year": 1447,
+      "month": 7,
+      "day": 21,
+      "month_name": {
+        "en": "Rajab",
+        "ur": "رجب"
+      },
+      "confidence": "confirmed",
+      "sources": [
+        "https://www.nation.com.pk/22-Dec-2025/rajab-al-murajjab-moon-sighted-pakistan",
+        "https://www.pakistantoday.com.pk/2025/12/21/rajab-moon-sighted-across-pakistan"
+      ]
+    },
+    "2026-01-12": {
+      "hijri": "1447-07-22",
+      "year": 1447,
+      "month": 7,
+      "day": 22,
+      "month_name": {
+        "en": "Rajab",
+        "ur": "رجب"
+      },
+      "confidence": "confirmed",
+      "sources": [
+        "https://www.nation.com.pk/22-Dec-2025/rajab-al-murajjab-moon-sighted-pakistan",
+        "https://www.pakistantoday.com.pk/2025/12/21/rajab-moon-sighted-across-pakistan"
+      ]
+    },
+    "2026-01-13": {
+      "hijri": "1447-07-23",
+      "year": 1447,
+      "month": 7,
+      "day": 23,
+      "month_name": {
+        "en": "Rajab",
+        "ur": "رجب"
+      },
+      "confidence": "confirmed",
+      "sources": [
+        "https://www.nation.com.pk/22-Dec-2025/rajab-al-murajjab-moon-sighted-pakistan",
+        "https://www.pakistantoday.com.pk/2025/12/21/rajab-moon-sighted-across-pakistan"
+      ]
+    },
+    "2026-01-14": {
+      "hijri": "1447-07-24",
+      "year": 1447,
+      "month": 7,
+      "day": 24,
+      "month_name": {
+        "en": "Rajab",
+        "ur": "رجب"
+      },
+      "confidence": "confirmed",
+      "sources": [
+        "https://www.nation.com.pk/22-Dec-2025/rajab-al-murajjab-moon-sighted-pakistan",
+        "https://www.pakistantoday.com.pk/2025/12/21/rajab-moon-sighted-across-pakistan"
+      ]
+    },
+    "2026-01-15": {
+      "hijri": "1447-07-25",
+      "year": 1447,
+      "month": 7,
+      "day": 25,
+      "month_name": {
+        "en": "Rajab",
+        "ur": "رجب"
+      },
+      "confidence": "confirmed",
+      "sources": [
+        "https://www.nation.com.pk/22-Dec-2025/rajab-al-murajjab-moon-sighted-pakistan",
+        "https://www.pakistantoday.com.pk/2025/12/21/rajab-moon-sighted-across-pakistan"
+      ]
+    },
+    "2026-01-16": {
+      "hijri": "1447-07-26",
+      "year": 1447,
+      "month": 7,
+      "day": 26,
+      "month_name": {
+        "en": "Rajab",
+        "ur": "رجب"
+      },
+      "confidence": "confirmed",
+      "sources": [
+        "https://www.nation.com.pk/22-Dec-2025/rajab-al-murajjab-moon-sighted-pakistan",
+        "https://www.pakistantoday.com.pk/2025/12/21/rajab-moon-sighted-across-pakistan"
+      ]
+    },
+    "2026-01-17": {
+      "hijri": "1447-07-27",
+      "year": 1447,
+      "month": 7,
+      "day": 27,
+      "month_name": {
+        "en": "Rajab",
+        "ur": "رجب"
+      },
+      "confidence": "confirmed",
+      "sources": [
+        "https://www.nation.com.pk/22-Dec-2025/rajab-al-murajjab-moon-sighted-pakistan",
+        "https://www.pakistantoday.com.pk/2025/12/21/rajab-moon-sighted-across-pakistan"
+      ]
+    },
+    "2026-01-18": {
+      "hijri": "1447-07-28",
+      "year": 1447,
+      "month": 7,
+      "day": 28,
+      "month_name": {
+        "en": "Rajab",
+        "ur": "رجب"
+      },
+      "confidence": "confirmed",
+      "sources": [
+        "https://www.nation.com.pk/22-Dec-2025/rajab-al-murajjab-moon-sighted-pakistan",
+        "https://www.pakistantoday.com.pk/2025/12/21/rajab-moon-sighted-across-pakistan"
+      ]
+    },
+    "2026-01-19": {
+      "hijri": "1447-07-29",
+      "year": 1447,
+      "month": 7,
+      "day": 29,
+      "month_name": {
+        "en": "Rajab",
+        "ur": "رجب"
+      },
+      "confidence": "confirmed",
+      "sources": [
+        "https://www.nation.com.pk/22-Dec-2025/rajab-al-murajjab-moon-sighted-pakistan",
+        "https://www.pakistantoday.com.pk/2025/12/21/rajab-moon-sighted-across-pakistan"
+      ]
+    },
+    "2026-01-20": {
+      "hijri": "1447-07-30",
+      "year": 1447,
+      "month": 7,
+      "day": 30,
+      "month_name": {
+        "en": "Rajab",
+        "ur": "رجب"
+      },
+      "confidence": "confirmed",
+      "sources": [
+        "https://www.nation.com.pk/22-Dec-2025/rajab-al-murajjab-moon-sighted-pakistan",
+        "https://www.pakistantoday.com.pk/2025/12/21/rajab-moon-sighted-across-pakistan"
+      ]
+    },
+    "2026-01-21": {
+      "hijri": "1447-08-01",
+      "year": 1447,
+      "month": 8,
+      "day": 1,
+      "month_name": {
+        "en": "Sha'ban",
+        "ur": "شعبان"
+      },
+      "confidence": "confirmed",
+      "sources": [
+        "https://www.app.com.pk/national/crescent-moon-of-shaban-not-sighted-month-to-begin-wednesday/",
+        "https://www.nation.com.pk/19-Jan-2026/shaban-moon-sighted-first-shaban-fall-january-21-ruet-e-hilal-committee"
+      ]
+    },
+    "2026-01-22": {
+      "hijri": "1447-08-02",
+      "year": 1447,
+      "month": 8,
+      "day": 2,
+      "month_name": {
+        "en": "Sha'ban",
+        "ur": "شعبان"
+      },
+      "confidence": "confirmed",
+      "sources": [
+        "https://www.app.com.pk/national/crescent-moon-of-shaban-not-sighted-month-to-begin-wednesday/",
+        "https://www.nation.com.pk/19-Jan-2026/shaban-moon-sighted-first-shaban-fall-january-21-ruet-e-hilal-committee"
+      ]
+    },
+    "2026-01-23": {
+      "hijri": "1447-08-03",
+      "year": 1447,
+      "month": 8,
+      "day": 3,
+      "month_name": {
+        "en": "Sha'ban",
+        "ur": "شعبان"
+      },
+      "confidence": "confirmed",
+      "sources": [
+        "https://www.app.com.pk/national/crescent-moon-of-shaban-not-sighted-month-to-begin-wednesday/",
+        "https://www.nation.com.pk/19-Jan-2026/shaban-moon-sighted-first-shaban-fall-january-21-ruet-e-hilal-committee"
+      ]
+    },
+    "2026-01-24": {
+      "hijri": "1447-08-04",
+      "year": 1447,
+      "month": 8,
+      "day": 4,
+      "month_name": {
+        "en": "Sha'ban",
+        "ur": "شعبان"
+      },
+      "confidence": "confirmed",
+      "sources": [
+        "https://www.app.com.pk/national/crescent-moon-of-shaban-not-sighted-month-to-begin-wednesday/",
+        "https://www.nation.com.pk/19-Jan-2026/shaban-moon-sighted-first-shaban-fall-january-21-ruet-e-hilal-committee"
+      ]
+    },
+    "2026-01-25": {
+      "hijri": "1447-08-05",
+      "year": 1447,
+      "month": 8,
+      "day": 5,
+      "month_name": {
+        "en": "Sha'ban",
+        "ur": "شعبان"
+      },
+      "confidence": "confirmed",
+      "sources": [
+        "https://www.app.com.pk/national/crescent-moon-of-shaban-not-sighted-month-to-begin-wednesday/",
+        "https://www.nation.com.pk/19-Jan-2026/shaban-moon-sighted-first-shaban-fall-january-21-ruet-e-hilal-committee"
+      ]
+    },
+    "2026-01-26": {
+      "hijri": "1447-08-06",
+      "year": 1447,
+      "month": 8,
+      "day": 6,
+      "month_name": {
+        "en": "Sha'ban",
+        "ur": "شعبان"
+      },
+      "confidence": "confirmed",
+      "sources": [
+        "https://www.app.com.pk/national/crescent-moon-of-shaban-not-sighted-month-to-begin-wednesday/",
+        "https://www.nation.com.pk/19-Jan-2026/shaban-moon-sighted-first-shaban-fall-january-21-ruet-e-hilal-committee"
+      ]
+    },
+    "2026-01-27": {
+      "hijri": "1447-08-07",
+      "year": 1447,
+      "month": 8,
+      "day": 7,
+      "month_name": {
+        "en": "Sha'ban",
+        "ur": "شعبان"
+      },
+      "confidence": "confirmed",
+      "sources": [
+        "https://www.app.com.pk/national/crescent-moon-of-shaban-not-sighted-month-to-begin-wednesday/",
+        "https://www.nation.com.pk/19-Jan-2026/shaban-moon-sighted-first-shaban-fall-january-21-ruet-e-hilal-committee"
+      ]
+    },
+    "2026-01-28": {
+      "hijri": "1447-08-08",
+      "year": 1447,
+      "month": 8,
+      "day": 8,
+      "month_name": {
+        "en": "Sha'ban",
+        "ur": "شعبان"
+      },
+      "confidence": "confirmed",
+      "sources": [
+        "https://www.app.com.pk/national/crescent-moon-of-shaban-not-sighted-month-to-begin-wednesday/",
+        "https://www.nation.com.pk/19-Jan-2026/shaban-moon-sighted-first-shaban-fall-january-21-ruet-e-hilal-committee"
+      ]
+    },
+    "2026-01-29": {
+      "hijri": "1447-08-09",
+      "year": 1447,
+      "month": 8,
+      "day": 9,
+      "month_name": {
+        "en": "Sha'ban",
+        "ur": "شعبان"
+      },
+      "confidence": "confirmed",
+      "sources": [
+        "https://www.app.com.pk/national/crescent-moon-of-shaban-not-sighted-month-to-begin-wednesday/",
+        "https://www.nation.com.pk/19-Jan-2026/shaban-moon-sighted-first-shaban-fall-january-21-ruet-e-hilal-committee"
+      ]
+    },
+    "2026-01-30": {
+      "hijri": "1447-08-10",
+      "year": 1447,
+      "month": 8,
+      "day": 10,
+      "month_name": {
+        "en": "Sha'ban",
+        "ur": "شعبان"
+      },
+      "confidence": "confirmed",
+      "sources": [
+        "https://www.app.com.pk/national/crescent-moon-of-shaban-not-sighted-month-to-begin-wednesday/",
+        "https://www.nation.com.pk/19-Jan-2026/shaban-moon-sighted-first-shaban-fall-january-21-ruet-e-hilal-committee"
+      ]
+    },
+    "2026-01-31": {
+      "hijri": "1447-08-11",
+      "year": 1447,
+      "month": 8,
+      "day": 11,
+      "month_name": {
+        "en": "Sha'ban",
+        "ur": "شعبان"
+      },
+      "confidence": "confirmed",
+      "sources": [
+        "https://www.app.com.pk/national/crescent-moon-of-shaban-not-sighted-month-to-begin-wednesday/",
+        "https://www.nation.com.pk/19-Jan-2026/shaban-moon-sighted-first-shaban-fall-january-21-ruet-e-hilal-committee"
+      ]
+    },
+    "2026-02-01": {
+      "hijri": "1447-08-12",
+      "year": 1447,
+      "month": 8,
+      "day": 12,
+      "month_name": {
+        "en": "Sha'ban",
+        "ur": "شعبان"
+      },
+      "confidence": "confirmed",
+      "sources": [
+        "https://www.app.com.pk/national/crescent-moon-of-shaban-not-sighted-month-to-begin-wednesday/",
+        "https://www.nation.com.pk/19-Jan-2026/shaban-moon-sighted-first-shaban-fall-january-21-ruet-e-hilal-committee"
+      ]
+    },
+    "2026-02-02": {
+      "hijri": "1447-08-13",
+      "year": 1447,
+      "month": 8,
+      "day": 13,
+      "month_name": {
+        "en": "Sha'ban",
+        "ur": "شعبان"
+      },
+      "confidence": "confirmed",
+      "sources": [
+        "https://www.app.com.pk/national/crescent-moon-of-shaban-not-sighted-month-to-begin-wednesday/",
+        "https://www.nation.com.pk/19-Jan-2026/shaban-moon-sighted-first-shaban-fall-january-21-ruet-e-hilal-committee"
+      ]
+    },
+    "2026-02-03": {
+      "hijri": "1447-08-14",
+      "year": 1447,
+      "month": 8,
+      "day": 14,
+      "month_name": {
+        "en": "Sha'ban",
+        "ur": "شعبان"
+      },
+      "confidence": "confirmed",
+      "sources": [
+        "https://www.app.com.pk/national/crescent-moon-of-shaban-not-sighted-month-to-begin-wednesday/",
+        "https://www.nation.com.pk/19-Jan-2026/shaban-moon-sighted-first-shaban-fall-january-21-ruet-e-hilal-committee"
+      ]
+    },
+    "2026-02-04": {
+      "hijri": "1447-08-15",
+      "year": 1447,
+      "month": 8,
+      "day": 15,
+      "month_name": {
+        "en": "Sha'ban",
+        "ur": "شعبان"
+      },
+      "confidence": "confirmed",
+      "sources": [
+        "https://www.app.com.pk/national/crescent-moon-of-shaban-not-sighted-month-to-begin-wednesday/",
+        "https://www.nation.com.pk/19-Jan-2026/shaban-moon-sighted-first-shaban-fall-january-21-ruet-e-hilal-committee"
+      ]
+    },
+    "2026-02-05": {
+      "hijri": "1447-08-16",
+      "year": 1447,
+      "month": 8,
+      "day": 16,
+      "month_name": {
+        "en": "Sha'ban",
+        "ur": "شعبان"
+      },
+      "confidence": "confirmed",
+      "sources": [
+        "https://www.app.com.pk/national/crescent-moon-of-shaban-not-sighted-month-to-begin-wednesday/",
+        "https://www.nation.com.pk/19-Jan-2026/shaban-moon-sighted-first-shaban-fall-january-21-ruet-e-hilal-committee"
+      ]
+    },
+    "2026-02-06": {
+      "hijri": "1447-08-17",
+      "year": 1447,
+      "month": 8,
+      "day": 17,
+      "month_name": {
+        "en": "Sha'ban",
+        "ur": "شعبان"
+      },
+      "confidence": "confirmed",
+      "sources": [
+        "https://www.app.com.pk/national/crescent-moon-of-shaban-not-sighted-month-to-begin-wednesday/",
+        "https://www.nation.com.pk/19-Jan-2026/shaban-moon-sighted-first-shaban-fall-january-21-ruet-e-hilal-committee"
+      ]
+    },
+    "2026-02-07": {
+      "hijri": "1447-08-18",
+      "year": 1447,
+      "month": 8,
+      "day": 18,
+      "month_name": {
+        "en": "Sha'ban",
+        "ur": "شعبان"
+      },
+      "confidence": "confirmed",
+      "sources": [
+        "https://www.app.com.pk/national/crescent-moon-of-shaban-not-sighted-month-to-begin-wednesday/",
+        "https://www.nation.com.pk/19-Jan-2026/shaban-moon-sighted-first-shaban-fall-january-21-ruet-e-hilal-committee"
+      ]
+    },
+    "2026-02-08": {
+      "hijri": "1447-08-19",
+      "year": 1447,
+      "month": 8,
+      "day": 19,
+      "month_name": {
+        "en": "Sha'ban",
+        "ur": "شعبان"
+      },
+      "confidence": "confirmed",
+      "sources": [
+        "https://www.app.com.pk/national/crescent-moon-of-shaban-not-sighted-month-to-begin-wednesday/",
+        "https://www.nation.com.pk/19-Jan-2026/shaban-moon-sighted-first-shaban-fall-january-21-ruet-e-hilal-committee"
+      ]
+    },
+    "2026-02-09": {
+      "hijri": "1447-08-20",
+      "year": 1447,
+      "month": 8,
+      "day": 20,
+      "month_name": {
+        "en": "Sha'ban",
+        "ur": "شعبان"
+      },
+      "confidence": "confirmed",
+      "sources": [
+        "https://www.app.com.pk/national/crescent-moon-of-shaban-not-sighted-month-to-begin-wednesday/",
+        "https://www.nation.com.pk/19-Jan-2026/shaban-moon-sighted-first-shaban-fall-january-21-ruet-e-hilal-committee"
+      ]
+    },
+    "2026-02-10": {
+      "hijri": "1447-08-21",
+      "year": 1447,
+      "month": 8,
+      "day": 21,
+      "month_name": {
+        "en": "Sha'ban",
+        "ur": "شعبان"
+      },
+      "confidence": "confirmed",
+      "sources": [
+        "https://www.app.com.pk/national/crescent-moon-of-shaban-not-sighted-month-to-begin-wednesday/",
+        "https://www.nation.com.pk/19-Jan-2026/shaban-moon-sighted-first-shaban-fall-january-21-ruet-e-hilal-committee"
+      ]
+    },
+    "2026-02-11": {
+      "hijri": "1447-08-22",
+      "year": 1447,
+      "month": 8,
+      "day": 22,
+      "month_name": {
+        "en": "Sha'ban",
+        "ur": "شعبان"
+      },
+      "confidence": "confirmed",
+      "sources": [
+        "https://www.app.com.pk/national/crescent-moon-of-shaban-not-sighted-month-to-begin-wednesday/",
+        "https://www.nation.com.pk/19-Jan-2026/shaban-moon-sighted-first-shaban-fall-january-21-ruet-e-hilal-committee"
+      ]
+    },
+    "2026-02-12": {
+      "hijri": "1447-08-23",
+      "year": 1447,
+      "month": 8,
+      "day": 23,
+      "month_name": {
+        "en": "Sha'ban",
+        "ur": "شعبان"
+      },
+      "confidence": "confirmed",
+      "sources": [
+        "https://www.app.com.pk/national/crescent-moon-of-shaban-not-sighted-month-to-begin-wednesday/",
+        "https://www.nation.com.pk/19-Jan-2026/shaban-moon-sighted-first-shaban-fall-january-21-ruet-e-hilal-committee"
+      ]
+    },
+    "2026-02-13": {
+      "hijri": "1447-08-24",
+      "year": 1447,
+      "month": 8,
+      "day": 24,
+      "month_name": {
+        "en": "Sha'ban",
+        "ur": "شعبان"
+      },
+      "confidence": "confirmed",
+      "sources": [
+        "https://www.app.com.pk/national/crescent-moon-of-shaban-not-sighted-month-to-begin-wednesday/",
+        "https://www.nation.com.pk/19-Jan-2026/shaban-moon-sighted-first-shaban-fall-january-21-ruet-e-hilal-committee"
+      ]
+    },
+    "2026-02-14": {
+      "hijri": "1447-08-25",
+      "year": 1447,
+      "month": 8,
+      "day": 25,
+      "month_name": {
+        "en": "Sha'ban",
+        "ur": "شعبان"
+      },
+      "confidence": "confirmed",
+      "sources": [
+        "https://www.app.com.pk/national/crescent-moon-of-shaban-not-sighted-month-to-begin-wednesday/",
+        "https://www.nation.com.pk/19-Jan-2026/shaban-moon-sighted-first-shaban-fall-january-21-ruet-e-hilal-committee"
+      ]
+    },
+    "2026-02-15": {
+      "hijri": "1447-08-26",
+      "year": 1447,
+      "month": 8,
+      "day": 26,
+      "month_name": {
+        "en": "Sha'ban",
+        "ur": "شعبان"
+      },
+      "confidence": "confirmed",
+      "sources": [
+        "https://www.app.com.pk/national/crescent-moon-of-shaban-not-sighted-month-to-begin-wednesday/",
+        "https://www.nation.com.pk/19-Jan-2026/shaban-moon-sighted-first-shaban-fall-january-21-ruet-e-hilal-committee"
+      ]
+    },
+    "2026-02-16": {
+      "hijri": "1447-08-27",
+      "year": 1447,
+      "month": 8,
+      "day": 27,
+      "month_name": {
+        "en": "Sha'ban",
+        "ur": "شعبان"
+      },
+      "confidence": "confirmed",
+      "sources": [
+        "https://www.app.com.pk/national/crescent-moon-of-shaban-not-sighted-month-to-begin-wednesday/",
+        "https://www.nation.com.pk/19-Jan-2026/shaban-moon-sighted-first-shaban-fall-january-21-ruet-e-hilal-committee"
+      ]
+    },
+    "2026-02-17": {
+      "hijri": "1447-08-28",
+      "year": 1447,
+      "month": 8,
+      "day": 28,
+      "month_name": {
+        "en": "Sha'ban",
+        "ur": "شعبان"
+      },
+      "confidence": "confirmed",
+      "sources": [
+        "https://www.app.com.pk/national/crescent-moon-of-shaban-not-sighted-month-to-begin-wednesday/",
+        "https://www.nation.com.pk/19-Jan-2026/shaban-moon-sighted-first-shaban-fall-january-21-ruet-e-hilal-committee"
+      ]
+    },
+    "2026-02-18": {
+      "hijri": "1447-08-29",
+      "year": 1447,
+      "month": 8,
+      "day": 29,
+      "month_name": {
+        "en": "Sha'ban",
+        "ur": "شعبان"
+      },
+      "confidence": "confirmed",
+      "sources": [
+        "https://www.app.com.pk/national/crescent-moon-of-shaban-not-sighted-month-to-begin-wednesday/",
+        "https://www.nation.com.pk/19-Jan-2026/shaban-moon-sighted-first-shaban-fall-january-21-ruet-e-hilal-committee"
+      ]
+    },
+    "2026-02-19": {
+      "hijri": "1447-09-01",
+      "year": 1447,
+      "month": 9,
+      "day": 1,
+      "month_name": {
+        "en": "Ramadan",
+        "ur": "رمضان"
+      },
+      "confidence": "confirmed",
+      "sources": [
+        "https://www.app.com.pk/national/ramazan-moon-sighted-ist-fast-on-february-19-in-pakistan-khabeer-azad/",
+        "https://www.dawn.com/news/1974092"
+      ]
+    },
+    "2026-02-20": {
+      "hijri": "1447-09-02",
+      "year": 1447,
+      "month": 9,
+      "day": 2,
+      "month_name": {
+        "en": "Ramadan",
+        "ur": "رمضان"
+      },
+      "confidence": "confirmed",
+      "sources": [
+        "https://www.app.com.pk/national/ramazan-moon-sighted-ist-fast-on-february-19-in-pakistan-khabeer-azad/",
+        "https://www.dawn.com/news/1974092"
+      ]
+    },
+    "2026-02-21": {
+      "hijri": "1447-09-03",
+      "year": 1447,
+      "month": 9,
+      "day": 3,
+      "month_name": {
+        "en": "Ramadan",
+        "ur": "رمضان"
+      },
+      "confidence": "confirmed",
+      "sources": [
+        "https://www.app.com.pk/national/ramazan-moon-sighted-ist-fast-on-february-19-in-pakistan-khabeer-azad/",
+        "https://www.dawn.com/news/1974092"
+      ]
+    },
+    "2026-02-22": {
+      "hijri": "1447-09-04",
+      "year": 1447,
+      "month": 9,
+      "day": 4,
+      "month_name": {
+        "en": "Ramadan",
+        "ur": "رمضان"
+      },
+      "confidence": "confirmed",
+      "sources": [
+        "https://www.app.com.pk/national/ramazan-moon-sighted-ist-fast-on-february-19-in-pakistan-khabeer-azad/",
+        "https://www.dawn.com/news/1974092"
+      ]
+    },
+    "2026-02-23": {
+      "hijri": "1447-09-05",
+      "year": 1447,
+      "month": 9,
+      "day": 5,
+      "month_name": {
+        "en": "Ramadan",
+        "ur": "رمضان"
+      },
+      "confidence": "confirmed",
+      "sources": [
+        "https://www.app.com.pk/national/ramazan-moon-sighted-ist-fast-on-february-19-in-pakistan-khabeer-azad/",
+        "https://www.dawn.com/news/1974092"
+      ]
+    },
+    "2026-02-24": {
+      "hijri": "1447-09-06",
+      "year": 1447,
+      "month": 9,
+      "day": 6,
+      "month_name": {
+        "en": "Ramadan",
+        "ur": "رمضان"
+      },
+      "confidence": "confirmed",
+      "sources": [
+        "https://www.app.com.pk/national/ramazan-moon-sighted-ist-fast-on-february-19-in-pakistan-khabeer-azad/",
+        "https://www.dawn.com/news/1974092"
+      ]
+    },
+    "2026-02-25": {
+      "hijri": "1447-09-07",
+      "year": 1447,
+      "month": 9,
+      "day": 7,
+      "month_name": {
+        "en": "Ramadan",
+        "ur": "رمضان"
+      },
+      "confidence": "confirmed",
+      "sources": [
+        "https://www.app.com.pk/national/ramazan-moon-sighted-ist-fast-on-february-19-in-pakistan-khabeer-azad/",
+        "https://www.dawn.com/news/1974092"
+      ]
+    },
+    "2026-02-26": {
+      "hijri": "1447-09-08",
+      "year": 1447,
+      "month": 9,
+      "day": 8,
+      "month_name": {
+        "en": "Ramadan",
+        "ur": "رمضان"
+      },
+      "confidence": "confirmed",
+      "sources": [
+        "https://www.app.com.pk/national/ramazan-moon-sighted-ist-fast-on-february-19-in-pakistan-khabeer-azad/",
+        "https://www.dawn.com/news/1974092"
+      ]
+    },
+    "2026-02-27": {
+      "hijri": "1447-09-09",
+      "year": 1447,
+      "month": 9,
+      "day": 9,
+      "month_name": {
+        "en": "Ramadan",
+        "ur": "رمضان"
+      },
+      "confidence": "confirmed",
+      "sources": [
+        "https://www.app.com.pk/national/ramazan-moon-sighted-ist-fast-on-february-19-in-pakistan-khabeer-azad/",
+        "https://www.dawn.com/news/1974092"
+      ]
+    },
+    "2026-02-28": {
+      "hijri": "1447-09-10",
+      "year": 1447,
+      "month": 9,
+      "day": 10,
+      "month_name": {
+        "en": "Ramadan",
+        "ur": "رمضان"
+      },
+      "confidence": "confirmed",
+      "sources": [
+        "https://www.app.com.pk/national/ramazan-moon-sighted-ist-fast-on-february-19-in-pakistan-khabeer-azad/",
+        "https://www.dawn.com/news/1974092"
+      ]
+    },
+    "2026-03-01": {
+      "hijri": "1447-09-11",
+      "year": 1447,
+      "month": 9,
+      "day": 11,
+      "month_name": {
+        "en": "Ramadan",
+        "ur": "رمضان"
+      },
+      "confidence": "confirmed",
+      "sources": [
+        "https://www.app.com.pk/national/ramazan-moon-sighted-ist-fast-on-february-19-in-pakistan-khabeer-azad/",
+        "https://www.dawn.com/news/1974092"
+      ]
+    },
+    "2026-03-02": {
+      "hijri": "1447-09-12",
+      "year": 1447,
+      "month": 9,
+      "day": 12,
+      "month_name": {
+        "en": "Ramadan",
+        "ur": "رمضان"
+      },
+      "confidence": "confirmed",
+      "sources": [
+        "https://www.app.com.pk/national/ramazan-moon-sighted-ist-fast-on-february-19-in-pakistan-khabeer-azad/",
+        "https://www.dawn.com/news/1974092"
+      ]
+    },
+    "2026-03-03": {
+      "hijri": "1447-09-13",
+      "year": 1447,
+      "month": 9,
+      "day": 13,
+      "month_name": {
+        "en": "Ramadan",
+        "ur": "رمضان"
+      },
+      "confidence": "confirmed",
+      "sources": [
+        "https://www.app.com.pk/national/ramazan-moon-sighted-ist-fast-on-february-19-in-pakistan-khabeer-azad/",
+        "https://www.dawn.com/news/1974092"
+      ]
+    },
+    "2026-03-04": {
+      "hijri": "1447-09-14",
+      "year": 1447,
+      "month": 9,
+      "day": 14,
+      "month_name": {
+        "en": "Ramadan",
+        "ur": "رمضان"
+      },
+      "confidence": "confirmed",
+      "sources": [
+        "https://www.app.com.pk/national/ramazan-moon-sighted-ist-fast-on-february-19-in-pakistan-khabeer-azad/",
+        "https://www.dawn.com/news/1974092"
+      ]
+    },
+    "2026-03-05": {
+      "hijri": "1447-09-15",
+      "year": 1447,
+      "month": 9,
+      "day": 15,
+      "month_name": {
+        "en": "Ramadan",
+        "ur": "رمضان"
+      },
+      "confidence": "confirmed",
+      "sources": [
+        "https://www.app.com.pk/national/ramazan-moon-sighted-ist-fast-on-february-19-in-pakistan-khabeer-azad/",
+        "https://www.dawn.com/news/1974092"
+      ]
+    },
+    "2026-03-06": {
+      "hijri": "1447-09-16",
+      "year": 1447,
+      "month": 9,
+      "day": 16,
+      "month_name": {
+        "en": "Ramadan",
+        "ur": "رمضان"
+      },
+      "confidence": "confirmed",
+      "sources": [
+        "https://www.app.com.pk/national/ramazan-moon-sighted-ist-fast-on-february-19-in-pakistan-khabeer-azad/",
+        "https://www.dawn.com/news/1974092"
+      ]
+    },
+    "2026-03-07": {
+      "hijri": "1447-09-17",
+      "year": 1447,
+      "month": 9,
+      "day": 17,
+      "month_name": {
+        "en": "Ramadan",
+        "ur": "رمضان"
+      },
+      "confidence": "confirmed",
+      "sources": [
+        "https://www.app.com.pk/national/ramazan-moon-sighted-ist-fast-on-february-19-in-pakistan-khabeer-azad/",
+        "https://www.dawn.com/news/1974092"
+      ]
+    },
+    "2026-03-08": {
+      "hijri": "1447-09-18",
+      "year": 1447,
+      "month": 9,
+      "day": 18,
+      "month_name": {
+        "en": "Ramadan",
+        "ur": "رمضان"
+      },
+      "confidence": "confirmed",
+      "sources": [
+        "https://www.app.com.pk/national/ramazan-moon-sighted-ist-fast-on-february-19-in-pakistan-khabeer-azad/",
+        "https://www.dawn.com/news/1974092"
+      ]
+    },
+    "2026-03-09": {
+      "hijri": "1447-09-19",
+      "year": 1447,
+      "month": 9,
+      "day": 19,
+      "month_name": {
+        "en": "Ramadan",
+        "ur": "رمضان"
+      },
+      "confidence": "confirmed",
+      "sources": [
+        "https://www.app.com.pk/national/ramazan-moon-sighted-ist-fast-on-february-19-in-pakistan-khabeer-azad/",
+        "https://www.dawn.com/news/1974092"
+      ]
+    },
+    "2026-03-10": {
+      "hijri": "1447-09-20",
+      "year": 1447,
+      "month": 9,
+      "day": 20,
+      "month_name": {
+        "en": "Ramadan",
+        "ur": "رمضان"
+      },
+      "confidence": "confirmed",
+      "sources": [
+        "https://www.app.com.pk/national/ramazan-moon-sighted-ist-fast-on-february-19-in-pakistan-khabeer-azad/",
+        "https://www.dawn.com/news/1974092"
+      ]
+    },
+    "2026-03-11": {
+      "hijri": "1447-09-21",
+      "year": 1447,
+      "month": 9,
+      "day": 21,
+      "month_name": {
+        "en": "Ramadan",
+        "ur": "رمضان"
+      },
+      "confidence": "confirmed",
+      "sources": [
+        "https://www.app.com.pk/national/ramazan-moon-sighted-ist-fast-on-february-19-in-pakistan-khabeer-azad/",
+        "https://www.dawn.com/news/1974092"
+      ]
+    },
+    "2026-03-12": {
+      "hijri": "1447-09-22",
+      "year": 1447,
+      "month": 9,
+      "day": 22,
+      "month_name": {
+        "en": "Ramadan",
+        "ur": "رمضان"
+      },
+      "confidence": "confirmed",
+      "sources": [
+        "https://www.app.com.pk/national/ramazan-moon-sighted-ist-fast-on-february-19-in-pakistan-khabeer-azad/",
+        "https://www.dawn.com/news/1974092"
+      ]
+    },
+    "2026-03-13": {
+      "hijri": "1447-09-23",
+      "year": 1447,
+      "month": 9,
+      "day": 23,
+      "month_name": {
+        "en": "Ramadan",
+        "ur": "رمضان"
+      },
+      "confidence": "confirmed",
+      "sources": [
+        "https://www.app.com.pk/national/ramazan-moon-sighted-ist-fast-on-february-19-in-pakistan-khabeer-azad/",
+        "https://www.dawn.com/news/1974092"
+      ]
+    },
+    "2026-03-14": {
+      "hijri": "1447-09-24",
+      "year": 1447,
+      "month": 9,
+      "day": 24,
+      "month_name": {
+        "en": "Ramadan",
+        "ur": "رمضان"
+      },
+      "confidence": "confirmed",
+      "sources": [
+        "https://www.app.com.pk/national/ramazan-moon-sighted-ist-fast-on-february-19-in-pakistan-khabeer-azad/",
+        "https://www.dawn.com/news/1974092"
+      ]
+    },
+    "2026-03-15": {
+      "hijri": "1447-09-25",
+      "year": 1447,
+      "month": 9,
+      "day": 25,
+      "month_name": {
+        "en": "Ramadan",
+        "ur": "رمضان"
+      },
+      "confidence": "confirmed",
+      "sources": [
+        "https://www.app.com.pk/national/ramazan-moon-sighted-ist-fast-on-february-19-in-pakistan-khabeer-azad/",
+        "https://www.dawn.com/news/1974092"
+      ]
+    },
+    "2026-03-16": {
+      "hijri": "1447-09-26",
+      "year": 1447,
+      "month": 9,
+      "day": 26,
+      "month_name": {
+        "en": "Ramadan",
+        "ur": "رمضان"
+      },
+      "confidence": "confirmed",
+      "sources": [
+        "https://www.app.com.pk/national/ramazan-moon-sighted-ist-fast-on-february-19-in-pakistan-khabeer-azad/",
+        "https://www.dawn.com/news/1974092"
+      ]
+    },
+    "2026-03-17": {
+      "hijri": "1447-09-27",
+      "year": 1447,
+      "month": 9,
+      "day": 27,
+      "month_name": {
+        "en": "Ramadan",
+        "ur": "رمضان"
+      },
+      "confidence": "confirmed",
+      "sources": [
+        "https://www.app.com.pk/national/ramazan-moon-sighted-ist-fast-on-february-19-in-pakistan-khabeer-azad/",
+        "https://www.dawn.com/news/1974092"
+      ]
+    },
+    "2026-03-18": {
+      "hijri": "1447-09-28",
+      "year": 1447,
+      "month": 9,
+      "day": 28,
+      "month_name": {
+        "en": "Ramadan",
+        "ur": "رمضان"
+      },
+      "confidence": "confirmed",
+      "sources": [
+        "https://www.app.com.pk/national/ramazan-moon-sighted-ist-fast-on-february-19-in-pakistan-khabeer-azad/",
+        "https://www.dawn.com/news/1974092"
+      ]
+    },
+    "2026-03-19": {
+      "hijri": "1447-09-29",
+      "year": 1447,
+      "month": 9,
+      "day": 29,
+      "month_name": {
+        "en": "Ramadan",
+        "ur": "رمضان"
+      },
+      "confidence": "confirmed",
+      "sources": [
+        "https://www.app.com.pk/national/ramazan-moon-sighted-ist-fast-on-february-19-in-pakistan-khabeer-azad/",
+        "https://www.dawn.com/news/1974092"
+      ]
+    },
+    "2026-03-20": {
+      "hijri": "1447-09-30",
+      "year": 1447,
+      "month": 9,
+      "day": 30,
+      "month_name": {
+        "en": "Ramadan",
+        "ur": "رمضان"
+      },
+      "confidence": "confirmed",
+      "sources": [
+        "https://www.app.com.pk/national/ramazan-moon-sighted-ist-fast-on-february-19-in-pakistan-khabeer-azad/",
+        "https://www.dawn.com/news/1974092"
+      ]
+    },
+    "2026-03-21": {
+      "hijri": "1447-10-01",
+      "year": 1447,
+      "month": 10,
+      "day": 1,
+      "month_name": {
+        "en": "Shawwal",
+        "ur": "شوال"
+      },
+      "confidence": "confirmed",
+      "sources": [
+        "https://www.nation.com.pk/20-Mar-2026/pakistan-celebrate-eid-saturday-shawwal-moon-sighting",
+        "https://www.arabnews.pk/pakistan/pakistan-to-celebrate-eid-al-fitr-on-saturday-after-moon-not-sighted-2636941"
+      ]
+    },
+    "2026-03-22": {
+      "hijri": "1447-10-02",
+      "year": 1447,
+      "month": 10,
+      "day": 2,
+      "month_name": {
+        "en": "Shawwal",
+        "ur": "شوال"
+      },
+      "confidence": "confirmed",
+      "sources": [
+        "https://www.nation.com.pk/20-Mar-2026/pakistan-celebrate-eid-saturday-shawwal-moon-sighting",
+        "https://www.arabnews.pk/pakistan/pakistan-to-celebrate-eid-al-fitr-on-saturday-after-moon-not-sighted-2636941"
+      ]
+    },
+    "2026-03-23": {
+      "hijri": "1447-10-03",
+      "year": 1447,
+      "month": 10,
+      "day": 3,
+      "month_name": {
+        "en": "Shawwal",
+        "ur": "شوال"
+      },
+      "confidence": "confirmed",
+      "sources": [
+        "https://www.nation.com.pk/20-Mar-2026/pakistan-celebrate-eid-saturday-shawwal-moon-sighting",
+        "https://www.arabnews.pk/pakistan/pakistan-to-celebrate-eid-al-fitr-on-saturday-after-moon-not-sighted-2636941"
+      ]
+    },
+    "2026-03-24": {
+      "hijri": "1447-10-04",
+      "year": 1447,
+      "month": 10,
+      "day": 4,
+      "month_name": {
+        "en": "Shawwal",
+        "ur": "شوال"
+      },
+      "confidence": "confirmed",
+      "sources": [
+        "https://www.nation.com.pk/20-Mar-2026/pakistan-celebrate-eid-saturday-shawwal-moon-sighting",
+        "https://www.arabnews.pk/pakistan/pakistan-to-celebrate-eid-al-fitr-on-saturday-after-moon-not-sighted-2636941"
+      ]
+    },
+    "2026-03-25": {
+      "hijri": "1447-10-05",
+      "year": 1447,
+      "month": 10,
+      "day": 5,
+      "month_name": {
+        "en": "Shawwal",
+        "ur": "شوال"
+      },
+      "confidence": "confirmed",
+      "sources": [
+        "https://www.nation.com.pk/20-Mar-2026/pakistan-celebrate-eid-saturday-shawwal-moon-sighting",
+        "https://www.arabnews.pk/pakistan/pakistan-to-celebrate-eid-al-fitr-on-saturday-after-moon-not-sighted-2636941"
+      ]
+    },
+    "2026-03-26": {
+      "hijri": "1447-10-06",
+      "year": 1447,
+      "month": 10,
+      "day": 6,
+      "month_name": {
+        "en": "Shawwal",
+        "ur": "شوال"
+      },
+      "confidence": "confirmed",
+      "sources": [
+        "https://www.nation.com.pk/20-Mar-2026/pakistan-celebrate-eid-saturday-shawwal-moon-sighting",
+        "https://www.arabnews.pk/pakistan/pakistan-to-celebrate-eid-al-fitr-on-saturday-after-moon-not-sighted-2636941"
+      ]
+    },
+    "2026-03-27": {
+      "hijri": "1447-10-07",
+      "year": 1447,
+      "month": 10,
+      "day": 7,
+      "month_name": {
+        "en": "Shawwal",
+        "ur": "شوال"
+      },
+      "confidence": "confirmed",
+      "sources": [
+        "https://www.nation.com.pk/20-Mar-2026/pakistan-celebrate-eid-saturday-shawwal-moon-sighting",
+        "https://www.arabnews.pk/pakistan/pakistan-to-celebrate-eid-al-fitr-on-saturday-after-moon-not-sighted-2636941"
+      ]
+    },
+    "2026-03-28": {
+      "hijri": "1447-10-08",
+      "year": 1447,
+      "month": 10,
+      "day": 8,
+      "month_name": {
+        "en": "Shawwal",
+        "ur": "شوال"
+      },
+      "confidence": "confirmed",
+      "sources": [
+        "https://www.nation.com.pk/20-Mar-2026/pakistan-celebrate-eid-saturday-shawwal-moon-sighting",
+        "https://www.arabnews.pk/pakistan/pakistan-to-celebrate-eid-al-fitr-on-saturday-after-moon-not-sighted-2636941"
+      ]
+    },
+    "2026-03-29": {
+      "hijri": "1447-10-09",
+      "year": 1447,
+      "month": 10,
+      "day": 9,
+      "month_name": {
+        "en": "Shawwal",
+        "ur": "شوال"
+      },
+      "confidence": "confirmed",
+      "sources": [
+        "https://www.nation.com.pk/20-Mar-2026/pakistan-celebrate-eid-saturday-shawwal-moon-sighting",
+        "https://www.arabnews.pk/pakistan/pakistan-to-celebrate-eid-al-fitr-on-saturday-after-moon-not-sighted-2636941"
+      ]
+    },
+    "2026-03-30": {
+      "hijri": "1447-10-10",
+      "year": 1447,
+      "month": 10,
+      "day": 10,
+      "month_name": {
+        "en": "Shawwal",
+        "ur": "شوال"
+      },
+      "confidence": "confirmed",
+      "sources": [
+        "https://www.nation.com.pk/20-Mar-2026/pakistan-celebrate-eid-saturday-shawwal-moon-sighting",
+        "https://www.arabnews.pk/pakistan/pakistan-to-celebrate-eid-al-fitr-on-saturday-after-moon-not-sighted-2636941"
+      ]
+    },
+    "2026-03-31": {
+      "hijri": "1447-10-11",
+      "year": 1447,
+      "month": 10,
+      "day": 11,
+      "month_name": {
+        "en": "Shawwal",
+        "ur": "شوال"
+      },
+      "confidence": "confirmed",
+      "sources": [
+        "https://www.nation.com.pk/20-Mar-2026/pakistan-celebrate-eid-saturday-shawwal-moon-sighting",
+        "https://www.arabnews.pk/pakistan/pakistan-to-celebrate-eid-al-fitr-on-saturday-after-moon-not-sighted-2636941"
+      ]
+    },
+    "2026-04-01": {
+      "hijri": "1447-10-12",
+      "year": 1447,
+      "month": 10,
+      "day": 12,
+      "month_name": {
+        "en": "Shawwal",
+        "ur": "شوال"
+      },
+      "confidence": "confirmed",
+      "sources": [
+        "https://www.nation.com.pk/20-Mar-2026/pakistan-celebrate-eid-saturday-shawwal-moon-sighting",
+        "https://www.arabnews.pk/pakistan/pakistan-to-celebrate-eid-al-fitr-on-saturday-after-moon-not-sighted-2636941"
+      ]
+    },
+    "2026-04-02": {
+      "hijri": "1447-10-13",
+      "year": 1447,
+      "month": 10,
+      "day": 13,
+      "month_name": {
+        "en": "Shawwal",
+        "ur": "شوال"
+      },
+      "confidence": "confirmed",
+      "sources": [
+        "https://www.nation.com.pk/20-Mar-2026/pakistan-celebrate-eid-saturday-shawwal-moon-sighting",
+        "https://www.arabnews.pk/pakistan/pakistan-to-celebrate-eid-al-fitr-on-saturday-after-moon-not-sighted-2636941"
+      ]
+    },
+    "2026-04-03": {
+      "hijri": "1447-10-14",
+      "year": 1447,
+      "month": 10,
+      "day": 14,
+      "month_name": {
+        "en": "Shawwal",
+        "ur": "شوال"
+      },
+      "confidence": "confirmed",
+      "sources": [
+        "https://www.nation.com.pk/20-Mar-2026/pakistan-celebrate-eid-saturday-shawwal-moon-sighting",
+        "https://www.arabnews.pk/pakistan/pakistan-to-celebrate-eid-al-fitr-on-saturday-after-moon-not-sighted-2636941"
+      ]
+    },
+    "2026-04-04": {
+      "hijri": "1447-10-15",
+      "year": 1447,
+      "month": 10,
+      "day": 15,
+      "month_name": {
+        "en": "Shawwal",
+        "ur": "شوال"
+      },
+      "confidence": "confirmed",
+      "sources": [
+        "https://www.nation.com.pk/20-Mar-2026/pakistan-celebrate-eid-saturday-shawwal-moon-sighting",
+        "https://www.arabnews.pk/pakistan/pakistan-to-celebrate-eid-al-fitr-on-saturday-after-moon-not-sighted-2636941"
+      ]
+    },
+    "2026-04-05": {
+      "hijri": "1447-10-16",
+      "year": 1447,
+      "month": 10,
+      "day": 16,
+      "month_name": {
+        "en": "Shawwal",
+        "ur": "شوال"
+      },
+      "confidence": "confirmed",
+      "sources": [
+        "https://www.nation.com.pk/20-Mar-2026/pakistan-celebrate-eid-saturday-shawwal-moon-sighting",
+        "https://www.arabnews.pk/pakistan/pakistan-to-celebrate-eid-al-fitr-on-saturday-after-moon-not-sighted-2636941"
+      ]
+    },
+    "2026-04-06": {
+      "hijri": "1447-10-17",
+      "year": 1447,
+      "month": 10,
+      "day": 17,
+      "month_name": {
+        "en": "Shawwal",
+        "ur": "شوال"
+      },
+      "confidence": "confirmed",
+      "sources": [
+        "https://www.nation.com.pk/20-Mar-2026/pakistan-celebrate-eid-saturday-shawwal-moon-sighting",
+        "https://www.arabnews.pk/pakistan/pakistan-to-celebrate-eid-al-fitr-on-saturday-after-moon-not-sighted-2636941"
+      ]
+    },
+    "2026-04-07": {
+      "hijri": "1447-10-18",
+      "year": 1447,
+      "month": 10,
+      "day": 18,
+      "month_name": {
+        "en": "Shawwal",
+        "ur": "شوال"
+      },
+      "confidence": "confirmed",
+      "sources": [
+        "https://www.nation.com.pk/20-Mar-2026/pakistan-celebrate-eid-saturday-shawwal-moon-sighting",
+        "https://www.arabnews.pk/pakistan/pakistan-to-celebrate-eid-al-fitr-on-saturday-after-moon-not-sighted-2636941"
+      ]
+    },
+    "2026-04-08": {
+      "hijri": "1447-10-19",
+      "year": 1447,
+      "month": 10,
+      "day": 19,
+      "month_name": {
+        "en": "Shawwal",
+        "ur": "شوال"
+      },
+      "confidence": "confirmed",
+      "sources": [
+        "https://www.nation.com.pk/20-Mar-2026/pakistan-celebrate-eid-saturday-shawwal-moon-sighting",
+        "https://www.arabnews.pk/pakistan/pakistan-to-celebrate-eid-al-fitr-on-saturday-after-moon-not-sighted-2636941"
+      ]
+    },
+    "2026-04-09": {
+      "hijri": "1447-10-20",
+      "year": 1447,
+      "month": 10,
+      "day": 20,
+      "month_name": {
+        "en": "Shawwal",
+        "ur": "شوال"
+      },
+      "confidence": "confirmed",
+      "sources": [
+        "https://www.nation.com.pk/20-Mar-2026/pakistan-celebrate-eid-saturday-shawwal-moon-sighting",
+        "https://www.arabnews.pk/pakistan/pakistan-to-celebrate-eid-al-fitr-on-saturday-after-moon-not-sighted-2636941"
+      ]
+    },
+    "2026-04-10": {
+      "hijri": "1447-10-21",
+      "year": 1447,
+      "month": 10,
+      "day": 21,
+      "month_name": {
+        "en": "Shawwal",
+        "ur": "شوال"
+      },
+      "confidence": "confirmed",
+      "sources": [
+        "https://www.nation.com.pk/20-Mar-2026/pakistan-celebrate-eid-saturday-shawwal-moon-sighting",
+        "https://www.arabnews.pk/pakistan/pakistan-to-celebrate-eid-al-fitr-on-saturday-after-moon-not-sighted-2636941"
+      ]
+    },
+    "2026-04-11": {
+      "hijri": "1447-10-22",
+      "year": 1447,
+      "month": 10,
+      "day": 22,
+      "month_name": {
+        "en": "Shawwal",
+        "ur": "شوال"
+      },
+      "confidence": "confirmed",
+      "sources": [
+        "https://www.nation.com.pk/20-Mar-2026/pakistan-celebrate-eid-saturday-shawwal-moon-sighting",
+        "https://www.arabnews.pk/pakistan/pakistan-to-celebrate-eid-al-fitr-on-saturday-after-moon-not-sighted-2636941"
+      ]
+    },
+    "2026-04-12": {
+      "hijri": "1447-10-23",
+      "year": 1447,
+      "month": 10,
+      "day": 23,
+      "month_name": {
+        "en": "Shawwal",
+        "ur": "شوال"
+      },
+      "confidence": "confirmed",
+      "sources": [
+        "https://www.nation.com.pk/20-Mar-2026/pakistan-celebrate-eid-saturday-shawwal-moon-sighting",
+        "https://www.arabnews.pk/pakistan/pakistan-to-celebrate-eid-al-fitr-on-saturday-after-moon-not-sighted-2636941"
+      ]
+    },
+    "2026-04-13": {
+      "hijri": "1447-10-24",
+      "year": 1447,
+      "month": 10,
+      "day": 24,
+      "month_name": {
+        "en": "Shawwal",
+        "ur": "شوال"
+      },
+      "confidence": "confirmed",
+      "sources": [
+        "https://www.nation.com.pk/20-Mar-2026/pakistan-celebrate-eid-saturday-shawwal-moon-sighting",
+        "https://www.arabnews.pk/pakistan/pakistan-to-celebrate-eid-al-fitr-on-saturday-after-moon-not-sighted-2636941"
+      ]
+    },
+    "2026-04-14": {
+      "hijri": "1447-10-25",
+      "year": 1447,
+      "month": 10,
+      "day": 25,
+      "month_name": {
+        "en": "Shawwal",
+        "ur": "شوال"
+      },
+      "confidence": "confirmed",
+      "sources": [
+        "https://www.nation.com.pk/20-Mar-2026/pakistan-celebrate-eid-saturday-shawwal-moon-sighting",
+        "https://www.arabnews.pk/pakistan/pakistan-to-celebrate-eid-al-fitr-on-saturday-after-moon-not-sighted-2636941"
+      ]
+    },
+    "2026-04-15": {
+      "hijri": "1447-10-26",
+      "year": 1447,
+      "month": 10,
+      "day": 26,
+      "month_name": {
+        "en": "Shawwal",
+        "ur": "شوال"
+      },
+      "confidence": "confirmed",
+      "sources": [
+        "https://www.nation.com.pk/20-Mar-2026/pakistan-celebrate-eid-saturday-shawwal-moon-sighting",
+        "https://www.arabnews.pk/pakistan/pakistan-to-celebrate-eid-al-fitr-on-saturday-after-moon-not-sighted-2636941"
+      ]
+    },
+    "2026-04-16": {
+      "hijri": "1447-10-27",
+      "year": 1447,
+      "month": 10,
+      "day": 27,
+      "month_name": {
+        "en": "Shawwal",
+        "ur": "شوال"
+      },
+      "confidence": "confirmed",
+      "sources": [
+        "https://www.nation.com.pk/20-Mar-2026/pakistan-celebrate-eid-saturday-shawwal-moon-sighting",
+        "https://www.arabnews.pk/pakistan/pakistan-to-celebrate-eid-al-fitr-on-saturday-after-moon-not-sighted-2636941"
+      ]
+    },
+    "2026-04-17": {
+      "hijri": "1447-10-28",
+      "year": 1447,
+      "month": 10,
+      "day": 28,
+      "month_name": {
+        "en": "Shawwal",
+        "ur": "شوال"
+      },
+      "confidence": "confirmed",
+      "sources": [
+        "https://www.nation.com.pk/20-Mar-2026/pakistan-celebrate-eid-saturday-shawwal-moon-sighting",
+        "https://www.arabnews.pk/pakistan/pakistan-to-celebrate-eid-al-fitr-on-saturday-after-moon-not-sighted-2636941"
+      ]
+    },
+    "2026-04-18": {
+      "hijri": "1447-10-29",
+      "year": 1447,
+      "month": 10,
+      "day": 29,
+      "month_name": {
+        "en": "Shawwal",
+        "ur": "شوال"
+      },
+      "confidence": "confirmed",
+      "sources": [
+        "https://www.nation.com.pk/20-Mar-2026/pakistan-celebrate-eid-saturday-shawwal-moon-sighting",
+        "https://www.arabnews.pk/pakistan/pakistan-to-celebrate-eid-al-fitr-on-saturday-after-moon-not-sighted-2636941"
+      ]
+    },
+    "2026-04-19": {
+      "hijri": "1447-11-01",
+      "year": 1447,
+      "month": 11,
+      "day": 1,
+      "month_name": {
+        "en": "Dhu al-Qi'dah",
+        "ur": "ذو القعدہ"
+      },
+      "confidence": "confirmed",
+      "sources": [
+        "https://www.app.com.pk/national/ziqad-moon-sighted-1st-ziqad-to-fall-on-sunday-ruet-e-hilal/",
+        "https://www.radio.gov.pk/18-04-2026/moon-of-ziqaad-sighted-in-pakistan"
+      ]
+    },
+    "2026-04-20": {
+      "hijri": "1447-11-02",
+      "year": 1447,
+      "month": 11,
+      "day": 2,
+      "month_name": {
+        "en": "Dhu al-Qi'dah",
+        "ur": "ذو القعدہ"
+      },
+      "confidence": "confirmed",
+      "sources": [
+        "https://www.app.com.pk/national/ziqad-moon-sighted-1st-ziqad-to-fall-on-sunday-ruet-e-hilal/",
+        "https://www.radio.gov.pk/18-04-2026/moon-of-ziqaad-sighted-in-pakistan"
+      ]
+    },
+    "2026-04-21": {
+      "hijri": "1447-11-03",
+      "year": 1447,
+      "month": 11,
+      "day": 3,
+      "month_name": {
+        "en": "Dhu al-Qi'dah",
+        "ur": "ذو القعدہ"
+      },
+      "confidence": "confirmed",
+      "sources": [
+        "https://www.app.com.pk/national/ziqad-moon-sighted-1st-ziqad-to-fall-on-sunday-ruet-e-hilal/",
+        "https://www.radio.gov.pk/18-04-2026/moon-of-ziqaad-sighted-in-pakistan"
+      ]
+    },
+    "2026-04-22": {
+      "hijri": "1447-11-04",
+      "year": 1447,
+      "month": 11,
+      "day": 4,
+      "month_name": {
+        "en": "Dhu al-Qi'dah",
+        "ur": "ذو القعدہ"
+      },
+      "confidence": "confirmed",
+      "sources": [
+        "https://www.app.com.pk/national/ziqad-moon-sighted-1st-ziqad-to-fall-on-sunday-ruet-e-hilal/",
+        "https://www.radio.gov.pk/18-04-2026/moon-of-ziqaad-sighted-in-pakistan"
+      ]
+    },
+    "2026-04-23": {
+      "hijri": "1447-11-05",
+      "year": 1447,
+      "month": 11,
+      "day": 5,
+      "month_name": {
+        "en": "Dhu al-Qi'dah",
+        "ur": "ذو القعدہ"
+      },
+      "confidence": "confirmed",
+      "sources": [
+        "https://www.app.com.pk/national/ziqad-moon-sighted-1st-ziqad-to-fall-on-sunday-ruet-e-hilal/",
+        "https://www.radio.gov.pk/18-04-2026/moon-of-ziqaad-sighted-in-pakistan"
+      ]
+    },
+    "2026-04-24": {
+      "hijri": "1447-11-06",
+      "year": 1447,
+      "month": 11,
+      "day": 6,
+      "month_name": {
+        "en": "Dhu al-Qi'dah",
+        "ur": "ذو القعدہ"
+      },
+      "confidence": "confirmed",
+      "sources": [
+        "https://www.app.com.pk/national/ziqad-moon-sighted-1st-ziqad-to-fall-on-sunday-ruet-e-hilal/",
+        "https://www.radio.gov.pk/18-04-2026/moon-of-ziqaad-sighted-in-pakistan"
+      ]
+    },
+    "2026-04-25": {
+      "hijri": "1447-11-07",
+      "year": 1447,
+      "month": 11,
+      "day": 7,
+      "month_name": {
+        "en": "Dhu al-Qi'dah",
+        "ur": "ذو القعدہ"
+      },
+      "confidence": "confirmed",
+      "sources": [
+        "https://www.app.com.pk/national/ziqad-moon-sighted-1st-ziqad-to-fall-on-sunday-ruet-e-hilal/",
+        "https://www.radio.gov.pk/18-04-2026/moon-of-ziqaad-sighted-in-pakistan"
+      ]
+    },
+    "2026-04-26": {
+      "hijri": "1447-11-08",
+      "year": 1447,
+      "month": 11,
+      "day": 8,
+      "month_name": {
+        "en": "Dhu al-Qi'dah",
+        "ur": "ذو القعدہ"
+      },
+      "confidence": "confirmed",
+      "sources": [
+        "https://www.app.com.pk/national/ziqad-moon-sighted-1st-ziqad-to-fall-on-sunday-ruet-e-hilal/",
+        "https://www.radio.gov.pk/18-04-2026/moon-of-ziqaad-sighted-in-pakistan"
+      ]
+    },
+    "2026-04-27": {
+      "hijri": "1447-11-09",
+      "year": 1447,
+      "month": 11,
+      "day": 9,
+      "month_name": {
+        "en": "Dhu al-Qi'dah",
+        "ur": "ذو القعدہ"
+      },
+      "confidence": "confirmed",
+      "sources": [
+        "https://www.app.com.pk/national/ziqad-moon-sighted-1st-ziqad-to-fall-on-sunday-ruet-e-hilal/",
+        "https://www.radio.gov.pk/18-04-2026/moon-of-ziqaad-sighted-in-pakistan"
+      ]
+    },
+    "2026-04-28": {
+      "hijri": "1447-11-10",
+      "year": 1447,
+      "month": 11,
+      "day": 10,
+      "month_name": {
+        "en": "Dhu al-Qi'dah",
+        "ur": "ذو القعدہ"
+      },
+      "confidence": "confirmed",
+      "sources": [
+        "https://www.app.com.pk/national/ziqad-moon-sighted-1st-ziqad-to-fall-on-sunday-ruet-e-hilal/",
+        "https://www.radio.gov.pk/18-04-2026/moon-of-ziqaad-sighted-in-pakistan"
+      ]
+    },
+    "2026-04-29": {
+      "hijri": "1447-11-11",
+      "year": 1447,
+      "month": 11,
+      "day": 11,
+      "month_name": {
+        "en": "Dhu al-Qi'dah",
+        "ur": "ذو القعدہ"
+      },
+      "confidence": "confirmed",
+      "sources": [
+        "https://www.app.com.pk/national/ziqad-moon-sighted-1st-ziqad-to-fall-on-sunday-ruet-e-hilal/",
+        "https://www.radio.gov.pk/18-04-2026/moon-of-ziqaad-sighted-in-pakistan"
+      ]
+    },
+    "2026-04-30": {
+      "hijri": "1447-11-12",
+      "year": 1447,
+      "month": 11,
+      "day": 12,
+      "month_name": {
+        "en": "Dhu al-Qi'dah",
+        "ur": "ذو القعدہ"
+      },
+      "confidence": "confirmed",
+      "sources": [
+        "https://www.app.com.pk/national/ziqad-moon-sighted-1st-ziqad-to-fall-on-sunday-ruet-e-hilal/",
+        "https://www.radio.gov.pk/18-04-2026/moon-of-ziqaad-sighted-in-pakistan"
+      ]
+    },
+    "2026-05-01": {
+      "hijri": "1447-11-13",
+      "year": 1447,
+      "month": 11,
+      "day": 13,
+      "month_name": {
+        "en": "Dhu al-Qi'dah",
+        "ur": "ذو القعدہ"
+      },
+      "confidence": "confirmed",
+      "sources": [
+        "https://www.app.com.pk/national/ziqad-moon-sighted-1st-ziqad-to-fall-on-sunday-ruet-e-hilal/",
+        "https://www.radio.gov.pk/18-04-2026/moon-of-ziqaad-sighted-in-pakistan"
+      ]
+    },
+    "2026-05-02": {
+      "hijri": "1447-11-14",
+      "year": 1447,
+      "month": 11,
+      "day": 14,
+      "month_name": {
+        "en": "Dhu al-Qi'dah",
+        "ur": "ذو القعدہ"
+      },
+      "confidence": "confirmed",
+      "sources": [
+        "https://www.app.com.pk/national/ziqad-moon-sighted-1st-ziqad-to-fall-on-sunday-ruet-e-hilal/",
+        "https://www.radio.gov.pk/18-04-2026/moon-of-ziqaad-sighted-in-pakistan"
+      ]
+    },
+    "2026-05-03": {
+      "hijri": "1447-11-15",
+      "year": 1447,
+      "month": 11,
+      "day": 15,
+      "month_name": {
+        "en": "Dhu al-Qi'dah",
+        "ur": "ذو القعدہ"
+      },
+      "confidence": "confirmed",
+      "sources": [
+        "https://www.app.com.pk/national/ziqad-moon-sighted-1st-ziqad-to-fall-on-sunday-ruet-e-hilal/",
+        "https://www.radio.gov.pk/18-04-2026/moon-of-ziqaad-sighted-in-pakistan"
+      ]
+    },
+    "2026-05-04": {
+      "hijri": "1447-11-16",
+      "year": 1447,
+      "month": 11,
+      "day": 16,
+      "month_name": {
+        "en": "Dhu al-Qi'dah",
+        "ur": "ذو القعدہ"
+      },
+      "confidence": "confirmed",
+      "sources": [
+        "https://www.app.com.pk/national/ziqad-moon-sighted-1st-ziqad-to-fall-on-sunday-ruet-e-hilal/",
+        "https://www.radio.gov.pk/18-04-2026/moon-of-ziqaad-sighted-in-pakistan"
+      ]
+    },
+    "2026-05-05": {
+      "hijri": "1447-11-17",
+      "year": 1447,
+      "month": 11,
+      "day": 17,
+      "month_name": {
+        "en": "Dhu al-Qi'dah",
+        "ur": "ذو القعدہ"
+      },
+      "confidence": "confirmed",
+      "sources": [
+        "https://www.app.com.pk/national/ziqad-moon-sighted-1st-ziqad-to-fall-on-sunday-ruet-e-hilal/",
+        "https://www.radio.gov.pk/18-04-2026/moon-of-ziqaad-sighted-in-pakistan"
+      ]
+    },
+    "2026-05-06": {
+      "hijri": "1447-11-18",
+      "year": 1447,
+      "month": 11,
+      "day": 18,
+      "month_name": {
+        "en": "Dhu al-Qi'dah",
+        "ur": "ذو القعدہ"
+      },
+      "confidence": "confirmed",
+      "sources": [
+        "https://www.app.com.pk/national/ziqad-moon-sighted-1st-ziqad-to-fall-on-sunday-ruet-e-hilal/",
+        "https://www.radio.gov.pk/18-04-2026/moon-of-ziqaad-sighted-in-pakistan"
+      ]
+    },
+    "2026-05-07": {
+      "hijri": "1447-11-19",
+      "year": 1447,
+      "month": 11,
+      "day": 19,
+      "month_name": {
+        "en": "Dhu al-Qi'dah",
+        "ur": "ذو القعدہ"
+      },
+      "confidence": "confirmed",
+      "sources": [
+        "https://www.app.com.pk/national/ziqad-moon-sighted-1st-ziqad-to-fall-on-sunday-ruet-e-hilal/",
+        "https://www.radio.gov.pk/18-04-2026/moon-of-ziqaad-sighted-in-pakistan"
+      ]
+    },
+    "2026-05-08": {
+      "hijri": "1447-11-20",
+      "year": 1447,
+      "month": 11,
+      "day": 20,
+      "month_name": {
+        "en": "Dhu al-Qi'dah",
+        "ur": "ذو القعدہ"
+      },
+      "confidence": "confirmed",
+      "sources": [
+        "https://www.app.com.pk/national/ziqad-moon-sighted-1st-ziqad-to-fall-on-sunday-ruet-e-hilal/",
+        "https://www.radio.gov.pk/18-04-2026/moon-of-ziqaad-sighted-in-pakistan"
+      ]
+    },
+    "2026-05-09": {
+      "hijri": "1447-11-21",
+      "year": 1447,
+      "month": 11,
+      "day": 21,
+      "month_name": {
+        "en": "Dhu al-Qi'dah",
+        "ur": "ذو القعدہ"
+      },
+      "confidence": "confirmed",
+      "sources": [
+        "https://www.app.com.pk/national/ziqad-moon-sighted-1st-ziqad-to-fall-on-sunday-ruet-e-hilal/",
+        "https://www.radio.gov.pk/18-04-2026/moon-of-ziqaad-sighted-in-pakistan"
+      ]
+    },
+    "2026-05-10": {
+      "hijri": "1447-11-22",
+      "year": 1447,
+      "month": 11,
+      "day": 22,
+      "month_name": {
+        "en": "Dhu al-Qi'dah",
+        "ur": "ذو القعدہ"
+      },
+      "confidence": "confirmed",
+      "sources": [
+        "https://www.app.com.pk/national/ziqad-moon-sighted-1st-ziqad-to-fall-on-sunday-ruet-e-hilal/",
+        "https://www.radio.gov.pk/18-04-2026/moon-of-ziqaad-sighted-in-pakistan"
+      ]
+    },
+    "2026-05-11": {
+      "hijri": "1447-11-23",
+      "year": 1447,
+      "month": 11,
+      "day": 23,
+      "month_name": {
+        "en": "Dhu al-Qi'dah",
+        "ur": "ذو القعدہ"
+      },
+      "confidence": "confirmed",
+      "sources": [
+        "https://www.app.com.pk/national/ziqad-moon-sighted-1st-ziqad-to-fall-on-sunday-ruet-e-hilal/",
+        "https://www.radio.gov.pk/18-04-2026/moon-of-ziqaad-sighted-in-pakistan"
+      ]
+    },
+    "2026-05-12": {
+      "hijri": "1447-11-24",
+      "year": 1447,
+      "month": 11,
+      "day": 24,
+      "month_name": {
+        "en": "Dhu al-Qi'dah",
+        "ur": "ذو القعدہ"
+      },
+      "confidence": "confirmed",
+      "sources": [
+        "https://www.app.com.pk/national/ziqad-moon-sighted-1st-ziqad-to-fall-on-sunday-ruet-e-hilal/",
+        "https://www.radio.gov.pk/18-04-2026/moon-of-ziqaad-sighted-in-pakistan"
+      ]
+    },
+    "2026-05-13": {
+      "hijri": "1447-11-25",
+      "year": 1447,
+      "month": 11,
+      "day": 25,
+      "month_name": {
+        "en": "Dhu al-Qi'dah",
+        "ur": "ذو القعدہ"
+      },
+      "confidence": "confirmed",
+      "sources": [
+        "https://www.app.com.pk/national/ziqad-moon-sighted-1st-ziqad-to-fall-on-sunday-ruet-e-hilal/",
+        "https://www.radio.gov.pk/18-04-2026/moon-of-ziqaad-sighted-in-pakistan"
+      ]
+    },
+    "2026-05-14": {
+      "hijri": "1447-11-26",
+      "year": 1447,
+      "month": 11,
+      "day": 26,
+      "month_name": {
+        "en": "Dhu al-Qi'dah",
+        "ur": "ذو القعدہ"
+      },
+      "confidence": "confirmed",
+      "sources": [
+        "https://www.app.com.pk/national/ziqad-moon-sighted-1st-ziqad-to-fall-on-sunday-ruet-e-hilal/",
+        "https://www.radio.gov.pk/18-04-2026/moon-of-ziqaad-sighted-in-pakistan"
+      ]
+    },
+    "2026-05-15": {
+      "hijri": "1447-11-27",
+      "year": 1447,
+      "month": 11,
+      "day": 27,
+      "month_name": {
+        "en": "Dhu al-Qi'dah",
+        "ur": "ذو القعدہ"
+      },
+      "confidence": "confirmed",
+      "sources": [
+        "https://www.app.com.pk/national/ziqad-moon-sighted-1st-ziqad-to-fall-on-sunday-ruet-e-hilal/",
+        "https://www.radio.gov.pk/18-04-2026/moon-of-ziqaad-sighted-in-pakistan"
+      ]
+    },
+    "2026-05-16": {
+      "hijri": "1447-11-28",
+      "year": 1447,
+      "month": 11,
+      "day": 28,
+      "month_name": {
+        "en": "Dhu al-Qi'dah",
+        "ur": "ذو القعدہ"
+      },
+      "confidence": "confirmed",
+      "sources": [
+        "https://www.app.com.pk/national/ziqad-moon-sighted-1st-ziqad-to-fall-on-sunday-ruet-e-hilal/",
+        "https://www.radio.gov.pk/18-04-2026/moon-of-ziqaad-sighted-in-pakistan"
+      ]
+    },
+    "2026-05-17": {
+      "hijri": "1447-11-29",
+      "year": 1447,
+      "month": 11,
+      "day": 29,
+      "month_name": {
+        "en": "Dhu al-Qi'dah",
+        "ur": "ذو القعدہ"
+      },
+      "confidence": "confirmed",
+      "sources": [
+        "https://www.app.com.pk/national/ziqad-moon-sighted-1st-ziqad-to-fall-on-sunday-ruet-e-hilal/",
+        "https://www.radio.gov.pk/18-04-2026/moon-of-ziqaad-sighted-in-pakistan"
+      ]
+    },
+    "2026-05-18": {
+      "hijri": "1447-12-01",
+      "year": 1447,
+      "month": 12,
+      "day": 1,
+      "month_name": {
+        "en": "Dhu al-Hijjah",
+        "ur": "ذو الحجہ"
+      },
+      "confidence": "confirmed",
+      "sources": [
+        "https://www.arabnews.pk/pakistan/dhul-hijjah-moon-sighted-in-pakistan-eid-al-adha-to-be-observed-on-may-27-2643931",
+        "https://www.thenews.pk/story/1416005-eid-ul-adha-ruet-e-hilal-committee-meeting-underway-for-zil-hajj-moon-sighting"
+      ]
+    },
+    "2026-05-19": {
+      "hijri": "1447-12-02",
+      "year": 1447,
+      "month": 12,
+      "day": 2,
+      "month_name": {
+        "en": "Dhu al-Hijjah",
+        "ur": "ذو الحجہ"
+      },
+      "confidence": "confirmed",
+      "sources": [
+        "https://www.arabnews.pk/pakistan/dhul-hijjah-moon-sighted-in-pakistan-eid-al-adha-to-be-observed-on-may-27-2643931",
+        "https://www.thenews.pk/story/1416005-eid-ul-adha-ruet-e-hilal-committee-meeting-underway-for-zil-hajj-moon-sighting"
+      ]
+    },
+    "2026-05-20": {
+      "hijri": "1447-12-03",
+      "year": 1447,
+      "month": 12,
+      "day": 3,
+      "month_name": {
+        "en": "Dhu al-Hijjah",
+        "ur": "ذو الحجہ"
+      },
+      "confidence": "confirmed",
+      "sources": [
+        "https://www.arabnews.pk/pakistan/dhul-hijjah-moon-sighted-in-pakistan-eid-al-adha-to-be-observed-on-may-27-2643931",
+        "https://www.thenews.pk/story/1416005-eid-ul-adha-ruet-e-hilal-committee-meeting-underway-for-zil-hajj-moon-sighting"
+      ]
+    },
+    "2026-05-21": {
+      "hijri": "1447-12-04",
+      "year": 1447,
+      "month": 12,
+      "day": 4,
+      "month_name": {
+        "en": "Dhu al-Hijjah",
+        "ur": "ذو الحجہ"
+      },
+      "confidence": "confirmed",
+      "sources": [
+        "https://www.arabnews.pk/pakistan/dhul-hijjah-moon-sighted-in-pakistan-eid-al-adha-to-be-observed-on-may-27-2643931",
+        "https://www.thenews.pk/story/1416005-eid-ul-adha-ruet-e-hilal-committee-meeting-underway-for-zil-hajj-moon-sighting"
+      ]
+    },
+    "2026-05-22": {
+      "hijri": "1447-12-05",
+      "year": 1447,
+      "month": 12,
+      "day": 5,
+      "month_name": {
+        "en": "Dhu al-Hijjah",
+        "ur": "ذو الحجہ"
+      },
+      "confidence": "confirmed",
+      "sources": [
+        "https://www.arabnews.pk/pakistan/dhul-hijjah-moon-sighted-in-pakistan-eid-al-adha-to-be-observed-on-may-27-2643931",
+        "https://www.thenews.pk/story/1416005-eid-ul-adha-ruet-e-hilal-committee-meeting-underway-for-zil-hajj-moon-sighting"
+      ]
+    },
+    "2026-05-23": {
+      "hijri": "1447-12-06",
+      "year": 1447,
+      "month": 12,
+      "day": 6,
+      "month_name": {
+        "en": "Dhu al-Hijjah",
+        "ur": "ذو الحجہ"
+      },
+      "confidence": "confirmed",
+      "sources": [
+        "https://www.arabnews.pk/pakistan/dhul-hijjah-moon-sighted-in-pakistan-eid-al-adha-to-be-observed-on-may-27-2643931",
+        "https://www.thenews.pk/story/1416005-eid-ul-adha-ruet-e-hilal-committee-meeting-underway-for-zil-hajj-moon-sighting"
+      ]
+    },
+    "2026-05-24": {
+      "hijri": "1447-12-07",
+      "year": 1447,
+      "month": 12,
+      "day": 7,
+      "month_name": {
+        "en": "Dhu al-Hijjah",
+        "ur": "ذو الحجہ"
+      },
+      "confidence": "confirmed",
+      "sources": [
+        "https://www.arabnews.pk/pakistan/dhul-hijjah-moon-sighted-in-pakistan-eid-al-adha-to-be-observed-on-may-27-2643931",
+        "https://www.thenews.pk/story/1416005-eid-ul-adha-ruet-e-hilal-committee-meeting-underway-for-zil-hajj-moon-sighting"
+      ]
+    },
+    "2026-05-25": {
+      "hijri": "1447-12-08",
+      "year": 1447,
+      "month": 12,
+      "day": 8,
+      "month_name": {
+        "en": "Dhu al-Hijjah",
+        "ur": "ذو الحجہ"
+      },
+      "confidence": "confirmed",
+      "sources": [
+        "https://www.arabnews.pk/pakistan/dhul-hijjah-moon-sighted-in-pakistan-eid-al-adha-to-be-observed-on-may-27-2643931",
+        "https://www.thenews.pk/story/1416005-eid-ul-adha-ruet-e-hilal-committee-meeting-underway-for-zil-hajj-moon-sighting"
+      ]
+    },
+    "2026-05-26": {
+      "hijri": "1447-12-09",
+      "year": 1447,
+      "month": 12,
+      "day": 9,
+      "month_name": {
+        "en": "Dhu al-Hijjah",
+        "ur": "ذو الحجہ"
+      },
+      "confidence": "confirmed",
+      "sources": [
+        "https://www.arabnews.pk/pakistan/dhul-hijjah-moon-sighted-in-pakistan-eid-al-adha-to-be-observed-on-may-27-2643931",
+        "https://www.thenews.pk/story/1416005-eid-ul-adha-ruet-e-hilal-committee-meeting-underway-for-zil-hajj-moon-sighting"
+      ]
+    },
+    "2026-05-27": {
+      "hijri": "1447-12-10",
+      "year": 1447,
+      "month": 12,
+      "day": 10,
+      "month_name": {
+        "en": "Dhu al-Hijjah",
+        "ur": "ذو الحجہ"
+      },
+      "confidence": "confirmed",
+      "sources": [
+        "https://www.arabnews.pk/pakistan/dhul-hijjah-moon-sighted-in-pakistan-eid-al-adha-to-be-observed-on-may-27-2643931",
+        "https://www.thenews.pk/story/1416005-eid-ul-adha-ruet-e-hilal-committee-meeting-underway-for-zil-hajj-moon-sighting"
+      ]
+    },
+    "2026-05-28": {
+      "hijri": "1447-12-11",
+      "year": 1447,
+      "month": 12,
+      "day": 11,
+      "month_name": {
+        "en": "Dhu al-Hijjah",
+        "ur": "ذو الحجہ"
+      },
+      "confidence": "confirmed",
+      "sources": [
+        "https://www.arabnews.pk/pakistan/dhul-hijjah-moon-sighted-in-pakistan-eid-al-adha-to-be-observed-on-may-27-2643931",
+        "https://www.thenews.pk/story/1416005-eid-ul-adha-ruet-e-hilal-committee-meeting-underway-for-zil-hajj-moon-sighting"
+      ]
+    },
+    "2026-05-29": {
+      "hijri": "1447-12-12",
+      "year": 1447,
+      "month": 12,
+      "day": 12,
+      "month_name": {
+        "en": "Dhu al-Hijjah",
+        "ur": "ذو الحجہ"
+      },
+      "confidence": "confirmed",
+      "sources": [
+        "https://www.arabnews.pk/pakistan/dhul-hijjah-moon-sighted-in-pakistan-eid-al-adha-to-be-observed-on-may-27-2643931",
+        "https://www.thenews.pk/story/1416005-eid-ul-adha-ruet-e-hilal-committee-meeting-underway-for-zil-hajj-moon-sighting"
+      ]
+    },
+    "2026-05-30": {
+      "hijri": "1447-12-13",
+      "year": 1447,
+      "month": 12,
+      "day": 13,
+      "month_name": {
+        "en": "Dhu al-Hijjah",
+        "ur": "ذو الحجہ"
+      },
+      "confidence": "confirmed",
+      "sources": [
+        "https://www.arabnews.pk/pakistan/dhul-hijjah-moon-sighted-in-pakistan-eid-al-adha-to-be-observed-on-may-27-2643931",
+        "https://www.thenews.pk/story/1416005-eid-ul-adha-ruet-e-hilal-committee-meeting-underway-for-zil-hajj-moon-sighting"
+      ]
+    },
+    "2026-05-31": {
+      "hijri": "1447-12-14",
+      "year": 1447,
+      "month": 12,
+      "day": 14,
+      "month_name": {
+        "en": "Dhu al-Hijjah",
+        "ur": "ذو الحجہ"
+      },
+      "confidence": "confirmed",
+      "sources": [
+        "https://www.arabnews.pk/pakistan/dhul-hijjah-moon-sighted-in-pakistan-eid-al-adha-to-be-observed-on-may-27-2643931",
+        "https://www.thenews.pk/story/1416005-eid-ul-adha-ruet-e-hilal-committee-meeting-underway-for-zil-hajj-moon-sighting"
+      ]
+    },
+    "2026-06-01": {
+      "hijri": "1447-12-15",
+      "year": 1447,
+      "month": 12,
+      "day": 15,
+      "month_name": {
+        "en": "Dhu al-Hijjah",
+        "ur": "ذو الحجہ"
+      },
+      "confidence": "confirmed",
+      "sources": [
+        "https://www.arabnews.pk/pakistan/dhul-hijjah-moon-sighted-in-pakistan-eid-al-adha-to-be-observed-on-may-27-2643931",
+        "https://www.thenews.pk/story/1416005-eid-ul-adha-ruet-e-hilal-committee-meeting-underway-for-zil-hajj-moon-sighting"
+      ]
+    },
+    "2026-06-02": {
+      "hijri": "1447-12-16",
+      "year": 1447,
+      "month": 12,
+      "day": 16,
+      "month_name": {
+        "en": "Dhu al-Hijjah",
+        "ur": "ذو الحجہ"
+      },
+      "confidence": "confirmed",
+      "sources": [
+        "https://www.arabnews.pk/pakistan/dhul-hijjah-moon-sighted-in-pakistan-eid-al-adha-to-be-observed-on-may-27-2643931",
+        "https://www.thenews.pk/story/1416005-eid-ul-adha-ruet-e-hilal-committee-meeting-underway-for-zil-hajj-moon-sighting"
+      ]
+    },
+    "2026-06-03": {
+      "hijri": "1447-12-17",
+      "year": 1447,
+      "month": 12,
+      "day": 17,
+      "month_name": {
+        "en": "Dhu al-Hijjah",
+        "ur": "ذو الحجہ"
+      },
+      "confidence": "confirmed",
+      "sources": [
+        "https://www.arabnews.pk/pakistan/dhul-hijjah-moon-sighted-in-pakistan-eid-al-adha-to-be-observed-on-may-27-2643931",
+        "https://www.thenews.pk/story/1416005-eid-ul-adha-ruet-e-hilal-committee-meeting-underway-for-zil-hajj-moon-sighting"
+      ]
+    },
+    "2026-06-04": {
+      "hijri": "1447-12-18",
+      "year": 1447,
+      "month": 12,
+      "day": 18,
+      "month_name": {
+        "en": "Dhu al-Hijjah",
+        "ur": "ذو الحجہ"
+      },
+      "confidence": "confirmed",
+      "sources": [
+        "https://www.arabnews.pk/pakistan/dhul-hijjah-moon-sighted-in-pakistan-eid-al-adha-to-be-observed-on-may-27-2643931",
+        "https://www.thenews.pk/story/1416005-eid-ul-adha-ruet-e-hilal-committee-meeting-underway-for-zil-hajj-moon-sighting"
+      ]
+    },
+    "2026-06-05": {
+      "hijri": "1447-12-19",
+      "year": 1447,
+      "month": 12,
+      "day": 19,
+      "month_name": {
+        "en": "Dhu al-Hijjah",
+        "ur": "ذو الحجہ"
+      },
+      "confidence": "confirmed",
+      "sources": [
+        "https://www.arabnews.pk/pakistan/dhul-hijjah-moon-sighted-in-pakistan-eid-al-adha-to-be-observed-on-may-27-2643931",
+        "https://www.thenews.pk/story/1416005-eid-ul-adha-ruet-e-hilal-committee-meeting-underway-for-zil-hajj-moon-sighting"
+      ]
+    },
+    "2026-06-06": {
+      "hijri": "1447-12-20",
+      "year": 1447,
+      "month": 12,
+      "day": 20,
+      "month_name": {
+        "en": "Dhu al-Hijjah",
+        "ur": "ذو الحجہ"
+      },
+      "confidence": "confirmed",
+      "sources": [
+        "https://www.arabnews.pk/pakistan/dhul-hijjah-moon-sighted-in-pakistan-eid-al-adha-to-be-observed-on-may-27-2643931",
+        "https://www.thenews.pk/story/1416005-eid-ul-adha-ruet-e-hilal-committee-meeting-underway-for-zil-hajj-moon-sighting"
+      ]
+    },
+    "2026-06-07": {
+      "hijri": "1447-12-21",
+      "year": 1447,
+      "month": 12,
+      "day": 21,
+      "month_name": {
+        "en": "Dhu al-Hijjah",
+        "ur": "ذو الحجہ"
+      },
+      "confidence": "confirmed",
+      "sources": [
+        "https://www.arabnews.pk/pakistan/dhul-hijjah-moon-sighted-in-pakistan-eid-al-adha-to-be-observed-on-may-27-2643931",
+        "https://www.thenews.pk/story/1416005-eid-ul-adha-ruet-e-hilal-committee-meeting-underway-for-zil-hajj-moon-sighting"
+      ]
+    },
+    "2026-06-08": {
+      "hijri": "1447-12-22",
+      "year": 1447,
+      "month": 12,
+      "day": 22,
+      "month_name": {
+        "en": "Dhu al-Hijjah",
+        "ur": "ذو الحجہ"
+      },
+      "confidence": "confirmed",
+      "sources": [
+        "https://www.arabnews.pk/pakistan/dhul-hijjah-moon-sighted-in-pakistan-eid-al-adha-to-be-observed-on-may-27-2643931",
+        "https://www.thenews.pk/story/1416005-eid-ul-adha-ruet-e-hilal-committee-meeting-underway-for-zil-hajj-moon-sighting"
+      ]
+    },
+    "2026-06-09": {
+      "hijri": "1447-12-23",
+      "year": 1447,
+      "month": 12,
+      "day": 23,
+      "month_name": {
+        "en": "Dhu al-Hijjah",
+        "ur": "ذو الحجہ"
+      },
+      "confidence": "confirmed",
+      "sources": [
+        "https://www.arabnews.pk/pakistan/dhul-hijjah-moon-sighted-in-pakistan-eid-al-adha-to-be-observed-on-may-27-2643931",
+        "https://www.thenews.pk/story/1416005-eid-ul-adha-ruet-e-hilal-committee-meeting-underway-for-zil-hajj-moon-sighting"
+      ]
+    },
+    "2026-06-10": {
+      "hijri": "1447-12-24",
+      "year": 1447,
+      "month": 12,
+      "day": 24,
+      "month_name": {
+        "en": "Dhu al-Hijjah",
+        "ur": "ذو الحجہ"
+      },
+      "confidence": "confirmed",
+      "sources": [
+        "https://www.arabnews.pk/pakistan/dhul-hijjah-moon-sighted-in-pakistan-eid-al-adha-to-be-observed-on-may-27-2643931",
+        "https://www.thenews.pk/story/1416005-eid-ul-adha-ruet-e-hilal-committee-meeting-underway-for-zil-hajj-moon-sighting"
+      ]
+    },
+    "2026-06-11": {
+      "hijri": "1447-12-25",
+      "year": 1447,
+      "month": 12,
+      "day": 25,
+      "month_name": {
+        "en": "Dhu al-Hijjah",
+        "ur": "ذو الحجہ"
+      },
+      "confidence": "confirmed",
+      "sources": [
+        "https://www.arabnews.pk/pakistan/dhul-hijjah-moon-sighted-in-pakistan-eid-al-adha-to-be-observed-on-may-27-2643931",
+        "https://www.thenews.pk/story/1416005-eid-ul-adha-ruet-e-hilal-committee-meeting-underway-for-zil-hajj-moon-sighting"
+      ]
+    },
+    "2026-06-12": {
+      "hijri": "1447-12-26",
+      "year": 1447,
+      "month": 12,
+      "day": 26,
+      "month_name": {
+        "en": "Dhu al-Hijjah",
+        "ur": "ذو الحجہ"
+      },
+      "confidence": "confirmed",
+      "sources": [
+        "https://www.arabnews.pk/pakistan/dhul-hijjah-moon-sighted-in-pakistan-eid-al-adha-to-be-observed-on-may-27-2643931",
+        "https://www.thenews.pk/story/1416005-eid-ul-adha-ruet-e-hilal-committee-meeting-underway-for-zil-hajj-moon-sighting"
+      ]
+    },
+    "2026-06-13": {
+      "hijri": "1447-12-27",
+      "year": 1447,
+      "month": 12,
+      "day": 27,
+      "month_name": {
+        "en": "Dhu al-Hijjah",
+        "ur": "ذو الحجہ"
+      },
+      "confidence": "confirmed",
+      "sources": [
+        "https://www.arabnews.pk/pakistan/dhul-hijjah-moon-sighted-in-pakistan-eid-al-adha-to-be-observed-on-may-27-2643931",
+        "https://www.thenews.pk/story/1416005-eid-ul-adha-ruet-e-hilal-committee-meeting-underway-for-zil-hajj-moon-sighting"
+      ]
+    },
+    "2026-06-14": {
+      "hijri": "1447-12-28",
+      "year": 1447,
+      "month": 12,
+      "day": 28,
+      "month_name": {
+        "en": "Dhu al-Hijjah",
+        "ur": "ذو الحجہ"
+      },
+      "confidence": "confirmed",
+      "sources": [
+        "https://www.arabnews.pk/pakistan/dhul-hijjah-moon-sighted-in-pakistan-eid-al-adha-to-be-observed-on-may-27-2643931",
+        "https://www.thenews.pk/story/1416005-eid-ul-adha-ruet-e-hilal-committee-meeting-underway-for-zil-hajj-moon-sighting"
+      ]
+    },
+    "2026-06-15": {
+      "hijri": "1447-12-29",
+      "year": 1447,
+      "month": 12,
+      "day": 29,
+      "month_name": {
+        "en": "Dhu al-Hijjah",
+        "ur": "ذو الحجہ"
+      },
+      "confidence": "confirmed",
+      "sources": [
+        "https://www.arabnews.pk/pakistan/dhul-hijjah-moon-sighted-in-pakistan-eid-al-adha-to-be-observed-on-may-27-2643931",
+        "https://www.thenews.pk/story/1416005-eid-ul-adha-ruet-e-hilal-committee-meeting-underway-for-zil-hajj-moon-sighting"
+      ]
+    }
+  }
+}
