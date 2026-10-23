@@ -42,6 +42,13 @@ class _AtomicPanelState extends State<AtomicPanel> {
 
   String _two(int n) => n.toString().padLeft(2, '0');
 
+  /// v2.55: 12-hour format with AM/PM (her order).
+  String _fmt12(DateTime t) {
+    final h12 = t.hour % 12 == 0 ? 12 : t.hour % 12;
+    final ampm = t.hour < 12 ? 'AM' : 'PM';
+    return '$h12:${_two(t.minute)}:${_two(t.second)} $ampm';
+  }
+
   /// "Fix phone time": overlay permission -> show floating atomic clock ->
   /// open system Date & Time settings so the user can match it by hand.
   Future<void> _onFixPhoneTime() async {
@@ -108,7 +115,7 @@ class _AtomicPanelState extends State<AtomicPanel> {
                   return Column(
                     children: [
                       Text(
-                        '${_two(t.hour)}:${_two(t.minute)}:${_two(t.second)}',
+                        _fmt12(t),
                         textDirection: TextDirection.ltr,
                         style: const TextStyle(
                           fontSize: 40,
