@@ -53,9 +53,17 @@ class AtomicTimeService extends ChangeNotifier {
       } catch (_) {
         // NTP failed (UDP blocked?) — try HTTPS fallback below.
       }
-      // 2. HTTPS fallback: worldtimeapi.org (works through firewalls).
-      final ok = await _syncViaHttps();
-      return ok;
+      // 2. HTTPS fallbacks (work through firewalls).
+      // Try multiple endpoints — some may be blocked.
+      final endpoints = [
+        'https://timeapi.io/api/time/current/zone?timeZone=UTC',
+        'https://worldclockapi.com/api/json/utc/now',
+        'http://worldtimeapi.org/api/timezone/Etc/UTC',
+      ];
+      for (final url in endpoints) {
+        if (await _syncViaHttps(url)) return true;
+      }
+      return false;
     } catch (e) {
       _error = e.toString();
       return false;
@@ -65,17 +73,22 @@ class AtomicTimeService extends ChangeNotifier {
     }
   }
 
-  /// HTTPS time sync via timeapi.io. Returns true on success.
-  Future<bool> _syncViaHttps() async {
+  /// HTTPS time sync. Tries the given URL, parses the time.
+  /// Supports timeapi.io (dateTime), worldclockapi (currentDateTime),
+  /// worldtimeapi (datetime). Returns true on success.
+  Future<bool> _syncViaHttps(String url) async {
     try {
       final before = DateTime.now();
       final resp = await http
-          .get(Uri.parse('https://timeapi.io/api/time/current/zone?timeZone=UTC'))
+          .get(Uri.parse(url))
           .timeout(const Duration(seconds: 10));
       final after = DateTime.now();
       if (resp.statusCode != 200) return false;
       final data = jsonDecode(resp.body) as Map<String, dynamic>;
-      final dtStr = data['dateTime'] as String?;
+      // Try each known field.
+      String? dtStr = data['dateTime'] as String? ??
+          data['currentDateTime'] as String? ??
+          data['datetime'] as String?;
       if (dtStr == null) return false;
       final serverTime = DateTime.parse(dtStr);
       // RTT/2 correction: assume symmetric latency.
