@@ -7,8 +7,9 @@ import 'world_clock_screen.dart';
 import 'stopwatch_screen.dart';
 import 'timer_screen.dart';
 
-/// v2.52: Clock tab — atomic time panel on top, then World Clock /
-/// Stopwatch / Timer sections via a proper TabBar (no label cutoff).
+/// v2.53: Clock tab — 4 sub-tabs: Atomic | World Clock | Stopwatch | Timer.
+/// Atomic time is its own tab (not always on top), so the other tabs
+/// get full screen space and buttons never need scrolling.
 class ClockScreen extends StatefulWidget {
   const ClockScreen({super.key});
 
@@ -46,8 +47,14 @@ class _ClockScreenState extends State<ClockScreen> {
     final l10n = AppLocalizations.of(context)!;
     final isLight = Theme.of(context).brightness == Brightness.light;
 
-    final tabLabels = [l10n.worldClock, l10n.stopwatch, l10n.timer];
-    final tabIcons = ['🌍', '⏱️', '⏲️'];
+    // 4 tabs: Atomic | World clock | Stopwatch | Timer.
+    final tabLabels = [
+      l10n.atomicTab,
+      l10n.worldClock,
+      l10n.stopwatch,
+      l10n.timer,
+    ];
+    final tabIcons = ['⏱️', '🌍', '⏱️', '⏲️'];
 
     final barBg = isLight ? AppTheme.lightCardBg : const Color(0xFF23272E);
     final activeBg = isLight ? AppTheme.lightCardBorder : const Color(0xFF3A4048);
@@ -59,8 +66,8 @@ class _ClockScreenState extends State<ClockScreen> {
       body: SafeArea(
         child: Column(
           children: [
-            const AtomicPanel(),
-            // Section selector — full-width tabs, no label cutoff.
+            // Section selector — 4 tabs, icon above label, FittedBox
+            // shrinks text so labels never cut off.
             Padding(
               padding:
                   const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
@@ -78,30 +85,37 @@ class _ClockScreenState extends State<ClockScreen> {
                           onTap: () => setState(() => _section = i),
                           child: Container(
                             padding: const EdgeInsets.symmetric(
-                                vertical: 10, horizontal: 4),
+                                vertical: 8, horizontal: 2),
                             decoration: BoxDecoration(
                               color: _section == i
                                   ? activeBg
                                   : Colors.transparent,
                               borderRadius: BorderRadius.circular(10),
                             ),
-                            // v2.53: FittedBox shrinks text to fit —
-                            // labels never cut off on narrow screens.
                             child: FittedBox(
                               fit: BoxFit.scaleDown,
-                              child: Text(
-                                '${tabIcons[i]} ${tabLabels[i]}',
-                                textAlign: TextAlign.center,
-                                maxLines: 1,
-                                style: TextStyle(
-                                  fontSize: 13,
-                                  fontWeight: _section == i
-                                      ? FontWeight.w600
-                                      : FontWeight.w400,
-                                  color: _section == i
-                                      ? activeColor
-                                      : inactiveColor,
-                                ),
+                              child: Column(
+                                mainAxisSize: MainAxisSize.min,
+                                children: [
+                                  Text(
+                                    tabIcons[i],
+                                    style: const TextStyle(fontSize: 14),
+                                  ),
+                                  const SizedBox(height: 2),
+                                  Text(
+                                    tabLabels[i],
+                                    maxLines: 1,
+                                    style: TextStyle(
+                                      fontSize: 11,
+                                      fontWeight: _section == i
+                                          ? FontWeight.w600
+                                          : FontWeight.w400,
+                                      color: _section == i
+                                          ? activeColor
+                                          : inactiveColor,
+                                    ),
+                                  ),
+                                ],
                               ),
                             ),
                           ),
@@ -115,6 +129,10 @@ class _ClockScreenState extends State<ClockScreen> {
               child: IndexedStack(
                 index: _section,
                 children: [
+                  // Atomic time — its own tab (scrollable).
+                  const SingleChildScrollView(
+                    child: AtomicPanel(),
+                  ),
                   WorldClockScreen(
                     nowProvider: _useAtomic
                         ? () => AtomicTimeService.instance
