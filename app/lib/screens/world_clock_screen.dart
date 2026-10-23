@@ -493,10 +493,17 @@ class _CityPickerScreenState extends State<_CityPickerScreen> {
             controller: _controller,
             autofocus: true,
             onChanged: (v) => setState(() => _query = v),
-            style: const TextStyle(fontWeight: FontWeight.w400),
+            // v2.58: Urdu font for proper Nastaleeq rendering (was overlapping).
+            style: const TextStyle(
+              fontWeight: FontWeight.w400,
+              fontFamily: 'JameelNoori',
+            ),
             decoration: InputDecoration(
               hintText: l10n.searchCityHint,
-              hintStyle: const TextStyle(fontWeight: FontWeight.w400),
+              hintStyle: const TextStyle(
+                fontWeight: FontWeight.w400,
+                fontFamily: 'JameelNoori',
+              ),
               border: InputBorder.none,
               contentPadding: const EdgeInsets.symmetric(
                   horizontal: 12, vertical: 12),
