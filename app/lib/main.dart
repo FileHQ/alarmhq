@@ -3,6 +3,7 @@ import 'package:alarmhq/l10n/app_localizations.dart';
 
 import 'screens/alarm_list_screen.dart';
 import 'screens/calendar_screen.dart';
+import 'screens/clock_screen.dart';
 import 'screens/permission_screen.dart';
 import 'screens/settings_screen.dart';
 import 'services/alarm_repository.dart';
@@ -140,7 +141,10 @@ class _AlarmHQAppState extends State<AlarmHQApp>
                       ? AlarmListScreen(repo: _repo, settings: _settings)
                       : _tab == 1
                           ? const CalendarScreen()
-                          : SettingsScreen(repo: _repo, settings: _settings),
+                          : _tab == 2
+                              ? SettingsScreen(
+                                  repo: _repo, settings: _settings)
+                              : const ClockScreen(),
                   bottomNavigationBar: NavigationBar(
                     selectedIndex: _tab,
                     onDestinationSelected: (i) => setState(() => _tab = i),
@@ -159,6 +163,11 @@ class _AlarmHQAppState extends State<AlarmHQApp>
                         icon: const Text('⚙️',
                             style: TextStyle(fontSize: 24)),
                         label: l10n.settings,
+                      ),
+                      NavigationDestination(
+                        icon: const Text('🕐',
+                            style: TextStyle(fontSize: 24)),
+                        label: l10n.clockTab,
                       ),
                     ],
                   ),
