@@ -83,13 +83,19 @@ class AtomicTimeService extends ChangeNotifier {
           .get(Uri.parse(url))
           .timeout(const Duration(seconds: 10));
       final after = DateTime.now();
-      if (resp.statusCode != 200) return false;
+      if (resp.statusCode != 200) {
+        _error = 'Server error: ${resp.statusCode}';
+        return false;
+      }
       final data = jsonDecode(resp.body) as Map<String, dynamic>;
       // Try each known field.
       String? dtStr = data['dateTime'] as String? ??
           data['currentDateTime'] as String? ??
           data['datetime'] as String?;
-      if (dtStr == null) return false;
+      if (dtStr == null) {
+        _error = 'Invalid server response';
+        return false;
+      }
       final serverTime = DateTime.parse(dtStr);
       // RTT/2 correction: assume symmetric latency.
       final rtt = after.difference(before);
@@ -100,7 +106,16 @@ class AtomicTimeService extends ChangeNotifier {
       _error = null;
       return true;
     } catch (e) {
-      _error = e.toString();
+      // v2.58: user-friendly error in Urdu/English.
+      final msg = e.toString();
+      if (msg.contains('SocketException') ||
+          msg.contains('Failed host lookup')) {
+        _error = 'انٹرنیٹ نہیں مل رہا — کنکشن چیک کریں';
+      } else if (msg.contains('TimeoutException')) {
+        _error = 'سرور جواب نہیں دے رہا — دوبارہ کوشش کریں';
+      } else {
+        _error = msg;
+      }
       return false;
     }
   }
