@@ -133,17 +133,37 @@ class _AtomicPanelState extends State<AtomicPanel> {
               const SizedBox(height: 12),
               // Sync status row.
               _buildStatusRow(l10n, svc, descColor),
-              // Phone-vs-atomic difference (only when synced).
+              // Phone-vs-atomic difference — prominent badge (v2.52).
               if (svc.hasSync && !svc.syncing) ...[
-                const SizedBox(height: 8),
-                Text(
-                  l10n.atomicDiff(svc.offsetText()),
-                  textDirection: TextDirection.ltr,
-                  textAlign: TextAlign.center,
-                  style: TextStyle(
-                    fontSize: 13,
-                    fontWeight: FontWeight.w400,
-                    color: descColor,
+                const SizedBox(height: 10),
+                Center(
+                  child: Container(
+                    padding: const EdgeInsets.symmetric(
+                        horizontal: 18, vertical: 8),
+                    decoration: BoxDecoration(
+                      color: (svc.offset.inMilliseconds >= 0
+                              ? AppTheme.emerald
+                              : const Color(0xFFFFB400))
+                          .withValues(alpha: 0.12),
+                      border: Border.all(
+                        color: svc.offset.inMilliseconds >= 0
+                            ? AppTheme.emerald
+                            : const Color(0xFFFFB400),
+                      ),
+                      borderRadius: BorderRadius.circular(20),
+                    ),
+                    child: Text(
+                      l10n.atomicDiff(svc.offsetText()),
+                      textDirection: TextDirection.ltr,
+                      textAlign: TextAlign.center,
+                      style: TextStyle(
+                        fontSize: 15,
+                        fontWeight: FontWeight.w600,
+                        color: svc.offset.inMilliseconds >= 0
+                            ? AppTheme.emerald
+                            : const Color(0xFFFFB400),
+                      ),
+                    ),
                   ),
                 ),
               ],
