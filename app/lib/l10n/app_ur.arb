@@ -195,5 +195,7 @@
   "tmrResume": "جاری رکھیں",
   "tmrReset": "ری سیٹ",
   "tmrDone": "وقت ختم!",
-  "tmrSetTime": "ٹائمر سیٹ کریں"
+  "tmrSetTime": "ٹائمر سیٹ کریں",
+  "undo": "واپس لیں",
+  "deleted": "حذف کر دیا گیا"
 }
