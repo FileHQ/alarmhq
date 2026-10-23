@@ -140,11 +140,11 @@ class _AlarmHQAppState extends State<AlarmHQApp>
                   body: _tab == 0
                       ? AlarmListScreen(repo: _repo, settings: _settings)
                       : _tab == 1
-                          ? const CalendarScreen()
+                          ? const ClockScreen()
                           : _tab == 2
-                              ? SettingsScreen(
-                                  repo: _repo, settings: _settings)
-                              : const ClockScreen(),
+                              ? const CalendarScreen()
+                              : SettingsScreen(
+                                  repo: _repo, settings: _settings),
                   bottomNavigationBar: NavigationBar(
                     selectedIndex: _tab,
                     onDestinationSelected: (i) => setState(() => _tab = i),
@@ -155,6 +155,11 @@ class _AlarmHQAppState extends State<AlarmHQApp>
                         label: l10n.alarms,
                       ),
                       NavigationDestination(
+                        icon: const Text('🕐',
+                            style: TextStyle(fontSize: 24)),
+                        label: l10n.clockTab,
+                      ),
+                      NavigationDestination(
                         icon: const Text('📅',
                             style: TextStyle(fontSize: 24)),
                         label: l10n.calendar,
@@ -163,11 +168,6 @@ class _AlarmHQAppState extends State<AlarmHQApp>
                         icon: const Text('⚙️',
                             style: TextStyle(fontSize: 24)),
                         label: l10n.settings,
-                      ),
-                      NavigationDestination(
-                        icon: const Text('🕐',
-                            style: TextStyle(fontSize: 24)),
-                        label: l10n.clockTab,
                       ),
                     ],
                   ),
