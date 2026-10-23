@@ -197,5 +197,6 @@
   "tmrDone": "Time's up!",
   "tmrSetTime": "Set timer",
   "undo": "Undo",
-  "deleted": "deleted"
+  "deleted": "deleted",
+  "atomicTab": "Atomic"
 }
