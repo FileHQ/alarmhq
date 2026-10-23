@@ -85,19 +85,23 @@ class _ClockScreenState extends State<ClockScreen> {
                                   : Colors.transparent,
                               borderRadius: BorderRadius.circular(10),
                             ),
-                            child: Text(
-                              '${tabIcons[i]} ${tabLabels[i]}',
-                              textAlign: TextAlign.center,
-                              maxLines: 1,
-                              overflow: TextOverflow.ellipsis,
-                              style: TextStyle(
-                                fontSize: 13,
-                                fontWeight: _section == i
-                                    ? FontWeight.w600
-                                    : FontWeight.w400,
-                                color: _section == i
-                                    ? activeColor
-                                    : inactiveColor,
+                            // v2.53: FittedBox shrinks text to fit —
+                            // labels never cut off on narrow screens.
+                            child: FittedBox(
+                              fit: BoxFit.scaleDown,
+                              child: Text(
+                                '${tabIcons[i]} ${tabLabels[i]}',
+                                textAlign: TextAlign.center,
+                                maxLines: 1,
+                                style: TextStyle(
+                                  fontSize: 13,
+                                  fontWeight: _section == i
+                                      ? FontWeight.w600
+                                      : FontWeight.w400,
+                                  color: _section == i
+                                      ? activeColor
+                                      : inactiveColor,
+                                ),
                               ),
                             ),
                           ),
@@ -118,8 +122,8 @@ class _ClockScreenState extends State<ClockScreen> {
                             .toUtc()
                         : null,
                   ),
-                  const StopwatchScreen(),
-                  const TimerScreen(),
+                  const StopwatchScreen(embedded: true),
+                  const TimerScreen(embedded: true),
                 ],
               ),
             ),
