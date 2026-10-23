@@ -653,4 +653,10 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get tmrSetTime => 'Set timer';
+
+  @override
+  String get undo => 'Undo';
+
+  @override
+  String get deleted => 'deleted';
 }
