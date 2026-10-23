@@ -23,16 +23,19 @@ jobs:
           channel: 'stable'
 
       - name: Get dependencies
+        working-directory: app
         run: flutter pub get
 
       - name: Analyze
+        working-directory: app
         run: flutter analyze
 
       - name: Build Release APK
+        working-directory: app
         run: flutter build apk --release --split-per-abi
 
       - name: Upload APK
         uses: actions/upload-artifact@v4
         with:
           name: alarmhq-release-apk
-          path: build/app/outputs/flutter-apk/app-*-release.apk
+          path: app/build/app/outputs/flutter-apk/app-*-release.apk
