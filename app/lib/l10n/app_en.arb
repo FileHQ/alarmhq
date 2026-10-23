@@ -195,5 +195,7 @@
   "tmrResume": "Resume",
   "tmrReset": "Reset",
   "tmrDone": "Time's up!",
-  "tmrSetTime": "Set timer"
+  "tmrSetTime": "Set timer",
+  "undo": "Undo",
+  "deleted": "deleted"
 }
