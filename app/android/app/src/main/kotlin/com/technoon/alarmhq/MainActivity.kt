@@ -211,6 +211,13 @@ class MainActivity : Activity() {
                     )
                     result.success(null)
                 }
+                // ---- date & time settings (v2.56): for the atomic
+                // "Fix phone time" flow — opens system Date & Time so the
+                // user can match it to the floating atomic clock.
+                "openDateTimeSettings" -> {
+                    startActivity(Intent(Settings.ACTION_DATE_SETTINGS))
+                    result.success(null)
+                }
                 // ---- full-screen intent (v2.11, CRITICAL): on Android 14+
                 // USE_FULL_SCREEN_INTENT must be granted by the user, or
                 // setFullScreenIntent() is silently ignored and the alarm
