@@ -527,7 +527,7 @@
  {
   "city": "Fort Nelson",
   "country": "Canada",
-  "zone": "America/Fort_Nelson",
+  "zone": "America/Vancouver",
   "country_ur": "کینیڈا",
   "city_ur": "فورٹ نیلسن"
  },
@@ -660,7 +660,7 @@
  {
   "city": "Coyhaique",
   "country": "Chile",
-  "zone": "America/Coyhaique",
+  "zone": "America/Santiago",
   "country_ur": "چلی",
   "city_ur": "کوئیہائیک"
  },
@@ -674,7 +674,7 @@
  {
   "city": "Punta Arenas",
   "country": "Chile",
-  "zone": "America/Punta_Arenas",
+  "zone": "America/Santiago",
   "country_ur": "چلی",
   "city_ur": "پونٹا اریناس"
  },
@@ -751,7 +751,7 @@
  {
   "city": "Famagusta",
   "country": "Cyprus",
-  "zone": "Asia/Famagusta",
+  "zone": "Asia/Nicosia",
   "country_ur": "قبرص",
   "city_ur": "فاماگوستا"
  },
@@ -968,7 +968,7 @@
  {
   "city": "Nuuk",
   "country": "Greenland",
-  "zone": "America/Nuuk",
+  "zone": "America/Thule",
   "country_ur": "گرین لینڈ",
   "city_ur": "نوک"
  },
@@ -1276,7 +1276,7 @@
  {
   "city": "Atyrau",
   "country": "Kazakhstan",
-  "zone": "Asia/Atyrau",
+  "zone": "Asia/Oral",
   "country_ur": "قازقستان",
   "city_ur": "آتیراؤ"
  },
@@ -1290,7 +1290,7 @@
  {
   "city": "Qostanay",
   "country": "Kazakhstan",
-  "zone": "Asia/Qostanay",
+  "zone": "Asia/Almaty",
   "country_ur": "قازقستان",
   "city_ur": "قوستانے"
  },
@@ -1311,7 +1311,7 @@
  {
   "city": "Kanton",
   "country": "Kiribati",
-  "zone": "Pacific/Kanton",
+  "zone": "Pacific/Enderbury",
   "country_ur": "کیریباتی",
   "city_ur": "کانٹن"
  },
@@ -1458,7 +1458,7 @@
  {
   "city": "Ciudad Juarez",
   "country": "Mexico",
-  "zone": "America/Ciudad_Juarez",
+  "zone": "America/Chihuahua",
   "country_ur": "میکسیکو",
   "city_ur": "سیوداد خواریز"
  },
@@ -1563,7 +1563,7 @@
  {
   "city": "Yangon",
   "country": "Myanmar",
-  "zone": "Asia/Yangon",
+  "zone": "Asia/Rangoon",
   "country_ur": "میانمار",
   "city_ur": "ینگون"
  },
@@ -1759,7 +1759,7 @@
  {
   "city": "Bougainville",
   "country": "Papua New Guinea",
-  "zone": "Pacific/Bougainville",
+  "zone": "Pacific/Port_Moresby",
   "country_ur": "پاپوا نیو گنی",
   "city_ur": "بوگن ویل"
  },
@@ -1878,14 +1878,14 @@
  {
   "city": "Astrakhan",
   "country": "Russia",
-  "zone": "Europe/Astrakhan",
+  "zone": "Europe/Samara",
   "country_ur": "روس",
   "city_ur": "آستراخان"
  },
  {
   "city": "Barnaul",
   "country": "Russia",
-  "zone": "Asia/Barnaul",
+  "zone": "Asia/Novosibirsk",
   "country_ur": "روس",
   "city_ur": "بارناؤل"
  },
@@ -1927,7 +1927,7 @@
  {
   "city": "Kirov",
   "country": "Russia",
-  "zone": "Europe/Kirov",
+  "zone": "Europe/Moscow",
   "country_ur": "روس",
   "city_ur": "کیروف"
  },
@@ -1997,7 +1997,7 @@
  {
   "city": "Saratov",
   "country": "Russia",
-  "zone": "Europe/Saratov",
+  "zone": "Europe/Samara",
   "country_ur": "روس",
   "city_ur": "ساراٹوف"
  },
@@ -2018,14 +2018,14 @@
  {
   "city": "Tomsk",
   "country": "Russia",
-  "zone": "Asia/Tomsk",
+  "zone": "Asia/Novosibirsk",
   "country_ur": "روس",
   "city_ur": "ٹومسک"
  },
  {
   "city": "Ulyanovsk",
   "country": "Russia",
-  "zone": "Europe/Ulyanovsk",
+  "zone": "Europe/Samara",
   "country_ur": "روس",
   "city_ur": "اولیانووسک"
  },
