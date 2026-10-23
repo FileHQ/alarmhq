@@ -51,14 +51,49 @@ class _AtomicPanelState extends State<AtomicPanel> {
 
   /// "Fix phone time": overlay permission -> show floating atomic clock ->
   /// open system Date & Time settings so the user can match it by hand.
+  /// v2.56: shows error feedback instead of failing silently.
   Future<void> _onFixPhoneTime() async {
     if (_fixing) return;
     setState(() => _fixing = true);
     try {
       final allowed = await AtomicOverlayService.ensurePermission();
-      if (!allowed) return;
-      await AtomicOverlayService.show();
+      if (!allowed) {
+        if (mounted) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(
+              content: Text(
+                'Overlay permission denied — cannot show floating clock',
+                style: TextStyle(fontWeight: FontWeight.w400),
+              ),
+            ),
+          );
+        }
+        return;
+      }
+      final shown = await AtomicOverlayService.show();
+      if (!shown && mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+            content: Text(
+              'Could not show overlay',
+              style: TextStyle(fontWeight: FontWeight.w400),
+            ),
+          ),
+        );
+        return;
+      }
       await AtomicOverlayService.openDateTimeSettings();
+    } catch (e) {
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text(
+              'Error: $e',
+              style: const TextStyle(fontWeight: FontWeight.w400),
+            ),
+          ),
+        );
+      }
     } finally {
       if (mounted) setState(() => _fixing = false);
     }
@@ -274,30 +309,49 @@ class _AtomicPanelState extends State<AtomicPanel> {
       );
     }
     // Never synced (offline or error): show offline note + sync button.
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.center,
+    // v2.56: show the actual error so we can diagnose.
+    return Column(
       children: [
-        Expanded(
-          child: Text(
-            l10n.atomicOffline,
-            textAlign: TextAlign.center,
-            style: TextStyle(
-              fontSize: 13,
-              fontWeight: FontWeight.w400,
-              color: descColor,
+        Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Expanded(
+              child: Text(
+                l10n.atomicOffline,
+                textAlign: TextAlign.center,
+                style: TextStyle(
+                  fontSize: 13,
+                  fontWeight: FontWeight.w400,
+                  color: descColor,
+                ),
+              ),
+            ),
+            TextButton(
+              onPressed: () => svc.sync(maxAge: Duration.zero),
+              child: Text(
+                l10n.atomicSync,
+                style: const TextStyle(
+                  fontSize: 13,
+                  fontWeight: FontWeight.w400,
+                ),
+              ),
+            ),
+          ],
+        ),
+        if (svc.error != null)
+          Padding(
+            padding: const EdgeInsets.only(top: 4),
+            child: Text(
+              svc.error!,
+              textAlign: TextAlign.center,
+              textDirection: TextDirection.ltr,
+              style: TextStyle(
+                fontSize: 11,
+                fontWeight: FontWeight.w400,
+                color: Colors.redAccent,
+              ),
             ),
           ),
-        ),
-        TextButton(
-          onPressed: () => svc.sync(maxAge: Duration.zero),
-          child: Text(
-            l10n.atomicSync,
-            style: const TextStyle(
-              fontSize: 13,
-              fontWeight: FontWeight.w400,
-            ),
-          ),
-        ),
       ],
     );
   }
