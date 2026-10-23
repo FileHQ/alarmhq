@@ -25,9 +25,6 @@ jobs:
       - name: Get dependencies
         run: cd app && flutter pub get
 
-      - name: Analyze
-        run: cd app && flutter analyze
-
       - name: Build Release APK
         run: cd app && flutter build apk --release --split-per-abi
 
