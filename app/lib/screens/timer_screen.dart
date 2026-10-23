@@ -12,7 +12,10 @@ import 'package:alarmhq/theme/app_theme.dart';
 /// time even if the UI ticker is delayed or the app was backgrounded.
 /// On finish: three short system beeps + vibration and a "Time's up" dialog.
 class TimerScreen extends StatefulWidget {
-  const TimerScreen({super.key});
+  /// When true, renders without its own AppBar (embedded in ClockScreen).
+  final bool embedded;
+
+  const TimerScreen({super.key, this.embedded = false});
 
   @override
   State<TimerScreen> createState() => _TimerScreenState();
@@ -224,12 +227,36 @@ class _TimerScreenState extends State<TimerScreen> {
     final running = _phase == _TimerPhase.running;
 
     return Scaffold(
-      appBar: AppBar(
-        title: Text(l10n.timer),
-        centerTitle: false,
-      ),
+      appBar: widget.embedded
+          ? null
+          : AppBar(
+              title: Text(l10n.timer),
+              centerTitle: false,
+            ),
       body: SafeArea(
-        child: Column(
+        // v2.53: scrollable when embedded so nothing is cut off
+        // on small screens below the atomic panel.
+        child: widget.embedded
+            ? SingleChildScrollView(
+                child: _timerBody(context, l10n, isLight, displayColor,
+                    subColor, idle, running),
+              )
+            : _timerBody(context, l10n, isLight, displayColor, subColor,
+                idle, running),
+      ),
+    );
+  }
+
+  Widget _timerBody(
+    BuildContext context,
+    AppLocalizations l10n,
+    bool isLight,
+    Color displayColor,
+    Color subColor,
+    bool idle,
+    bool running,
+  ) {
+    return Column(
           children: [
             const SizedBox(height: 32),
             // Countdown display — Roboto: JameelNoori has no digit glyphs.
@@ -311,9 +338,7 @@ class _TimerScreenState extends State<TimerScreen> {
             ),
             const SizedBox(height: 32),
           ],
-        ),
-      ),
-    );
+        );
   }
 
   /// [-] value [+] stepper; the value is tappable for direct numeric entry.
