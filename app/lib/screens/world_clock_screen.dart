@@ -50,20 +50,19 @@ class _CityEntry {
 class _WorldClockScreenState extends State<WorldClockScreen> {
   static bool _tzInit = false;
   static const String _prefsKey = 'worldclock_cities';
-  static const List<String> _defaultZones = [
-    'Asia/Karachi',
-    'Asia/Dubai',
-    'Asia/Riyadh',
-    'Europe/London',
-    'America/New_York',
+  static const List<_CityEntry> _defaultCities = [
+    _CityEntry(city: 'Karachi', country: 'Pakistan', zone: 'Asia/Karachi'),
+    _CityEntry(city: 'Dubai', country: 'United Arab Emirates', zone: 'Asia/Dubai'),
+    _CityEntry(city: 'Riyadh', country: 'Saudi Arabia', zone: 'Asia/Riyadh'),
+    _CityEntry(city: 'London', country: 'United Kingdom', zone: 'Europe/London'),
+    _CityEntry(city: 'New York', country: 'United States', zone: 'America/New_York'),
   ];
   static const List<String> _monthAbbr = [
     'Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun',
     'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec',
   ];
 
-  List<String> _zones = [];
-  Map<String, _CityEntry> _meta = {};
+  List<_CityEntry> _cities = [];
   List<_CityEntry> _allCities = [];
   bool _loaded = false;
   Timer? _ticker;
@@ -101,28 +100,45 @@ class _WorldClockScreenState extends State<WorldClockScreen> {
     } catch (_) {
       all = [];
     }
+    // Meta: zone -> first city (for backward-compat zone-only entries).
     final meta = <String, _CityEntry>{};
     for (final e in all) {
       meta.putIfAbsent(e.zone, () => e);
     }
+    // Fast lookup: "city|zone" -> entry.
+    final byKey = <String, _CityEntry>{};
+    for (final e in all) {
+      byKey['${e.city}|${e.zone}'] = e;
+    }
 
-    List<String> zones;
+    List<_CityEntry> cities;
     try {
       final saved = await PrefsService.getString(_prefsKey);
       if (saved == null) {
-        zones = List<String>.from(_defaultZones);
+        cities = List<_CityEntry>.from(_defaultCities);
       } else {
         final decoded = jsonDecode(saved) as List;
-        zones = decoded.whereType<String>().toList();
-        if (zones.isEmpty) zones = List<String>.from(_defaultZones);
+        cities = [];
+        for (final item in decoded) {
+          if (item is Map<String, dynamic>) {
+            // New format: full city object.
+            final e = _CityEntry.fromJson(item);
+            if (e.zone.isNotEmpty && e.city.isNotEmpty) cities.add(e);
+          } else if (item is String) {
+            // Old format: zone ID only — resolve via meta.
+            final e = meta[item];
+            if (e != null) cities.add(e);
+          }
+        }
+        if (cities.isEmpty) cities = List<_CityEntry>.from(_defaultCities);
       }
     } catch (_) {
-      zones = List<String>.from(_defaultZones);
+      cities = List<_CityEntry>.from(_defaultCities);
     }
     // Drop zones the timezone DB doesn't know (defensive).
-    zones = zones.where((z) {
+    cities = cities.where((c) {
       try {
-        tz.getLocation(z);
+        tz.getLocation(c.zone);
         return true;
       } catch (_) {
         return false;
@@ -132,8 +148,7 @@ class _WorldClockScreenState extends State<WorldClockScreen> {
     if (!mounted) return;
     setState(() {
       _allCities = all;
-      _meta = meta;
-      _zones = zones;
+      _cities = cities;
       _loaded = true;
     });
     _save();
@@ -141,7 +156,10 @@ class _WorldClockScreenState extends State<WorldClockScreen> {
 
   Future<void> _save() async {
     try {
-      await PrefsService.putString(_prefsKey, jsonEncode(_zones));
+      final list = _cities
+          .map((c) => {'city': c.city, 'country': c.country, 'zone': c.zone})
+          .toList();
+      await PrefsService.putString(_prefsKey, jsonEncode(list));
     } catch (_) {}
   }
 
@@ -179,41 +197,43 @@ class _WorldClockScreenState extends State<WorldClockScreen> {
     return 'UTC$sign$h:${m.toString().padLeft(2, '0')}';
   }
 
-  String _cityName(String zone) => _meta[zone]?.city ?? zone.split('/').last.replaceAll('_', ' ');
-  String _countryName(String zone) => _meta[zone]?.country ?? '';
+  String _cityKey(_CityEntry c) => '${c.city}|${c.zone}';
 
   Future<void> _openPicker() async {
-    final zone = await Navigator.of(context).push<String>(
+    final picked = await Navigator.of(context).push<_CityEntry>(
       MaterialPageRoute(
         builder: (_) => _CityPickerScreen(
           allCities: _allCities,
-          existing: _zones.toSet(),
+          existing: _cities.map(_cityKey).toSet(),
           fmtOffset: _fmtOffset,
           cityTime: _cityTime,
         ),
       ),
     );
-    if (zone != null && !_zones.contains(zone)) {
-      setState(() => _zones.add(zone));
+    if (picked != null &&
+        !_cities.any((c) => _cityKey(c) == _cityKey(picked))) {
+      setState(() => _cities.add(picked));
       _save();
     }
   }
 
   void _removeAt(int index) {
-    final removed = _zones[index];
-    setState(() => _zones.removeAt(index));
+    final removed = _cities[index];
+    setState(() => _cities.removeAt(index));
     _save();
     final l10n = AppLocalizations.of(context)!;
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
         content: Text(
-          _cityName(removed),
+          // v2.53: clear confirmation so the undo bar isn't
+          // mistaken for the city coming back.
+          '${removed.city} ${l10n.deleted}',
           style: const TextStyle(fontWeight: FontWeight.w400),
         ),
         action: SnackBarAction(
-          label: l10n.addCity,
+          label: l10n.undo,
           onPressed: () {
-            setState(() => _zones.insert(index, removed));
+            setState(() => _cities.insert(index, removed));
             _save();
           },
         ),
@@ -222,13 +242,13 @@ class _WorldClockScreenState extends State<WorldClockScreen> {
   }
 
   void _confirmRemove(int index) {
-    final zone = _zones[index];
+    final city = _cities[index];
     final l10n = AppLocalizations.of(context)!;
     showDialog<void>(
       context: context,
       builder: (ctx) => AlertDialog(
         title: Text(
-          _cityName(zone),
+          city.city,
           style: const TextStyle(fontWeight: FontWeight.w400),
         ),
         actions: [
@@ -277,7 +297,7 @@ class _WorldClockScreenState extends State<WorldClockScreen> {
       ),
       body: !_loaded
           ? const Center(child: CircularProgressIndicator())
-          : _zones.isEmpty
+          : _cities.isEmpty
               ? Center(
                   child: Padding(
                     padding: const EdgeInsets.all(32),
@@ -294,11 +314,11 @@ class _WorldClockScreenState extends State<WorldClockScreen> {
                 )
               : ListView.builder(
                   padding: const EdgeInsets.all(16),
-                  itemCount: _zones.length,
+                  itemCount: _cities.length,
                   itemBuilder: (ctx, i) {
-                    final zone = _zones[i];
+                    final city = _cities[i];
                     return Dismissible(
-                      key: ValueKey(zone),
+                      key: ValueKey(_cityKey(city)),
                       direction: DismissDirection.horizontal,
                       background: Container(
                         alignment: Alignment.centerRight,
@@ -321,7 +341,7 @@ class _WorldClockScreenState extends State<WorldClockScreen> {
                       onDismissed: (_) => _removeAt(i),
                       child: GestureDetector(
                         onLongPress: () => _confirmRemove(i),
-                        child: _cityCard(zone, isLight),
+                        child: _cityCard(city, isLight),
                       ),
                     );
                   },
@@ -329,8 +349,8 @@ class _WorldClockScreenState extends State<WorldClockScreen> {
     );
   }
 
-  Widget _cityCard(String zone, bool isLight) {
-    final t = _cityTime(zone);
+  Widget _cityCard(_CityEntry city, bool isLight) {
+    final t = _cityTime(city.zone);
     final timeColor = isLight ? AppTheme.lightRingsText : AppTheme.emerald;
     final subColor = isLight ? Colors.black54 : Colors.white70;
     return Container(
@@ -351,7 +371,7 @@ class _WorldClockScreenState extends State<WorldClockScreen> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  _cityName(zone),
+                  city.city,
                   style: const TextStyle(
                     fontWeight: FontWeight.w400,
                     fontSize: 17,
@@ -359,7 +379,7 @@ class _WorldClockScreenState extends State<WorldClockScreen> {
                 ),
                 const SizedBox(height: 2),
                 Text(
-                  _countryName(zone),
+                  city.country,
                   style: TextStyle(
                     fontWeight: FontWeight.w400,
                     fontSize: 13,
@@ -393,7 +413,7 @@ class _WorldClockScreenState extends State<WorldClockScreen> {
   }
 }
 
-/// Full-screen searchable city picker. Returns the selected zone ID
+/// Full-screen searchable city picker. Returns the selected city
 /// via Navigator.pop, or null when dismissed.
 class _CityPickerScreen extends StatefulWidget {
   final List<_CityEntry> allCities;
@@ -466,7 +486,7 @@ class _CityPickerScreenState extends State<_CityPickerScreen> {
         itemCount: results.length,
         itemBuilder: (ctx, i) {
           final e = results[i];
-          final added = widget.existing.contains(e.zone);
+          final added = widget.existing.contains('${e.city}|${e.zone}');
           String offset;
           try {
             offset = widget.fmtOffset(widget.cityTime(e.zone).timeZoneOffset);
@@ -515,7 +535,7 @@ class _CityPickerScreenState extends State<_CityPickerScreen> {
                 ),
               ],
             ),
-            onTap: added ? null : () => Navigator.of(context).pop(e.zone),
+            onTap: added ? null : () => Navigator.of(context).pop(e),
           );
         },
       ),
