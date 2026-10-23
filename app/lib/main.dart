@@ -136,16 +136,15 @@ class _AlarmHQAppState extends State<AlarmHQApp>
               : Builder(
               builder: (context) {
                 final l10n = AppLocalizations.of(context)!;
-                // v2.56: back button behavior (her orders):
+                // v2.58: back button behavior (her orders):
                 // - on non-main tab: go back to Alarms tab
                 // - on main tab (Alarms): confirm dialog "close app?"
-                return PopScope(
-                  canPop: false,
-                  onPopInvokedWithResult: (didPop, result) async {
-                    if (didPop) return;
+                // Uses BackButtonListener (more reliable than PopScope).
+                return BackButtonListener(
+                  onBackButtonPressed: () async {
                     if (_tab != 0) {
                       setState(() => _tab = 0);
-                      return;
+                      return true;
                     }
                     // On main screen: ask "Do you want to close the app?"
                     final confirm = await showDialog<bool>(
@@ -181,6 +180,7 @@ class _AlarmHQAppState extends State<AlarmHQApp>
                     if (confirm == true) {
                       SystemNavigator.pop();
                     }
+                    return true;
                   },
                   child: Scaffold(
                     key: _scaffoldKey,
