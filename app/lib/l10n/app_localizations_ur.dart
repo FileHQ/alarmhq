@@ -640,4 +640,13 @@ class AppLocalizationsUr extends AppLocalizations {
 
   @override
   String get atomicTab => 'اٹامک';
+
+  @override
+  String get exitTitle => 'کیا آپ ایپ بند کرنا چاہتے ہیں؟';
+
+  @override
+  String get exitYes => 'جی ہاں';
+
+  @override
+  String get exitNo => 'جی نہیں';
 }
