@@ -198,5 +198,8 @@
   "tmrSetTime": "Set timer",
   "undo": "Undo",
   "deleted": "deleted",
-  "atomicTab": "Atomic"
+  "atomicTab": "Atomic",
+  "exitTitle": "Do you want to close the app?",
+  "exitYes": "Yes",
+  "exitNo": "No"
 }
