@@ -24,55 +24,64 @@
   "city": "Pago Pago",
   "country": "American Samoa",
   "zone": "Pacific/Pago_Pago",
-  "country_ur": "امریکی ساموآ"
+  "country_ur": "امریکی ساموآ",
+  "city_ur": "پاگو پاگو"
  },
  {
   "city": "Andorra",
   "country": "Andorra",
   "zone": "Europe/Andorra",
-  "country_ur": "انڈورا"
+  "country_ur": "انڈورا",
+  "city_ur": "انڈورا"
  },
  {
   "city": "Casey",
   "country": "Antarctica",
   "zone": "Antarctica/Casey",
-  "country_ur": "انٹارکٹیکا"
+  "country_ur": "انٹارکٹیکا",
+  "city_ur": "کیسی"
  },
  {
   "city": "Davis",
   "country": "Antarctica",
   "zone": "Antarctica/Davis",
-  "country_ur": "انٹارکٹیکا"
+  "country_ur": "انٹارکٹیکا",
+  "city_ur": "ڈیوس"
  },
  {
   "city": "Mawson",
   "country": "Antarctica",
   "zone": "Antarctica/Mawson",
-  "country_ur": "انٹارکٹیکا"
+  "country_ur": "انٹارکٹیکا",
+  "city_ur": "ماوسن"
  },
  {
   "city": "Palmer",
   "country": "Antarctica",
   "zone": "Antarctica/Palmer",
-  "country_ur": "انٹارکٹیکا"
+  "country_ur": "انٹارکٹیکا",
+  "city_ur": "پالمر"
  },
  {
   "city": "Rothera",
   "country": "Antarctica",
   "zone": "Antarctica/Rothera",
-  "country_ur": "انٹارکٹیکا"
+  "country_ur": "انٹارکٹیکا",
+  "city_ur": "روتھرا"
  },
  {
   "city": "Troll",
   "country": "Antarctica",
   "zone": "Antarctica/Troll",
-  "country_ur": "انٹارکٹیکا"
+  "country_ur": "انٹارکٹیکا",
+  "city_ur": "ٹرول"
  },
  {
   "city": "Vostok",
   "country": "Antarctica",
   "zone": "Antarctica/Vostok",
-  "country_ur": "انٹارکٹیکا"
+  "country_ur": "انٹارکٹیکا",
+  "city_ur": "وستوک"
  },
  {
   "city": "Buenos Aires",
@@ -85,7 +94,8 @@
   "city": "Catamarca",
   "country": "Argentina",
   "zone": "America/Argentina/Catamarca",
-  "country_ur": "ارجنٹائن"
+  "country_ur": "ارجنٹائن",
+  "city_ur": "کٹامارکا"
  },
  {
   "city": "Cordoba",
@@ -98,13 +108,15 @@
   "city": "Jujuy",
   "country": "Argentina",
   "zone": "America/Argentina/Jujuy",
-  "country_ur": "ارجنٹائن"
+  "country_ur": "ارجنٹائن",
+  "city_ur": "خوخوئی"
  },
  {
   "city": "La Rioja",
   "country": "Argentina",
   "zone": "America/Argentina/La_Rioja",
-  "country_ur": "ارجنٹائن"
+  "country_ur": "ارجنٹائن",
+  "city_ur": "لا ریوخا"
  },
  {
   "city": "Mendoza",
@@ -117,43 +129,50 @@
   "city": "Rio Gallegos",
   "country": "Argentina",
   "zone": "America/Argentina/Rio_Gallegos",
-  "country_ur": "ارجنٹائن"
+  "country_ur": "ارجنٹائن",
+  "city_ur": "ریو گیلیگوس"
  },
  {
   "city": "Salta",
   "country": "Argentina",
   "zone": "America/Argentina/Salta",
-  "country_ur": "ارجنٹائن"
+  "country_ur": "ارجنٹائن",
+  "city_ur": "سالٹا"
  },
  {
   "city": "San Juan",
   "country": "Argentina",
   "zone": "America/Argentina/San_Juan",
-  "country_ur": "ارجنٹائن"
+  "country_ur": "ارجنٹائن",
+  "city_ur": "سان خوان"
  },
  {
   "city": "San Luis",
   "country": "Argentina",
   "zone": "America/Argentina/San_Luis",
-  "country_ur": "ارجنٹائن"
+  "country_ur": "ارجنٹائن",
+  "city_ur": "سان لوئس"
  },
  {
   "city": "Tucuman",
   "country": "Argentina",
   "zone": "America/Argentina/Tucuman",
-  "country_ur": "ارجنٹائن"
+  "country_ur": "ارجنٹائن",
+  "city_ur": "ٹوکومان"
  },
  {
   "city": "Ushuaia",
   "country": "Argentina",
   "zone": "America/Argentina/Ushuaia",
-  "country_ur": "ارجنٹائن"
+  "country_ur": "ارجنٹائن",
+  "city_ur": "اوشوایا"
  },
  {
   "city": "Yerevan",
   "country": "Armenia",
   "zone": "Asia/Yerevan",
-  "country_ur": "آرمینیا"
+  "country_ur": "آرمینیا",
+  "city_ur": "یریوان"
  },
  {
   "city": "Adelaide",
@@ -173,7 +192,8 @@
   "city": "Broken Hill",
   "country": "Australia",
   "zone": "Australia/Broken_Hill",
-  "country_ur": "آسٹریلیا"
+  "country_ur": "آسٹریلیا",
+  "city_ur": "بروکن ہل"
  },
  {
   "city": "Darwin",
@@ -186,7 +206,8 @@
   "city": "Eucla",
   "country": "Australia",
   "zone": "Australia/Eucla",
-  "country_ur": "آسٹریلیا"
+  "country_ur": "آسٹریلیا",
+  "city_ur": "یوکلا"
  },
  {
   "city": "Hobart",
@@ -199,19 +220,22 @@
   "city": "Lindeman",
   "country": "Australia",
   "zone": "Australia/Lindeman",
-  "country_ur": "آسٹریلیا"
+  "country_ur": "آسٹریلیا",
+  "city_ur": "لنڈیمین"
  },
  {
   "city": "Lord Howe",
   "country": "Australia",
   "zone": "Australia/Lord_Howe",
-  "country_ur": "آسٹریلیا"
+  "country_ur": "آسٹریلیا",
+  "city_ur": "لارڈ ہوو"
  },
  {
   "city": "Macquarie",
   "country": "Australia",
   "zone": "Antarctica/Macquarie",
-  "country_ur": "آسٹریلیا"
+  "country_ur": "آسٹریلیا",
+  "city_ur": "میکوری"
  },
  {
   "city": "Melbourne",
@@ -238,7 +262,8 @@
   "city": "Salzburg",
   "country": "Austria",
   "zone": "Europe/Vienna",
-  "country_ur": "آسٹریا"
+  "country_ur": "آسٹریا",
+  "city_ur": "سالزبرگ"
  },
  {
   "city": "Vienna",
@@ -279,19 +304,22 @@
   "city": "Barbados",
   "country": "Barbados",
   "zone": "America/Barbados",
-  "country_ur": "بارباڈوس"
+  "country_ur": "بارباڈوس",
+  "city_ur": "بارباڈوس"
  },
  {
   "city": "Minsk",
   "country": "Belarus",
   "zone": "Europe/Minsk",
-  "country_ur": "بیلاروس"
+  "country_ur": "بیلاروس",
+  "city_ur": "منسک"
  },
  {
   "city": "Antwerp",
   "country": "Belgium",
   "zone": "Europe/Brussels",
-  "country_ur": "بیلجیم"
+  "country_ur": "بیلجیم",
+  "city_ur": "اینٹورپ"
  },
  {
   "city": "Brussels",
@@ -304,13 +332,15 @@
   "city": "Belize",
   "country": "Belize",
   "zone": "America/Belize",
-  "country_ur": "بیلیز"
+  "country_ur": "بیلیز",
+  "city_ur": "بیلیز"
  },
  {
   "city": "Bermuda",
   "country": "Bermuda",
   "zone": "Atlantic/Bermuda",
-  "country_ur": "برمودا"
+  "country_ur": "برمودا",
+  "city_ur": "برمودا"
  },
  {
   "city": "Thimphu",
@@ -323,31 +353,36 @@
   "city": "La Paz",
   "country": "Bolivia",
   "zone": "America/La_Paz",
-  "country_ur": "بولیویا"
+  "country_ur": "بولیویا",
+  "city_ur": "لا پاز"
  },
  {
   "city": "Araguaina",
   "country": "Brazil",
   "zone": "America/Araguaina",
-  "country_ur": "برازیل"
+  "country_ur": "برازیل",
+  "city_ur": "اراگوائنا"
  },
  {
   "city": "Bahia",
   "country": "Brazil",
   "zone": "America/Bahia",
-  "country_ur": "برازیل"
+  "country_ur": "برازیل",
+  "city_ur": "باہیا"
  },
  {
   "city": "Belem",
   "country": "Brazil",
   "zone": "America/Belem",
-  "country_ur": "برازیل"
+  "country_ur": "برازیل",
+  "city_ur": "بیلیم"
  },
  {
   "city": "Boa Vista",
   "country": "Brazil",
   "zone": "America/Boa_Vista",
-  "country_ur": "برازیل"
+  "country_ur": "برازیل",
+  "city_ur": "بوآ وسٹا"
  },
  {
   "city": "Brasilia",
@@ -360,19 +395,22 @@
   "city": "Campo Grande",
   "country": "Brazil",
   "zone": "America/Campo_Grande",
-  "country_ur": "برازیل"
+  "country_ur": "برازیل",
+  "city_ur": "کیمپو گرانڈے"
  },
  {
   "city": "Cuiaba",
   "country": "Brazil",
   "zone": "America/Cuiaba",
-  "country_ur": "برازیل"
+  "country_ur": "برازیل",
+  "city_ur": "کویابا"
  },
  {
   "city": "Eirunepe",
   "country": "Brazil",
   "zone": "America/Eirunepe",
-  "country_ur": "برازیل"
+  "country_ur": "برازیل",
+  "city_ur": "ایرونیپ"
  },
  {
   "city": "Fortaleza",
@@ -385,7 +423,8 @@
   "city": "Maceio",
   "country": "Brazil",
   "zone": "America/Maceio",
-  "country_ur": "برازیل"
+  "country_ur": "برازیل",
+  "city_ur": "میسیو"
  },
  {
   "city": "Manaus",
@@ -398,13 +437,15 @@
   "city": "Noronha",
   "country": "Brazil",
   "zone": "America/Noronha",
-  "country_ur": "برازیل"
+  "country_ur": "برازیل",
+  "city_ur": "نورونہا"
  },
  {
   "city": "Porto Velho",
   "country": "Brazil",
   "zone": "America/Porto_Velho",
-  "country_ur": "برازیل"
+  "country_ur": "برازیل",
+  "city_ur": "پورٹو ویلہو"
  },
  {
   "city": "Recife",
@@ -417,7 +458,8 @@
   "city": "Rio Branco",
   "country": "Brazil",
   "zone": "America/Rio_Branco",
-  "country_ur": "برازیل"
+  "country_ur": "برازیل",
+  "city_ur": "ریو برانکو"
  },
  {
   "city": "Rio de Janeiro",
@@ -430,7 +472,8 @@
   "city": "Santarem",
   "country": "Brazil",
   "zone": "America/Santarem",
-  "country_ur": "برازیل"
+  "country_ur": "برازیل",
+  "city_ur": "سنٹاریم"
  },
  {
   "city": "Sao Paulo",
@@ -443,31 +486,36 @@
   "city": "Chagos",
   "country": "British Indian Ocean Territory",
   "zone": "Indian/Chagos",
-  "country_ur": "برطانوی بحر ہند علاقہ"
+  "country_ur": "برطانوی بحر ہند علاقہ",
+  "city_ur": "چاگوس"
  },
  {
   "city": "Sofia",
   "country": "Bulgaria",
   "zone": "Europe/Sofia",
-  "country_ur": "بلغاریہ"
+  "country_ur": "بلغاریہ",
+  "city_ur": "صوفیہ"
  },
  {
   "city": "Cambridge Bay",
   "country": "Canada",
   "zone": "America/Cambridge_Bay",
-  "country_ur": "کینیڈا"
+  "country_ur": "کینیڈا",
+  "city_ur": "کیمبرج بے"
  },
  {
   "city": "Dawson",
   "country": "Canada",
   "zone": "America/Dawson",
-  "country_ur": "کینیڈا"
+  "country_ur": "کینیڈا",
+  "city_ur": "ڈاسن"
  },
  {
   "city": "Dawson Creek",
   "country": "Canada",
   "zone": "America/Dawson_Creek",
-  "country_ur": "کینیڈا"
+  "country_ur": "کینیڈا",
+  "city_ur": "ڈاسن کریک"
  },
  {
   "city": "Edmonton",
@@ -480,19 +528,22 @@
   "city": "Fort Nelson",
   "country": "Canada",
   "zone": "America/Fort_Nelson",
-  "country_ur": "کینیڈا"
+  "country_ur": "کینیڈا",
+  "city_ur": "فورٹ نیلسن"
  },
  {
   "city": "Glace Bay",
   "country": "Canada",
   "zone": "America/Glace_Bay",
-  "country_ur": "کینیڈا"
+  "country_ur": "کینیڈا",
+  "city_ur": "گلیس بے"
  },
  {
   "city": "Goose Bay",
   "country": "Canada",
   "zone": "America/Goose_Bay",
-  "country_ur": "کینیڈا"
+  "country_ur": "کینیڈا",
+  "city_ur": "گوز بے"
  },
  {
   "city": "Halifax",
@@ -505,19 +556,22 @@
   "city": "Inuvik",
   "country": "Canada",
   "zone": "America/Inuvik",
-  "country_ur": "کینیڈا"
+  "country_ur": "کینیڈا",
+  "city_ur": "انووک"
  },
  {
   "city": "Iqaluit",
   "country": "Canada",
   "zone": "America/Iqaluit",
-  "country_ur": "کینیڈا"
+  "country_ur": "کینیڈا",
+  "city_ur": "ایکالوئٹ"
  },
  {
   "city": "Moncton",
   "country": "Canada",
   "zone": "America/Moncton",
-  "country_ur": "کینیڈا"
+  "country_ur": "کینیڈا",
+  "city_ur": "مونکٹن"
  },
  {
   "city": "Montreal",
@@ -530,31 +584,36 @@
   "city": "Rankin Inlet",
   "country": "Canada",
   "zone": "America/Rankin_Inlet",
-  "country_ur": "کینیڈا"
+  "country_ur": "کینیڈا",
+  "city_ur": "رینکن انلیٹ"
  },
  {
   "city": "Regina",
   "country": "Canada",
   "zone": "America/Regina",
-  "country_ur": "کینیڈا"
+  "country_ur": "کینیڈا",
+  "city_ur": "ریجینا"
  },
  {
   "city": "Resolute",
   "country": "Canada",
   "zone": "America/Resolute",
-  "country_ur": "کینیڈا"
+  "country_ur": "کینیڈا",
+  "city_ur": "ریزولوٹ"
  },
  {
   "city": "St Johns",
   "country": "Canada",
   "zone": "America/St_Johns",
-  "country_ur": "کینیڈا"
+  "country_ur": "کینیڈا",
+  "city_ur": "سینٹ جانز"
  },
  {
   "city": "Swift Current",
   "country": "Canada",
   "zone": "America/Swift_Current",
-  "country_ur": "کینیڈا"
+  "country_ur": "کینیڈا",
+  "city_ur": "سوئفٹ کرنٹ"
  },
  {
   "city": "Toronto",
@@ -574,7 +633,8 @@
   "city": "Whitehorse",
   "country": "Canada",
   "zone": "America/Whitehorse",
-  "country_ur": "کینیڈا"
+  "country_ur": "کینیڈا",
+  "city_ur": "وائٹ ہارس"
  },
  {
   "city": "Winnipeg",
@@ -587,31 +647,36 @@
   "city": "Cape Verde",
   "country": "Cape Verde",
   "zone": "Atlantic/Cape_Verde",
-  "country_ur": "کیپ ورڈی"
+  "country_ur": "کیپ ورڈی",
+  "city_ur": "کیپ ورڈی"
  },
  {
   "city": "Ndjamena",
   "country": "Chad",
   "zone": "Africa/Ndjamena",
-  "country_ur": "چاڈ"
+  "country_ur": "چاڈ",
+  "city_ur": "انجامینا"
  },
  {
   "city": "Coyhaique",
   "country": "Chile",
   "zone": "America/Coyhaique",
-  "country_ur": "چلی"
+  "country_ur": "چلی",
+  "city_ur": "کوئیہائیک"
  },
  {
   "city": "Easter",
   "country": "Chile",
   "zone": "Pacific/Easter",
-  "country_ur": "چلی"
+  "country_ur": "چلی",
+  "city_ur": "ایسٹر"
  },
  {
   "city": "Punta Arenas",
   "country": "Chile",
   "zone": "America/Punta_Arenas",
-  "country_ur": "چلی"
+  "country_ur": "چلی",
+  "city_ur": "پونٹا اریناس"
  },
  {
   "city": "Santiago",
@@ -652,7 +717,8 @@
   "city": "Urumqi",
   "country": "China",
   "zone": "Asia/Urumqi",
-  "country_ur": "چین"
+  "country_ur": "چین",
+  "city_ur": "ارمچی"
  },
  {
   "city": "Bogota",
@@ -665,13 +731,15 @@
   "city": "Rarotonga",
   "country": "Cook Islands",
   "zone": "Pacific/Rarotonga",
-  "country_ur": "کک جزائر"
+  "country_ur": "کک جزائر",
+  "city_ur": "راروٹونگا"
  },
  {
   "city": "Costa Rica",
   "country": "Costa Rica",
   "zone": "America/Costa_Rica",
-  "country_ur": "کوسٹا ریکا"
+  "country_ur": "کوسٹا ریکا",
+  "city_ur": "کوسٹا ریکا"
  },
  {
   "city": "Havana",
@@ -684,13 +752,15 @@
   "city": "Famagusta",
   "country": "Cyprus",
   "zone": "Asia/Famagusta",
-  "country_ur": "قبرص"
+  "country_ur": "قبرص",
+  "city_ur": "فاماگوستا"
  },
  {
   "city": "Nicosia",
   "country": "Cyprus",
   "zone": "Asia/Nicosia",
-  "country_ur": "قبرص"
+  "country_ur": "قبرص",
+  "city_ur": "نیکوسیا"
  },
  {
   "city": "Prague",
@@ -703,31 +773,36 @@
   "city": "Aarhus",
   "country": "Denmark",
   "zone": "Europe/Copenhagen",
-  "country_ur": "ڈنمارک"
+  "country_ur": "ڈنمارک",
+  "city_ur": "آرہس"
  },
  {
   "city": "Santo Domingo",
   "country": "Dominican Republic",
   "zone": "America/Santo_Domingo",
-  "country_ur": "ڈومینیکن جمہوریہ"
+  "country_ur": "ڈومینیکن جمہوریہ",
+  "city_ur": "سینٹو ڈومنگو"
  },
  {
   "city": "Galapagos",
   "country": "Ecuador",
   "zone": "Pacific/Galapagos",
-  "country_ur": "ایکواڈور"
+  "country_ur": "ایکواڈور",
+  "city_ur": "گالاپاگوس"
  },
  {
   "city": "Guayaquil",
   "country": "Ecuador",
   "zone": "America/Guayaquil",
-  "country_ur": "ایکواڈور"
+  "country_ur": "ایکواڈور",
+  "city_ur": "گوایاکل"
  },
  {
   "city": "Alexandria",
   "country": "Egypt",
   "zone": "Africa/Cairo",
-  "country_ur": "مصر"
+  "country_ur": "مصر",
+  "city_ur": "اسکندریہ"
  },
  {
   "city": "Cairo",
@@ -740,31 +815,36 @@
   "city": "El Salvador",
   "country": "El Salvador",
   "zone": "America/El_Salvador",
-  "country_ur": "ایل سلواڈور"
+  "country_ur": "ایل سلواڈور",
+  "city_ur": "ایل سلواڈور"
  },
  {
   "city": "Tallinn",
   "country": "Estonia",
   "zone": "Europe/Tallinn",
-  "country_ur": "ایسٹونیا"
+  "country_ur": "ایسٹونیا",
+  "city_ur": "ٹالن"
  },
  {
   "city": "Stanley",
   "country": "Falkland Islands",
   "zone": "Atlantic/Stanley",
-  "country_ur": "فاک لینڈ جزائر"
+  "country_ur": "فاک لینڈ جزائر",
+  "city_ur": "اسٹینلے"
  },
  {
   "city": "Faroe",
   "country": "Faroe Islands",
   "zone": "Atlantic/Faroe",
-  "country_ur": "فیرو جزائر"
+  "country_ur": "فیرو جزائر",
+  "city_ur": "فیرو"
  },
  {
   "city": "Fiji",
   "country": "Fiji",
   "zone": "Pacific/Fiji",
-  "country_ur": "فجی"
+  "country_ur": "فجی",
+  "city_ur": "فجی"
  },
  {
   "city": "Helsinki",
@@ -777,19 +857,22 @@
   "city": "Tampere",
   "country": "Finland",
   "zone": "Europe/Helsinki",
-  "country_ur": "فن لینڈ"
+  "country_ur": "فن لینڈ",
+  "city_ur": "ٹیمپیر"
  },
  {
   "city": "Lyon",
   "country": "France",
   "zone": "Europe/Paris",
-  "country_ur": "فرانس"
+  "country_ur": "فرانس",
+  "city_ur": "لیون"
  },
  {
   "city": "Marseille",
   "country": "France",
   "zone": "Europe/Paris",
-  "country_ur": "فرانس"
+  "country_ur": "فرانس",
+  "city_ur": "مارسیل"
  },
  {
   "city": "Paris",
@@ -802,25 +885,29 @@
   "city": "Cayenne",
   "country": "French Guiana",
   "zone": "America/Cayenne",
-  "country_ur": "فرانسیسی گیانا"
+  "country_ur": "فرانسیسی گیانا",
+  "city_ur": "کائین"
  },
  {
   "city": "Gambier",
   "country": "French Polynesia",
   "zone": "Pacific/Gambier",
-  "country_ur": "فرانسیسی پولینیشیا"
+  "country_ur": "فرانسیسی پولینیشیا",
+  "city_ur": "گیمبیئر"
  },
  {
   "city": "Marquesas",
   "country": "French Polynesia",
   "zone": "Pacific/Marquesas",
-  "country_ur": "فرانسیسی پولینیشیا"
+  "country_ur": "فرانسیسی پولینیشیا",
+  "city_ur": "مارکیساس"
  },
  {
   "city": "Tahiti",
   "country": "French Polynesia",
   "zone": "Pacific/Tahiti",
-  "country_ur": "فرانسیسی پولینیشیا"
+  "country_ur": "فرانسیسی پولینیشیا",
+  "city_ur": "تاہیٹی"
  },
  {
   "city": "Tbilisi",
@@ -861,7 +948,8 @@
   "city": "Gibraltar",
   "country": "Gibraltar",
   "zone": "Europe/Gibraltar",
-  "country_ur": "جبرالٹر"
+  "country_ur": "جبرالٹر",
+  "city_ur": "جبرالٹر"
  },
  {
   "city": "Athens",
@@ -874,61 +962,71 @@
   "city": "Danmarkshavn",
   "country": "Greenland",
   "zone": "America/Danmarkshavn",
-  "country_ur": "گرین لینڈ"
+  "country_ur": "گرین لینڈ",
+  "city_ur": "ڈنمارکشاون"
  },
  {
   "city": "Nuuk",
   "country": "Greenland",
   "zone": "America/Nuuk",
-  "country_ur": "گرین لینڈ"
+  "country_ur": "گرین لینڈ",
+  "city_ur": "نوک"
  },
  {
   "city": "Scoresbysund",
   "country": "Greenland",
   "zone": "America/Scoresbysund",
-  "country_ur": "گرین لینڈ"
+  "country_ur": "گرین لینڈ",
+  "city_ur": "اسکورسبیسنڈ"
  },
  {
   "city": "Thule",
   "country": "Greenland",
   "zone": "America/Thule",
-  "country_ur": "گرین لینڈ"
+  "country_ur": "گرین لینڈ",
+  "city_ur": "تھول"
  },
  {
   "city": "Guam",
   "country": "Guam",
   "zone": "Pacific/Guam",
-  "country_ur": "گوام"
+  "country_ur": "گوام",
+  "city_ur": "گوام"
  },
  {
   "city": "Guatemala",
   "country": "Guatemala",
   "zone": "America/Guatemala",
-  "country_ur": "گوئٹے مالا"
+  "country_ur": "گوئٹے مالا",
+  "city_ur": "گوئٹے مالا"
  },
  {
   "city": "Bissau",
   "country": "Guinea-Bissau",
   "zone": "Africa/Bissau",
-  "country_ur": "گنی بساؤ"
+  "country_ur": "گنی بساؤ",
+  "city_ur": "بساؤ"
  },
  {
   "city": "Guyana",
   "country": "Guyana",
   "zone": "America/Guyana",
-  "country_ur": "گیانا"
+  "country_ur": "گیانا",
+  "city_ur": "گیانا"
  },
  {
   "city": "Port-au-Prince",
   "country": "Haiti",
   "zone": "America/Port-au-Prince",
-  "country_ur": "ہیٹی"
+  "country_ur": "ہیٹی",
+  "city_ur": "پورٹ او پرنس"
  },
  {
   "city": "Tegucigalpa",
   "country": "Honduras",
   "zone": "America/Tegucigalpa",
-  "country_ur": "ہونڈوراس"
+  "country_ur": "ہونڈوراس",
+  "city_ur": "ٹیگوسیگالپا"
  },
  {
   "city": "Hong Kong",
@@ -983,7 +1081,8 @@
   "city": "Kolkata",
   "country": "India",
   "zone": "Asia/Kolkata",
-  "country_ur": "بھارت"
+  "country_ur": "بھارت",
+  "city_ur": "کولکاتا"
  },
  {
   "city": "Mumbai",
@@ -1003,13 +1102,15 @@
   "city": "Jayapura",
   "country": "Indonesia",
   "zone": "Asia/Jayapura",
-  "country_ur": "انڈونیشیا"
+  "country_ur": "انڈونیشیا",
+  "city_ur": "جایاپورا"
  },
  {
   "city": "Makassar",
   "country": "Indonesia",
   "zone": "Asia/Makassar",
-  "country_ur": "انڈونیشیا"
+  "country_ur": "انڈونیشیا",
+  "city_ur": "مکاسر"
  },
  {
   "city": "Medan",
@@ -1022,7 +1123,8 @@
   "city": "Pontianak",
   "country": "Indonesia",
   "zone": "Asia/Pontianak",
-  "country_ur": "انڈونیشیا"
+  "country_ur": "انڈونیشیا",
+  "city_ur": "پونٹیانک"
  },
  {
   "city": "Surabaya",
@@ -1035,13 +1137,15 @@
   "city": "Isfahan",
   "country": "Iran",
   "zone": "Asia/Tehran",
-  "country_ur": "ایران"
+  "country_ur": "ایران",
+  "city_ur": "اصفہان"
  },
  {
   "city": "Mashhad",
   "country": "Iran",
   "zone": "Asia/Tehran",
-  "country_ur": "ایران"
+  "country_ur": "ایران",
+  "city_ur": "مشہد"
  },
  {
   "city": "Tehran",
@@ -1061,7 +1165,8 @@
   "city": "Basra",
   "country": "Iraq",
   "zone": "Asia/Baghdad",
-  "country_ur": "عراق"
+  "country_ur": "عراق",
+  "city_ur": "بصرہ"
  },
  {
   "city": "Dublin",
@@ -1074,7 +1179,8 @@
   "city": "Haifa",
   "country": "Israel",
   "zone": "Asia/Jerusalem",
-  "country_ur": "اسرائیل"
+  "country_ur": "اسرائیل",
+  "city_ur": "حیفہ"
  },
  {
   "city": "Jerusalem",
@@ -1094,7 +1200,8 @@
   "city": "Naples",
   "country": "Italy",
   "zone": "Europe/Rome",
-  "country_ur": "اٹلی"
+  "country_ur": "اٹلی",
+  "city_ur": "نیپلز"
  },
  {
   "city": "Rome",
@@ -1107,13 +1214,15 @@
   "city": "Abidjan",
   "country": "Ivory Coast",
   "zone": "Africa/Abidjan",
-  "country_ur": "آئیوری کوسٹ"
+  "country_ur": "آئیوری کوسٹ",
+  "city_ur": "ابیجان"
  },
  {
   "city": "Jamaica",
   "country": "Jamaica",
   "zone": "America/Jamaica",
-  "country_ur": "جمیکا"
+  "country_ur": "جمیکا",
+  "city_ur": "جمیکا"
  },
  {
   "city": "Kyoto",
@@ -1154,37 +1263,43 @@
   "city": "Aqtau",
   "country": "Kazakhstan",
   "zone": "Asia/Aqtau",
-  "country_ur": "قازقستان"
+  "country_ur": "قازقستان",
+  "city_ur": "آقتاؤ"
  },
  {
   "city": "Aqtobe",
   "country": "Kazakhstan",
   "zone": "Asia/Aqtobe",
-  "country_ur": "قازقستان"
+  "country_ur": "قازقستان",
+  "city_ur": "آقتوبے"
  },
  {
   "city": "Atyrau",
   "country": "Kazakhstan",
   "zone": "Asia/Atyrau",
-  "country_ur": "قازقستان"
+  "country_ur": "قازقستان",
+  "city_ur": "آتیراؤ"
  },
  {
   "city": "Oral",
   "country": "Kazakhstan",
   "zone": "Asia/Oral",
-  "country_ur": "قازقستان"
+  "country_ur": "قازقستان",
+  "city_ur": "اورال"
  },
  {
   "city": "Qostanay",
   "country": "Kazakhstan",
   "zone": "Asia/Qostanay",
-  "country_ur": "قازقستان"
+  "country_ur": "قازقستان",
+  "city_ur": "قوستانے"
  },
  {
   "city": "Qyzylorda",
   "country": "Kazakhstan",
   "zone": "Asia/Qyzylorda",
-  "country_ur": "قازقستان"
+  "country_ur": "قازقستان",
+  "city_ur": "قیزیلوردا"
  },
  {
   "city": "Nairobi",
@@ -1197,19 +1312,22 @@
   "city": "Kanton",
   "country": "Kiribati",
   "zone": "Pacific/Kanton",
-  "country_ur": "کیریباتی"
+  "country_ur": "کیریباتی",
+  "city_ur": "کانٹن"
  },
  {
   "city": "Kiritimati",
   "country": "Kiribati",
   "zone": "Pacific/Kiritimati",
-  "country_ur": "کیریباتی"
+  "country_ur": "کیریباتی",
+  "city_ur": "کیریٹی ماتی"
  },
  {
   "city": "Tarawa",
   "country": "Kiribati",
   "zone": "Pacific/Tarawa",
-  "country_ur": "کیریباتی"
+  "country_ur": "کیریباتی",
+  "city_ur": "تاراوا"
  },
  {
   "city": "Kuwait City",
@@ -1222,13 +1340,15 @@
   "city": "Bishkek",
   "country": "Kyrgyzstan",
   "zone": "Asia/Bishkek",
-  "country_ur": "کرغزستان"
+  "country_ur": "کرغزستان",
+  "city_ur": "بشکیک"
  },
  {
   "city": "Riga",
   "country": "Latvia",
   "zone": "Europe/Riga",
-  "country_ur": "لٹویا"
+  "country_ur": "لٹویا",
+  "city_ur": "ریگا"
  },
  {
   "city": "Beirut",
@@ -1241,73 +1361,85 @@
   "city": "Monrovia",
   "country": "Liberia",
   "zone": "Africa/Monrovia",
-  "country_ur": "لائبیریا"
+  "country_ur": "لائبیریا",
+  "city_ur": "مونروویا"
  },
  {
   "city": "Tripoli",
   "country": "Libya",
   "zone": "Africa/Tripoli",
-  "country_ur": "لیبیا"
+  "country_ur": "لیبیا",
+  "city_ur": "طرابلس"
  },
  {
   "city": "Vilnius",
   "country": "Lithuania",
   "zone": "Europe/Vilnius",
-  "country_ur": "لیتھوانیا"
+  "country_ur": "لیتھوانیا",
+  "city_ur": "ویلنیس"
  },
  {
   "city": "Macau",
   "country": "Macau",
   "zone": "Asia/Macau",
-  "country_ur": "مکاؤ"
+  "country_ur": "مکاؤ",
+  "city_ur": "مکاؤ"
  },
  {
   "city": "George Town",
   "country": "Malaysia",
   "zone": "Asia/Kuala_Lumpur",
-  "country_ur": "ملائیشیا"
+  "country_ur": "ملائیشیا",
+  "city_ur": "جارج ٹاؤن"
  },
  {
   "city": "Kuching",
   "country": "Malaysia",
   "zone": "Asia/Kuching",
-  "country_ur": "ملائیشیا"
+  "country_ur": "ملائیشیا",
+  "city_ur": "کوچنگ"
  },
  {
   "city": "Maldives",
   "country": "Maldives",
   "zone": "Indian/Maldives",
-  "country_ur": "مالدیپ"
+  "country_ur": "مالدیپ",
+  "city_ur": "مالدیپ"
  },
  {
   "city": "Malta",
   "country": "Malta",
   "zone": "Europe/Malta",
-  "country_ur": "مالٹا"
+  "country_ur": "مالٹا",
+  "city_ur": "مالٹا"
  },
  {
   "city": "Kwajalein",
   "country": "Marshall Islands",
   "zone": "Pacific/Kwajalein",
-  "country_ur": "مارشل جزائر"
+  "country_ur": "مارشل جزائر",
+  "city_ur": "کواجلین"
  },
  {
   "city": "Martinique",
   "country": "Martinique",
   "zone": "America/Martinique",
-  "country_ur": "مارٹینیک"
+  "country_ur": "مارٹینیک",
+  "city_ur": "مارٹینیک"
  },
  {
   "city": "Mauritius",
   "country": "Mauritius",
   "zone": "Indian/Mauritius",
-  "country_ur": "موریشس"
+  "country_ur": "موریشس",
+  "city_ur": "موریشس"
  },
  {
   "city": "Bahia Banderas",
   "country": "Mexico",
   "zone": "America/Bahia_Banderas",
-  "country_ur": "میکسیکو"
+  "country_ur": "میکسیکو",
+  "city_ur": "باہیا بینڈیراس"
  },
  {
   "city": "Cancun",
@@ -1320,37 +1452,43 @@
   "city": "Chihuahua",
   "country": "Mexico",
   "zone": "America/Chihuahua",
-  "country_ur": "میکسیکو"
+  "country_ur": "میکسیکو",
+  "city_ur": "چیہواہوا"
  },
  {
   "city": "Ciudad Juarez",
   "country": "Mexico",
   "zone": "America/Ciudad_Juarez",
-  "country_ur": "میکسیکو"
+  "country_ur": "میکسیکو",
+  "city_ur": "سیوداد خواریز"
  },
  {
   "city": "Hermosillo",
   "country": "Mexico",
   "zone": "America/Hermosillo",
-  "country_ur": "میکسیکو"
+  "country_ur": "میکسیکو",
+  "city_ur": "ہرموسیلو"
  },
  {
   "city": "Matamoros",
   "country": "Mexico",
   "zone": "America/Matamoros",
-  "country_ur": "میکسیکو"
+  "country_ur": "میکسیکو",
+  "city_ur": "ماٹاموروس"
  },
  {
   "city": "Mazatlan",
   "country": "Mexico",
   "zone": "America/Mazatlan",
-  "country_ur": "میکسیکو"
+  "country_ur": "میکسیکو",
+  "city_ur": "مازاتلان"
  },
  {
   "city": "Merida",
   "country": "Mexico",
   "zone": "America/Merida",
-  "country_ur": "میکسیکو"
+  "country_ur": "میکسیکو",
+  "city_ur": "میریڈا"
  },
  {
   "city": "Mexico City",
@@ -1370,7 +1508,8 @@
   "city": "Ojinaga",
   "country": "Mexico",
   "zone": "America/Ojinaga",
-  "country_ur": "میکسیکو"
+  "country_ur": "میکسیکو",
+  "city_ur": "اوخیناگا"
  },
  {
   "city": "Tijuana",
@@ -1383,19 +1522,22 @@
   "city": "Kosrae",
   "country": "Micronesia",
   "zone": "Pacific/Kosrae",
-  "country_ur": "مائیکرونیشیا"
+  "country_ur": "مائیکرونیشیا",
+  "city_ur": "کوسرائے"
  },
  {
   "city": "Chisinau",
   "country": "Moldova",
   "zone": "Europe/Chisinau",
-  "country_ur": "مالڈووا"
+  "country_ur": "مالڈووا",
+  "city_ur": "چسیناؤ"
  },
  {
   "city": "Hovd",
   "country": "Mongolia",
   "zone": "Asia/Hovd",
-  "country_ur": "منگولیا"
+  "country_ur": "منگولیا",
+  "city_ur": "ہووڈ"
  },
  {
   "city": "Ulaanbaatar",
@@ -1408,31 +1550,36 @@
   "city": "Casablanca",
   "country": "Morocco",
   "zone": "Africa/Casablanca",
-  "country_ur": "مراکش"
+  "country_ur": "مراکش",
+  "city_ur": "کاسابلانکا"
  },
  {
   "city": "Maputo",
   "country": "Mozambique",
   "zone": "Africa/Maputo",
-  "country_ur": "موزمبیق"
+  "country_ur": "موزمبیق",
+  "city_ur": "ماپوٹو"
  },
  {
   "city": "Yangon",
   "country": "Myanmar",
   "zone": "Asia/Yangon",
-  "country_ur": "میانمار"
+  "country_ur": "میانمار",
+  "city_ur": "ینگون"
  },
  {
   "city": "Windhoek",
   "country": "Namibia",
   "zone": "Africa/Windhoek",
-  "country_ur": "نمیبیا"
+  "country_ur": "نمیبیا",
+  "city_ur": "ونڈہوک"
  },
  {
   "city": "Nauru",
   "country": "Nauru",
   "zone": "Pacific/Nauru",
-  "country_ur": "نورو"
+  "country_ur": "نورو",
+  "city_ur": "نورو"
  },
  {
   "city": "Kathmandu",
@@ -1445,13 +1592,15 @@
   "city": "Rotterdam",
   "country": "Netherlands",
   "zone": "Europe/Amsterdam",
-  "country_ur": "نیدرلینڈز"
+  "country_ur": "نیدرلینڈز",
+  "city_ur": "روٹرڈیم"
  },
  {
   "city": "Noumea",
   "country": "New Caledonia",
   "zone": "Pacific/Noumea",
-  "country_ur": "نیو کیلیڈونیا"
+  "country_ur": "نیو کیلیڈونیا",
+  "city_ur": "نومیا"
  },
  {
   "city": "Auckland",
@@ -1464,13 +1613,15 @@
   "city": "Chatham",
   "country": "New Zealand",
   "zone": "Pacific/Chatham",
-  "country_ur": "نیوزی لینڈ"
+  "country_ur": "نیوزی لینڈ",
+  "city_ur": "چیتھم"
  },
  {
   "city": "Managua",
   "country": "Nicaragua",
   "zone": "America/Managua",
-  "country_ur": "نکاراگوا"
+  "country_ur": "نکاراگوا",
+  "city_ur": "ماناگوا"
  },
  {
   "city": "Lagos",
@@ -1483,25 +1634,29 @@
   "city": "Niue",
   "country": "Niue",
   "zone": "Pacific/Niue",
-  "country_ur": "نیووے"
+  "country_ur": "نیووے",
+  "city_ur": "نیووے"
  },
  {
   "city": "Norfolk",
   "country": "Norfolk Island",
   "zone": "Pacific/Norfolk",
-  "country_ur": "نورفک جزیرہ"
+  "country_ur": "نورفک جزیرہ",
+  "city_ur": "نورفک"
  },
  {
   "city": "Pyongyang",
   "country": "North Korea",
   "zone": "Asia/Pyongyang",
-  "country_ur": "شمالی کوریا"
+  "country_ur": "شمالی کوریا",
+  "city_ur": "پیانگ یانگ"
  },
  {
   "city": "Bergen",
   "country": "Norway",
   "zone": "Europe/Oslo",
-  "country_ur": "ناروے"
+  "country_ur": "ناروے",
+  "city_ur": "برگن"
  },
  {
   "city": "Muscat",
@@ -1577,43 +1732,50 @@
   "city": "Palau",
   "country": "Palau",
   "zone": "Pacific/Palau",
-  "country_ur": "پلاؤ"
+  "country_ur": "پلاؤ",
+  "city_ur": "پلاؤ"
  },
  {
   "city": "Gaza",
   "country": "Palestine",
   "zone": "Asia/Gaza",
-  "country_ur": "فلسطین"
+  "country_ur": "فلسطین",
+  "city_ur": "غزہ"
  },
  {
   "city": "Hebron",
   "country": "Palestine",
   "zone": "Asia/Hebron",
-  "country_ur": "فلسطین"
+  "country_ur": "فلسطین",
+  "city_ur": "الخلیل"
  },
  {
   "city": "Panama",
   "country": "Panama",
   "zone": "America/Panama",
-  "country_ur": "پاناما"
+  "country_ur": "پاناما",
+  "city_ur": "پاناما"
  },
  {
   "city": "Bougainville",
   "country": "Papua New Guinea",
   "zone": "Pacific/Bougainville",
-  "country_ur": "پاپوا نیو گنی"
+  "country_ur": "پاپوا نیو گنی",
+  "city_ur": "بوگن ویل"
  },
  {
   "city": "Port Moresby",
   "country": "Papua New Guinea",
   "zone": "Pacific/Port_Moresby",
-  "country_ur": "پاپوا نیو گنی"
+  "country_ur": "پاپوا نیو گنی",
+  "city_ur": "پورٹ مورسبی"
  },
  {
   "city": "Asuncion",
   "country": "Paraguay",
   "zone": "America/Asuncion",
-  "country_ur": "پیراگوئے"
+  "country_ur": "پیراگوئے",
+  "city_ur": "اسونسیون"
  },
  {
   "city": "Lima",
@@ -1626,7 +1788,8 @@
   "city": "Cebu",
   "country": "Philippines",
   "zone": "Asia/Manila",
-  "country_ur": "فلپائن"
+  "country_ur": "فلپائن",
+  "city_ur": "سیبو"
  },
  {
   "city": "Manila",
@@ -1639,13 +1802,15 @@
   "city": "Pitcairn",
   "country": "Pitcairn Islands",
   "zone": "Pacific/Pitcairn",
-  "country_ur": "پٹکیرن جزائر"
+  "country_ur": "پٹکیرن جزائر",
+  "city_ur": "پٹکیرن"
  },
  {
   "city": "Krakow",
   "country": "Poland",
   "zone": "Europe/Warsaw",
-  "country_ur": "پولینڈ"
+  "country_ur": "پولینڈ",
+  "city_ur": "کراکو"
  },
  {
   "city": "Warsaw",
@@ -1658,7 +1823,8 @@
   "city": "Azores",
   "country": "Portugal",
   "zone": "Atlantic/Azores",
-  "country_ur": "پرتگال"
+  "country_ur": "پرتگال",
+  "city_ur": "آزورس"
  },
  {
   "city": "Lisbon",
@@ -1671,13 +1837,15 @@
   "city": "Madeira",
   "country": "Portugal",
   "zone": "Atlantic/Madeira",
-  "country_ur": "پرتگال"
+  "country_ur": "پرتگال",
+  "city_ur": "مادیئرا"
  },
  {
   "city": "Puerto Rico",
   "country": "Puerto Rico",
   "zone": "America/Puerto_Rico",
-  "country_ur": "پورٹو ریکو"
+  "country_ur": "پورٹو ریکو",
+  "city_ur": "پورٹو ریکو"
  },
  {
   "city": "Doha",
@@ -1690,7 +1858,8 @@
   "city": "Qatar",
   "country": "Qatar",
   "zone": "Asia/Qatar",
-  "country_ur": "قطر"
+  "country_ur": "قطر",
+  "city_ur": "قطر"
  },
  {
   "city": "Bucharest",
@@ -1703,31 +1872,36 @@
   "city": "Anadyr",
   "country": "Russia",
   "zone": "Asia/Anadyr",
-  "country_ur": "روس"
+  "country_ur": "روس",
+  "city_ur": "انادر"
  },
  {
   "city": "Astrakhan",
   "country": "Russia",
   "zone": "Europe/Astrakhan",
-  "country_ur": "روس"
+  "country_ur": "روس",
+  "city_ur": "آستراخان"
  },
  {
   "city": "Barnaul",
   "country": "Russia",
   "zone": "Asia/Barnaul",
-  "country_ur": "روس"
+  "country_ur": "روس",
+  "city_ur": "بارناؤل"
  },
  {
   "city": "Chita",
   "country": "Russia",
   "zone": "Asia/Chita",
-  "country_ur": "روس"
+  "country_ur": "روس",
+  "city_ur": "چیٹا"
  },
  {
   "city": "Irkutsk",
   "country": "Russia",
   "zone": "Asia/Irkutsk",
-  "country_ur": "روس"
+  "country_ur": "روس",
+  "city_ur": "ارکٹسک"
  },
  {
   "city": "Kaliningrad",
@@ -1740,31 +1914,36 @@
   "city": "Kamchatka",
   "country": "Russia",
   "zone": "Asia/Kamchatka",
-  "country_ur": "روس"
+  "country_ur": "روس",
+  "city_ur": "کامچٹکا"
  },
  {
   "city": "Khandyga",
   "country": "Russia",
   "zone": "Asia/Khandyga",
-  "country_ur": "روس"
+  "country_ur": "روس",
+  "city_ur": "خاندیگا"
  },
  {
   "city": "Kirov",
   "country": "Russia",
   "zone": "Europe/Kirov",
-  "country_ur": "روس"
+  "country_ur": "روس",
+  "city_ur": "کیروف"
  },
  {
   "city": "Krasnoyarsk",
   "country": "Russia",
   "zone": "Asia/Krasnoyarsk",
-  "country_ur": "روس"
+  "country_ur": "روس",
+  "city_ur": "کراسنویارسک"
  },
  {
   "city": "Magadan",
   "country": "Russia",
   "zone": "Asia/Magadan",
-  "country_ur": "روس"
+  "country_ur": "روس",
+  "city_ur": "ماگادان"
  },
  {
   "city": "Moscow",
@@ -1777,7 +1956,8 @@
   "city": "Novokuznetsk",
   "country": "Russia",
   "zone": "Asia/Novokuznetsk",
-  "country_ur": "روس"
+  "country_ur": "روس",
+  "city_ur": "نووکوزنیٹسک"
  },
  {
   "city": "Novosibirsk",
@@ -1790,7 +1970,8 @@
   "city": "Omsk",
   "country": "Russia",
   "zone": "Asia/Omsk",
-  "country_ur": "روس"
+  "country_ur": "روس",
+  "city_ur": "اومسک"
  },
  {
   "city": "Saint Petersburg",
@@ -1803,49 +1984,57 @@
   "city": "Sakhalin",
   "country": "Russia",
   "zone": "Asia/Sakhalin",
-  "country_ur": "روس"
+  "country_ur": "روس",
+  "city_ur": "سخالین"
  },
  {
   "city": "Samara",
   "country": "Russia",
   "zone": "Europe/Samara",
-  "country_ur": "روس"
+  "country_ur": "روس",
+  "city_ur": "سامارا"
  },
  {
   "city": "Saratov",
   "country": "Russia",
   "zone": "Europe/Saratov",
-  "country_ur": "روس"
+  "country_ur": "روس",
+  "city_ur": "ساراٹوف"
  },
  {
   "city": "Simferopol",
   "country": "Russia",
   "zone": "Europe/Simferopol",
-  "country_ur": "روس"
+  "country_ur": "روس",
+  "city_ur": "سمفیروپول"
  },
  {
   "city": "Srednekolymsk",
   "country": "Russia",
   "zone": "Asia/Srednekolymsk",
-  "country_ur": "روس"
+  "country_ur": "روس",
+  "city_ur": "سریدنکولیمسک"
  },
  {
   "city": "Tomsk",
   "country": "Russia",
   "zone": "Asia/Tomsk",
-  "country_ur": "روس"
+  "country_ur": "روس",
+  "city_ur": "ٹومسک"
  },
  {
   "city": "Ulyanovsk",
   "country": "Russia",
   "zone": "Europe/Ulyanovsk",
-  "country_ur": "روس"
+  "country_ur": "روس",
+  "city_ur": "اولیانووسک"
  },
  {
   "city": "Ust-Nera",
   "country": "Russia",
   "zone": "Asia/Ust-Nera",
-  "country_ur": "روس"
+  "country_ur": "روس",
+  "city_ur": "است نیرا"
  },
  {
   "city": "Vladivostok",
@@ -1858,13 +2047,15 @@
   "city": "Volgograd",
   "country": "Russia",
   "zone": "Europe/Volgograd",
-  "country_ur": "روس"
+  "country_ur": "روس",
+  "city_ur": "وولگوگراڈ"
  },
  {
   "city": "Yakutsk",
   "country": "Russia",
   "zone": "Asia/Yakutsk",
-  "country_ur": "روس"
+  "country_ur": "روس",
+  "city_ur": "یاکٹسک"
  },
  {
   "city": "Yekaterinburg",
@@ -1877,19 +2068,22 @@
   "city": "Miquelon",
   "country": "Saint Pierre and Miquelon",
   "zone": "America/Miquelon",
-  "country_ur": "سینٹ پیئر و میکیلون"
+  "country_ur": "سینٹ پیئر و میکیلون",
+  "city_ur": "میکیلون"
  },
  {
   "city": "Apia",
   "country": "Samoa",
   "zone": "Pacific/Apia",
-  "country_ur": "ساموآ"
+  "country_ur": "ساموآ",
+  "city_ur": "اپیا"
  },
  {
   "city": "Sao Tome",
   "country": "Sao Tome and Principe",
   "zone": "Africa/Sao_Tome",
-  "country_ur": "ساؤ ٹومے و پرنسپے"
+  "country_ur": "ساؤ ٹومے و پرنسپے",
+  "city_ur": "ساؤ ٹومے"
  },
  {
   "city": "Dammam",
@@ -1930,7 +2124,8 @@
   "city": "Belgrade",
   "country": "Serbia",
   "zone": "Europe/Belgrade",
-  "country_ur": "سربیا"
+  "country_ur": "سربیا",
+  "city_ur": "بیلگریڈ"
  },
  {
   "city": "Singapore",
@@ -1943,7 +2138,8 @@
   "city": "Guadalcanal",
   "country": "Solomon Islands",
   "zone": "Pacific/Guadalcanal",
-  "country_ur": "سلیمان جزائر"
+  "country_ur": "سلیمان جزائر",
+  "city_ur": "گواڈالکنال"
  },
  {
   "city": "Cape Town",
@@ -1956,7 +2152,8 @@
   "city": "Durban",
   "country": "South Africa",
   "zone": "Africa/Johannesburg",
-  "country_ur": "جنوبی افریقہ"
+  "country_ur": "جنوبی افریقہ",
+  "city_ur": "ڈربن"
  },
  {
   "city": "Johannesburg",
@@ -1969,7 +2166,8 @@
   "city": "South Georgia",
   "country": "South Georgia",
   "zone": "Atlantic/South_Georgia",
-  "country_ur": "جنوبی جارجیا"
+  "country_ur": "جنوبی جارجیا",
+  "city_ur": "جنوبی جارجیا"
  },
  {
   "city": "Busan",
@@ -1989,7 +2187,8 @@
   "city": "Juba",
   "country": "South Sudan",
   "zone": "Africa/Juba",
-  "country_ur": "جنوبی سوڈان"
+  "country_ur": "جنوبی سوڈان",
+  "city_ur": "جوبا"
  },
  {
   "city": "Barcelona",
@@ -2002,13 +2201,15 @@
   "city": "Canary",
   "country": "Spain",
   "zone": "Atlantic/Canary",
-  "country_ur": "اسپین"
+  "country_ur": "اسپین",
+  "city_ur": "کینری"
  },
  {
   "city": "Ceuta",
   "country": "Spain",
   "zone": "Africa/Ceuta",
-  "country_ur": "اسپین"
+  "country_ur": "اسپین",
+  "city_ur": "سیوتا"
  },
  {
   "city": "Madrid",
@@ -2035,13 +2236,15 @@
   "city": "Paramaribo",
   "country": "Suriname",
   "zone": "America/Paramaribo",
-  "country_ur": "سرینام"
+  "country_ur": "سرینام",
+  "city_ur": "پاراماریبو"
  },
  {
   "city": "Gothenburg",
   "country": "Sweden",
   "zone": "Europe/Stockholm",
-  "country_ur": "سویڈن"
+  "country_ur": "سویڈن",
+  "city_ur": "گوتھنبرگ"
  },
  {
   "city": "Geneva",
@@ -2075,7 +2278,8 @@
   "city": "Dushanbe",
   "country": "Tajikistan",
   "zone": "Asia/Dushanbe",
-  "country_ur": "تاجکستان"
+  "country_ur": "تاجکستان",
+  "city_ur": "دوشنبے"
  },
  {
   "city": "Bangkok",
@@ -2088,25 +2292,29 @@
   "city": "Chiang Mai",
   "country": "Thailand",
   "zone": "Asia/Bangkok",
-  "country_ur": "تھائی لینڈ"
+  "country_ur": "تھائی لینڈ",
+  "city_ur": "چیانگ مائی"
  },
  {
   "city": "Dili",
   "country": "Timor-Leste",
   "zone": "Asia/Dili",
-  "country_ur": "تیمور لیسٹے"
+  "country_ur": "تیمور لیسٹے",
+  "city_ur": "دیلی"
  },
  {
   "city": "Fakaofo",
   "country": "Tokelau",
   "zone": "Pacific/Fakaofo",
-  "country_ur": "ٹوکیلاؤ"
+  "country_ur": "ٹوکیلاؤ",
+  "city_ur": "فاکاؤفو"
  },
  {
   "city": "Tongatapu",
   "country": "Tonga",
   "zone": "Pacific/Tongatapu",
-  "country_ur": "ٹونگا"
+  "country_ur": "ٹونگا",
+  "city_ur": "ٹونگاٹاپو"
  },
  {
   "city": "Tunis",
@@ -2133,25 +2341,29 @@
   "city": "Izmir",
   "country": "Turkey",
   "zone": "Europe/Istanbul",
-  "country_ur": "ترکی"
+  "country_ur": "ترکی",
+  "city_ur": "ازمیر"
  },
  {
   "city": "Ashgabat",
   "country": "Turkmenistan",
   "zone": "Asia/Ashgabat",
-  "country_ur": "ترکمانستان"
+  "country_ur": "ترکمانستان",
+  "city_ur": "عشق آباد"
  },
  {
   "city": "Grand Turk",
   "country": "Turks and Caicos",
   "zone": "America/Grand_Turk",
-  "country_ur": "ترکس و کیکوس"
+  "country_ur": "ترکس و کیکوس",
+  "city_ur": "گرینڈ ترک"
  },
  {
   "city": "Kyiv",
   "country": "Ukraine",
   "zone": "Europe/Kyiv",
-  "country_ur": "یوکرین"
+  "country_ur": "یوکرین",
+  "city_ur": "کیف"
  },
  {
   "city": "Abu Dhabi",
@@ -2178,7 +2390,8 @@
   "city": "Birmingham",
   "country": "United Kingdom",
   "zone": "Europe/London",
-  "country_ur": "برطانیہ"
+  "country_ur": "برطانیہ",
+  "city_ur": "برمنگھم"
  },
  {
   "city": "London",
@@ -2191,13 +2404,15 @@
   "city": "Manchester",
   "country": "United Kingdom",
   "zone": "Europe/London",
-  "country_ur": "برطانیہ"
+  "country_ur": "برطانیہ",
+  "city_ur": "مانچسٹر"
  },
  {
   "city": "Adak",
   "country": "United States",
   "zone": "America/Adak",
-  "country_ur": "امریکہ"
+  "country_ur": "امریکہ",
+  "city_ur": "اڈاک"
  },
  {
   "city": "Anchorage",
@@ -2210,13 +2425,15 @@
   "city": "Beulah",
   "country": "United States",
   "zone": "America/North_Dakota/Beulah",
-  "country_ur": "امریکہ"
+  "country_ur": "امریکہ",
+  "city_ur": "بیولا"
  },
  {
   "city": "Boise",
   "country": "United States",
   "zone": "America/Boise",
-  "country_ur": "امریکہ"
+  "country_ur": "امریکہ",
+  "city_ur": "بوئزے"
  },
  {
   "city": "Boston",
@@ -2229,7 +2446,8 @@
   "city": "Center",
   "country": "United States",
   "zone": "America/North_Dakota/Center",
-  "country_ur": "امریکہ"
+  "country_ur": "امریکہ",
+  "city_ur": "سینٹر"
  },
  {
   "city": "Chicago",
@@ -2277,13 +2495,15 @@
   "city": "Juneau",
   "country": "United States",
   "zone": "America/Juneau",
-  "country_ur": "امریکہ"
+  "country_ur": "امریکہ",
+  "city_ur": "جونو"
  },
  {
   "city": "Knox",
   "country": "United States",
   "zone": "America/Indiana/Knox",
-  "country_ur": "امریکہ"
+  "country_ur": "امریکہ",
+  "city_ur": "ناکس"
  },
  {
   "city": "Los Angeles",
@@ -2303,31 +2523,36 @@
   "city": "Marengo",
   "country": "United States",
   "zone": "America/Indiana/Marengo",
-  "country_ur": "امریکہ"
+  "country_ur": "امریکہ",
+  "city_ur": "مارینگو"
  },
  {
   "city": "Menominee",
   "country": "United States",
   "zone": "America/Menominee",
-  "country_ur": "امریکہ"
+  "country_ur": "امریکہ",
+  "city_ur": "مینومینی"
  },
  {
   "city": "Metlakatla",
   "country": "United States",
   "zone": "America/Metlakatla",
-  "country_ur": "امریکہ"
+  "country_ur": "امریکہ",
+  "city_ur": "میٹلاکٹلا"
  },
  {
   "city": "Monticello",
   "country": "United States",
   "zone": "America/Kentucky/Monticello",
-  "country_ur": "امریکہ"
+  "country_ur": "امریکہ",
+  "city_ur": "مونٹیسیلو"
  },
  {
   "city": "New Salem",
   "country": "United States",
   "zone": "America/North_Dakota/New_Salem",
-  "country_ur": "امریکہ"
+  "country_ur": "امریکہ",
+  "city_ur": "نیو سیلم"
  },
  {
   "city": "New York",
@@ -2340,13 +2565,15 @@
   "city": "Nome",
   "country": "United States",
   "zone": "America/Nome",
-  "country_ur": "امریکہ"
+  "country_ur": "امریکہ",
+  "city_ur": "نوم"
  },
  {
   "city": "Petersburg",
   "country": "United States",
   "zone": "America/Indiana/Petersburg",
-  "country_ur": "امریکہ"
+  "country_ur": "امریکہ",
+  "city_ur": "پیٹرزبرگ"
  },
  {
   "city": "Phoenix",
@@ -2366,25 +2593,29 @@
   "city": "Sitka",
   "country": "United States",
   "zone": "America/Sitka",
-  "country_ur": "امریکہ"
+  "country_ur": "امریکہ",
+  "city_ur": "سٹکا"
  },
  {
   "city": "Tell City",
   "country": "United States",
   "zone": "America/Indiana/Tell_City",
-  "country_ur": "امریکہ"
+  "country_ur": "امریکہ",
+  "city_ur": "ٹیل سٹی"
  },
  {
   "city": "Vevay",
   "country": "United States",
   "zone": "America/Indiana/Vevay",
-  "country_ur": "امریکہ"
+  "country_ur": "امریکہ",
+  "city_ur": "ویوے"
  },
  {
   "city": "Vincennes",
   "country": "United States",
   "zone": "America/Indiana/Vincennes",
-  "country_ur": "امریکہ"
+  "country_ur": "امریکہ",
+  "city_ur": "ونسینس"
  },
  {
   "city": "Washington",
@@ -2397,25 +2628,29 @@
   "city": "Winamac",
   "country": "United States",
   "zone": "America/Indiana/Winamac",
-  "country_ur": "امریکہ"
+  "country_ur": "امریکہ",
+  "city_ur": "وینامیک"
  },
  {
   "city": "Yakutat",
   "country": "United States",
   "zone": "America/Yakutat",
-  "country_ur": "امریکہ"
+  "country_ur": "امریکہ",
+  "city_ur": "یاکوٹاٹ"
  },
  {
   "city": "Montevideo",
   "country": "Uruguay",
   "zone": "America/Montevideo",
-  "country_ur": "یوروگوئے"
+  "country_ur": "یوروگوئے",
+  "city_ur": "مونٹیویڈیو"
  },
  {
   "city": "Samarkand",
   "country": "Uzbekistan",
   "zone": "Asia/Samarkand",
-  "country_ur": "ازبکستان"
+  "country_ur": "ازبکستان",
+  "city_ur": "سمرقند"
  },
  {
   "city": "Tashkent",
@@ -2428,7 +2663,8 @@
   "city": "Efate",
   "country": "Vanuatu",
   "zone": "Pacific/Efate",
-  "country_ur": "وانواتو"
+  "country_ur": "وانواتو",
+  "city_ur": "ایفاٹ"
  },
  {
   "city": "Caracas",
@@ -2441,18 +2677,21 @@
   "city": "Hanoi",
   "country": "Vietnam",
   "zone": "Asia/Ho_Chi_Minh",
-  "country_ur": "ویتنام"
+  "country_ur": "ویتنام",
+  "city_ur": "ہنوئی"
  },
  {
   "city": "Ho Chi Minh",
   "country": "Vietnam",
   "zone": "Asia/Ho_Chi_Minh",
-  "country_ur": "ویتنام"
+  "country_ur": "ویتنام",
+  "city_ur": "ہو چی منہ"
  },
  {
   "city": "El Aaiun",
   "country": "Western Sahara",
   "zone": "Africa/El_Aaiun",
-  "country_ur": "مغربی صحارا"
+  "country_ur": "مغربی صحارا",
+  "city_ur": "العیون"
  }
 ]
