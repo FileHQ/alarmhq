@@ -532,8 +532,7 @@ class _CityPickerScreenState extends State<_CityPickerScreen> {
           try {
             offset = widget.fmtOffset(widget.cityTime(e.zone).timeZoneOffset);
           } catch (_) {
-            // v2.61: fallback — show UTC instead of hiding badge
-            offset = 'UTC';
+            offset = '';
           }
           final subColor = isLight ? Colors.black54 : Colors.white70;
           final isUrdu =
