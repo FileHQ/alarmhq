@@ -648,4 +648,10 @@ class AppLocalizationsUr extends AppLocalizations {
 
   @override
   String get tmrSetTime => 'ٹائمر سیٹ کریں';
+
+  @override
+  String get undo => 'واپس لیں';
+
+  @override
+  String get deleted => 'حذف کر دیا گیا';
 }
