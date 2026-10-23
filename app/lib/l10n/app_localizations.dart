@@ -1273,6 +1273,18 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Set timer'**
   String get tmrSetTime;
+
+  /// No description provided for @undo.
+  ///
+  /// In en, this message translates to:
+  /// **'Undo'**
+  String get undo;
+
+  /// No description provided for @deleted.
+  ///
+  /// In en, this message translates to:
+  /// **'deleted'**
+  String get deleted;
 }
 
 class _AppLocalizationsDelegate
