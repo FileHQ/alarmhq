@@ -640,4 +640,13 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get atomicTab => 'Atomic';
+
+  @override
+  String get exitTitle => 'Do you want to close the app?';
+
+  @override
+  String get exitYes => 'Yes';
+
+  @override
+  String get exitNo => 'No';
 }
