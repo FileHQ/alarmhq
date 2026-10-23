@@ -1,0 +1,42 @@
+name: alarmhq
+description: AlarmHQ - personal alarm app (Urdu + English).
+publish_to: 'none'
+version: 1.0.51+4052
+
+environment:
+  sdk: ^3.13.5
+
+# Zero third-party dependencies on purpose: everything native goes through
+# hand-written platform channels (see android/app/src/main/kotlin), so the
+# project resolves fully offline and has no plugin failure modes.
+dependencies:
+  flutter:
+    sdk: flutter
+  flutter_localizations:
+    sdk: flutter
+  # v2.51: Clock tab — world clock, atomic (NTP) time, overlay window
+  ntp_dart: ^1.5.1
+  timezone: ^0.10.1
+  system_alert_window: ^2.0.0
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^6.0.0
+
+flutter:
+  uses-material-design: true
+  generate: true
+  assets:
+    - assets/tones/
+    - assets/hijri/
+    - assets/cities.json
+  # v2.39: Embedded Noto Nastaliq Urdu, SUBSET to Urdu/Arabic script only
+  # v2.40: Jameel Noori Nastaleeq (user's own font file), subsetted to
+  # Urdu/Arabic ranges only (no Latin, no digits). Urdu text renders in
+  # Nastaliq; English text and all numbers (123) automatically fall back
+  # to the system font.
+  fonts:
+    - family: JameelNoori
+      fonts:
+        - asset: assets/fonts/JameelNoori-Regular.ttf
