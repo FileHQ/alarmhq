@@ -1,6 +1,5 @@
 // ignore: unused_import
 import 'package:intl/intl.dart' as intl;
-
 import 'app_localizations.dart';
 
 // ignore_for_file: type=lint
@@ -13,8 +12,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get about => 'About';
 
   @override
-  String get aboutText =>
-      'AlarmHQ v1 — a personal alarm app. No ads, no accounts, no tracking.';
+  String get aboutText => 'AlarmHQ v1 — a personal alarm app. No ads, no accounts, no tracking.';
 
   @override
   String get addAlarm => 'Add alarm';
@@ -37,8 +35,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get appTitle => 'AlarmHQ';
 
   @override
-  String get batteryDesc =>
-      'Prevents the phone from delaying or killing alarms to save battery.';
+  String get batteryDesc => 'Prevents the phone from delaying or killing alarms to save battery.';
 
   @override
   String get batteryTitle => 'Ignore battery optimizations';
@@ -98,8 +95,7 @@ class AppLocalizationsEn extends AppLocalizations {
   }
 
   @override
-  String get exactAlarmDesc =>
-      'Needed so alarms ring at the exact minute, even in Doze mode.';
+  String get exactAlarmDesc => 'Needed so alarms ring at the exact minute, even in Doze mode.';
 
   @override
   String get exactAlarmTitle => 'Exact alarms';
@@ -207,8 +203,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get openSettings => 'Open settings';
 
   @override
-  String get permBatteryDesc =>
-      'Your phone may kill AlarmHQ in the background and revoke its permissions. Tap Allow, then choose \"Don\'t optimize\", so alarms always ring.';
+  String get permBatteryDesc => 'Your phone may kill AlarmHQ in the background and revoke its permissions. Tap Allow, then choose \"Don\'t optimize\", so alarms always ring.';
 
   @override
   String get permBatteryGrant => 'Allow';
@@ -217,15 +212,13 @@ class AppLocalizationsEn extends AppLocalizations {
   String get permBatteryTitle => 'Battery Optimization';
 
   @override
-  String get permBody =>
-      'AlarmHQ needs these permissions so your alarms always ring on time — even when the phone is locked or saving battery.';
+  String get permBody => 'AlarmHQ needs these permissions so your alarms always ring on time — even when the phone is locked or saving battery.';
 
   @override
   String get permContinue => 'Continue';
 
   @override
-  String get permExactDesc =>
-      'Lets alarms ring at the exact minute, even in Doze mode.';
+  String get permExactDesc => 'Lets alarms ring at the exact minute, even in Doze mode.';
 
   @override
   String get permExactTitle => 'Exact alarms';
@@ -237,15 +230,13 @@ class AppLocalizationsEn extends AppLocalizations {
   String get permGranted => 'Granted';
 
   @override
-  String get permNotifDesc =>
-      'Shows the alarm on screen and in the notification shade.';
+  String get permNotifDesc => 'Shows the alarm on screen and in the notification shade.';
 
   @override
   String get permNotifTitle => 'Notifications';
 
   @override
-  String get permOverlayDesc =>
-      'Shows the full-screen alarm over the lock screen.';
+  String get permOverlayDesc => 'Shows the full-screen alarm over the lock screen.';
 
   @override
   String get permOverlayTitle => 'Display over other apps';
@@ -254,33 +245,28 @@ class AppLocalizationsEn extends AppLocalizations {
   String get permFsTitle => 'Full-screen alarm';
 
   @override
-  String get permFsDesc =>
-      'Lets the alarm pop up on the lock screen (needed on Android 14+).';
+  String get permFsDesc => 'Lets the alarm pop up on the lock screen (needed on Android 14+).';
 
   @override
   String get permAutostartTitle => 'Autostart permission';
 
   @override
-  String get permAutostartDesc =>
-      'Lets the alarm ring even when the app is closed (needed on many phones).';
+  String get permAutostartDesc => 'Lets the alarm ring even when the app is closed (needed on many phones).';
 
   @override
   String get permLockScreenTitle => 'Show on Lock screen';
 
   @override
-  String get permLockScreenDesc =>
-      'Without this, the alarm NEVER appears on the lock screen. Steps: 1. Tap \'Open Settings\' below. 2. Turn ON \'Show on Lock screen\' (also turn ON \'Open new windows while running in the background\'). 3. Return to the app.';
+  String get permLockScreenDesc => 'Without this, the alarm NEVER appears on the lock screen. Steps: 1. Tap \'Open Settings\' below. 2. Turn ON \'Show on Lock screen\' (also turn ON \'Open new windows while running in the background\'). 3. Return to the app.';
 
   @override
   String get permUnusedTitle => 'Auto-remove permissions';
 
   @override
-  String get permUnusedDesc =>
-      '⚠️ If this is ON, Android will AUTOMATICALLY REMOVE your alarm permissions after a few days of not opening the app! Turn it OFF.';
+  String get permUnusedDesc => '⚠️ If this is ON, Android will AUTOMATICALLY REMOVE your alarm permissions after a few days of not opening the app! Turn it OFF.';
 
   @override
-  String get permLockScreenReminder =>
-      'In Settings → Apps → AlarmHQ, turn ON \"Show on Lock screen\" — and also \"Open new windows while running in the background\".';
+  String get permLockScreenReminder => 'In Settings → Apps → AlarmHQ, turn ON \"Show on Lock screen\" — and also \"Open new windows while running in the background\".';
 
   @override
   String get permSkip => 'Skip for now';
@@ -378,15 +364,13 @@ class AppLocalizationsEn extends AppLocalizations {
   String get fsBannerTitle => 'Full-screen alarm is off';
 
   @override
-  String get fsBannerBody =>
-      'Tap to allow the alarm to pop up on the lock screen';
+  String get fsBannerBody => 'Tap to allow the alarm to pop up on the lock screen';
 
   @override
   String get lockBannerTitle => 'Show on Lock screen is needed';
 
   @override
-  String get lockBannerBody =>
-      'Tap to open Settings → Apps → AlarmHQ and turn it ON';
+  String get lockBannerBody => 'Tap to open Settings → Apps → AlarmHQ and turn it ON';
 
   @override
   String get permRequired => 'Required';
@@ -395,8 +379,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get permOpenSettings => 'Open Settings';
 
   @override
-  String get permVerifyNote =>
-      'Enable the toggle in Settings, then return to the app.';
+  String get permVerifyNote => 'Enable the toggle in Settings, then return to the app.';
 
   @override
   String get sound => 'Sound';
@@ -496,12 +479,10 @@ class AppLocalizationsEn extends AppLocalizations {
   }
 
   @override
-  String get permBgActivityReminder =>
-      'Also enable \"Allow background activity\" for AlarmHQ in Settings > Apps, so the alarm rings when the app is closed.';
+  String get permBgActivityReminder => 'Also enable \"Allow background activity\" for AlarmHQ in Settings > Apps, so the alarm rings when the app is closed.';
 
   @override
-  String get permUnusedBanner =>
-      '⚠️ Android may AUTO-REMOVE AlarmHQ\'s permissions — turn OFF \"Manage app if unused\" in Settings → Apps → AlarmHQ.';
+  String get permUnusedBanner => '⚠️ Android may AUTO-REMOVE AlarmHQ\'s permissions — turn OFF \"Manage app if unused\" in Settings → Apps → AlarmHQ.';
 
   @override
   String get calendar => 'Calendar';
@@ -549,8 +530,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get legendCalculated => 'Orange = calculated';
 
   @override
-  String get calendarHint =>
-      'Top: Gregorian  •  Bottom: Hijri (tap a date for detail)';
+  String get calendarHint => 'Top: Gregorian  •  Bottom: Hijri (tap a date for detail)';
 
   @override
   String get close => 'Close';
@@ -602,15 +582,13 @@ class AppLocalizationsEn extends AppLocalizations {
   String get fixPhoneTime => 'Fix phone time';
 
   @override
-  String get fixPhoneTimeDesc =>
-      'Open Date & Time settings with live atomic time on top, so you can match it exactly.';
+  String get fixPhoneTimeDesc => 'Open Date & Time settings with live atomic time on top, so you can match it exactly.';
 
   @override
   String get overlayTitle => 'Display over other apps';
 
   @override
-  String get overlayDesc =>
-      'Shows a small floating atomic clock over Settings while you fix the phone time.';
+  String get overlayDesc => 'Shows a small floating atomic clock over Settings while you fix the phone time.';
 
   @override
   String get swStart => 'Start';
@@ -659,4 +637,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get deleted => 'deleted';
+
+  @override
+  String get atomicTab => 'Atomic';
 }
