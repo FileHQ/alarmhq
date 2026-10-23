@@ -1288,6 +1288,24 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Atomic'**
   String get atomicTab;
+
+  /// No description provided for @exitTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Do you want to close the app?'**
+  String get exitTitle;
+
+  /// No description provided for @exitYes.
+  ///
+  /// In en, this message translates to:
+  /// **'Yes'**
+  String get exitYes;
+
+  /// No description provided for @exitNo.
+  ///
+  /// In en, this message translates to:
+  /// **'No'**
+  String get exitNo;
 }
 
 class _AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> {
