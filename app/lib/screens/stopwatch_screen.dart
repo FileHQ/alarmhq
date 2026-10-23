@@ -11,7 +11,10 @@ import 'package:alarmhq/theme/app_theme.dart';
 /// for UI updates. Disposing the screen stops UI updates but the Stopwatch
 /// keeps its elapsed time.
 class StopwatchScreen extends StatefulWidget {
-  const StopwatchScreen({super.key});
+  /// When true, renders without its own AppBar (embedded in ClockScreen).
+  final bool embedded;
+
+  const StopwatchScreen({super.key, this.embedded = false});
 
   @override
   State<StopwatchScreen> createState() => _StopwatchScreenState();
@@ -101,10 +104,12 @@ class _StopwatchScreenState extends State<StopwatchScreen> {
     final subColor = isLight ? Colors.black54 : Colors.white70;
 
     return Scaffold(
-      appBar: AppBar(
-        title: Text(l10n.stopwatch),
-        centerTitle: false,
-      ),
+      appBar: widget.embedded
+          ? null
+          : AppBar(
+              title: Text(l10n.stopwatch),
+              centerTitle: false,
+            ),
       body: SafeArea(
         child: Column(
           children: [
