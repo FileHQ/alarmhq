@@ -494,15 +494,18 @@ class _CityPickerScreenState extends State<_CityPickerScreen> {
             autofocus: true,
             onChanged: (v) => setState(() => _query = v),
             // v2.58: Urdu font for proper Nastaleeq rendering (was overlapping).
+            // v2.61: increased line height for Nastaleeq.
             style: const TextStyle(
               fontWeight: FontWeight.w400,
               fontFamily: 'JameelNoori',
+              height: 1.8,
             ),
             decoration: InputDecoration(
               hintText: l10n.searchCityHint,
               hintStyle: const TextStyle(
                 fontWeight: FontWeight.w400,
                 fontFamily: 'JameelNoori',
+                height: 1.8,
               ),
               border: InputBorder.none,
               contentPadding: const EdgeInsets.symmetric(
@@ -529,7 +532,8 @@ class _CityPickerScreenState extends State<_CityPickerScreen> {
           try {
             offset = widget.fmtOffset(widget.cityTime(e.zone).timeZoneOffset);
           } catch (_) {
-            offset = '';
+            // v2.61: fallback — show UTC instead of hiding badge
+            offset = 'UTC';
           }
           final subColor = isLight ? Colors.black54 : Colors.white70;
           final isUrdu =
