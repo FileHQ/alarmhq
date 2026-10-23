@@ -488,37 +488,42 @@ class _CityPickerScreenState extends State<_CityPickerScreen> {
         // v2.56: proper padding for the search field (was cramped).
         titleSpacing: 0,
         title: Padding(
-          padding: const EdgeInsets.symmetric(vertical: 8),
-          child: TextField(
-            controller: _controller,
-            autofocus: true,
-            onChanged: (v) => setState(() => _query = v),
-            // v2.58: Urdu font for proper Nastaleeq rendering (was overlapping).
-            // v2.61: increased line height for Nastaleeq.
-            style: const TextStyle(
-              fontWeight: FontWeight.w400,
-              fontFamily: 'JameelNoori',
-              height: 1.8,
-            ),
-            decoration: InputDecoration(
-              hintText: l10n.searchCityHint,
-              hintStyle: const TextStyle(
+          padding: const EdgeInsets.symmetric(vertical: 12),
+          child: SizedBox(
+            height: 56,
+            child: TextField(
+              controller: _controller,
+              autofocus: true,
+              onChanged: (v) => setState(() => _query = v),
+              // v2.58: Urdu font for proper Nastaleeq rendering.
+              // v2.63: taller field for Nastaleeq's tall glyphs.
+              style: const TextStyle(
                 fontWeight: FontWeight.w400,
                 fontFamily: 'JameelNoori',
-                height: 1.8,
+                height: 2.0,
+                fontSize: 18,
               ),
-              border: InputBorder.none,
-              contentPadding: const EdgeInsets.symmetric(
-                  horizontal: 12, vertical: 12),
-              suffixIcon: _query.isEmpty
-                  ? null
-                  : IconButton(
-                      icon: const Icon(Icons.clear),
-                      onPressed: () {
-                        _controller.clear();
-                        setState(() => _query = '');
-                      },
-                    ),
+              decoration: InputDecoration(
+                hintText: l10n.searchCityHint,
+                hintStyle: const TextStyle(
+                  fontWeight: FontWeight.w400,
+                  fontFamily: 'JameelNoori',
+                  height: 2.0,
+                  fontSize: 18,
+                ),
+                border: InputBorder.none,
+                contentPadding: const EdgeInsets.symmetric(
+                    horizontal: 12, vertical: 16),
+                suffixIcon: _query.isEmpty
+                    ? null
+                    : IconButton(
+                        icon: const Icon(Icons.clear),
+                        onPressed: () {
+                          _controller.clear();
+                          setState(() => _query = '');
+                        },
+                      ),
+              ),
             ),
           ),
         ),
@@ -539,32 +544,46 @@ class _CityPickerScreenState extends State<_CityPickerScreen> {
               Localizations.localeOf(context).languageCode == 'ur';
           // v2.55: custom layout with proper spacing (ListTile was cramped),
           // Urdu names when app is in Urdu.
+          // v2.63: apply Urdu font to prevent clipping.
           final cityName = isUrdu && e.cityUr.isNotEmpty ? e.cityUr : e.city;
           final countryName =
               isUrdu && e.countryUr.isNotEmpty ? e.countryUr : e.country;
+          final urduStyle = isUrdu
+              ? const TextStyle(
+                  fontFamily: 'JameelNoori',
+                  height: 1.6,
+                )
+              : null;
           return InkWell(
             onTap: added ? null : () => Navigator.of(context).pop(e),
             child: Padding(
               padding: const EdgeInsets.symmetric(
-                  horizontal: 16, vertical: 12),
+                  horizontal: 16, vertical: 14),
               child: Row(
+                crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
                   Expanded(
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
+                      mainAxisSize: MainAxisSize.min,
                       children: [
                         Text(
                           cityName,
-                          style: const TextStyle(
-                              fontWeight: FontWeight.w400, fontSize: 16),
+                          style: TextStyle(
+                              fontWeight: FontWeight.w400,
+                              fontSize: 16,
+                              fontFamily: urduStyle?.fontFamily,
+                              height: urduStyle?.height),
                         ),
-                        const SizedBox(height: 6),
+                        const SizedBox(height: 8),
                         Text(
                           countryName,
                           style: TextStyle(
                             fontWeight: FontWeight.w400,
                             fontSize: 13,
                             color: subColor,
+                            fontFamily: urduStyle?.fontFamily,
+                            height: urduStyle?.height,
                           ),
                         ),
                       ],
