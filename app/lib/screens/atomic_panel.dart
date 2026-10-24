@@ -56,32 +56,15 @@ class _AtomicPanelState extends State<AtomicPanel> {
     if (_fixing) return;
     setState(() => _fixing = true);
     try {
-      final allowed = await AtomicOverlayService.ensurePermission();
-      if (!allowed) {
-        if (mounted) {
-          ScaffoldMessenger.of(context).showSnackBar(
-            const SnackBar(
-              content: Text(
-                'Overlay permission denied — cannot show floating clock',
-                style: TextStyle(fontWeight: FontWeight.w400),
-              ),
-            ),
-          );
-        }
-        return;
-      }
-      final shown = await AtomicOverlayService.show();
-      if (!shown && mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(
-            content: Text(
-              'Could not show overlay',
-              style: TextStyle(fontWeight: FontWeight.w400),
-            ),
-          ),
-        );
-        return;
-      }
+      // v2.66: Notification method (her order) — replaces overlay which
+      // doesn't work on Realme/ColorOS. Show atomic time as ongoing
+      // notification, then open Date & Time settings.
+      final svc = AtomicTimeService.instance;
+      final atomicNow = svc.now();
+      final timeStr = _fmt12(atomicNow);
+      final dateStr =
+          '${atomicNow.day} ${_monthsUr[atomicNow.month - 1]} ${atomicNow.year}';
+      await AtomicOverlayService.showAtomicTimeNotification(timeStr, dateStr);
       await AtomicOverlayService.openDateTimeSettings();
     } catch (e) {
       if (mounted) {
