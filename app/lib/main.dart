@@ -34,6 +34,7 @@ class _AlarmHQAppState extends State<AlarmHQApp>
   bool _onboarded = false;
   int _tab = 0;
   bool _ringingDialogOpen = false;
+  bool _exitDialogOpen = false;
 
   @override
   void initState() {
@@ -49,50 +50,8 @@ class _AlarmHQAppState extends State<AlarmHQApp>
     if (state == AppLifecycleState.resumed) _checkRinging();
   }
 
-  /// v2.61: System back button handler (her order).
-  /// PopScope inside home: doesn't work — the root Navigator handles
-  /// back at app level. didPopRoute is the correct hook.
-  /// - On non-main tab: go back to Alarms tab.
-  /// - On main tab: confirm dialog "Do you want to close the app?"
-  @override
-  Future<bool> didPopRoute() async {
-    if (!_onboarded || !_ready) return false;
-    if (_tab != 0) {
-      setState(() => _tab = 0);
-      return true;
-    }
-    // On main screen: ask "Do you want to close the app?"
-    final l10n = AppLocalizations.of(_scaffoldKey.currentContext!);
-    final confirm = await showDialog<bool>(
-      context: _scaffoldKey.currentContext!,
-      builder: (ctx) => AlertDialog(
-        title: Text(
-          l10n?.exitTitle ?? 'Close app?',
-          style: const TextStyle(fontWeight: FontWeight.w400, fontSize: 17),
-        ),
-        actions: [
-          TextButton(
-            onPressed: () => Navigator.of(ctx).pop(false),
-            child: Text(
-              l10n?.exitNo ?? 'No',
-              style: const TextStyle(fontWeight: FontWeight.w400),
-            ),
-          ),
-          TextButton(
-            onPressed: () => Navigator.of(ctx).pop(true),
-            child: Text(
-              l10n?.exitYes ?? 'Yes',
-              style: const TextStyle(fontWeight: FontWeight.w400),
-            ),
-          ),
-        ],
-      ),
-    );
-    if (confirm == true) {
-      SystemNavigator.pop();
-    }
-    return true;
-  }
+  // v2.64: Back button now handled by PopScope around Scaffold (below).
+  // didPopRoute removed — was unreliable on her device.
 
   Future<void> _checkRinging() async {
     if (!_ready || _ringingDialogOpen) return;
@@ -181,7 +140,59 @@ class _AlarmHQAppState extends State<AlarmHQApp>
               : Builder(
               builder: (context) {
                 final l10n = AppLocalizations.of(context)!;
-                return Scaffold(
+                // v2.64: PopScope intercepts back button at Scaffold level.
+                // didPopRoute was unreliable — PopScope with canPop:false
+                // catches the system back button before Navigator does.
+                return PopScope(
+                  canPop: false,
+                  onPopInvokedWithResult: (didPop, result) async {
+                    if (didPop) return;
+                    if (_tab != 0) {
+                      setState(() => _tab = 0);
+                      return;
+                    }
+                    // On main tab: confirm dialog.
+                    if (_exitDialogOpen) return;
+                    _exitDialogOpen = true;
+                    try {
+                      final ctx = _scaffoldKey.currentContext;
+                      if (ctx == null) return;
+                      final confirm = await showDialog<bool>(
+                        context: ctx,
+                        builder: (dctx) => AlertDialog(
+                          title: Text(
+                            l10n.exitTitle,
+                            style: const TextStyle(
+                                fontWeight: FontWeight.w400, fontSize: 17),
+                          ),
+                          actions: [
+                            TextButton(
+                              onPressed: () => Navigator.of(dctx).pop(false),
+                              child: Text(
+                                l10n.exitNo,
+                                style: const TextStyle(
+                                    fontWeight: FontWeight.w400),
+                              ),
+                            ),
+                            TextButton(
+                              onPressed: () => Navigator.of(dctx).pop(true),
+                              child: Text(
+                                l10n.exitYes,
+                                style: const TextStyle(
+                                    fontWeight: FontWeight.w400),
+                              ),
+                            ),
+                          ],
+                        ),
+                      );
+                      if (confirm == true) {
+                        SystemNavigator.pop();
+                      }
+                    } finally {
+                      _exitDialogOpen = false;
+                    }
+                  },
+                  child: Scaffold(
                     key: _scaffoldKey,
                     body: _tab == 0
                         ? AlarmListScreen(repo: _repo, settings: _settings)
@@ -217,7 +228,8 @@ class _AlarmHQAppState extends State<AlarmHQApp>
                       ),
                     ],
                     ),
-                  );
+                  ),
+                );
               },
             ),
     );
