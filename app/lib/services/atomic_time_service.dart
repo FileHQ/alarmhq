@@ -129,7 +129,8 @@ class AtomicTimeService extends ChangeNotifier {
   /// Always LTR-formatted so Urdu RTL doesn't reverse the order.
   String offsetText() {
     final ms = _offset.inMilliseconds;
-    if (ms.abs() < 500) return '±0s';
+    // v2.66: LTR isolate on ALL cases (zero case was missing it — showed as "0±s").
+    if (ms.abs() < 500) return '\u2066±0s\u2069';
     final sign = ms > 0 ? '+' : '-';
     final absMs = ms.abs();
     final days = absMs ~/ (24 * 3600 * 1000);
