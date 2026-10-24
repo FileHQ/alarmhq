@@ -124,12 +124,26 @@ class AtomicTimeService extends ChangeNotifier {
   /// Falls back to device time if never synced.
   DateTime now() => DateTime.now().add(_offset);
 
-  /// Human-readable offset, e.g. "+2.3s" / "-0.8s" / "±0.0s".
+  /// Human-readable offset, e.g. "+2d 3h 15m 30s" / "-5m 20s" / "±0s".
+  /// v2.64: includes days (date difference), hours, minutes — not just seconds.
+  /// Always LTR-formatted so Urdu RTL doesn't reverse the order.
   String offsetText() {
     final ms = _offset.inMilliseconds;
-    if (ms.abs() < 500) return '±0.0s';
-    final s = (ms.abs() / 1000).toStringAsFixed(1);
-    return ms > 0 ? '+${s}s' : '-${s}s';
+    if (ms.abs() < 500) return '±0s';
+    final sign = ms > 0 ? '+' : '-';
+    final absMs = ms.abs();
+    final days = absMs ~/ (24 * 3600 * 1000);
+    final hours = (absMs % (24 * 3600 * 1000)) ~/ (3600 * 1000);
+    final mins = (absMs % (3600 * 1000)) ~/ (60 * 1000);
+    final secs = ((absMs % (60 * 1000)) / 1000).toStringAsFixed(0);
+    final parts = <String>[];
+    if (days > 0) parts.add('${days}d');
+    if (hours > 0) parts.add('${hours}h');
+    if (mins > 0) parts.add('${mins}m');
+    // Always show seconds if nothing else, or if there are leftover seconds.
+    if (parts.isEmpty || int.parse(secs) > 0) parts.add('${secs}s');
+    // LTR isolate so RTL locales don't reverse the order.
+    return '\u2066$sign${parts.join(' ')}\u2069';
   }
 
   /// Stream ticking every second with the atomic-corrected time.
