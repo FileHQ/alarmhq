@@ -50,8 +50,17 @@ class _AlarmHQAppState extends State<AlarmHQApp>
     if (state == AppLifecycleState.resumed) _checkRinging();
   }
 
-  // v2.64: Back button now handled by PopScope around Scaffold (below).
-  // didPopRoute removed — was unreliable on her device.
+  // v2.66: Back button — BOTH PopScope (below) AND didPopRoute (fallback).
+  // PopScope alone didn't work on her Realme device.
+  @override
+  Future<bool> didPopRoute() async {
+    if (!_onboarded || !_ready) return false;
+    if (_tab != 0) {
+      setState(() => _tab = 0);
+      return true;
+    }
+    return false; // Let PopScope handle the dialog on main tab.
+  }
 
   Future<void> _checkRinging() async {
     if (!_ready || _ringingDialogOpen) return;
