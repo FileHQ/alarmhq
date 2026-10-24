@@ -54,4 +54,28 @@ class AtomicOverlayService {
   static Future<void> openDateTimeSettings() async {
     await _alarm.invokeMethod('openDateTimeSettings');
   }
+
+  /// v2.66: Show atomic time as an ongoing notification (replaces overlay
+  /// on Realme/ColorOS where system_alert_window doesn't work).
+  static Future<bool> showAtomicTimeNotification(
+      String timeText, String dateText) async {
+    try {
+      final ok = await _alarm.invokeMethod<bool>(
+        'showAtomicTimeNotification',
+        {'timeText': timeText, 'dateText': dateText},
+      );
+      return ok == true;
+    } catch (_) {
+      return false;
+    }
+  }
+
+  /// Hide the atomic time notification.
+  static Future<void> hideAtomicTimeNotification() async {
+    try {
+      await _alarm.invokeMethod('hideAtomicTimeNotification');
+    } catch (_) {
+      // Best effort.
+    }
+  }
 }
