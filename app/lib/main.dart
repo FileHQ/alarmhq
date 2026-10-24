@@ -152,13 +152,13 @@ class _AlarmHQAppState extends State<AlarmHQApp>
                 // v2.64: PopScope intercepts back button at Scaffold level.
                 // didPopRoute was unreliable — PopScope with canPop:false
                 // catches the system back button before Navigator does.
-                return PopScope(
-                  canPop: false,
-                  onPopInvokedWithResult: (didPop, result) async {
-                    if (didPop) return;
+                // v2.68: WillPopScope (deprecated API, but different
+                // mechanism than PopScope — trying as last resort).
+                return WillPopScope(
+                  onWillPop: () async {
                     if (_tab != 0) {
                       setState(() => _tab = 0);
-                      return;
+                      return false;
                     }
                     // On main tab: confirm dialog.
                     if (_exitDialogOpen) return;
@@ -200,6 +200,7 @@ class _AlarmHQAppState extends State<AlarmHQApp>
                     } finally {
                       _exitDialogOpen = false;
                     }
+                    return false;
                   },
                   child: Scaffold(
                     key: _scaffoldKey,
