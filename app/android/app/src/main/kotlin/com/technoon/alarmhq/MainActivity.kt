@@ -3,6 +3,7 @@ package com.technoon.alarmhq
 import android.Manifest
 import android.app.Activity
 import android.app.AlarmManager
+import android.app.NotificationChannel
 import android.app.NotificationManager
 import android.content.Context
 import android.content.Intent
@@ -17,6 +18,7 @@ import android.os.Handler
 import android.os.Looper
 import android.os.PowerManager
 import android.provider.Settings
+import androidx.core.app.NotificationCompat
 import io.flutter.embedding.android.FlutterView
 import io.flutter.embedding.engine.FlutterEngine
 import io.flutter.embedding.engine.dart.DartExecutor
@@ -217,6 +219,48 @@ class MainActivity : Activity() {
                 "openDateTimeSettings" -> {
                     startActivity(Intent(Settings.ACTION_DATE_SETTINGS))
                     result.success(null)
+                }
+                // v2.66: Atomic time notification (replaces overlay on Realme).
+                // Shows an ongoing notification with the atomic time so the
+                // user can see it while in Date & Time settings.
+                "showAtomicTimeNotification" -> {
+                    val timeText = call.argument<String>("timeText") ?: ""
+                    val dateText = call.argument<String>("dateText") ?: ""
+                    try {
+                        val nm = getSystemService(
+                            Context.NOTIFICATION_SERVICE
+                        ) as NotificationManager
+                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                            val channel = NotificationChannel(
+                                "atomic_time",
+                                "Atomic Clock",
+                                NotificationManager.IMPORTANCE_DEFAULT,
+                            )
+                            nm.createNotificationChannel(channel)
+                        }
+                        val notif = NotificationCompat.Builder(this, "atomic_time")
+                            .setSmallIcon(android.R.drawable.ic_lock_idle_alarm)
+                            .setContentTitle("⏱️ Atomic Time: $timeText")
+                            .setContentText(dateText)
+                            .setOngoing(true)
+                            .setAutoCancel(false)
+                            .build()
+                        nm.notify(9999, notif)
+                        result.success(true)
+                    } catch (e: Exception) {
+                        result.success(false)
+                    }
+                }
+                "hideAtomicTimeNotification" -> {
+                    try {
+                        val nm = getSystemService(
+                            Context.NOTIFICATION_SERVICE
+                        ) as NotificationManager
+                        nm.cancel(9999)
+                        result.success(true)
+                    } catch (e: Exception) {
+                        result.success(false)
+                    }
                 }
                 // ---- full-screen intent (v2.11, CRITICAL): on Android 14+
                 // USE_FULL_SCREEN_INTENT must be granted by the user, or
