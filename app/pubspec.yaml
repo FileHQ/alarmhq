@@ -1,7 +1,7 @@
 name: alarmhq
 description: AlarmHQ - personal alarm app (Urdu + English).
 publish_to: 'none'
-version: 1.0.64+4065
+version: 1.0.65+4066
 
 environment:
   sdk: ^3.13.5
