@@ -262,6 +262,52 @@ class MainActivity : Activity() {
                         result.success(false)
                     }
                 }
+                // ---- native atomic overlay (v2.69, ClockSync-style) ----
+                // Direct WindowManager overlay via a native Service — works
+                // on non-rooted devices (only needs SYSTEM_ALERT_WINDOW).
+                "showNativeAtomicOverlay" -> {
+                    try {
+                        val offsetMs = (call.argument<Number>("offsetMs")?.toLong()) ?: 0L
+                        val intent = Intent(this, AtomicOverlayNativeService::class.java).apply {
+                            putExtra(AtomicOverlayNativeService.EXTRA_OFFSET_MS, offsetMs)
+                        }
+                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                            startForegroundService(intent)
+                        } else {
+                            startService(intent)
+                        }
+                        result.success(true)
+                    } catch (e: Exception) {
+                        result.success(false)
+                    }
+                }
+                "hideNativeAtomicOverlay" -> {
+                    try {
+                        stopService(Intent(this, AtomicOverlayNativeService::class.java))
+                        result.success(true)
+                    } catch (e: Exception) {
+                        result.success(false)
+                    }
+                }
+                // ---- root check + ClockSync time-set (v2.69) ----
+                "isRooted" -> {
+                    result.success(checkRoot())
+                }
+                "setSystemTimeRoot" -> {
+                    val timeMs = (call.argument<Number>("timeMs")?.toLong()) ?: 0L
+                    result.success(setSystemTimeViaRoot(timeMs))
+                }
+                // ---- timezone (v2.69, works WITHOUT root) ----
+                "setTimeZone" -> {
+                    val zoneId = call.argument<String>("zoneId") ?: ""
+                    try {
+                        val am = getSystemService(Context.ALARM_SERVICE) as android.app.AlarmManager
+                        am.setTimeZone(zoneId)
+                        result.success(true)
+                    } catch (e: Exception) {
+                        result.success(false)
+                    }
+                }
                 // ---- full-screen intent (v2.11, CRITICAL): on Android 14+
                 // USE_FULL_SCREEN_INTENT must be granted by the user, or
                 // setFullScreenIntent() is silently ignored and the alarm
@@ -604,5 +650,44 @@ class MainActivity : Activity() {
                 )
             )
         } catch (_: Exception) { /* best effort */ }
+    }
+
+    // ---- ClockSync-style root helpers (v2.69) ----
+    private fun checkRoot(): Boolean {
+        // ClockSync tries: su, /system/xbin/su, /system/bin/su
+        for (su in arrayOf("su", "/system/xbin/su", "/system/bin/su")) {
+            try {
+                val p = Runtime.getRuntime().exec(arrayOf(su, "-c", "id"))
+                val out = p.inputStream.bufferedReader().readText()
+                p.waitFor()
+                if (out.contains("uid=0")) return true
+            } catch (_: Exception) { /* try next */ }
+        }
+        return false
+    }
+
+    private fun runSuCommand(cmd: String): Boolean {
+        for (su in arrayOf("su", "/system/xbin/su", "/system/bin/su")) {
+            try {
+                val p = Runtime.getRuntime().exec(arrayOf(su, "-c", cmd))
+                p.waitFor()
+                if (p.exitValue() == 0) return true
+            } catch (_: Exception) { /* try next */ }
+        }
+        return false
+    }
+
+    private fun setSystemTimeViaRoot(timeMs: Long): Boolean {
+        // ClockSync method: chmod 666 /dev/alarm -> setCurrentTimeMillis
+        // -> chmod 664 /dev/alarm. Only works on rooted devices.
+        if (!checkRoot()) return false
+        runSuCommand("chmod 666 /dev/alarm")
+        val ok = try {
+            android.os.SystemClock.setCurrentTimeMillis(timeMs)
+        } catch (_: Exception) {
+            false
+        }
+        runSuCommand("chmod 664 /dev/alarm")
+        return ok
     }
 }
