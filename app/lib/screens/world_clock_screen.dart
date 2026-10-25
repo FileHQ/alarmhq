@@ -495,22 +495,22 @@ class _CityPickerScreenState extends State<_CityPickerScreen> {
               controller: _controller,
               autofocus: true,
               onChanged: (v) => setState(() => _query = v),
-              // v2.69: System font for search field (JameelNoori's narrow
-              // spaces caused یا/ملک overlap despite double/triple/NBSP).
-              // System Noto Nastaliq renders Urdu spacing correctly.
+              // v2.70: Noto Nastaliq Urdu (bundled) for search field.
+              // JameelNoori's narrow spaces caused یا/ملک overlap;
+              // system font on Realme/ColorOS didn't fix it either.
               style: const TextStyle(
                 fontWeight: FontWeight.w400,
+                fontFamily: 'NotoNastaliqUrdu',
                 height: 1.6,
-                fontSize: 18,
-                letterSpacing: 0.5,
+                fontSize: 16,
               ),
               decoration: InputDecoration(
                 hintText: l10n.searchCityHint,
                 hintStyle: const TextStyle(
                   fontWeight: FontWeight.w400,
+                  fontFamily: 'NotoNastaliqUrdu',
                   height: 1.6,
-                  fontSize: 18,
-                  letterSpacing: 0.5,
+                  fontSize: 16,
                 ),
                 border: InputBorder.none,
                 contentPadding: const EdgeInsets.symmetric(
