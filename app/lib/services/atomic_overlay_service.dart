@@ -79,6 +79,17 @@ class AtomicOverlayService {
     }
   }
 
+  /// v2.77: Open the PiP atomic clock activity.
+  static Future<bool> openAtomicPip(int offsetMs) async {
+    try {
+      return await _alarm.invokeMethod<bool>(
+              'openAtomicPip', {'offsetMs': offsetMs}) ??
+          false;
+    } catch (_) {
+      return false;
+    }
+  }
+
   /// v2.74: Check battery optimization exemption.
   static Future<bool> isIgnoringBatteryOptimizations() async {
     try {
