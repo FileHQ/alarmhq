@@ -48,6 +48,7 @@ class AtomicClockPipActivity : Activity() {
     // in PiP — opening it immediately raced the PiP transition and
     // the system shrank Settings instead of our activity (v2.77 bug).
     private var openSettingsOnPip = false
+    private var rootLayout: LinearLayout? = null
     private var timeText: TextView? = null
     private var dateText: TextView? = null
     private var buttonsRow: LinearLayout? = null
@@ -70,6 +71,7 @@ class AtomicClockPipActivity : Activity() {
             setBackgroundColor(Color.parseColor("#1A1A1A"))
             setPadding(32, 32, 32, 32)
         }
+        rootLayout = root
         timeText = TextView(this).apply {
             textSize = 32f
             setTextColor(Color.parseColor("#A3E635"))
@@ -114,6 +116,25 @@ class AtomicClockPipActivity : Activity() {
         newConfig: Configuration,
     ) {
         super.onPictureInPictureModeChanged(isInPictureInPictureMode, newConfig)
+        // v2.80: PiP-optimized layout. Full-screen 32sp time wraps and
+        // clips in the small PiP window (v2.79 showed only "PM").
+        // In PiP: single-line smaller time, date hidden (only the time
+        // matters while setting the clock), tight padding.
+        if (isInPictureInPictureMode) {
+            timeText?.apply {
+                textSize = 22f
+                setSingleLine(true)
+            }
+            dateText?.visibility = View.GONE
+            rootLayout?.setPadding(16, 16, 16, 16)
+        } else {
+            timeText?.apply {
+                textSize = 32f
+                setSingleLine(false)
+            }
+            dateText?.visibility = View.VISIBLE
+            rootLayout?.setPadding(32, 32, 32, 32)
+        }
         // In PiP: clock only, no buttons (they don't fit the small window).
         buttonsRow?.visibility = if (isInPictureInPictureMode) View.GONE else View.VISIBLE
         // v2.78: PiP transition is COMPLETE here — now it is safe to
