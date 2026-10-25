@@ -210,7 +210,9 @@ class _AlarmHQAppState extends State<AlarmHQApp>
                         ),
                       );
                       if (confirm == true) {
-                        SystemNavigator.pop();
+                        // v2.73: SystemNavigator.pop() is a no-op in a
+                        // plain Activity — finish natively instead.
+                        _alarmChannel.invokeMethod('exitApp');
                       }
                     } finally {
                       _exitDialogOpen = false;
