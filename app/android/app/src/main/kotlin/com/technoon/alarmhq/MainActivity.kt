@@ -331,6 +331,19 @@ class MainActivity : Activity() {
                     finishAffinity()
                     result.success(null)
                 }
+                // v2.77: Open the PiP atomic clock activity.
+                "openAtomicPip" -> {
+                    try {
+                        val offsetMs = (call.argument<Number>("offsetMs")?.toLong()) ?: 0L
+                        val intent = Intent(this, AtomicClockPipActivity::class.java).apply {
+                            putExtra(AtomicClockPipActivity.EXTRA_OFFSET_MS, offsetMs)
+                        }
+                        startActivity(intent)
+                        result.success(true)
+                    } catch (e: Exception) {
+                        result.success(false)
+                    }
+                }
                 // v2.74: Battery optimization exemption — ColorOS kills
                 // the overlay service when the app backgrounds (Settings
                 // opens) unless the app is exempt. Check + request dialog.
