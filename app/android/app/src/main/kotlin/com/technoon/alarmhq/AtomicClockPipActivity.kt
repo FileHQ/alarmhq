@@ -16,6 +16,7 @@ import android.view.View
 import android.widget.Button
 import android.widget.LinearLayout
 import android.widget.TextView
+import android.widget.Toast
 import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
@@ -52,6 +53,11 @@ class AtomicClockPipActivity : Activity() {
     private var timeText: TextView? = null
     private var dateText: TextView? = null
     private var buttonsRow: LinearLayout? = null
+    // v2.83 fallback chain: PiP -> overlay -> note-the-time.
+    private var overlayStarted = false
+    private var noteFallback = false
+    private var noticeText: TextView? = null
+    private var settingsBtn: Button? = null
     private val handler = Handler(Looper.getMainLooper())
 
     private val tickTask = object : Runnable {
@@ -84,20 +90,46 @@ class AtomicClockPipActivity : Activity() {
             gravity = Gravity.CENTER
         }
         root.addView(dateText)
+        // v2.83: shown only in the note-the-time fallback (no PiP,
+        // no overlay) — explains why no floating clock will appear.
+        noticeText = TextView(this).apply {
+            text = "اس موبائل میں چھوٹی window دستیاب نہیں ہے۔ اوپر والا ٹائم نوٹ کر لیں، پھر Settings کھول کر وہی ٹائم لگائیں۔"
+            textSize = 14f
+            setTextColor(Color.parseColor("#B3FFFFFF"))
+            gravity = Gravity.CENTER
+            visibility = View.GONE
+            setPadding(32, 24, 32, 0)
+        }
+        root.addView(noticeText)
 
         buttonsRow = LinearLayout(this).apply {
             orientation = LinearLayout.HORIZONTAL
             gravity = Gravity.CENTER
             setPadding(0, 32, 0, 0)
         }
-        val settingsBtn = Button(this).apply {
+        settingsBtn = Button(this).apply {
             text = "Settings کھولیں"
             setOnClickListener { enterPipAndOpenSettings() }
         }
         buttonsRow?.addView(settingsBtn)
         val closeBtn = Button(this).apply {
             text = "بند کریں"
-            setOnClickListener { finish() }
+            setOnClickListener {
+                // v2.83: stop a fallback overlay so no orphan clock
+                // floats after the user closes this screen.
+                if (overlayStarted) {
+                    try {
+                        stopService(
+                            Intent(
+                                this@AtomicClockPipActivity,
+                                AtomicOverlayNativeService::class.java,
+                            ),
+                        )
+                    } catch (_: Exception) {
+                    }
+                }
+                finish()
+            }
         }
         buttonsRow?.addView(closeBtn)
         root.addView(buttonsRow)
@@ -108,6 +140,15 @@ class AtomicClockPipActivity : Activity() {
 
     override fun onDestroy() {
         handler.removeCallbacks(tickTask)
+        // v2.83: system Back also finishes — stop a fallback overlay
+        // then too (isFinishing is false on rotation, so a config
+        // change does not kill an overlay the user is still using).
+        if (overlayStarted && isFinishing) {
+            try {
+                stopService(Intent(this, AtomicOverlayNativeService::class.java))
+            } catch (_: Exception) {
+            }
+        }
         super.onDestroy()
     }
 
@@ -169,7 +210,18 @@ class AtomicClockPipActivity : Activity() {
         dateText?.text = SimpleDateFormat("d MMMM yyyy", Locale.US).format(t)
     }
 
+    // v2.83 fallback chain, in order:
+    //  1. PiP (system window; best on modern phones).
+    //  2. Overlay service (needs SYSTEM_ALERT_WINDOW; works where
+    //     PiP does not exist, e.g. older Android with looser rules).
+    //  3. Note-the-time screen (always works: clock stays visible
+    //     here, user notes it, then opens plain Settings).
     private fun enterPipAndOpenSettings() {
+        // Already in note-time mode: this tap just opens Settings.
+        if (noteFallback) {
+            openPlainSettings()
+            return
+        }
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             // v2.78: Enter PiP ONLY. Settings opens from
             // onPictureInPictureModeChanged once PiP is confirmed.
@@ -180,29 +232,49 @@ class AtomicClockPipActivity : Activity() {
                 .setAspectRatio(Rational(4, 3))
                 .build()
             val entered = enterPictureInPictureMode(params)
-            if (!entered) {
-                // PiP refused (e.g. disabled by OEM) — fall back to
-                // plain Settings so the user is not stuck.
-                openSettingsOnPip = false
-                try {
-                    val si = Intent(Settings.ACTION_DATE_SETTINGS).apply {
-                        addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
-                    }
-                    startActivity(si)
-                } catch (_: Exception) {
-                    // Best effort.
-                }
-            }
-        } else {
-            // Pre-Oreo: no PiP, just open Settings.
+            if (entered) return
+            // PiP refused (e.g. disabled by OEM) — try overlay below.
+            openSettingsOnPip = false
+        }
+        // PiP unavailable (pre-Oreo) or refused: try overlay.
+        if (Settings.canDrawOverlays(this)) {
             try {
-                val si = Intent(Settings.ACTION_DATE_SETTINGS).apply {
-                    addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+                val intent = Intent(this, AtomicOverlayNativeService::class.java).apply {
+                    putExtra(AtomicOverlayNativeService.EXTRA_OFFSET_MS, offsetMs)
                 }
-                startActivity(si)
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                    startForegroundService(intent)
+                } else {
+                    startService(intent)
+                }
+                overlayStarted = true
+                // This screen stays behind Settings, so Back returns
+                // here (recovery if the overlay itself gets killed).
+                Toast.makeText(
+                    this,
+                    "تیرتی گھڑی چل رہی ہے — اگر Settings پر نظر نہ آئے تو Back دبا کر ٹائم نوٹ کر لیں",
+                    Toast.LENGTH_LONG,
+                ).show()
+                openPlainSettings()
+                return
             } catch (_: Exception) {
-                // Best effort.
+                // Fall through to note-the-time.
             }
+        }
+        // Overlay also unavailable (no permission / failed):
+        // note-the-time fallback — clock stays visible here.
+        noteFallback = true
+        noticeText?.visibility = View.VISIBLE
+    }
+
+    private fun openPlainSettings() {
+        try {
+            val si = Intent(Settings.ACTION_DATE_SETTINGS).apply {
+                addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+            }
+            startActivity(si)
+        } catch (_: Exception) {
+            // Best effort.
         }
     }
 }
