@@ -79,6 +79,24 @@ class AtomicOverlayService {
     }
   }
 
+  /// v2.72: Check overlay permission (SYSTEM_ALERT_WINDOW).
+  static Future<bool> canDrawOverlays() async {
+    try {
+      return await _alarm.invokeMethod<bool>('canDrawOverlays') ?? false;
+    } catch (_) {
+      return false;
+    }
+  }
+
+  /// v2.72: Open the overlay-permission settings page.
+  static Future<void> openOverlaySettings() async {
+    try {
+      await _alarm.invokeMethod('openOverlaySettings');
+    } catch (_) {
+      // Best effort.
+    }
+  }
+
   /// v2.69: Native overlay (ClockSync-style) — direct WindowManager via
   /// a native Service. Works on non-rooted devices (only needs
   /// SYSTEM_ALERT_WINDOW). Takes the atomic offset in ms; the service
