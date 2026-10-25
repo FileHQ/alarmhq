@@ -154,7 +154,6 @@ class _AlarmHQAppState extends State<AlarmHQApp>
       darkTheme: AppTheme.dark(),
       themeMode: _settings.theme,
       locale: _settings.locale,
-      navigatorObservers: [_BackObserver()],
       localizationsDelegates: AppLocalizations.localizationsDelegates,
       supportedLocales: AppLocalizations.supportedLocales,
       home: !_ready
@@ -262,39 +261,5 @@ class _AlarmHQAppState extends State<AlarmHQApp>
               },
             ),
     );
-  }
-}
-
-// v2.71: Reports Navigator stack depth to native code so MainActivity
-// knows whether back belongs to Flutter (pushed route/dialog) or to
-// native handling (root route -> tab 0 / exit dialog).
-class _BackObserver extends NavigatorObserver {
-  static const _ch = MethodChannel('com.technoon.alarmhq/alarm');
-
-  void _report() {
-    // navigator null during transitions — treat as canPop to stay safe.
-    final n = navigator;
-    final canPop = n == null ? true : n.canPop();
-    _ch.invokeMethod('setCanPop', {'canPop': canPop});
-  }
-
-  @override
-  void didPush(Route<dynamic> route, Route<dynamic>? previousRoute) {
-    _report();
-  }
-
-  @override
-  void didPop(Route<dynamic> route, Route<dynamic>? previousRoute) {
-    _report();
-  }
-
-  @override
-  void didRemove(Route<dynamic> route, Route<dynamic>? previousRoute) {
-    _report();
-  }
-
-  @override
-  void didReplace({Route<dynamic>? newRoute, Route<dynamic>? oldRoute}) {
-    _report();
   }
 }
