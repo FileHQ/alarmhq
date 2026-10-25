@@ -58,28 +58,17 @@ class MainActivity : Activity() {
         setupChannels(engine)
     }
 
-    // v2.72: FORWARD back presses to the Flutter engine instead of
-    // handling natively. Root cause of all back-button failures: this
-    // plain Activity never forwarded back to Flutter's Navigator, so
-    // the Activity just finished (app exit) before Dart could pop a
-    // route, switch to tab 0, or show the exit dialog. NavigationChannel
-    // .popRoute() sends the standard pop message; Dart's Navigator +
-    // WillPopScope then do the right thing: pop picker/dialog, go to
-    // tab 0, or show the exit dialog on the root route.
-    override fun dispatchKeyEvent(event: android.view.KeyEvent): Boolean {
-        if (event.keyCode == android.view.KeyEvent.KEYCODE_BACK &&
-            event.action == android.view.KeyEvent.ACTION_DOWN
-        ) {
-            flutterEngine?.navigationChannel?.popRoute()
-            return true
-        }
-        return super.dispatchKeyEvent(event)
-    }
-
+    // v2.73: FORWARD back presses to the Flutter engine. Root cause
+    // of all back-button failures: this plain Activity never forwarded
+    // back to Flutter's Navigator, so the Activity just finished (app
+    // exit) before Dart could pop a route, switch to tab 0, or show
+    // the exit dialog. NavigationChannel.popRoute() sends the standard
+    // pop message; Dart's Navigator + WillPopScope then do the right
+    // thing. ONLY onBackPressed (covers button + gesture); dispatchKey
+    // Event caused double popRoute sends (the 3-press bug).
     @Deprecated("Deprecated in Java")
     override fun onBackPressed() {
-        // Gesture navigation back (no KeyEvent) — forward to engine too.
-        // Never call super: that finishes the Activity (the app-exit bug).
+        // Never call super: that finishes the Activity (app-exit bug).
         flutterEngine?.navigationChannel?.popRoute()
     }
 
@@ -334,6 +323,13 @@ class MainActivity : Activity() {
                 "setSystemTimeRoot" -> {
                     val timeMs = (call.argument<Number>("timeMs")?.toLong()) ?: 0L
                     result.success(setSystemTimeViaRoot(timeMs))
+                }
+                // v2.73: Exit app — SystemNavigator.pop() does NOT work
+                // in a plain Activity (engine has no Activity binding),
+                // so the dialog's Yes button must finish natively.
+                "exitApp" -> {
+                    finishAffinity()
+                    result.success(null)
                 }
                 // v2.72: Overlay permission check (SYSTEM_ALERT_WINDOW).
                 "canDrawOverlays" -> {
