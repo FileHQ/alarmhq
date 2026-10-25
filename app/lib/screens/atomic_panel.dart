@@ -120,10 +120,52 @@ class _AtomicPanelState extends State<AtomicPanel> {
         await AtomicOverlayService.openOverlaySettings();
         return;
       }
-      // Native overlay (ClockSync SyncAssistService method).
+      // v2.76: ClockSync method — overlay FIRST, Settings LATER.
+      // Auto-opening Settings instantly backgrounds the app before
+      // the service has firmly become foreground, so ColorOS kills
+      // it. Show the overlay, then let the USER open Settings via
+      // the dialog button (seconds later, service firmly foreground).
       await AtomicOverlayService.showNativeOverlay(
           svc.offset.inMilliseconds);
-      await AtomicOverlayService.openDateTimeSettings();
+      if (!mounted) return;
+      final openSettings = await showDialog<bool>(
+        context: context,
+        barrierDismissible: true,
+        builder: (dctx) => AlertDialog(
+          title: const Text(
+            'اٹامک ٹائم اوپر نظر آ رہا ہے',
+            style: TextStyle(fontWeight: FontWeight.w400, fontSize: 17),
+          ),
+          content: const Text(
+            'اب Settings میں جا کر فون کا ٹائم اس سے ملا کر سیٹ کریں۔',
+            style: TextStyle(fontWeight: FontWeight.w400),
+          ),
+          actions: [
+            TextButton(
+              onPressed: () => Navigator.of(dctx).pop(false),
+              child: const Text(
+                'اوورلے بند کریں',
+                style: TextStyle(fontWeight: FontWeight.w400),
+              ),
+            ),
+            TextButton(
+              onPressed: () => Navigator.of(dctx).pop(true),
+              child: const Text(
+                'Settings کھولیں',
+                style: TextStyle(fontWeight: FontWeight.w400),
+              ),
+            ),
+          ],
+        ),
+      );
+      if (openSettings == true) {
+        await AtomicOverlayService.openDateTimeSettings();
+      } else if (openSettings == false) {
+        await AtomicOverlayService.hideNativeOverlay();
+      }
+      // barrierDismissible: dialog dismissed by tapping outside leaves
+      // the overlay running so the user can still open Settings manually
+      // (ClockSync behaviour).
     } catch (e) {
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
