@@ -35,6 +35,9 @@ class MainActivity : Activity() {
     // handling needs it because this is a plain Activity, not
     // FlutterActivity — Flutter's own back handling never fires here.
     private var currentTab = 0
+    // v2.71: True when Flutter has a pushed route/dialog (edit screen
+    // etc.) — then back belongs to Flutter, not to native handling.
+    private var flutterCanPop = false
 
     companion object {
         private const val PICK_AUDIO_REQUEST = 1001
@@ -58,22 +61,48 @@ class MainActivity : Activity() {
         setupChannels(engine)
     }
 
-    // v2.70: NATIVE back button handling. This Activity is a plain
-    // Activity (not FlutterActivity), so Flutter's WillPopScope/PopScope
-    // never receive back presses on Realme/ColorOS — the Activity just
-    // finished. Handle it here: other tab -> go to Alarms tab;
-    // Alarms tab -> native exit-confirm dialog.
+    // v2.71: NATIVE back button handling. This Activity is a plain
+    // Activity (not FlutterActivity), and Flutter's engine consumes
+    // the back press before onBackPressed is ever called — so
+    // intercept at dispatchKeyEvent, BEFORE the FlutterView sees it.
+    // Only when Flutter is on its root route (!flutterCanPop); pushed
+    // routes/dialogs keep Flutter's own back handling.
+    override fun dispatchKeyEvent(event: android.view.KeyEvent): Boolean {
+        if (event.keyCode == android.view.KeyEvent.KEYCODE_BACK &&
+            event.action == android.view.KeyEvent.ACTION_DOWN &&
+            !flutterCanPop
+        ) {
+            handleNativeBack()
+            return true
+        }
+        return super.dispatchKeyEvent(event)
+    }
+
     @Deprecated("Deprecated in Java")
     override fun onBackPressed() {
+        // Fallback if dispatchKeyEvent path is ever bypassed.
+        if (!flutterCanPop) {
+            handleNativeBack()
+        } else {
+            super.onBackPressed()
+        }
+    }
+
+    private var exitDialogShowing = false
+
+    private fun handleNativeBack() {
         if (currentTab != 0) {
             alarmChannel?.invokeMethod("goToTab0", null)
             return
         }
+        if (exitDialogShowing) return
+        exitDialogShowing = true
         android.app.AlertDialog.Builder(this)
             .setTitle("ایپ بند کریں؟")
             .setMessage("کیا آپ ایپ بند کرنا چاہتے ہیں؟")
             .setPositiveButton("جی ہاں") { _, _ -> finish() }
             .setNegativeButton("جی نہیں", null)
+            .setOnDismissListener { exitDialogShowing = false }
             .show()
     }
 
@@ -89,6 +118,11 @@ class MainActivity : Activity() {
                 // handling knows whether to go to tab 0 or exit.
                 "setCurrentTab" -> {
                     currentTab = (call.argument<Number>("tab")?.toInt()) ?: 0
+                    result.success(null)
+                }
+                // v2.71: Flutter reports whether its Navigator can pop.
+                "setCanPop" -> {
+                    flutterCanPop = (call.argument<Boolean>("canPop")) ?: false
                     result.success(null)
                 }
                 "scheduleAlarm" -> {
