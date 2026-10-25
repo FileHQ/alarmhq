@@ -118,15 +118,23 @@ class AtomicClockPipActivity : Activity() {
         super.onPictureInPictureModeChanged(isInPictureInPictureMode, newConfig)
         // v2.80: PiP-optimized layout. Full-screen 32sp time wraps and
         // clips in the small PiP window (v2.79 showed only "PM").
-        // In PiP: single-line smaller time, date hidden (only the time
-        // matters while setting the clock), tight padding.
+        // v2.81: time was one line but its TOP was cut by the system
+        // tap-label ("AlarmHQ" bar) — so in PiP the time now sits
+        // BELOW the label zone (large top padding) in a taller window.
+        // In PiP: single-line time, date hidden (only the time
+        // matters while setting the clock).
         if (isInPictureInPictureMode) {
             timeText?.apply {
-                textSize = 22f
+                textSize = 24f
                 setSingleLine(true)
             }
             dateText?.visibility = View.GONE
-            rootLayout?.setPadding(16, 16, 16, 16)
+            val d = resources.displayMetrics.density
+            // Top padding pushes time below the system label zone.
+            rootLayout?.setPadding(
+                (16 * d).toInt(), (64 * d).toInt(),
+                (16 * d).toInt(), (16 * d).toInt(),
+            )
         } else {
             timeText?.apply {
                 textSize = 32f
@@ -166,8 +174,10 @@ class AtomicClockPipActivity : Activity() {
             // v2.78: Enter PiP ONLY. Settings opens from
             // onPictureInPictureModeChanged once PiP is confirmed.
             openSettingsOnPip = true
+            // v2.81: 4:3 (taller) — 16:9 was too short; the system tap
+            // label ("AlarmHQ" bar) covered the top of the time.
             val params = PictureInPictureParams.Builder()
-                .setAspectRatio(Rational(16, 9))
+                .setAspectRatio(Rational(4, 3))
                 .build()
             val entered = enterPictureInPictureMode(params)
             if (!entered) {
