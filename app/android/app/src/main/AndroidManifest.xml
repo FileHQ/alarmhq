@@ -17,6 +17,7 @@
     <uses-permission android:name="android.permission.FOREGROUND_SERVICE_MEDIA_PLAYBACK" />
     <uses-permission android:name="android.permission.REQUEST_IGNORE_BATTERY_OPTIMIZATIONS" />
     <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW" />
+    <uses-permission android:name="android.permission.SET_TIME_ZONE" />
 
     <application
         android:label="AlarmHQ"
@@ -56,6 +57,11 @@
             android:name=".AlarmService"
             android:exported="false"
             android:foregroundServiceType="mediaPlayback" />
+
+        <!-- Native atomic-clock overlay (ClockSync-style, v2.69) -->
+        <service
+            android:name=".AtomicOverlayNativeService"
+            android:exported="false" />
 
         <!-- Fired by AlarmManager -->
         <receiver
