@@ -53,6 +53,13 @@ class AtomicOverlayNativeService : Service() {
 
     private val tickTask = object : Runnable {
         override fun run() {
+            // v2.75: Self-healing — if ColorOS/the system detached the
+            // overlay view, re-add it instead of staying invisible.
+            if (overlayView == null ||
+                overlayView?.isAttachedToWindow != true
+            ) {
+                createOverlay()
+            }
             updateDisplay()
             handler.postDelayed(this, 1000)
         }
@@ -141,6 +148,14 @@ class AtomicOverlayNativeService : Service() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M && !Settings.canDrawOverlays(this)) {
             return
         }
+        // v2.75: Clean any stale/detached view before creating a new one,
+        // else addView throws for a duplicate or leaks the old view.
+        try {
+            overlayView?.let { windowManager?.removeView(it) }
+        } catch (_: Exception) {
+            // Already detached — safe to ignore.
+        }
+        overlayView = null
         val wm = getSystemService(Context.WINDOW_SERVICE) as WindowManager
         windowManager = wm
 
