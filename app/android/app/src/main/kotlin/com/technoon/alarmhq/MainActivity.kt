@@ -331,6 +331,25 @@ class MainActivity : Activity() {
                     finishAffinity()
                     result.success(null)
                 }
+                // v2.74: Battery optimization exemption — ColorOS kills
+                // the overlay service when the app backgrounds (Settings
+                // opens) unless the app is exempt. Check + request dialog.
+                "isIgnoringBatteryOptimizations" -> {
+                    val pm = getSystemService(Context.POWER_SERVICE) as android.os.PowerManager
+                    result.success(pm.isIgnoringBatteryOptimizations(packageName))
+                }
+                "requestIgnoreBatteryOptimizations" -> {
+                    try {
+                        val intent = Intent(
+                            Settings.ACTION_REQUEST_IGNORE_BATTERY_OPTIMIZATIONS,
+                            android.net.Uri.parse("package:$packageName"),
+                        )
+                        startActivity(intent)
+                        result.success(true)
+                    } catch (e: Exception) {
+                        result.success(false)
+                    }
+                }
                 // v2.72: Overlay permission check (SYSTEM_ALERT_WINDOW).
                 "canDrawOverlays" -> {
                     val ok = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
