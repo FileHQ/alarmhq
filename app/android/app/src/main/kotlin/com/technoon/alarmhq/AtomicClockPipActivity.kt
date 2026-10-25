@@ -43,6 +43,11 @@ class AtomicClockPipActivity : Activity() {
     }
 
     private var offsetMs: Long = 0L
+    // v2.78: Set when the user taps "Settings کھولیں". Settings opens
+    // ONLY after onPictureInPictureModeChanged confirms we are fully
+    // in PiP — opening it immediately raced the PiP transition and
+    // the system shrank Settings instead of our activity (v2.77 bug).
+    private var openSettingsOnPip = false
     private var timeText: TextView? = null
     private var dateText: TextView? = null
     private var buttonsRow: LinearLayout? = null
@@ -111,6 +116,17 @@ class AtomicClockPipActivity : Activity() {
         super.onPictureInPictureModeChanged(isInPictureInPictureMode, newConfig)
         // In PiP: clock only, no buttons (they don't fit the small window).
         buttonsRow?.visibility = if (isInPictureInPictureMode) View.GONE else View.VISIBLE
+        // v2.78: PiP transition is COMPLETE here — now it is safe to
+        // open Settings. Our activity is already small, so Settings
+        // opens full-screen behind the PiP clock.
+        if (isInPictureInPictureMode && openSettingsOnPip) {
+            openSettingsOnPip = false
+            try {
+                startActivity(Intent(Settings.ACTION_DATE_SETTINGS))
+            } catch (_: Exception) {
+                // Best effort.
+            }
+        }
     }
 
     private fun updateDisplay() {
@@ -121,16 +137,30 @@ class AtomicClockPipActivity : Activity() {
 
     private fun enterPipAndOpenSettings() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            // v2.78: Enter PiP ONLY. Settings opens from
+            // onPictureInPictureModeChanged once PiP is confirmed.
+            openSettingsOnPip = true
             val params = PictureInPictureParams.Builder()
                 .setAspectRatio(Rational(16, 9))
                 .build()
-            enterPictureInPictureMode(params)
-        }
-        // Open Date & Time settings; the PiP clock floats above it.
-        try {
-            startActivity(Intent(Settings.ACTION_DATE_SETTINGS))
-        } catch (_: Exception) {
-            // Best effort.
+            val entered = enterPictureInPictureMode(params)
+            if (!entered) {
+                // PiP refused (e.g. disabled by OEM) — fall back to
+                // plain Settings so the user is not stuck.
+                openSettingsOnPip = false
+                try {
+                    startActivity(Intent(Settings.ACTION_DATE_SETTINGS))
+                } catch (_: Exception) {
+                    // Best effort.
+                }
+            }
+        } else {
+            // Pre-Oreo: no PiP, just open Settings.
+            try {
+                startActivity(Intent(Settings.ACTION_DATE_SETTINGS))
+            } catch (_: Exception) {
+                // Best effort.
+            }
         }
     }
 }
