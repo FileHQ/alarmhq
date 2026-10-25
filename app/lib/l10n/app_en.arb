@@ -179,7 +179,7 @@
   "atomicDiff": "Phone is {diff} vs atomic time",
   "atomicOffline": "Offline — showing device time",
   "fixPhoneTime": "Fix phone time",
-  "fixPhoneTimeDesc": "Open Date & Time settings with live atomic time on top, so you can match it exactly.",
+  "fixPhoneTimeDesc": "Open Date & Time settings with live atomic time in a small window, so you can match it exactly.",
   "overlayTitle": "Display over other apps",
   "overlayDesc": "Shows a small floating atomic clock over Settings while you fix the phone time.",
   "swStart": "Start",
