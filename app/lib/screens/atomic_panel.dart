@@ -42,12 +42,6 @@ class _AtomicPanelState extends State<AtomicPanel> {
     AtomicTimeService.instance.sync();
   }
 
-  @override
-  void dispose() {
-    _notifTimer?.cancel();
-    super.dispose();
-  }
-
   String _two(int n) => n.toString().padLeft(2, '0');
 
   /// v2.55: 12-hour format with AM/PM (her order).
@@ -60,31 +54,36 @@ class _AtomicPanelState extends State<AtomicPanel> {
   /// "Fix phone time": overlay permission -> show floating atomic clock ->
   /// open system Date & Time settings so the user can match it by hand.
   /// v2.56: shows error feedback instead of failing silently.
-  // v2.68: Timer to keep the atomic-time notification ticking live.
-  Timer? _notifTimer;
-
   Future<void> _onFixPhoneTime() async {
     if (_fixing) return;
     setState(() => _fixing = true);
     try {
-      // v2.66: Notification method (her order) — replaces overlay which
-      // doesn't work on Realme/ColorOS. Show atomic time as ongoing
-      // notification, then open Date & Time settings.
-      // v2.68: Update notification every second so time doesn't freeze.
+      // v2.69: ClockSync-style flow.
+      // 1. If rooted: set time directly (su + chmod + setCurrentTimeMillis).
+      // 2. Else: show NATIVE overlay (WindowManager via Service — works
+      //    on non-rooted devices) + open Date & Time settings.
       final svc = AtomicTimeService.instance;
-      Future<void> updateNotif() async {
-        final atomicNow = svc.now();
-        final timeStr = _fmt12(atomicNow);
-        final dateStr =
-            '${atomicNow.day} ${_monthsUr[atomicNow.month - 1]} ${atomicNow.year}';
-        await AtomicOverlayService.showAtomicTimeNotification(timeStr, dateStr);
+      final atomicNow = svc.now();
+      final rooted = await AtomicOverlayService.isRooted();
+      if (rooted) {
+        final ok = await AtomicOverlayService.setSystemTimeRoot(
+            atomicNow.millisecondsSinceEpoch);
+        if (ok && mounted) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(
+              content: Text(
+                'فون کا ٹائم اٹامک ٹائم سے سیٹ ہو گیا',
+                style: TextStyle(fontWeight: FontWeight.w400),
+              ),
+            ),
+          );
+          return;
+        }
+        // Root set failed — fall through to overlay + settings.
       }
-
-      await updateNotif();
-      _notifTimer?.cancel();
-      _notifTimer = Timer.periodic(const Duration(seconds: 1), (_) {
-        updateNotif();
-      });
+      // Native overlay (ClockSync SyncAssistService method).
+      await AtomicOverlayService.showNativeOverlay(
+          svc.offset.inMilliseconds);
       await AtomicOverlayService.openDateTimeSettings();
     } catch (e) {
       if (mounted) {
