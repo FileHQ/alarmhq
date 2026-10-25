@@ -99,11 +99,14 @@ class AtomicOverlayNativeService : Service() {
                 )
             }
         }
+        // v2.74: setOngoing(true) — ColorOS is less likely to kill a
+        // service whose notification the user cannot swipe away.
         val notification = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             Notification.Builder(this, channelId)
                 .setContentTitle("اٹامک ٹائم اوورلے چل رہا ہے")
                 .setContentText("ٹائم سیٹ کرنے کے لیے اوورلے دیکھیں")
                 .setSmallIcon(android.R.drawable.ic_lock_idle_alarm)
+                .setOngoing(true)
                 .build()
         } else {
             @Suppress("DEPRECATION")
@@ -111,6 +114,7 @@ class AtomicOverlayNativeService : Service() {
                 .setContentTitle("اٹامک ٹائم اوورلے چل رہا ہے")
                 .setContentText("ٹائم سیٹ کرنے کے لیے اوورلے دیکھیں")
                 .setSmallIcon(android.R.drawable.ic_lock_idle_alarm)
+                .setOngoing(true)
                 .build()
         }
         // v2.71: startForeground can still throw on some OEM builds
