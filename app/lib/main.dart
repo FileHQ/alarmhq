@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter/services.dart';
 import 'package:alarmhq/l10n/app_localizations.dart';
 
 import 'screens/alarm_list_screen.dart';
@@ -37,10 +38,24 @@ class _AlarmHQAppState extends State<AlarmHQApp>
   bool _exitDialogOpen = false;
 
   @override
+  static const _alarmChannel =
+      MethodChannel('com.technoon.alarmhq/alarm');
+
   void initState() {
     super.initState();
     WidgetsBinding.instance.addObserver(this);
+    // v2.70: Native back handling — report tab changes to MainActivity
+    // and handle its goToTab0 request.
+    _alarmChannel.setMethodCallHandler((call) async {
+      if (call.method == 'goToTab0') {
+        if (mounted) setState(() => _tab = 0);
+      }
+    });
     _boot();
+  }
+
+  void _reportTab(int tab) {
+    _alarmChannel.invokeMethod('setCurrentTab', {'tab': tab});
   }
 
   @override
@@ -214,7 +229,10 @@ class _AlarmHQAppState extends State<AlarmHQApp>
                                     repo: _repo, settings: _settings),
                     bottomNavigationBar: NavigationBar(
                     selectedIndex: _tab,
-                    onDestinationSelected: (i) => setState(() => _tab = i),
+                    onDestinationSelected: (i) {
+                      setState(() => _tab = i);
+                      _reportTab(i);
+                    },
                     destinations: [
                       NavigationDestination(
                         icon: const Text('⏰',
