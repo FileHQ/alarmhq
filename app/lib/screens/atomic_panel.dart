@@ -81,91 +81,16 @@ class _AtomicPanelState extends State<AtomicPanel> {
         }
         // Root set failed — fall through to overlay + settings.
       }
-      // v2.74: Battery exemption MUST be granted, else ColorOS kills
-      // the overlay service the moment Settings opens (the v2.73
-      // 'overlay vanishes on Settings' cause). If missing, open the
-      // one-tap system dialog and stop — user allows, then taps again.
-      final ignoringBatt =
-          await AtomicOverlayService.isIgnoringBatteryOptimizations();
-      if (!ignoringBatt) {
-        if (mounted) {
-          ScaffoldMessenger.of(context).showSnackBar(
-            const SnackBar(
-              content: Text(
-                'پہلے background کی اجازت دیں، پھر دوبارہ بٹن دبائیں',
-                style: TextStyle(fontWeight: FontWeight.w400),
-              ),
-            ),
-          );
-        }
-        await AtomicOverlayService.requestIgnoreBatteryOptimizations();
-        return;
-      }
-      // v2.72: Overlay permission MUST be granted, else the service
-      // silently shows nothing (the v2.71 'no time on Settings' cause).
-      // If missing, open overlay settings and stop — user grants, then
-      // taps the button again.
-      final canOverlay = await AtomicOverlayService.canDrawOverlays();
-      if (!canOverlay) {
-        if (mounted) {
-          ScaffoldMessenger.of(context).showSnackBar(
-            const SnackBar(
-              content: Text(
-                'پہلے اوورلے کی اجازت دیں، پھر دوبارہ بٹن دبائیں',
-                style: TextStyle(fontWeight: FontWeight.w400),
-              ),
-            ),
-          );
-        }
-        await AtomicOverlayService.openOverlaySettings();
-        return;
-      }
-      // v2.76: ClockSync method — overlay FIRST, Settings LATER.
-      // Auto-opening Settings instantly backgrounds the app before
-      // the service has firmly become foreground, so ColorOS kills
-      // it. Show the overlay, then let the USER open Settings via
-      // the dialog button (seconds later, service firmly foreground).
-      await AtomicOverlayService.showNativeOverlay(
+      // v2.77: PiP needs NO overlay permission and NO battery
+      // exemption (system window, not a service) — the v2.72/v2.74
+      // gates are skipped for this flow.
+      // v2.77: PiP atomic clock — the service-overlay approach failed
+      // 7 times because ColorOS kills our processes on backgrounding.
+      // PiP is a SYSTEM-managed visible window (like floating YouTube):
+      // it stays on screen over Settings by design. The PiP activity
+      // itself has the "Settings کھولیں" button.
+      await AtomicOverlayService.openAtomicPip(
           svc.offset.inMilliseconds);
-      if (!mounted) return;
-      final openSettings = await showDialog<bool>(
-        context: context,
-        barrierDismissible: true,
-        builder: (dctx) => AlertDialog(
-          title: const Text(
-            'اٹامک ٹائم اوپر نظر آ رہا ہے',
-            style: TextStyle(fontWeight: FontWeight.w400, fontSize: 17),
-          ),
-          content: const Text(
-            'اب Settings میں جا کر فون کا ٹائم اس سے ملا کر سیٹ کریں۔',
-            style: TextStyle(fontWeight: FontWeight.w400),
-          ),
-          actions: [
-            TextButton(
-              onPressed: () => Navigator.of(dctx).pop(false),
-              child: const Text(
-                'اوورلے بند کریں',
-                style: TextStyle(fontWeight: FontWeight.w400),
-              ),
-            ),
-            TextButton(
-              onPressed: () => Navigator.of(dctx).pop(true),
-              child: const Text(
-                'Settings کھولیں',
-                style: TextStyle(fontWeight: FontWeight.w400),
-              ),
-            ),
-          ],
-        ),
-      );
-      if (openSettings == true) {
-        await AtomicOverlayService.openDateTimeSettings();
-      } else if (openSettings == false) {
-        await AtomicOverlayService.hideNativeOverlay();
-      }
-      // barrierDismissible: dialog dismissed by tapping outside leaves
-      // the overlay running so the user can still open Settings manually
-      // (ClockSync behaviour).
     } catch (e) {
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
