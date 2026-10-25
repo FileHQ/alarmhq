@@ -122,7 +122,12 @@ class AtomicClockPipActivity : Activity() {
         if (isInPictureInPictureMode && openSettingsOnPip) {
             openSettingsOnPip = false
             try {
-                startActivity(Intent(Settings.ACTION_DATE_SETTINGS))
+                // v2.79: NEW_TASK is REQUIRED — without it Settings joins
+                // our PiP task and shows inside the small window.
+                val si = Intent(Settings.ACTION_DATE_SETTINGS).apply {
+                    addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+                }
+                startActivity(si)
             } catch (_: Exception) {
                 // Best effort.
             }
@@ -149,7 +154,10 @@ class AtomicClockPipActivity : Activity() {
                 // plain Settings so the user is not stuck.
                 openSettingsOnPip = false
                 try {
-                    startActivity(Intent(Settings.ACTION_DATE_SETTINGS))
+                    val si = Intent(Settings.ACTION_DATE_SETTINGS).apply {
+                        addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+                    }
+                    startActivity(si)
                 } catch (_: Exception) {
                     // Best effort.
                 }
@@ -157,7 +165,10 @@ class AtomicClockPipActivity : Activity() {
         } else {
             // Pre-Oreo: no PiP, just open Settings.
             try {
-                startActivity(Intent(Settings.ACTION_DATE_SETTINGS))
+                val si = Intent(Settings.ACTION_DATE_SETTINGS).apply {
+                    addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+                }
+                startActivity(si)
             } catch (_: Exception) {
                 // Best effort.
             }
