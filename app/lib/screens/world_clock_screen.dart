@@ -493,7 +493,9 @@ class _CityPickerScreenState extends State<_CityPickerScreen> {
             height: 56,
             child: TextField(
               controller: _controller,
-              autofocus: true,
+              // v2.73: No autofocus — an open keyboard eats the first
+              // back press(es) before the route pops (the 3-press bug).
+              autofocus: false,
               onChanged: (v) => setState(() => _query = v),
               // v2.70: Noto Nastaliq Urdu (bundled) for search field.
               // JameelNoori's narrow spaces caused یا/ملک overlap;
