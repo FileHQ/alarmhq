@@ -79,6 +79,26 @@ class AtomicOverlayService {
     }
   }
 
+  /// v2.74: Check battery optimization exemption.
+  static Future<bool> isIgnoringBatteryOptimizations() async {
+    try {
+      return await _alarm.invokeMethod<bool>(
+              'isIgnoringBatteryOptimizations') ??
+          false;
+    } catch (_) {
+      return false;
+    }
+  }
+
+  /// v2.74: Open the system 'allow background running' dialog.
+  static Future<void> requestIgnoreBatteryOptimizations() async {
+    try {
+      await _alarm.invokeMethod('requestIgnoreBatteryOptimizations');
+    } catch (_) {
+      // Best effort.
+    }
+  }
+
   /// v2.72: Check overlay permission (SYSTEM_ALERT_WINDOW).
   static Future<bool> canDrawOverlays() async {
     try {
