@@ -81,6 +81,25 @@ class _AtomicPanelState extends State<AtomicPanel> {
         }
         // Root set failed — fall through to overlay + settings.
       }
+      // v2.72: Overlay permission MUST be granted, else the service
+      // silently shows nothing (the v2.71 'no time on Settings' cause).
+      // If missing, open overlay settings and stop — user grants, then
+      // taps the button again.
+      final canOverlay = await AtomicOverlayService.canDrawOverlays();
+      if (!canOverlay) {
+        if (mounted) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(
+              content: Text(
+                'پہلے اوورلے کی اجازت دیں، پھر دوبارہ بٹن دبائیں',
+                style: TextStyle(fontWeight: FontWeight.w400),
+              ),
+            ),
+          );
+        }
+        await AtomicOverlayService.openOverlaySettings();
+        return;
+      }
       // Native overlay (ClockSync SyncAssistService method).
       await AtomicOverlayService.showNativeOverlay(
           svc.offset.inMilliseconds);
