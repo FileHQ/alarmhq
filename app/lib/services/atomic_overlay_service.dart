@@ -78,4 +78,61 @@ class AtomicOverlayService {
       // Best effort.
     }
   }
+
+  /// v2.69: Native overlay (ClockSync-style) — direct WindowManager via
+  /// a native Service. Works on non-rooted devices (only needs
+  /// SYSTEM_ALERT_WINDOW). Takes the atomic offset in ms; the service
+  /// ticks locally (device time + offset) every second.
+  static Future<bool> showNativeOverlay(int offsetMs) async {
+    try {
+      final ok = await _alarm.invokeMethod<bool>(
+        'showNativeAtomicOverlay',
+        {'offsetMs': offsetMs},
+      );
+      return ok == true;
+    } catch (_) {
+      return false;
+    }
+  }
+
+  /// Hide the native overlay.
+  static Future<void> hideNativeOverlay() async {
+    try {
+      await _alarm.invokeMethod('hideNativeAtomicOverlay');
+    } catch (_) {
+      // Best effort.
+    }
+  }
+
+  /// v2.69: Check if device is rooted (ClockSync method).
+  static Future<bool> isRooted() async {
+    try {
+      return await _alarm.invokeMethod<bool>('isRooted') ?? false;
+    } catch (_) {
+      return false;
+    }
+  }
+
+  /// v2.69: Set system time via root (ClockSync method). Returns true
+  /// only on rooted devices where it actually worked.
+  static Future<bool> setSystemTimeRoot(int timeMs) async {
+    try {
+      return await _alarm.invokeMethod<bool>(
+            'setSystemTimeRoot', {'timeMs': timeMs}) ??
+          false;
+    } catch (_) {
+      return false;
+    }
+  }
+
+  /// v2.69: Set timezone (works WITHOUT root).
+  static Future<bool> setTimeZone(String zoneId) async {
+    try {
+      return await _alarm.invokeMethod<bool>(
+            'setTimeZone', {'zoneId': zoneId}) ??
+          false;
+    } catch (_) {
+      return false;
+    }
+  }
 }
