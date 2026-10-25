@@ -161,11 +161,11 @@ class _AlarmHQAppState extends State<AlarmHQApp>
                       return false;
                     }
                     // On main tab: confirm dialog.
-                    if (_exitDialogOpen) return;
+                    if (_exitDialogOpen) return false;
                     _exitDialogOpen = true;
                     try {
                       final ctx = _scaffoldKey.currentContext;
-                      if (ctx == null) return;
+                      if (ctx == null) return false;
                       final confirm = await showDialog<bool>(
                         context: ctx,
                         builder: (dctx) => AlertDialog(
