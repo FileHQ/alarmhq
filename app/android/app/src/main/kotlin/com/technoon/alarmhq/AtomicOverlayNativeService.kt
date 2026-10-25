@@ -61,7 +61,17 @@ class AtomicOverlayNativeService : Service() {
     override fun onBind(intent: Intent?): IBinder? = null
 
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
-        offsetMs = intent?.getLongExtra(EXTRA_OFFSET_MS, 0L) ?: 0L
+        // v2.73: Persist offset — if ColorOS kills the service and the
+        // system restarts it (START_STICKY, null intent), recover the
+        // last offset instead of showing device time (offset 0).
+        val prefs = getSharedPreferences("atomic_overlay", Context.MODE_PRIVATE)
+        val fromIntent = intent?.getLongExtra(EXTRA_OFFSET_MS, Long.MIN_VALUE)
+        offsetMs = if (fromIntent != null && fromIntent != Long.MIN_VALUE) {
+            prefs.edit().putLong("offset_ms", fromIntent).apply()
+            fromIntent
+        } else {
+            prefs.getLong("offset_ms", 0L)
+        }
         // v2.70: Foreground service — REQUIRED. startForegroundService()
         // without startForeground() kills the service after ~5s, which
         // is exactly when Settings opens and the overlay vanished.
@@ -115,6 +125,9 @@ class AtomicOverlayNativeService : Service() {
 
     override fun onDestroy() {
         handler.removeCallbacks(tickTask)
+        // v2.73: Only clear persisted offset on explicit user close
+        // (the X button calls stopSelf -> onDestroy). System kills do
+        // not reliably call onDestroy, so restart recovery still works.
         removeOverlay()
         isRunning = false
         super.onDestroy()
