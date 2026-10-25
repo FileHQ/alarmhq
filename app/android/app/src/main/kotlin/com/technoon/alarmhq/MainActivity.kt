@@ -28,8 +28,13 @@ import org.json.JSONObject
 class MainActivity : Activity() {
 
     private var flutterEngine: FlutterEngine? = null
+    private var alarmChannel: MethodChannel? = null
     private var pendingPickResult: MethodChannel.Result? = null
     private var pendingNotifResult: MethodChannel.Result? = null
+    // v2.70: Current tab reported by Flutter (0=Alarms). Native back
+    // handling needs it because this is a plain Activity, not
+    // FlutterActivity — Flutter's own back handling never fires here.
+    private var currentTab = 0
 
     companion object {
         private const val PICK_AUDIO_REQUEST = 1001
@@ -53,12 +58,39 @@ class MainActivity : Activity() {
         setupChannels(engine)
     }
 
+    // v2.70: NATIVE back button handling. This Activity is a plain
+    // Activity (not FlutterActivity), so Flutter's WillPopScope/PopScope
+    // never receive back presses on Realme/ColorOS — the Activity just
+    // finished. Handle it here: other tab -> go to Alarms tab;
+    // Alarms tab -> native exit-confirm dialog.
+    @Deprecated("Deprecated in Java")
+    override fun onBackPressed() {
+        if (currentTab != 0) {
+            alarmChannel?.invokeMethod("goToTab0", null)
+            return
+        }
+        android.app.AlertDialog.Builder(this)
+            .setTitle("ایپ بند کریں؟")
+            .setMessage("کیا آپ ایپ بند کرنا چاہتے ہیں؟")
+            .setPositiveButton("جی ہاں") { _, _ -> finish() }
+            .setNegativeButton("جی نہیں", null)
+            .show()
+    }
+
     private fun setupChannels(engine: FlutterEngine) {
-        MethodChannel(
+        val channel = MethodChannel(
             engine.dartExecutor.binaryMessenger,
             "com.technoon.alarmhq/alarm",
-        ).setMethodCallHandler { call, result ->
+        )
+        alarmChannel = channel
+        channel.setMethodCallHandler { call, result ->
             when (call.method) {
+                // v2.70: Flutter reports tab changes so native back
+                // handling knows whether to go to tab 0 or exit.
+                "setCurrentTab" -> {
+                    currentTab = (call.argument<Number>("tab")?.toInt()) ?: 0
+                    result.success(null)
+                }
                 "scheduleAlarm" -> {
                     val id = (call.argument<Number>("id")?.toInt()) ?: -1
                     val trigger = call.argument<Number>("triggerAtMillis")?.toLong()
