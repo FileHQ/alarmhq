@@ -495,21 +495,22 @@ class _CityPickerScreenState extends State<_CityPickerScreen> {
               controller: _controller,
               autofocus: true,
               onChanged: (v) => setState(() => _query = v),
-              // v2.58: Urdu font for proper Nastaleeq rendering.
-              // v2.63: taller field for Nastaleeq's tall glyphs.
+              // v2.69: System font for search field (JameelNoori's narrow
+              // spaces caused یا/ملک overlap despite double/triple/NBSP).
+              // System Noto Nastaliq renders Urdu spacing correctly.
               style: const TextStyle(
                 fontWeight: FontWeight.w400,
-                fontFamily: 'JameelNoori',
-                height: 2.0,
+                height: 1.6,
                 fontSize: 18,
+                letterSpacing: 0.5,
               ),
               decoration: InputDecoration(
                 hintText: l10n.searchCityHint,
                 hintStyle: const TextStyle(
                   fontWeight: FontWeight.w400,
-                  fontFamily: 'JameelNoori',
-                  height: 2.0,
+                  height: 1.6,
                   fontSize: 18,
+                  letterSpacing: 0.5,
                 ),
                 border: InputBorder.none,
                 contentPadding: const EdgeInsets.symmetric(
