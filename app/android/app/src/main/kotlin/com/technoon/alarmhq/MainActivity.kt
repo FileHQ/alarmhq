@@ -35,9 +35,6 @@ class MainActivity : Activity() {
     // handling needs it because this is a plain Activity, not
     // FlutterActivity — Flutter's own back handling never fires here.
     private var currentTab = 0
-    // v2.71: True when Flutter has a pushed route/dialog (edit screen
-    // etc.) — then back belongs to Flutter, not to native handling.
-    private var flutterCanPop = false
 
     companion object {
         private const val PICK_AUDIO_REQUEST = 1001
@@ -61,18 +58,19 @@ class MainActivity : Activity() {
         setupChannels(engine)
     }
 
-    // v2.71: NATIVE back button handling. This Activity is a plain
-    // Activity (not FlutterActivity), and Flutter's engine consumes
-    // the back press before onBackPressed is ever called — so
-    // intercept at dispatchKeyEvent, BEFORE the FlutterView sees it.
-    // Only when Flutter is on its root route (!flutterCanPop); pushed
-    // routes/dialogs keep Flutter's own back handling.
+    // v2.72: FORWARD back presses to the Flutter engine instead of
+    // handling natively. Root cause of all back-button failures: this
+    // plain Activity never forwarded back to Flutter's Navigator, so
+    // the Activity just finished (app exit) before Dart could pop a
+    // route, switch to tab 0, or show the exit dialog. NavigationChannel
+    // .popRoute() sends the standard pop message; Dart's Navigator +
+    // WillPopScope then do the right thing: pop picker/dialog, go to
+    // tab 0, or show the exit dialog on the root route.
     override fun dispatchKeyEvent(event: android.view.KeyEvent): Boolean {
         if (event.keyCode == android.view.KeyEvent.KEYCODE_BACK &&
-            event.action == android.view.KeyEvent.ACTION_DOWN &&
-            !flutterCanPop
+            event.action == android.view.KeyEvent.ACTION_DOWN
         ) {
-            handleNativeBack()
+            flutterEngine?.navigationChannel?.popRoute()
             return true
         }
         return super.dispatchKeyEvent(event)
@@ -80,30 +78,9 @@ class MainActivity : Activity() {
 
     @Deprecated("Deprecated in Java")
     override fun onBackPressed() {
-        // Fallback if dispatchKeyEvent path is ever bypassed.
-        if (!flutterCanPop) {
-            handleNativeBack()
-        } else {
-            super.onBackPressed()
-        }
-    }
-
-    private var exitDialogShowing = false
-
-    private fun handleNativeBack() {
-        if (currentTab != 0) {
-            alarmChannel?.invokeMethod("goToTab0", null)
-            return
-        }
-        if (exitDialogShowing) return
-        exitDialogShowing = true
-        android.app.AlertDialog.Builder(this)
-            .setTitle("ایپ بند کریں؟")
-            .setMessage("کیا آپ ایپ بند کرنا چاہتے ہیں؟")
-            .setPositiveButton("جی ہاں") { _, _ -> finish() }
-            .setNegativeButton("جی نہیں", null)
-            .setOnDismissListener { exitDialogShowing = false }
-            .show()
+        // Gesture navigation back (no KeyEvent) — forward to engine too.
+        // Never call super: that finishes the Activity (the app-exit bug).
+        flutterEngine?.navigationChannel?.popRoute()
     }
 
     private fun setupChannels(engine: FlutterEngine) {
@@ -118,11 +95,6 @@ class MainActivity : Activity() {
                 // handling knows whether to go to tab 0 or exit.
                 "setCurrentTab" -> {
                     currentTab = (call.argument<Number>("tab")?.toInt()) ?: 0
-                    result.success(null)
-                }
-                // v2.71: Flutter reports whether its Navigator can pop.
-                "setCanPop" -> {
-                    flutterCanPop = (call.argument<Boolean>("canPop")) ?: false
                     result.success(null)
                 }
                 "scheduleAlarm" -> {
@@ -362,6 +334,15 @@ class MainActivity : Activity() {
                 "setSystemTimeRoot" -> {
                     val timeMs = (call.argument<Number>("timeMs")?.toLong()) ?: 0L
                     result.success(setSystemTimeViaRoot(timeMs))
+                }
+                // v2.72: Overlay permission check (SYSTEM_ALERT_WINDOW).
+                "canDrawOverlays" -> {
+                    val ok = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                        Settings.canDrawOverlays(this)
+                    } else {
+                        true
+                    }
+                    result.success(ok)
                 }
                 // ---- timezone (v2.69, works WITHOUT root) ----
                 "setTimeZone" -> {
