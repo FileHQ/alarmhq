@@ -60,6 +60,13 @@
             android:foregroundServiceType="mediaPlayback" />
 
         <!-- Native atomic-clock overlay (ClockSync-style, v2.69) -->
+        <!-- v2.77: PiP atomic clock activity (system-managed window). -->
+        <activity
+            android:name=".AtomicClockPipActivity"
+            android:exported="false"
+            android:supportsPictureInPicture="true"
+            android:configChanges="screenSize|smallestScreenSize|screenLayout|orientation" />
+
         <!-- v2.75: Separate :overlay process — ColorOS killing the
              main app process no longer kills the overlay with it. -->
         <service
