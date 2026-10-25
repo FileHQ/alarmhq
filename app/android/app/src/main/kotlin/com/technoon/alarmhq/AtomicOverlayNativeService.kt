@@ -103,7 +103,14 @@ class AtomicOverlayNativeService : Service() {
                 .setSmallIcon(android.R.drawable.ic_lock_idle_alarm)
                 .build()
         }
-        startForeground(1001, notification)
+        // v2.71: startForeground can still throw on some OEM builds
+        // (missing type, denied) — never let it crash the app.
+        try {
+            startForeground(1001, notification)
+        } catch (_: Exception) {
+            // Continue as background service; overlay may still show
+            // if SYSTEM_ALERT_WINDOW is granted.
+        }
     }
 
     override fun onDestroy() {
