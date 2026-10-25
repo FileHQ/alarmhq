@@ -1,5 +1,8 @@
 package com.technoon.alarmhq
 
+import android.app.Notification
+import android.app.NotificationChannel
+import android.app.NotificationManager
 import android.app.Service
 import android.content.Context
 import android.content.Intent
@@ -59,6 +62,10 @@ class AtomicOverlayNativeService : Service() {
 
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
         offsetMs = intent?.getLongExtra(EXTRA_OFFSET_MS, 0L) ?: 0L
+        // v2.70: Foreground service — REQUIRED. startForegroundService()
+        // without startForeground() kills the service after ~5s, which
+        // is exactly when Settings opens and the overlay vanished.
+        startAsForeground()
         if (overlayView == null) {
             createOverlay()
         }
@@ -66,6 +73,37 @@ class AtomicOverlayNativeService : Service() {
         handler.post(tickTask)
         isRunning = true
         return START_STICKY
+    }
+
+    private fun startAsForeground() {
+        val channelId = "atomic_overlay"
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            val nm = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+            if (nm.getNotificationChannel(channelId) == null) {
+                nm.createNotificationChannel(
+                    NotificationChannel(
+                        channelId,
+                        "Atomic clock overlay",
+                        NotificationManager.IMPORTANCE_LOW,
+                    )
+                )
+            }
+        }
+        val notification = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            Notification.Builder(this, channelId)
+                .setContentTitle("اٹامک ٹائم اوورلے چل رہا ہے")
+                .setContentText("ٹائم سیٹ کرنے کے لیے اوورلے دیکھیں")
+                .setSmallIcon(android.R.drawable.ic_lock_idle_alarm)
+                .build()
+        } else {
+            @Suppress("DEPRECATION")
+            Notification.Builder(this)
+                .setContentTitle("اٹامک ٹائم اوورلے چل رہا ہے")
+                .setContentText("ٹائم سیٹ کرنے کے لیے اوورلے دیکھیں")
+                .setSmallIcon(android.R.drawable.ic_lock_idle_alarm)
+                .build()
+        }
+        startForeground(1001, notification)
     }
 
     override fun onDestroy() {
