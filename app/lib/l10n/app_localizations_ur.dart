@@ -589,6 +589,11 @@ class AppLocalizationsUr extends AppLocalizations {
   }
 
   @override
+  String atomicPhoneTime(Object time) {
+    return 'فون کا وقت: $time';
+  }
+
+  @override
   String atomicDiff(Object diff) {
     return 'فون اٹامک ٹائم سے $diff ہے';
   }
