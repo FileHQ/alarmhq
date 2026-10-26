@@ -41,6 +41,11 @@ class AlarmService : Service() {
         const val ACTION_SNOOZED = "com.technoon.alarmhq.SNOOZED"
         // v2.21: snooze directly from the ringing notification (lock screen).
         const val ACTION_SNOOZE = "com.technoon.alarmhq.SNOOZE"
+        // v2.84: tell FullScreenAlarmActivity to finish. Notification
+        // Stop/Snooze stop the sound via the service, but the activity
+        // never heard about it and stayed stuck on screen.
+        const val ACTION_DISMISS_FULLSCREEN =
+            "com.technoon.alarmhq.DISMISS_FULLSCREEN"
         // v2.14: new channel ID — the old channel was created with
         // IMPORTANCE_HIGH and Android never upgrades an existing channel's
         // importance. Fresh ID forces MAX, required for full-screen intent.
@@ -698,9 +703,17 @@ class AlarmService : Service() {
         try { vibrator?.cancel() } catch (_: Exception) {}
     }
 
+    /** v2.84: notify FullScreenAlarmActivity to finish itself. */
+    private fun dismissFullScreen() {
+        try {
+            sendBroadcast(Intent(ACTION_DISMISS_FULLSCREEN))
+        } catch (_: Exception) { }
+    }
+
     private fun stopEverything() {
         ringingAlarmJson = null
         ringingSnoozeCount = 0
+        dismissFullScreen()
         stopPlayback()
         cancelSnoozedNotification()
         try { stopForeground(STOP_FOREGROUND_REMOVE) } catch (_: Exception) {}
@@ -716,6 +729,9 @@ class AlarmService : Service() {
     private fun stopRingingOnly() {
         ringingAlarmJson = null
         ringingSnoozeCount = 0
+        // v2.84: same stuck-screen bug as Stop — a notification Snooze
+        // also leaves the full-screen UI up unless told to finish.
+        dismissFullScreen()
         stopPlayback()
     }
 
