@@ -223,6 +223,26 @@ class _AlarmListScreenState extends State<AlarmListScreen>
       }
     }
   }
+
+  /// v2.84: "Stop snooze" button on the alarm card. Cancels the pending
+  /// snooze natively (same path as the snoozed notification's Stop button)
+  /// and clears the local badge state immediately so the card returns to
+  /// its normal schedule without waiting for the next refresh tick.
+  Future<void> _stopSnooze(AlarmModel a) async {
+    try {
+      await NativeBridge.cancelSnooze(a.id);
+    } catch (_) {
+      // Best effort only — still clear the local badge state below.
+    }
+    if (mounted) {
+      setState(() {
+        _snoozeTriggers.remove(a.id);
+        _snoozeCounts.remove(a.id);
+        _snoozedActive.remove(a.id);
+      });
+    }
+  }
+
   Future<void> _openEditor({AlarmModel? existing}) async {
     final changed = await Navigator.of(context).push<bool>(
       MaterialPageRoute(
@@ -704,10 +724,15 @@ class _AlarmListScreenState extends State<AlarmListScreen>
                               if (snoozedUntil == null) {
                                 return Text(
                                   '⏰ ${l10n.snoozedGeneric}',
+                                  // v2.84: explicit Roboto — same fix as the
+                                  // v2.41 countdown: JameelNoori has no
+                                  // Latin/digit glyphs, and the emoji+digit
+                                  // mix fell back to a dark color on Realme.
                                   style: const TextStyle(
                                     fontSize: 13,
                                     fontWeight: FontWeight.w800,
                                     color: AppTheme.emerald,
+                                    fontFamily: 'Roboto',
                                   ),
                                 );
                               }
@@ -722,13 +747,44 @@ class _AlarmListScreenState extends State<AlarmListScreen>
                                       timeStr);
                               return Text(
                                 '⏰ $text',
+                                // v2.84: explicit Roboto — same v2.41
+                                // countdown fix: without it the time digits
+                                // rendered black on the user's Realme.
                                 style: const TextStyle(
                                   fontSize: 13,
                                   fontWeight: FontWeight.w800,
                                   color: AppTheme.emerald,
+                                  fontFamily: 'Roboto',
                                 ),
                               );
                             },
+                          ),
+                        ),
+                        // v2.84: "Stop snooze" button (approved mockup).
+                        // Cancels the pending snooze; the alarm returns to
+                        // its normal schedule.
+                        const SizedBox(height: 6),
+                        Align(
+                          alignment: AlignmentDirectional.centerStart,
+                          child: OutlinedButton(
+                            onPressed: () => _stopSnooze(a),
+                            style: OutlinedButton.styleFrom(
+                              foregroundColor: const Color(0xFFFF8A8A),
+                              side: const BorderSide(
+                                  color: Color(0xFFFF8A8A)),
+                              padding: const EdgeInsets.symmetric(
+                                  horizontal: 12, vertical: 0),
+                              minimumSize: const Size(0, 32),
+                              tapTargetSize:
+                                  MaterialTapTargetSize.shrinkWrap,
+                            ),
+                            child: Text(
+                              l10n.stopSnooze,
+                              style: const TextStyle(
+                                fontSize: 12,
+                                fontWeight: FontWeight.w800,
+                              ),
+                            ),
                           ),
                         ),
                       ],
