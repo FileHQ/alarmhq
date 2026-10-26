@@ -110,6 +110,7 @@
   "snoozedUntil": "Snoozed until {time}",
   "snoozedUntilLeft": "Snoozed until {time} ({left} left)",
   "snoozedGeneric": "Snoozed",
+  "stopSnooze": "Stop snooze",
   "fsBannerTitle": "Full-screen alarm is off",
   "fsBannerBody": "Tap to allow the alarm to pop up on the lock screen",
   "lockBannerTitle": "Show on Lock screen is needed",
