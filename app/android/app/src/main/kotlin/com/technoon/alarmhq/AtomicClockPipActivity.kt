@@ -9,6 +9,7 @@ import android.os.Build
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
+import android.os.SystemClock
 import android.provider.Settings
 import android.util.Rational
 import android.view.Gravity
@@ -41,9 +42,20 @@ class AtomicClockPipActivity : Activity() {
 
     companion object {
         const val EXTRA_OFFSET_MS = "offset_ms"
+        // v2.85: app language ('en'/'ur') — the PiP buttons were
+        // hardcoded Urdu and ignored English mode entirely.
+        const val EXTRA_LANG = "lang"
     }
 
     private var offsetMs: Long = 0L
+    private var isUrdu: Boolean = false
+    // v2.85: monotonic anchor — the old clock was deviceTime +
+    // snapshot offset, so when the user changed the phone time in
+    // Settings the PiP followed the phone and went wrong. Anchoring
+    // to elapsedRealtime (immune to wall-clock changes) keeps the
+    // PiP on true atomic time no matter what the phone is set to.
+    private var anchorAtomicMs: Long = 0L
+    private var anchorElapsedMs: Long = 0L
     // v2.78: Set when the user taps "Settings کھولیں". Settings opens
     // ONLY after onPictureInPictureModeChanged confirms we are fully
     // in PiP — opening it immediately raced the PiP transition and
@@ -70,6 +82,9 @@ class AtomicClockPipActivity : Activity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         offsetMs = intent?.getLongExtra(EXTRA_OFFSET_MS, 0L) ?: 0L
+        isUrdu = intent?.getStringExtra(EXTRA_LANG) == "ur"
+        anchorAtomicMs = System.currentTimeMillis() + offsetMs
+        anchorElapsedMs = SystemClock.elapsedRealtime()
 
         val root = LinearLayout(this).apply {
             orientation = LinearLayout.VERTICAL
@@ -93,7 +108,11 @@ class AtomicClockPipActivity : Activity() {
         // v2.83: shown only in the note-the-time fallback (no PiP,
         // no overlay) — explains why no floating clock will appear.
         noticeText = TextView(this).apply {
-            text = "اس موبائل میں چھوٹی window دستیاب نہیں ہے۔ اوپر والا ٹائم نوٹ کر لیں، پھر Settings کھول کر وہی ٹائم لگائیں۔"
+            text = if (isUrdu) {
+                "اس موبائل میں چھوٹی window دستیاب نہیں ہے۔ اوپر والا ٹائم نوٹ کر لیں، پھر Settings کھول کر وہی ٹائم لگائیں۔"
+            } else {
+                "This phone doesn't support a small window. Note the time above, then open Settings and set the same time."
+            }
             textSize = 14f
             setTextColor(Color.parseColor("#B3FFFFFF"))
             gravity = Gravity.CENTER
@@ -108,12 +127,12 @@ class AtomicClockPipActivity : Activity() {
             setPadding(0, 32, 0, 0)
         }
         settingsBtn = Button(this).apply {
-            text = "Settings کھولیں"
+            text = if (isUrdu) "Settings کھولیں" else "Open Settings"
             setOnClickListener { enterPipAndOpenSettings() }
         }
         buttonsRow?.addView(settingsBtn)
         val closeBtn = Button(this).apply {
-            text = "بند کریں"
+            text = if (isUrdu) "بند کریں" else "Close"
             setOnClickListener {
                 // v2.83: stop a fallback overlay so no orphan clock
                 // floats after the user closes this screen.
@@ -205,7 +224,12 @@ class AtomicClockPipActivity : Activity() {
     }
 
     private fun updateDisplay() {
-        val t = Date(System.currentTimeMillis() + offsetMs)
+        // v2.85: monotonic anchor (see fields) — wall-clock changes
+        // from Settings no longer move this clock.
+        val t = Date(
+            anchorAtomicMs +
+                (SystemClock.elapsedRealtime() - anchorElapsedMs),
+        )
         timeText?.text = SimpleDateFormat("hh:mm:ss a", Locale.US).format(t)
         dateText?.text = SimpleDateFormat("d MMMM yyyy", Locale.US).format(t)
     }
@@ -252,7 +276,11 @@ class AtomicClockPipActivity : Activity() {
                 // here (recovery if the overlay itself gets killed).
                 Toast.makeText(
                     this,
-                    "تیرتی گھڑی چل رہی ہے — اگر Settings پر نظر نہ آئے تو Back دبا کر ٹائم نوٹ کر لیں",
+                    if (isUrdu) {
+                        "تیرتی گھڑی چل رہی ہے — اگر Settings پر نظر نہ آئے تو Back دبا کر ٹائم نوٹ کر لیں"
+                    } else {
+                        "Floating clock is running — if it doesn't appear over Settings, press Back and note the time"
+                    },
                     Toast.LENGTH_LONG,
                 ).show()
                 openPlainSettings()
