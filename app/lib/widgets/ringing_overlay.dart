@@ -91,12 +91,26 @@ class _RingingOverlayState extends State<RingingOverlay> {
   }
 
   Future<void> _dismiss(BuildContext context) async {
-    await NativeBridge.dismissAlarm();
+    // v2.88: never leave the dialog stuck on a native error — the
+    // old code skipped pop() when dismissAlarm() threw.
+    try {
+      await NativeBridge.dismissAlarm();
+    } catch (_) {
+      // Sound path is the service's job; the dialog must still close.
+    }
     if (context.mounted) Navigator.of(context).pop();
   }
 
   Future<void> _snooze(BuildContext context) async {
-    final ok = await NativeBridge.snoozeAlarm();
+    // v2.88: same stuck-dialog guard for a native snooze error
+    // (the ok == false path below still stays + shows its note).
+    bool ok;
+    try {
+      ok = await NativeBridge.snoozeAlarm();
+    } catch (_) {
+      if (context.mounted) Navigator.of(context).pop();
+      return;
+    }
     if (!context.mounted) return;
     if (!ok) {
       final l10n = AppLocalizations.of(context)!;
