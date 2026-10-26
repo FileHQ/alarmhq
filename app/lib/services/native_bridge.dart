@@ -164,6 +164,14 @@ class NativeBridge {
   static Future<int> getSnoozeCount(int id) async =>
       await _alarm.invokeMethod<int>('getSnoozeCount', {'id': id}) ?? 0;
 
+  /// v2.84: cancel a pending snooze for alarm [id] from the alarm card's
+  /// "Stop snooze" button. Reuses the snoozed notification's Stop path
+  /// (ACTION_STOP + snoozeAlarmId): cancels the snooze one-shot, clears
+  /// the trigger prefs, cancels the snoozed notification. The regular
+  /// schedule is untouched, so the alarm rings normally next time.
+  static Future<bool> cancelSnooze(int id) async =>
+      await _alarm.invokeMethod<bool>('cancelSnooze', {'id': id}) ?? false;
+
   /// v2.26: fallback — reads the snooze trigger for [id] directly from the
   /// "alarmhq_prefs" backup file when [getSnoozeTrigger] misses.
   static Future<int?> getSnoozeTriggerBackup(int id) async =>
