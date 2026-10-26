@@ -33,9 +33,15 @@ class AtomicTimeService extends ChangeNotifier {
   /// blocked (common on mobile networks).
   Future<bool> sync({Duration maxAge = const Duration(minutes: 5)}) async {
     if (_syncing) return hasSync;
-    if (_lastSync != null &&
-        DateTime.now().difference(_lastSync!) < maxAge) {
-      return true;
+    if (_lastSync != null) {
+      final age = DateTime.now().difference(_lastSync!);
+      // v2.85: a backward clock jump (user set the phone time back)
+      // makes age NEGATIVE, and negative < maxAge (even zero) wrongly
+      // returned cached — Sync now silently did nothing, no spinner,
+      // no change, until an app restart (which clears the in-memory
+      // _lastSync). Negative age means the clock moved, so treat it
+      // as stale and sync for real.
+      if (!age.isNegative && age < maxAge) return true;
     }
     _syncing = true;
     _error = null;
