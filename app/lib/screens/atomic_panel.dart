@@ -179,6 +179,19 @@ class _AtomicPanelState extends State<AtomicPanel> {
                           color: descColor,
                         ),
                       ),
+                      // v2.86: show the phone's own clock too, so the
+                      // two times (and their difference) are visible
+                      // side by side instead of one ambiguous number.
+                      const SizedBox(height: 4),
+                      Text(
+                        l10n.atomicPhoneTime(_fmt12(DateTime.now())),
+                        textDirection: TextDirection.ltr,
+                        style: TextStyle(
+                          fontSize: 15,
+                          fontWeight: FontWeight.w400,
+                          color: descColor,
+                        ),
+                      ),
                     ],
                   );
                 },
