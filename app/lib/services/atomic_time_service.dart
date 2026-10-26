@@ -16,13 +16,25 @@ class AtomicTimeService extends ChangeNotifier {
   AtomicTimeService._();
   static final AtomicTimeService instance = AtomicTimeService._();
 
-  Duration _offset = Duration.zero;
+  // v2.86: monotonic anchor — the old design kept a wall-clock
+  // offset (serverTime - deviceTime) and computed now() as
+  // deviceTime + offset, so ANY phone-time change moved the atomic
+  // clock with it (stale offset after a manual ±1h change showed
+  // atomic time == phone time). Now each sync anchors the true
+  // server time to a monotonic Stopwatch (immune to wall-clock
+  // changes), and now() marches forward from that anchor. The
+  // offset is derived live, so it stays correct across jumps too.
+  DateTime? _anchorAtomic;
+  final Stopwatch _anchorWatch = Stopwatch();
   DateTime? _lastSync;
   bool _syncing = false;
   String? _error;
 
-  /// Difference: atomicTime - deviceTime. Positive = device is behind.
-  Duration get offset => _offset;
+  /// Difference: atomicTime - deviceTime, computed live from the
+  /// monotonic anchor. Positive = device is behind.
+  Duration get offset => _anchorAtomic == null
+      ? Duration.zero
+      : now().difference(DateTime.now());
   DateTime? get lastSync => _lastSync;
   bool get syncing => _syncing;
   String? get error => _error;
@@ -52,7 +64,10 @@ class AtomicTimeService extends ChangeNotifier {
         final resp = await NtpClient().query(samples: 3).timeout(
           const Duration(seconds: 8),
         );
-        _offset = resp.offset;
+        _anchorAtomic = DateTime.now().add(resp.offset);
+        _anchorWatch
+          ..reset()
+          ..start();
         _lastSync = DateTime.now();
         _error = null;
         return true;
@@ -126,8 +141,12 @@ class AtomicTimeService extends ChangeNotifier {
       // RTT/2 correction: assume symmetric latency.
       final rtt = after.difference(before);
       final corrected = serverTime.add(rtt ~/ 2);
-      // offset = serverTime - deviceTime.
-      _offset = corrected.difference(after);
+      // v2.86: anchor the corrected server time to the monotonic
+      // clock instead of storing a wall-clock offset (see fields).
+      _anchorAtomic = corrected;
+      _anchorWatch
+        ..reset()
+        ..start();
       _lastSync = DateTime.now();
       _error = null;
       return true;
@@ -146,15 +165,18 @@ class AtomicTimeService extends ChangeNotifier {
     }
   }
 
-  /// Current atomic-corrected time (device time + offset).
+  /// Current atomic-corrected time, marched forward from the
+  /// monotonic sync anchor — immune to phone-time changes.
   /// Falls back to device time if never synced.
-  DateTime now() => DateTime.now().add(_offset);
+  DateTime now() => _anchorAtomic == null
+      ? DateTime.now()
+      : _anchorAtomic!.add(_anchorWatch.elapsed);
 
   /// Human-readable offset, e.g. "+2d 3h 15m 30s" / "-5m 20s" / "±0s".
   /// v2.64: includes days (date difference), hours, minutes — not just seconds.
   /// Always LTR-formatted so Urdu RTL doesn't reverse the order.
   String offsetText() {
-    final ms = _offset.inMilliseconds;
+    final ms = offset.inMilliseconds;
     // v2.66: LTR isolate on ALL cases (zero case was missing it — showed as "0±s").
     if (ms.abs() < 500) return '\u2066±0s\u2069';
     final sign = ms > 0 ? '+' : '-';
