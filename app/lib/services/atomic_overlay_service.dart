@@ -80,10 +80,12 @@ class AtomicOverlayService {
   }
 
   /// v2.77: Open the PiP atomic clock activity.
-  static Future<bool> openAtomicPip(int offsetMs) async {
+  /// v2.85: [lang] ('en'/'ur') so the native PiP buttons follow the
+  /// app's language instead of hardcoded Urdu.
+  static Future<bool> openAtomicPip(int offsetMs, String lang) async {
     try {
       return await _alarm.invokeMethod<bool>(
-              'openAtomicPip', {'offsetMs': offsetMs}) ??
+              'openAtomicPip', {'offsetMs': offsetMs, 'lang': lang}) ??
           false;
     } catch (_) {
       return false;
