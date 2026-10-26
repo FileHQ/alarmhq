@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
@@ -12,7 +13,14 @@ import '../theme/app_theme.dart';
 /// Shown when an alarm fires while the user is inside the app
 /// (the native full-screen activity covers the lock-screen case).
 /// Dismiss / Snooze actually stop the native [AlarmService].
-class RingingOverlay extends StatelessWidget {
+///
+/// v2.85: the dialog used to close ONLY via its own buttons
+/// (barrierDismissible: false, canPop: false, no outside signal),
+/// so stopping/snoozing from the NOTIFICATION left it stuck on
+/// screen even though the sound had stopped. It now polls the
+/// native ringing state and pops itself the moment ringing ends,
+/// whatever stopped it.
+class RingingOverlay extends StatefulWidget {
   const RingingOverlay({
     super.key,
     required this.alarm,
@@ -47,6 +55,33 @@ class RingingOverlay extends StatelessWidget {
       ),
     );
   }
+
+  @override
+  State<RingingOverlay> createState() => _RingingOverlayState();
+}
+
+class _RingingOverlayState extends State<RingingOverlay> {
+  Timer? _watchdog;
+
+  @override
+  void initState() {
+    super.initState();
+    _watchdog = Timer.periodic(const Duration(seconds: 1), (_) async {
+      if (!mounted) return;
+      final ringing = await NativeBridge.isAlarmRinging();
+      if (!mounted) return;
+      if (!ringing) Navigator.of(context).pop();
+    });
+  }
+
+  @override
+  void dispose() {
+    _watchdog?.cancel();
+    super.dispose();
+  }
+
+  AlarmModel get alarm => widget.alarm;
+  int get snoozeCount => widget.snoozeCount;
 
   String _time12h() {
     final h12 = alarm.hour % 12 == 0 ? 12 : alarm.hour % 12;
