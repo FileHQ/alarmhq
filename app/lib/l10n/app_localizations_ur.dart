@@ -372,6 +372,9 @@ class AppLocalizationsUr extends AppLocalizations {
   String get snoozedGeneric => 'اسنوز ہے';
 
   @override
+  String get stopSnooze => 'سنوز روکیں';
+
+  @override
   String get fsBannerTitle => 'فل اسکرین الارم بند ہے';
 
   @override
