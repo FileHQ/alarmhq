@@ -48,7 +48,10 @@ class _AtomicOverlayCard extends StatefulWidget {
 }
 
 class _AtomicOverlayCardState extends State<_AtomicOverlayCard> {
-  Duration _offset = Duration.zero;
+  // v2.86: monotonic anchor (same fix as AtomicTimeService) — the
+  // old DateTime.now() + offset followed phone-time changes.
+  DateTime? _anchorAtomic;
+  final Stopwatch _watch = Stopwatch();
   Timer? _timer;
   DateTime _now = DateTime.now();
 
@@ -66,7 +69,11 @@ class _AtomicOverlayCardState extends State<_AtomicOverlayCard> {
     super.initState();
     _syncClock();
     _timer = Timer.periodic(const Duration(seconds: 1), (_) {
-      if (mounted) setState(() => _now = DateTime.now().add(_offset));
+      if (mounted) {
+        setState(() => _now = _anchorAtomic == null
+            ? DateTime.now()
+            : _anchorAtomic!.add(_watch.elapsed));
+      }
     });
   }
 
@@ -78,11 +85,14 @@ class _AtomicOverlayCardState extends State<_AtomicOverlayCard> {
           .timeout(const Duration(seconds: 8));
       if (!mounted) return;
       setState(() {
-        _offset = resp.offset; // atomic - device
-        _now = DateTime.now().add(_offset);
+        _anchorAtomic = DateTime.now().add(resp.offset);
+        _watch
+          ..reset()
+          ..start();
+        _now = _anchorAtomic!;
       });
     } catch (_) {
-      // Offline: _offset stays zero -> device time.
+      // Offline: anchor stays null -> device time.
     }
   }
 
