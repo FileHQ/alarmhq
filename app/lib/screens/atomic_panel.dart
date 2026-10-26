@@ -56,6 +56,9 @@ class _AtomicPanelState extends State<AtomicPanel> {
   /// v2.56: shows error feedback instead of failing silently.
   Future<void> _onFixPhoneTime() async {
     if (_fixing) return;
+    // v2.85: capture the language before any await (context use
+    // across async gaps is unsafe once awaits have run).
+    final lang = Localizations.localeOf(context).languageCode;
     setState(() => _fixing = true);
     try {
       // v2.69: ClockSync-style flow.
@@ -90,7 +93,7 @@ class _AtomicPanelState extends State<AtomicPanel> {
       // it stays on screen over Settings by design. The PiP activity
       // itself has the "Settings کھولیں" button.
       await AtomicOverlayService.openAtomicPip(
-          svc.offset.inMilliseconds);
+          svc.offset.inMilliseconds, lang);
     } catch (e) {
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
@@ -288,31 +291,52 @@ class _AtomicPanelState extends State<AtomicPanel> {
       final ls = svc.lastSync!;
       final timeStr =
           '${_two(ls.hour)}:${_two(ls.minute)}:${_two(ls.second)}';
-      return Row(
-        mainAxisAlignment: MainAxisAlignment.center,
+      // v2.85: a failed re-sync used to be invisible here (error was
+      // only shown in the never-synced branch), so "Sync now" looked
+      // like it did nothing. Show the error under the row too.
+      return Column(
         children: [
-          Expanded(
-            child: Text(
-              l10n.atomicLastSync(timeStr),
-              textDirection: TextDirection.ltr,
-              textAlign: TextAlign.center,
-              style: TextStyle(
-                fontSize: 13,
-                fontWeight: FontWeight.w400,
-                color: descColor,
+          Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Expanded(
+                child: Text(
+                  l10n.atomicLastSync(timeStr),
+                  textDirection: TextDirection.ltr,
+                  textAlign: TextAlign.center,
+                  style: TextStyle(
+                    fontSize: 13,
+                    fontWeight: FontWeight.w400,
+                    color: descColor,
+                  ),
+                ),
+              ),
+              TextButton(
+                onPressed: () => svc.sync(maxAge: Duration.zero),
+                child: Text(
+                  l10n.atomicSync,
+                  style: const TextStyle(
+                    fontSize: 13,
+                    fontWeight: FontWeight.w400,
+                  ),
+                ),
+              ),
+            ],
+          ),
+          if (svc.error != null)
+            Padding(
+              padding: const EdgeInsets.only(top: 4),
+              child: Text(
+                svc.error!,
+                textAlign: TextAlign.center,
+                textDirection: TextDirection.ltr,
+                style: const TextStyle(
+                  fontSize: 11,
+                  fontWeight: FontWeight.w400,
+                  color: Colors.redAccent,
+                ),
               ),
             ),
-          ),
-          TextButton(
-            onPressed: () => svc.sync(maxAge: Duration.zero),
-            child: Text(
-              l10n.atomicSync,
-              style: const TextStyle(
-                fontSize: 13,
-                fontWeight: FontWeight.w400,
-              ),
-            ),
-          ),
         ],
       );
     }
