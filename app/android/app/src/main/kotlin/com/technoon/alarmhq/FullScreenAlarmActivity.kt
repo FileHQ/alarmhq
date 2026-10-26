@@ -6,6 +6,9 @@ import android.graphics.Color
 import android.graphics.Typeface
 import android.os.Build
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
+import android.os.SystemClock
 import android.view.GestureDetector
 import android.view.Gravity
 import android.view.MotionEvent
@@ -51,8 +54,30 @@ class FullScreenAlarmActivity : Activity() {
         }
     }
 
+    // v2.88: broadcast-INDEPENDENT self-close. The v2.84 broadcast is
+    // the primary path, but if it is ever missed (OEM delivery quirks),
+    // the screen must still go away when ringing ends. Same-process
+    // static: AlarmService.ringingAlarmJson is null after EVERY
+    // Stop/Snooze path, so watching it closes this screen no matter
+    // which button stopped the alarm. 2s grace covers startup races
+    // (activity launched just as ringing ends).
+    private val watchdogHandler = Handler(Looper.getMainLooper())
+    private var createdElapsedMs: Long = 0L
+    private val watchdogTask = object : Runnable {
+        override fun run() {
+            if (SystemClock.elapsedRealtime() - createdElapsedMs > 2000 &&
+                AlarmService.ringingAlarmJson == null) {
+                finish()
+                return
+            }
+            watchdogHandler.postDelayed(this, 1000)
+        }
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        createdElapsedMs = SystemClock.elapsedRealtime()
+        watchdogHandler.postDelayed(watchdogTask, 1000)
 
         // v2.84: listen for the service's dismiss broadcast (see above).
         try {
@@ -445,6 +470,7 @@ class FullScreenAlarmActivity : Activity() {
     }
 
     override fun onDestroy() {
+        watchdogHandler.removeCallbacks(watchdogTask)
         try { unregisterReceiver(dismissReceiver) } catch (_: Exception) { }
         super.onDestroy()
     }
