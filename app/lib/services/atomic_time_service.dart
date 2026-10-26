@@ -96,7 +96,27 @@ class AtomicTimeService extends ChangeNotifier {
         _error = 'Invalid server response';
         return false;
       }
-      final serverTime = DateTime.parse(dtStr);
+      final dt = dtStr.trim();
+      final serverTimeRaw = DateTime.parse(dt);
+      // v2.85: timeapi.io returns UTC wall-clock WITHOUT a zone designator
+      // ("2026-10-26T04:33:26"), and DateTime.parse treats zone-less
+      // strings as LOCAL. That shifted the offset by the whole timezone
+      // (-5h in Pakistan) on a phone whose time was actually correct.
+      // All three endpoints serve UTC, so a zone-less result MUST be UTC.
+      final hasZone = dt.endsWith('Z') ||
+          RegExp(r'[+-]\d{2}:\d{2}$').hasMatch(dt);
+      final serverTime = hasZone
+          ? serverTimeRaw
+          : DateTime.utc(
+              serverTimeRaw.year,
+              serverTimeRaw.month,
+              serverTimeRaw.day,
+              serverTimeRaw.hour,
+              serverTimeRaw.minute,
+              serverTimeRaw.second,
+              serverTimeRaw.millisecond,
+              serverTimeRaw.microsecond,
+            );
       // RTT/2 correction: assume symmetric latency.
       final rtt = after.difference(before);
       final corrected = serverTime.add(rtt ~/ 2);
@@ -132,17 +152,21 @@ class AtomicTimeService extends ChangeNotifier {
     // v2.66: LTR isolate on ALL cases (zero case was missing it — showed as "0±s").
     if (ms.abs() < 500) return '\u2066±0s\u2069';
     final sign = ms > 0 ? '+' : '-';
-    final absMs = ms.abs();
-    final days = absMs ~/ (24 * 3600 * 1000);
-    final hours = (absMs % (24 * 3600 * 1000)) ~/ (3600 * 1000);
-    final mins = (absMs % (3600 * 1000)) ~/ (60 * 1000);
-    final secs = ((absMs % (60 * 1000)) / 1000).toStringAsFixed(0);
+    // v2.85: integer whole seconds — the old code rounded the leftover
+    // seconds with toStringAsFixed(0), so 59.6s became "60s" and the badge
+    // read "-4h 59m 60s" instead of "-5h 0m 0s". Whole-second division
+    // can never yield 60.
+    final totalSecs = ms.abs() ~/ 1000;
+    final days = totalSecs ~/ (24 * 3600);
+    final hours = (totalSecs % (24 * 3600)) ~/ 3600;
+    final mins = (totalSecs % 3600) ~/ 60;
+    final secs = totalSecs % 60;
     final parts = <String>[];
     if (days > 0) parts.add('${days}d');
     if (hours > 0) parts.add('${hours}h');
     if (mins > 0) parts.add('${mins}m');
     // Always show seconds if nothing else, or if there are leftover seconds.
-    if (parts.isEmpty || int.parse(secs) > 0) parts.add('${secs}s');
+    if (parts.isEmpty || secs > 0) parts.add('${secs}s');
     // LTR isolate so RTL locales don't reverse the order.
     return '\u2066$sign${parts.join(' ')}\u2069';
   }
