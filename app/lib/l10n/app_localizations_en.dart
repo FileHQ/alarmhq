@@ -375,6 +375,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get snoozedGeneric => 'Snoozed';
 
   @override
+  String get stopSnooze => 'Stop snooze';
+
+  @override
   String get fsBannerTitle => 'Full-screen alarm is off';
 
   @override
