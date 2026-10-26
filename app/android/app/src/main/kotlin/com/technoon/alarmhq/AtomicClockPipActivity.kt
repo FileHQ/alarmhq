@@ -127,7 +127,9 @@ class AtomicClockPipActivity : Activity() {
             setPadding(0, 32, 0, 0)
         }
         settingsBtn = Button(this).apply {
-            text = if (isUrdu) "Settings کھولیں" else "Open Settings"
+            // v2.87: fully Urdu on the Urdu screen ("سیٹنگز" matches
+            // the app's own Urdu term) — no mixed English word.
+            text = if (isUrdu) "سیٹنگز کھولیں" else "Open Settings"
             setOnClickListener { enterPipAndOpenSettings() }
         }
         buttonsRow?.addView(settingsBtn)
