@@ -594,6 +594,11 @@ class AppLocalizationsEn extends AppLocalizations {
   }
 
   @override
+  String atomicPhoneTime(Object time) {
+    return 'Phone time: $time';
+  }
+
+  @override
   String atomicDiff(Object diff) {
     return 'Phone is $diff vs atomic time';
   }
