@@ -110,6 +110,7 @@
   "snoozedUntil": "{time} تک اسنوز",
   "snoozedUntilLeft": "{time} تک اسنوز ({left} باقی)",
   "snoozedGeneric": "اسنوز ہے",
+  "stopSnooze": "سنوز روکیں",
   "fsBannerTitle": "فل اسکرین الارم بند ہے",
   "fsBannerBody": "لاک اسکرین پر الارم دکھانے کے لیے یہاں دبائیں",
   "lockBannerTitle": "لاک اسکرین پر دکھانا ضروری ہے",
