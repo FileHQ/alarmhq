@@ -177,6 +177,7 @@
   "atomicTime": "Atomic time",
   "atomicSync": "Sync now",
   "atomicLastSync": "Last sync: {time}",
+  "atomicPhoneTime": "Phone time: {time}",
   "atomicDiff": "Phone is {diff} vs atomic time",
   "atomicOffline": "Offline — showing device time",
   "fixPhoneTime": "Fix phone time",
