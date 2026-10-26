@@ -50,6 +50,10 @@ class AtomicOverlayNativeService : Service() {
     private var dateText: TextView? = null
     private val handler = Handler(Looper.getMainLooper())
     private var offsetMs: Long = 0L
+    // v2.85: monotonic anchor (same fix as the PiP activity) — the
+    // overlay clock must not follow manual phone-time changes.
+    private var anchorAtomicMs: Long = 0L
+    private var anchorElapsedMs: Long = 0L
 
     private val tickTask = object : Runnable {
         override fun run() {
@@ -79,6 +83,8 @@ class AtomicOverlayNativeService : Service() {
         } else {
             prefs.getLong("offset_ms", 0L)
         }
+        anchorAtomicMs = System.currentTimeMillis() + offsetMs
+        anchorElapsedMs = android.os.SystemClock.elapsedRealtime()
         // v2.70: Foreground service — REQUIRED. startForegroundService()
         // without startForeground() kills the service after ~5s, which
         // is exactly when Settings opens and the overlay vanished.
@@ -222,7 +228,10 @@ class AtomicOverlayNativeService : Service() {
     }
 
     private fun updateDisplay() {
-        val t = Date(System.currentTimeMillis() + offsetMs)
+        val t = Date(
+            anchorAtomicMs +
+                (android.os.SystemClock.elapsedRealtime() - anchorElapsedMs),
+        )
         val timeFmt = SimpleDateFormat("hh:mm:ss a", Locale.US)
         val dateFmt = SimpleDateFormat("d MMMM yyyy", Locale.US)
         timeText?.text = timeFmt.format(t)
