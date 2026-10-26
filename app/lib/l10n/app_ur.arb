@@ -177,6 +177,7 @@
   "atomicTime": "اٹامک ٹائم",
   "atomicSync": "ابھی sync کریں",
   "atomicLastSync": "آخری sync: {time}",
+  "atomicPhoneTime": "فون کا وقت: {time}",
   "atomicDiff": "فون اٹامک ٹائم سے {diff} ہے",
   "atomicOffline": "آف لائن — فون کا ٹائم دکھایا جا رہا ہے",
   "fixPhoneTime": "فون کا ٹائم ٹھیک کریں",
