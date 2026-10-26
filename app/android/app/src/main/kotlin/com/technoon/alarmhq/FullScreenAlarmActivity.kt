@@ -37,8 +37,38 @@ class FullScreenAlarmActivity : Activity() {
     private var maxSnoozes: Int = 3
     private var canSnooze: Boolean = false
 
+    // v2.84: notification Stop/Snooze stop the sound via AlarmService but
+    // never told this activity — it stayed stuck on screen. Finish when
+    // the service broadcasts the dismiss signal.
+    private val dismissReceiver = object : android.content.BroadcastReceiver() {
+        override fun onReceive(
+            context: android.content.Context?,
+            intent: Intent?,
+        ) {
+            if (intent?.action == AlarmService.ACTION_DISMISS_FULLSCREEN) {
+                finish()
+            }
+        }
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        // v2.84: listen for the service's dismiss broadcast (see above).
+        try {
+            val filter = android.content.IntentFilter(
+                AlarmService.ACTION_DISMISS_FULLSCREEN
+            )
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+                registerReceiver(
+                    dismissReceiver, filter,
+                    android.content.Context.RECEIVER_NOT_EXPORTED,
+                )
+            } else {
+                @Suppress("DEPRECATION")
+                registerReceiver(dismissReceiver, filter)
+            }
+        } catch (_: Exception) { }
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O_MR1) {
             setShowWhenLocked(true)
@@ -412,6 +442,11 @@ class FullScreenAlarmActivity : Activity() {
             action = AlarmService.ACTION_STOP_RINGING
         }
         startService(i)
+    }
+
+    override fun onDestroy() {
+        try { unregisterReceiver(dismissReceiver) } catch (_: Exception) { }
+        super.onDestroy()
     }
 
     @Deprecated("Back button should not dismiss the alarm screen")
