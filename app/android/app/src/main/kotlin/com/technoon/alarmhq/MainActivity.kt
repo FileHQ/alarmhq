@@ -103,6 +103,21 @@ class MainActivity : Activity() {
                     if (id >= 0) AlarmScheduler.cancel(this, id)
                     result.success(true)
                 }
+                // v2.84: cancel a pending snooze from the alarm card's
+                // "Stop snooze" button. Reuses the snoozed notification's
+                // Stop path exactly (ACTION_STOP + snoozeAlarmId).
+                "cancelSnooze" -> {
+                    val id = call.argument<Number>("id")?.toInt() ?: -1
+                    if (id >= 0) {
+                        startService(
+                            Intent(this, AlarmService::class.java).apply {
+                                action = AlarmService.ACTION_STOP
+                                putExtra("snoozeAlarmId", id)
+                            }
+                        )
+                    }
+                    result.success(true)
+                }
                 // v2.27: cancel only the regular occurrence — keeps a
                 // pending snooze one-shot alive. Used by reschedule().
                 "cancelRegularAlarm" -> {
