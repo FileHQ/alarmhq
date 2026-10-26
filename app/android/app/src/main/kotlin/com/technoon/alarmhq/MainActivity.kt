@@ -347,11 +347,14 @@ class MainActivity : Activity() {
                     result.success(null)
                 }
                 // v2.77: Open the PiP atomic clock activity.
+                // v2.85: pass the app language so PiP buttons match it.
                 "openAtomicPip" -> {
                     try {
                         val offsetMs = (call.argument<Number>("offsetMs")?.toLong()) ?: 0L
+                        val lang = call.argument<String>("lang") ?: "en"
                         val intent = Intent(this, AtomicClockPipActivity::class.java).apply {
                             putExtra(AtomicClockPipActivity.EXTRA_OFFSET_MS, offsetMs)
+                            putExtra(AtomicClockPipActivity.EXTRA_LANG, lang)
                         }
                         startActivity(intent)
                         result.success(true)
