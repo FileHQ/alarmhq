@@ -1160,6 +1160,12 @@ abstract class AppLocalizations {
   /// **'Last sync: {time}'**
   String atomicLastSync(Object time);
 
+  /// No description provided for @atomicPhoneTime.
+  ///
+  /// In en, this message translates to:
+  /// **'Phone time: {time}'**
+  String atomicPhoneTime(Object time);
+
   /// No description provided for @atomicDiff.
   ///
   /// In en, this message translates to:
