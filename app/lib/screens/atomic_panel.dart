@@ -45,9 +45,9 @@ class _AtomicPanelState extends State<AtomicPanel> {
   String _two(int n) => n.toString().padLeft(2, '0');
 
   /// v2.55: 12-hour format with AM/PM (her order).
-  String _fmt12(DateTime t) {
+  String _fmt12(AppLocalizations l10n, DateTime t) {
     final h12 = t.hour % 12 == 0 ? 12 : t.hour % 12;
-    final ampm = t.hour < 12 ? 'AM' : 'PM';
+    final ampm = t.hour < 12 ? l10n.amLabel : l10n.pmLabel;
     return '$h12:${_two(t.minute)}:${_two(t.second)} $ampm';
   }
 
@@ -160,9 +160,9 @@ class _AtomicPanelState extends State<AtomicPanel> {
                   final months = isUrdu ? _monthsUr : _monthsEn;
                   return Column(
                     children: [
+                      // v2.90: no forced LTR — Urdu time reads naturally RTL now.
                       Text(
-                        _fmt12(t),
-                        textDirection: TextDirection.ltr,
+                        _fmt12(l10n, t),
                         style: const TextStyle(
                           fontSize: 40,
                           fontWeight: FontWeight.w400,
@@ -184,7 +184,7 @@ class _AtomicPanelState extends State<AtomicPanel> {
                       // side by side instead of one ambiguous number.
                       const SizedBox(height: 4),
                       Text(
-                        l10n.atomicPhoneTime(_fmt12(DateTime.now())),
+                        l10n.atomicPhoneTime(_fmt12(l10n, DateTime.now())),
                         textDirection: TextDirection.ltr,
                         style: TextStyle(
                           fontSize: 15,
