@@ -190,10 +190,10 @@ class _WorldClockScreenState extends State<WorldClockScreen> {
     return tz.TZDateTime.from(_baseUtc(), tz.getLocation(zone));
   }
 
-  String _fmtTime(tz.TZDateTime t) {
+  String _fmtTime(AppLocalizations l10n, tz.TZDateTime t) {
     // v2.55: 12-hour format with AM/PM (her order).
     final h12 = t.hour % 12 == 0 ? 12 : t.hour % 12;
-    final ampm = t.hour < 12 ? 'AM' : 'PM';
+    final ampm = t.hour < 12 ? l10n.amLabel : l10n.pmLabel;
     String p2(int n) => n.toString().padLeft(2, '0');
     return '$h12:${p2(t.minute)}:${p2(t.second)} $ampm';
   }
@@ -356,7 +356,7 @@ class _WorldClockScreenState extends State<WorldClockScreen> {
                       onDismissed: (_) => _removeAt(i),
                       child: GestureDetector(
                         onLongPress: () => _confirmRemove(i),
-                        child: _cityCard(city, isLight),
+                        child: _cityCard(l10n, city, isLight),
                       ),
                     );
                   },
@@ -364,7 +364,7 @@ class _WorldClockScreenState extends State<WorldClockScreen> {
     );
   }
 
-  Widget _cityCard(_CityEntry city, bool isLight) {
+  Widget _cityCard(AppLocalizations l10n, _CityEntry city, bool isLight) {
     final t = _cityTime(city.zone);
     final timeColor = isLight ? AppTheme.lightRingsText : AppTheme.emerald;
     final subColor = isLight ? Colors.black54 : Colors.white70;
@@ -421,7 +421,7 @@ class _WorldClockScreenState extends State<WorldClockScreen> {
             ),
           ),
           Text(
-            _fmtTime(t),
+            _fmtTime(l10n, t),
             style: TextStyle(
               fontWeight: FontWeight.w400,
               fontSize: 30,
