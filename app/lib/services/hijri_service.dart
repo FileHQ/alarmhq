@@ -310,11 +310,15 @@ class HijriService {
     }
     if (ans < 0) return null;
     final m = _verified[ans];
-    // Month end = next month's start; the last verified month is
-    // capped at 30 days (a Hijri month is never longer).
+    // Month end = next month's start. v2.89: the last verified month
+    // is capped at 29 days, NOT 30 — a Hijri 30th is never confirmed
+    // in advance (if the new moon is sighted on the 29th, the next
+    // day is the 1st, not the 30th). Day 30 of the last month falls
+    // through to the predicted path (~30) until a later data update
+    // verifies the next month's start, which then confirms it.
     final endExclusive = ans + 1 < _verified.length
         ? _verified[ans + 1].start
-        : m.start.add(const Duration(days: 30));
+        : m.start.add(const Duration(days: 29));
     if (!d.isBefore(endExclusive)) return null;
     final day = d.difference(m.start).inDays + 1;
     return HijriDate(
