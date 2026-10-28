@@ -61,7 +61,11 @@ class _ClockScreenState extends State<ClockScreen> {
     final activeColor = AppTheme.emerald;
     final inactiveColor = isLight ? Colors.black54 : Colors.white60;
 
-    return Scaffold(
+    // v2.89: Clock stays LTR in Urdu mode (user order: Clock and
+    // Calendar keep the English layout, not RTL).
+    return Directionality(
+      textDirection: TextDirection.ltr,
+      child: Scaffold(
       backgroundColor: isLight ? Colors.white : AppTheme.charcoal,
       body: SafeArea(
         child: Column(
@@ -148,6 +152,6 @@ class _ClockScreenState extends State<ClockScreen> {
           ],
         ),
       ),
-    );
+    ));
   }
 }
