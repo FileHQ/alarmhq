@@ -112,7 +112,11 @@ class _CalendarScreenState extends State<CalendarScreen> {
     }
     final hijriHeader = hijriMonths.join(' / ');
 
-    return Scaffold(
+    // v2.89: Calendar stays LTR in Urdu mode (user order: Clock and
+    // Calendar keep the English layout, not RTL).
+    return Directionality(
+      textDirection: TextDirection.ltr,
+      child: Scaffold(
       appBar: AppBar(
         title: Text(l10n.calendar),
         centerTitle: false,
@@ -267,7 +271,7 @@ class _CalendarScreenState extends State<CalendarScreen> {
         ),
       ),
       ),
-    );
+    ));
   }
 
   /// v2.34: "Go to Date" dialog — jump the calendar via a Gregorian
