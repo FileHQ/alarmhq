@@ -83,10 +83,10 @@ class _RingingOverlayState extends State<RingingOverlay> {
   AlarmModel get alarm => widget.alarm;
   int get snoozeCount => widget.snoozeCount;
 
-  String _time12h() {
+  String _time12h(AppLocalizations l10n) {
     final h12 = alarm.hour % 12 == 0 ? 12 : alarm.hour % 12;
     final mm = alarm.minute.toString().padLeft(2, '0');
-    final ap = alarm.hour < 12 ? 'AM' : 'PM';
+    final ap = alarm.hour < 12 ? l10n.amLabel : l10n.pmLabel;
     return '$h12:$mm $ap';
   }
 
@@ -152,12 +152,16 @@ class _RingingOverlayState extends State<RingingOverlay> {
                   ),
                 ),
                 const SizedBox(height: 12),
-                Text(
-                  _time12h(),
-                  style: const TextStyle(
-                    color: Colors.white,
-                    fontSize: 72,
-                    fontWeight: FontWeight.w800,
+                // v2.90: long Urdu AM/PM shrinks instead of overflowing.
+                FittedBox(
+                  fit: BoxFit.scaleDown,
+                  child: Text(
+                    _time12h(l10n),
+                    style: const TextStyle(
+                      color: Colors.white,
+                      fontSize: 72,
+                      fontWeight: FontWeight.w800,
+                    ),
                   ),
                 ),
                 if (alarm.label.isNotEmpty) ...[
