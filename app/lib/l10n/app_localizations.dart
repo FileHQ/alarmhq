@@ -140,6 +140,18 @@ abstract class AppLocalizations {
   /// **'Alarms'**
   String get alarms;
 
+  /// No description provided for @amLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'AM'**
+  String get amLabel;
+
+  /// No description provided for @pmLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'PM'**
+  String get pmLabel;
+
   /// No description provided for @appTitle.
   ///
   /// In en, this message translates to:
@@ -290,6 +302,12 @@ abstract class AppLocalizations {
   /// **'H'**
   String get hoursShort;
 
+  /// No description provided for @hoursUnit.
+  ///
+  /// In en, this message translates to:
+  /// **'{n}h'**
+  String hoursUnit(Object n);
+
   /// No description provided for @intervalDays.
   ///
   /// In en, this message translates to:
@@ -391,6 +409,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'{n} min'**
   String minutesUnit(Object n);
+
+  /// No description provided for @daysUnit.
+  ///
+  /// In en, this message translates to:
+  /// **'{n}d'**
+  String daysUnit(Object n);
 
   /// No description provided for @newAlarm.
   ///
