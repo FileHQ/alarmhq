@@ -163,11 +163,11 @@ class _ScrollTimePickerState extends State<ScrollTimePicker> {
     final m = diff.inMinutes % 60;
     String dur;
     if (h > 0 && m > 0) {
-      dur = '$h h $m m';
+      dur = '${l10n.hoursUnit(h)} ${l10n.minutesUnit(m)}';
     } else if (h > 0) {
-      dur = '$h h';
+      dur = l10n.hoursUnit(h);
     } else {
-      dur = '$m m';
+      dur = l10n.minutesUnit(m);
     }
     return l10n.alarmIn(dur);
   }
@@ -364,7 +364,7 @@ class _ScrollTimePickerState extends State<ScrollTimePicker> {
                 _wheel(
                   controller: _ampmCtrl,
                   itemCount: kAmPmWheelCount,
-                  label: (i) => isAmAt(i) ? 'AM' : 'PM',
+                  label: (i) => isAmAt(i) ? l10n.amLabel : l10n.pmLabel,
                   onChanged: _onAmPmChanged,
                   onTap: () {
                     // Tap toggles AM/PM.
@@ -446,12 +446,16 @@ class _WheelItem extends StatelessWidget {
     return GestureDetector(
       onTap: onTap,
       child: Center(
-        child: Text(
-          text,
-          style: const TextStyle(
-            fontSize: 30,
-            fontWeight: FontWeight.w700,
-            color: Colors.white,
+        // v2.90: long Urdu AM/PM ("بعد دوپہر") shrinks instead of clipping.
+        child: FittedBox(
+          fit: BoxFit.scaleDown,
+          child: Text(
+            text,
+            style: const TextStyle(
+              fontSize: 30,
+              fontWeight: FontWeight.w700,
+              color: Colors.white,
+            ),
           ),
         ),
       ),
