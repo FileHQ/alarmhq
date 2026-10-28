@@ -34,6 +34,12 @@ class AppLocalizationsEn extends AppLocalizations {
   String get alarms => 'Alarms';
 
   @override
+  String get amLabel => 'AM';
+
+  @override
+  String get pmLabel => 'PM';
+
+  @override
   String get appTitle => 'AlarmHQ';
 
   @override
@@ -117,6 +123,11 @@ class AppLocalizationsEn extends AppLocalizations {
   String get hoursShort => 'H';
 
   @override
+  String hoursUnit(Object n) {
+    return '${n}h';
+  }
+
+  @override
   String get intervalDays => 'Repeat every (days)';
 
   @override
@@ -169,6 +180,11 @@ class AppLocalizationsEn extends AppLocalizations {
   @override
   String minutesUnit(Object n) {
     return '$n min';
+  }
+
+  @override
+  String daysUnit(Object n) {
+    return '${n}d';
   }
 
   @override
