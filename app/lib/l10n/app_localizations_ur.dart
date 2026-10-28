@@ -34,6 +34,12 @@ class AppLocalizationsUr extends AppLocalizations {
   String get alarms => 'الارمز';
 
   @override
+  String get amLabel => 'قبل دوپہر';
+
+  @override
+  String get pmLabel => 'بعد دوپہر';
+
+  @override
   String get appTitle => 'AlarmHQ';
 
   @override
@@ -113,7 +119,12 @@ class AppLocalizationsUr extends AppLocalizations {
   String get granted => 'اجازت ہے';
 
   @override
-  String get hoursShort => 'H';
+  String get hoursShort => 'گھنٹے';
+
+  @override
+  String hoursUnit(Object n) {
+    return '$n گھنٹے';
+  }
 
   @override
   String get intervalDays => 'ہر کتنے دن بعد دہراؤ';
@@ -163,11 +174,16 @@ class AppLocalizationsUr extends AppLocalizations {
   String get maxSnoozes => 'زیادہ سے زیادہ اسنوز';
 
   @override
-  String get minutesShort => 'M';
+  String get minutesShort => 'منٹ';
 
   @override
   String minutesUnit(Object n) {
     return '$n منٹ';
+  }
+
+  @override
+  String daysUnit(Object n) {
+    return '$n دن';
   }
 
   @override
