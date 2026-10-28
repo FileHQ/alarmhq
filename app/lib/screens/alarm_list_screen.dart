@@ -264,7 +264,7 @@ class _AlarmListScreenState extends State<AlarmListScreen>
       builder: (c) => AlertDialog(
         title: Text(l10n.deleteAlarmTitle),
         content: Text(l10n.deleteAlarmBody(alarm.label.isEmpty
-            ? _timeText12(alarm.hour, alarm.minute)
+            ? _timeText12(l10n, alarm.hour, alarm.minute)
             : alarm.label)),
         actions: [
           TextButton(
@@ -290,13 +290,13 @@ class _AlarmListScreenState extends State<AlarmListScreen>
     final next = NextOccurrence.nextTrigger(alarm, DateTime.now());
     final when = next == null
         ? ''
-        : '${next.day}/${next.month} ${_timeText12(next.hour, next.minute)}';
+        : '${next.day}/${next.month} ${_timeText12(l10n, next.hour, next.minute)}';
     final choice = await showDialog<String>(
       context: context,
       builder: (c) => AlertDialog(
         title: Text(l10n.turnOffAlarmTitle),
         content: Text(l10n.turnOffAlarmBody(
-          alarm.label.isEmpty ? _timeText12(alarm.hour, alarm.minute) : alarm.label,
+          alarm.label.isEmpty ? _timeText12(l10n, alarm.hour, alarm.minute) : alarm.label,
           when,
         )),
         actions: [
@@ -326,16 +326,16 @@ class _AlarmListScreenState extends State<AlarmListScreen>
   }
 
   /// 12-hour "6:32 PM" text.
-  String _timeText12(int hour24, int minute) {
-    final ampm = hour24 < 12 ? 'AM' : 'PM';
+  String _timeText12(AppLocalizations l10n, int hour24, int minute) {
+    final ampm = hour24 < 12 ? l10n.amLabel : l10n.pmLabel;
     var h = hour24 % 12;
     if (h == 0) h = 12;
     return '$h:${minute.toString().padLeft(2, '0')} $ampm';
   }
 
   /// "6:32" and "PM" separately for styled display.
-  (String, String) _timeParts(int hour24, int minute) {
-    final ampm = hour24 < 12 ? 'AM' : 'PM';
+  (String, String) _timeParts(AppLocalizations l10n, int hour24, int minute) {
+    final ampm = hour24 < 12 ? l10n.amLabel : l10n.pmLabel;
     var h = hour24 % 12;
     if (h == 0) h = 12;
     return ('$h:${minute.toString().padLeft(2, '0')}', ampm);
@@ -382,11 +382,11 @@ class _AlarmListScreenState extends State<AlarmListScreen>
     final m = diff.inMinutes % 60;
     String dur;
     if (d > 0) {
-      dur = '${d}d ${h}h ${m}m';
+      dur = '${l10n.daysUnit(d)} ${l10n.hoursUnit(h)} ${l10n.minutesUnit(m)}';
     } else if (h > 0) {
-      dur = '${h}h ${m}m';
+      dur = '${l10n.hoursUnit(h)} ${l10n.minutesUnit(m)}';
     } else {
-      dur = '${m}m';
+      dur = l10n.minutesUnit(m);
     }
     return l10n.ringsIn(dur);
   }
@@ -397,7 +397,7 @@ class _AlarmListScreenState extends State<AlarmListScreen>
     final next = snoozed ?? NextOccurrence.nextTrigger(a, DateTime.now());
     if (next == null) return l10n.disabled;
     return l10n.nextRing(
-        '${next.day}/${next.month} ${_timeText12(next.hour, next.minute)}');
+        '${next.day}/${next.month} ${_timeText12(l10n, next.hour, next.minute)}');
   }
 
   @override
@@ -577,7 +577,7 @@ class _AlarmListScreenState extends State<AlarmListScreen>
 
   Widget _alarmCard(
       BuildContext context, AppLocalizations l10n, AlarmModel a) {
-    final (time, ampm) = _timeParts(a.hour, a.minute);
+    final (time, ampm) = _timeParts(l10n, a.hour, a.minute);
     final countdown = _countdownText(l10n, a);
     final dimmed = !a.enabled;
     // v2.45: light-theme card colors (user chose light green tint).
@@ -738,7 +738,7 @@ class _AlarmListScreenState extends State<AlarmListScreen>
                               }
                               final used = _snoozeCounts[a.id] ?? 0;
                               final max = a.maxSnoozes;
-                              final timeStr = _timeText12(snoozedUntil.hour,
+                              final timeStr = _timeText12(l10n, snoozedUntil.hour,
                                   snoozedUntil.minute);
                               final text = (max < 0 || max == 0)
                                   ? l10n.snoozedUntil(timeStr)
