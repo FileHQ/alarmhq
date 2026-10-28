@@ -238,8 +238,8 @@ class _AlarmEditScreenState extends State<AlarmEditScreen> {
   }
 
   /// "6:32 PM"
-  String _timeText12() {
-    final ampm = _time.hour < 12 ? 'AM' : 'PM';
+  String _timeText12(AppLocalizations l10n) {
+    final ampm = _time.hour < 12 ? l10n.amLabel : l10n.pmLabel;
     var h = _time.hour % 12;
     if (h == 0) h = 12;
     return '$h:${_time.minute.toString().padLeft(2, '0')} $ampm';
@@ -281,14 +281,17 @@ class _AlarmEditScreenState extends State<AlarmEditScreen> {
                 child: Padding(
                   padding: const EdgeInsets.symmetric(
                       horizontal: 32, vertical: 12),
-                  child: Text(
-                    _timeText12(),
+                  child: FittedBox(
+                    fit: BoxFit.scaleDown,
+                    child: Text(
+                      _timeText12(l10n),
                     style:
                         Theme.of(context).textTheme.displayLarge?.copyWith(
                               fontWeight: FontWeight.w800,
                               color: AppTheme.emerald,
                               letterSpacing: -1,
                             ),
+                    ),
                   ),
                 ),
               ),
@@ -584,7 +587,7 @@ class _AlarmEditScreenState extends State<AlarmEditScreen> {
                       size: 16, color: AppTheme.emerald),
                   const SizedBox(width: 8),
                   Text(
-                    '${_dateText(t)}  ${_time12(t.hour, t.minute)}',
+                    '${_dateText(t)}  ${_time12(l10n, t.hour, t.minute)}',
                     style: const TextStyle(fontWeight: FontWeight.w600),
                   ),
                 ],
@@ -595,8 +598,8 @@ class _AlarmEditScreenState extends State<AlarmEditScreen> {
     );
   }
 
-  String _time12(int h24, int m) {
-    final ampm = h24 < 12 ? 'AM' : 'PM';
+  String _time12(AppLocalizations l10n, int h24, int m) {
+    final ampm = h24 < 12 ? l10n.amLabel : l10n.pmLabel;
     var h = h24 % 12;
     if (h == 0) h = 12;
     return '$h:${m.toString().padLeft(2, '0')} $ampm';
@@ -652,7 +655,7 @@ class _AlarmEditScreenState extends State<AlarmEditScreen> {
                       size: 16, color: AppTheme.emerald),
                   const SizedBox(width: 8),
                   Text(
-                    '${_dateText(t)}  ${_time12(t.hour, t.minute)}',
+                    '${_dateText(t)}  ${_time12(l10n, t.hour, t.minute)}',
                     style: const TextStyle(fontWeight: FontWeight.w600),
                   ),
                 ],
@@ -695,7 +698,7 @@ class _AlarmEditScreenState extends State<AlarmEditScreen> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
-                          '${_dateText(d)}  ${_timeText12()}',
+                          '${_dateText(d)}  ${_timeText12(l10n)}',
                           style: const TextStyle(
                               fontWeight: FontWeight.w600),
                         ),
