@@ -63,6 +63,12 @@ class _AlarmHQAppState extends State<AlarmHQApp>
     // If an alarm fired while the app was in the background and the user
     // returns to it, show the in-app ringing dialog with Dismiss/Snooze.
     if (state == AppLifecycleState.resumed) _checkRinging();
+    // v2.91: re-check the fork for newer Hijri data whenever the app
+    // comes back to the foreground, so a confirmed month start lands
+    // without waiting for a restart or a Calendar open.
+    if (state == AppLifecycleState.resumed) {
+      HijriService.instance.syncFromNetwork();
+    }
   }
 
   // v2.66: Back button — BOTH PopScope (below) AND didPopRoute (fallback).
