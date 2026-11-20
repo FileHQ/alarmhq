@@ -144,7 +144,11 @@ class HijriService {
     'ذو الحجہ',
   ];
 
-  static const String _apiBase = 'https://shaheeranser.github.io/hijri-api';
+  /// v2.91: the app reads the user's own fork (FileHQ/hijri-api), not
+  /// the upstream repo. The fork auto-updates when two publishers agree
+  /// on a new month start, and the app re-checks it on start, on resume
+  /// and when the Calendar opens.
+  static const String _apiBase = 'https://filehq.github.io/hijri-api';
   static const List<int> _years = [1447, 1448, 1449];
 
   final Map<String, HijriDate> _byGregorian = {};
